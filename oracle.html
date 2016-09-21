@@ -1,0 +1,2571 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Oracle11g</title>
+<!-- 2016-09-21 周三 08:42 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="imfine">
+<link rel="stylesheet" href="ss.css">
+</head>
+<body>
+<div id="content">
+<h1 class="title">Oracle11g</h1>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">Emacs 常用命令</a></li>
+<li><a href="#sec-2">Oracle 的体系结构</a>
+<ul>
+<li><a href="#sec-2-1">服务端</a>
+<ul>
+<li><a href="#sec-2-1-1">实例 (INSTANCE)</a></li>
+<li><a href="#sec-2-1-2">数据库 (DATABASE)</a></li>
+<li><a href="#sec-2-1-3">启动过程</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2">客户端</a>
+<ul>
+<li><a href="#sec-2-2-1">sqlplus</a></li>
+<li><a href="#sec-2-2-2">jdbc</a></li>
+<li><a href="#sec-2-2-3">其他的图形化工具</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3">Oracle 网络配置</a>
+<ul>
+<li><a href="#sec-3-1">配置途径</a></li>
+<li><a href="#sec-3-2">服务端 (NETWORK/ADMIN/listener.ora)</a></li>
+<li><a href="#sec-3-3">客户端 (NETWORK/ADMIN/tnsnames.ora)</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">用户与权限</a>
+<ul>
+<li><a href="#sec-4-1">用户</a>
+<ul>
+<li><a href="#sec-4-1-1">系统缺省用户</a></li>
+<li><a href="#sec-4-1-2">用户的默认表空间</a></li>
+<li><a href="#sec-4-1-3">资源文件 (Profile)</a></li>
+<li><a href="#sec-4-1-4">创建/修改/删除用户</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-2">权限</a>
+<ul>
+<li><a href="#sec-4-2-1">系统权限 (执行特定命令)</a></li>
+<li><a href="#sec-4-2-2">对象权限 (访问数据库对象)</a></li>
+<li><a href="#sec-4-2-3">示例</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-3">角色</a>
+<ul>
+<li><a href="#sec-4-3-1">创建角色</a></li>
+<li><a href="#sec-4-3-2">配置角色</a></li>
+<li><a href="#sec-4-3-3">使用角色</a></li>
+<li><a href="#sec-4-3-4">删除角色</a></li>
+<li><a href="#sec-4-3-5">相关的字典表</a></li>
+<li><a href="#sec-4-3-6">特殊的 PUBLIC 角色</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-5"><span class="todo TODO">TODO</span> 阶段性实践</a></li>
+<li><a href="#sec-6">SQL</a>
+<ul>
+<li><a href="#sec-6-1">SQL 的历史及概念</a></li>
+<li><a href="#sec-6-2">SQL 的分类</a>
+<ul>
+<li><a href="#sec-6-2-1">DDL（Data Definition Language）</a></li>
+<li><a href="#sec-6-2-2">DML（Data Definition Language）</a></li>
+<li><a href="#sec-6-2-3">TCL（Transaction Control Language)</a></li>
+<li><a href="#sec-6-2-4">DCL（Data Control Language)</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-3">数据类型</a>
+<ul>
+<li><a href="#sec-6-3-1">字符类型</a></li>
+<li><a href="#sec-6-3-2">数字类型</a></li>
+<li><a href="#sec-6-3-3">时间类型</a></li>
+<li><a href="#sec-6-3-4">RAW 类型</a></li>
+<li><a href="#sec-6-3-5">LOB类型(large Object)</a></li>
+<li><a href="#sec-6-3-6">ROWID/ROWNUM</a></li>
+<li><a href="#sec-6-3-7">NULL</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-4">运算符</a></li>
+<li><a href="#sec-6-5">函数</a>
+<ul>
+<li><a href="#sec-6-5-1">数值函数</a></li>
+<li><a href="#sec-6-5-2">字符函数</a></li>
+<li><a href="#sec-6-5-3">时间函数</a></li>
+<li><a href="#sec-6-5-4">比较函数</a></li>
+<li><a href="#sec-6-5-5">转换函数</a></li>
+<li><a href="#sec-6-5-6">其他函数</a></li>
+<li><a href="#sec-6-5-7">分组函数</a></li>
+<li><a href="#sec-6-5-8">分析函数</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-6">自定义函数</a></li>
+</ul>
+</li>
+<li><a href="#sec-7">同义词（Synonymous)</a></li>
+<li><a href="#sec-8">序列(Sequence)</a></li>
+<li><a href="#sec-9">表的分区(Partition)</a>
+<ul>
+<li><a href="#sec-9-1">范围分区</a></li>
+<li><a href="#sec-9-2">列表分区</a></li>
+<li><a href="#sec-9-3">哈希分区</a></li>
+<li><a href="#sec-9-4">范围-列表分区</a></li>
+<li><a href="#sec-9-5">范围-列表分区</a></li>
+<li><a href="#sec-9-6">分区的修改</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+
+<section id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Emacs 常用命令</h2>
+<div class="outline-text-2" id="text-1">
+<ol class="org-ol">
+<li>保存
+Ctrl-x Ctrl-s
+</li>
+
+<li>生成 html
+Ctrl-C Ctrl-e h h
+</li>
+
+<li>复制
+Alt-W
+</li>
+</ol>
+</div>
+</section>
+
+
+<section id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Oracle 的体系结构</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+数据库是一个以某种有组织的方式存储的数据集合。
+它本质上是用计算机存储记录的系统，是位于用户和系统之间的一层管理软件。
+Oracle 数据库是目前最流行、最强大的面向对象的关系型数据库(ORDBMS)。
+</p>
+
+
+<p>
+Oracle 是基于请求响应的方式，分为服务端和客户端。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">服务端</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Oracle 是由实例和数据库两部分组成的。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1">实例 (INSTANCE)</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+又称为oracle数据库引擎，由由内存即SGA(System Global Area,系统全局区)和后台处理进程组成。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2">数据库 (DATABASE)</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+保存在计算机上的数据文件等。可以从物理物件或逻辑组件的角度看待。
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="sec-2-1-2-1" name="sec-2-1-2-1"></a>物理组件<br ><div class="outline-text-5" id="text-2-1-2-1">
+<ol class="org-ol">
+<li>控制文件 (Control File)
+<pre class="example">
+select * from v$controlfile;
+</pre>
+<p>
+记录数据库的物理结构和其他控制信息，如数据库名称，数据文件、日志文件名称和位置等。多副本保证安全。
+</p>
+</li>
+
+<li>数据文件 (Data File)
+<pre class="example">
+select name,status,enabled from v$datafile;
+</pre>
+</li>
+
+<li>日志文件 (联机日志文件/归档日志文件)
+<pre class="example">
+select * from v$log;   -- 查看日志
+</pre>
+
+<p>
+保存用户的所有操作。一个数据库至少有两个日志组，轮流写入。<br >
+  每个日志组至少有一个日志成员，成员之间是镜像关系，这是为了保护数据。<br >
+  联机日志组的交换过程叫切换。当一个组写完会自动切换下一组，也可以手动切换：
+</p>
+<pre class="example">
+alter system switch logfile   -- 切换日志文件
+</pre>
+
+<p>
+如果打开归档模式，切换日志的时候会产生归档文件。打开归档模式命令:
+</p>
+<pre class="example">
+alter database archivelog
+</pre>
+</li>
+
+<li>初始化参数文件 (Parameter File)
+<pre class="example">
+$ORA_HOME/admin/&lt;SID&gt;/pfile/init.ora.xxx
+</pre>
+<p>
+记录了数据库启动运行的一系列参数，内存、控制文件等
+</p>
+</li>
+</ol>
+</div>
+</li>
+
+<li><a id="sec-2-1-2-2" name="sec-2-1-2-2"></a>逻辑组件<br ><div class="outline-text-5" id="text-2-1-2-2">
+<ol class="org-ol">
+<li>表空间 (tablespace)
+<pre class="example">
+select * from v$tablespace;
+</pre>
+<ul class="org-ul">
+<li><b>最基本的逻辑结构</b> ，是数据库恢复的最小单位, 容纳着许多数据库实体, 如表、视图、索引、聚簇、回退段和临时段等。
+</li>
+<li>默认创建的表空间有 SYSTEM/SYSAUX/TEMP/UNDO/USERS
+</li>
+<li>表空间跟数据文件是 1vN 的关系。一个表空间至少需要一个相应的数据文件
+</li>
+<li>在实际生产中，不建议用默认表空间，要根据情况自己创建
+</li>
+<li>创建/删除表空间的语法：
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#34920;&#31354;&#38388;&#21019;&#24314;</span>
+<span style="color: #0000FF;">create</span> tablespace xxx
+  logging
+  datafile <span style="color: #008000;">'D:\xxx.dbf'</span>
+  <span style="color: #0000FF;">size</span> 50m
+  autoextend <span style="color: #0000FF;">on</span>
+  <span style="color: #0000FF;">next</span> 50m maxsize 20480m
+  extent management <span style="color: #0000FF;">local</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#20020;&#26102;&#34920;&#31354;&#38388;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">temporary</span> tablespace yyy
+  tempfile <span style="color: #008000;">'D:\yyy.dbf'</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;</span>
+<span style="color: #0000FF;">drop</span> tablespace yyy;
+</pre>
+</div>
+</li>
+<li>逻辑上说，一个表空间是由一到多个段组成的。
+</li>
+</ul>
+</li>
+
+<li>段 (Segment)
+<ul class="org-ul">
+<li>段是对象在数据库中占用的空间
+</li>
+<li>每个段，对应的是每个对象，有 table/index/view 等
+</li>
+<li>按照存储对象类型的不同，分为数据段、索引段、回滚段和临时段
+</li>
+<li>逻辑上说，段是由区组成的
+</li>
+</ul>
+</li>
+
+<li>区 (Extend)
+<ul class="org-ul">
+<li>由连续的数据块组成，由 Oracle 自动分配管理
+</li>
+<li>当段中的空间已满时，会自动扩展新区
+</li>
+</ul>
+</li>
+
+<li>块 (Block)
+<ul class="org-ul">
+<li>数据块是Oracle服务器所能分配、读取或写入的最小逻辑单位。
+</li>
+<li>Oracle服务器以数据块为单位管理数据文件的存储空间。 
+</li>
+<li>正常情况下，块的大小是操作系统块的整数倍，称作标准块。
+</li>
+<li>可以通过参数 db_block_size 控制，默认 8k.
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-2-1-3" class="outline-4">
+<h4 id="sec-2-1-3">启动过程</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<pre class="example">
+startup nomount        -- 只启动了实例 (Instance)
+alter database mount   -- 数据库挂载
+alter database open    -- 数据库打开
+</pre>
+
+<pre class="example">
+shutdown immediate     -- 立刻关闭
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">客户端</h3>
+<div class="outline-text-3" id="text-2-2">
+</div><div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1">sqlplus</h4>
+<div class="outline-text-4" id="text-2-2-1">
+</div><ul class="org-ul"><li><a id="sec-2-2-1-1" name="sec-2-2-1-1"></a>连接语法：<br ><div class="outline-text-5" id="text-2-2-1-1">
+<pre class="example">
+sqlplus sys/southit as sysdba     -- 管理员登录
+sqlplus / as sysdba               -- 操作系统认证
+sqlplus scott/tiger               -- 普通用户登录
+sqlplus scott/tiger@remotedb      -- 连接远程数据库
+sqlplus /nolog                    -- 未连接状态，之后可以用 conn user/pass 语法登录
+</pre>
+</div>
+</li>
+
+<li><a id="sec-2-2-1-2" name="sec-2-2-1-2"></a>常用命令 (set/show)<br ><div class="outline-text-5" id="text-2-2-1-2">
+<pre class="example">
+linesize/pagesize/header/autocommit/echo/pause/serveroutput/autotrace/timing...
+column xxx format a22
+show parameters [系统参数]
+</pre>
+</div>
+</li>
+
+<li><a id="sec-2-2-1-3" name="sec-2-2-1-3"></a>快速编辑之修改<br ><div class="outline-text-5" id="text-2-2-1-3">
+<ol class="org-ol">
+<li>list 定位到需要修改的行
+</li>
+<li>通过 change 去做替换
+<pre class="example">
+change /table_names/table_name
+</pre>
+</li>
+<li>通过list 命令，查看修改完的语句 
+</li>
+<li>通过调用 run 命令，运行目前缓存区存在的语句。
+</li>
+</ol>
+</div>
+</li>
+
+<li><a id="sec-2-2-1-4" name="sec-2-2-1-4"></a>快速编辑之追加单词<br ><div class="outline-text-5" id="text-2-2-1-4">
+<ol class="org-ol">
+<li>list 定位到需要修改的行
+</li>
+<li>通过 append 去追加字段
+<pre class="example">
+append table_name
+</pre>
+</li>
+<li>通过list做检查
+</li>
+<li>通过 run 去执行命令。
+</li>
+</ol>
+</div>
+</li>
+
+<li><a id="sec-2-2-1-5" name="sec-2-2-1-5"></a>快速编辑之删除<br ><div class="outline-text-5" id="text-2-2-1-5">
+<ol class="org-ol">
+<li>list 定位到需要修改的行
+<pre class="example">
+list 1
+</pre>
+</li>
+<li>通过 del 直接删除 / 通过 change 命令，把本行替换为空。
+</li>
+<li>list 查看结果
+</li>
+<li>run 运行语句
+</li>
+</ol>
+</div>
+</li>
+
+<li><a id="sec-2-2-1-6" name="sec-2-2-1-6"></a>快速编辑之添加新行<br ><div class="outline-text-5" id="text-2-2-1-6">
+<ol class="org-ol">
+<li>list 定位
+</li>
+<li>通过 input 输入新行的内容
+</li>
+<li>list 查看结果
+</li>
+<li>run 运行命令
+</li>
+</ol>
+</div>
+</li>
+
+<li><a id="sec-2-2-1-7" name="sec-2-2-1-7"></a>快速编辑之其他<br ><div class="outline-text-5" id="text-2-2-1-7">
+<pre class="example">
+list last         -- 定位到缓冲区内容的最后一行
+save name         -- 保存当前缓冲区的内容到 .sql 文件。默认为当前目录，可以添加详细路径
+start name.sql    -- 加载 .sql 文件并执行。简写为 @name
+get name          -- 加载 .sql 文件但不执行
+run               -- 执行缓冲区内容。简写为 /
+edit              -- 调用外部编辑器修改缓冲区内容
+clear buffer      -- 清空缓存区
+clear screen      -- 清屏
+</pre>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2">jdbc</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+利用 java 连接 Oracle. 需要 ojdbc.jar
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-3" class="outline-4">
+<h4 id="sec-2-2-3">其他的图形化工具</h4>
+<div class="outline-text-4" id="text-2-2-3">
+<p>
+Toad / PLSQL Developer 等
+</p>
+</div>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Oracle 网络配置</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">配置途径</h3>
+<div class="outline-text-3" id="text-3-1">
+<ol class="org-ol">
+<li>直接修改 NETWORK/ADMIN 下的配置文件
+</li>
+<li>通过 Oracle 的 Net Manager 工具配置
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">服务端 (NETWORK/ADMIN/listener.ora)</h3>
+<div class="outline-text-3" id="text-3-2">
+<ol class="org-ol">
+<li>直接修改配置文件或通过图形界面配置。主要配置元素有：
+<ul class="org-ul">
+<li>协议 (TCP/IP)
+</li>
+<li>连接地址
+</li>
+<li>端口号 (默认1521，一般不需要修改)
+</li>
+</ul>
+</li>
+<li>开启 TNSListener 服务
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">客户端 (NETWORK/ADMIN/tnsnames.ora)</h3>
+<div class="outline-text-3" id="text-3-3">
+<ol class="org-ol">
+<li>直接修改配置文件或通过图形界面配置。主要配置元素有：
+<ul class="org-ul">
+<li>协议 (TCP/IP)
+</li>
+<li>连接地址 (机器名或IP地址)
+</li>
+<li>端口号 (默认1521，需要跟服务器端的一致)
+</li>
+<li>数据库的服务名(默认跟SID/数据库名等是一致的)
+</li>
+</ul>
+</li>
+<li>配置完后，就可以通过类似如下语句连接：
+<pre class="example">
+sqlplus scott/tiger@DBALIAS
+</pre>
+</li>
+</ol>
+</div>
+</div>
+</section>
+
+
+
+<section id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">用户与权限</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">用户</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+用户是用于资源控制和权限管理的一个概念
+</p>
+
+
+<p>
+开始新的项目时，保持良好的习惯： 
+为项目创建新的用户，指定新的表空间。
+</p>
+</div>
+
+<div id="outline-container-sec-4-1-1" class="outline-4">
+<h4 id="sec-4-1-1">系统缺省用户</h4>
+<div class="outline-text-4" id="text-4-1-1">
+</div><ul class="org-ul"><li><a id="sec-4-1-1-1" name="sec-4-1-1-1"></a>SYS 用户，又叫特权用户，数据库中至高无上的用户。<br ><div class="outline-text-5" id="text-4-1-1-1">
+<ul class="org-ul">
+<li>它是数据库的系统管理员，负责的是数据的安装、维护、升级、备份、恢复、优化等操作。
+</li>
+<li>不能用 normal 的身份登录，必须用 SYSDBA/SYSOPER 的身份登录。
+</li>
+<li>即使其他的用户用 SYSDBA/SYSOPER 的身份登录，实际上登录的也是 SYS。
+</li>
+</ul>
+</div>
+</li>
+
+<li><a id="sec-4-1-1-2" name="sec-4-1-1-2"></a>SYSTEM 用户。<br ><div class="outline-text-5" id="text-4-1-1-2">
+<p>
+数据库的管理员。SYSTEM 用户之下保存着数据库运行的一些基本字典数据。
+它拥有 DBA 的角色。主要负责对数据库中各种对象，各种资源的管理。
+</p>
+</div>
+</li>
+
+<li><a id="sec-4-1-1-3" name="sec-4-1-1-3"></a>其他用户 (如SCOTT)<br ><div class="outline-text-5" id="text-4-1-1-3">
+<p>
+普通用户，能够执行被授权范围之内的操作。
+</p>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-4-1-2" class="outline-4">
+<h4 id="sec-4-1-2">用户的默认表空间</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<p>
+SYS/SYSTEM -&gt; SYSTEM 表空间
+</p>
+
+<p>
+普通用户  -&gt; USERS 表空间
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1-3" class="outline-4">
+<h4 id="sec-4-1-3">资源文件 (Profile)</h4>
+<div class="outline-text-4" id="text-4-1-3">
+<p>
+资源文件是口令限制、资源限制的命名集合
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26597;&#35810;</span>
+<span style="color: #0000FF;">select</span> *<span style="color: #0000FF;">from</span> dba_profiles <span style="color: #0000FF;">where</span> profile = <span style="color: #008000;">'DEFAULT'</span>;    <span style="color: #8D8D84; font-style: italic;">-- default profile</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;</span>
+<span style="color: #0000FF;">CREATE</span> PROFILE filename <span style="color: #0000FF;">LIMIT</span>
+  SESSION_PER_USER <span style="color: #6434A3;">integer</span>
+  CPU_PER_SESSION <span style="color: #6434A3;">integer</span>
+  USER_PER_CALL <span style="color: #6434A3;">integer</span>
+  CONNECT_TIME <span style="color: #6434A3;">integer</span>|UNLIMITED
+
+<span style="color: #8D8D84; font-style: italic;">-- RESOURCE_LIMIT &#35774;&#32622;&#20026; TRUE&#65292;&#25165;&#20250;&#26377;&#25928;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">system</span> <span style="color: #0000FF;">set</span> RESOURCE_LIMIT = <span style="color: #0000FF;">TRUE</span>;
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#36164;&#28304;&#38480;&#21046;&#25991;&#20214;</span>
+<span style="color: #0000FF;">create</span> profile myprofile <span style="color: #0000FF;">limit</span> failed_login_attempts 3;
+</pre>
+</div>
+
+<p>
+常用选项（我随便写的，你们自己再整理修订下）
+</p>
+<table>
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="left">FAILED_LOGIN_ATTEMPTS</td>
+<td class="left">用于指定联系登陆的最大失败次数.</td>
+</tr>
+
+<tr>
+<td class="left">PASSWORD_LOCK_TIME</td>
+<td class="left">用于指定帐户被锁定的天数.</td>
+</tr>
+
+<tr>
+<td class="left">PASSWORD_LIFE_TIME</td>
+<td class="left">用于指定口令有效期</td>
+</tr>
+
+<tr>
+<td class="left">PASSWORD_GRACE_TIME</td>
+<td class="left">用于指定口令宽限期.</td>
+</tr>
+
+<tr>
+<td class="left">PASSWORD_REUSE_TIME</td>
+<td class="left">用于指定口令可用时间.</td>
+</tr>
+
+<tr>
+<td class="left">PASSWORD_REUSE_MAX</td>
+<td class="left">用于指定口令在有效期内可更改次数.</td>
+</tr>
+
+<tr>
+<td class="left">PASSWORD_VERIFY_FUNCTION</td>
+<td class="left">是否校验口令(校验将值改为VERIFY_FUNCTION)</td>
+</tr>
+
+<tr>
+<td class="left">CPU_PER_SESSION</td>
+<td class="left">用于指定每个会话可以占用的最大CPU时间.</td>
+</tr>
+
+<tr>
+<td class="left">LOGICAL_READS_PER_SESSON</td>
+<td class="left">用于指定会话的最大逻辑读取次数.</td>
+</tr>
+
+<tr>
+<td class="left">PRIVATE_SGA</td>
+<td class="left">用于指定会话在共享池中可以分配的最大总计私有空间.</td>
+</tr>
+
+<tr>
+<td class="left">COMPOSITE_LIMIT</td>
+<td class="left">用于指定会话的总计资源消耗</td>
+</tr>
+
+<tr>
+<td class="left">CPU_PER_CALL</td>
+<td class="left">限制每次调用可占用的最大CPU时间</td>
+</tr>
+
+<tr>
+<td class="left">LOGICAL_READS_PER_CALL</td>
+<td class="left">用于限制每次调用的最大逻辑I/O次数.</td>
+</tr>
+
+<tr>
+<td class="left">SESSIONS_PER_USER</td>
+<td class="left">用于指定每个用户的最大并发会话个数.</td>
+</tr>
+
+<tr>
+<td class="left">CONNECT_TIME</td>
+<td class="left">用于指定会话的最大连接时间.</td>
+</tr>
+
+<tr>
+<td class="left">IDLE_TIME</td>
+<td class="left">用于指定会话的最大空闲时间.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1-4" class="outline-4">
+<h4 id="sec-4-1-4">创建/修改/删除用户</h4>
+<div class="outline-text-4" id="text-4-1-4">
+<ol class="org-ol">
+<li>创建用户语法格式
+<pre class="example">
+create USER name
+  identified by password
+  [default tablespace users]
+  [temporary tablespace temp]
+  [profile default]
+  [quota xxx on users]
+  [other key/value pair]
+</pre>
+</li>
+
+<li>修改用户语法格式
+<pre class="example">
+alter USER name
+  identified by password
+  [default tablespace users]
+  [temporary tablespace temp]
+  [profile default]
+  [quota xxx on users]
+  [other key/value pair]
+</pre>
+</li>
+
+<li>删除用户
+<pre class="example">
+drop USER name [cascade]
+</pre>
+</li>
+
+<li>操作示例
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26597;&#35810;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> dba_users <span style="color: #0000FF;">where</span> username=<span style="color: #008000;">'SCOTT'</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22522;&#26412;&#30340;&#21019;&#24314;&#35821;&#27861;&#65288;&#29992;&#25143;&#21517;+&#23494;&#30721;&#65289;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #006FE0;">user</span> vip identified <span style="color: #0000FF;">by</span> vip;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#36739;&#35814;&#32454;&#30340;&#21019;&#24314;&#35821;&#27861;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #006FE0;">User</span> vip
+  identified <span style="color: #0000FF;">by</span> vip
+  <span style="color: #0000FF;">default</span> tablespace users
+  <span style="color: #0000FF;">temporary</span> <span style="color: #0000FF;">temporary</span> temp
+  profile <span style="color: #0000FF;">default</span>
+  quota ulimited <span style="color: #0000FF;">on</span> users;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20462;&#25913;&#29992;&#25143;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #006FE0;">user</span> vip identified <span style="color: #0000FF;">by</span> vop;
+<span style="color: #0000FF;">alter</span> <span style="color: #006FE0;">user</span> vip profile ttt;
+<span style="color: #0000FF;">alter</span> <span style="color: #006FE0;">user</span> vip <span style="color: #0000FF;">default</span> <span style="color: #006699;">tablespace</span> <span style="color: #0000FF;">system</span>;
+<span style="color: #0000FF;">alter</span> <span style="color: #006FE0;">user</span> vip <span style="color: #0000FF;">temporary</span> tablespace mytemp;
+<span style="color: #0000FF;">alter</span> <span style="color: #006FE0;">user</span> vip account unlock/lock;
+<span style="color: #0000FF;">alter</span> <span style="color: #006FE0;">user</span> vip quota unlimited <span style="color: #0000FF;">on</span> test;  <span style="color: #8D8D84; font-style: italic;">-- very good</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#29992;&#25143;&#12290;&#22914;&#26524;&#29992;&#25143;&#19979;&#23384;&#22312;&#23545;&#35937;&#65292;&#38656;&#35201;&#28155;&#21152; cascade &#20851;&#38190;&#35789;&#12290;</span>
+<span style="color: #0000FF;">drop</span> <span style="color: #006FE0;">user</span> vip;
+<span style="color: #0000FF;">drop</span> <span style="color: #006FE0;">user</span> vip <span style="color: #0000FF;">cascade</span>;
+</pre>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2">权限</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+权限指的是执行特定命令或访问数据库对象的权利。分为系统权限和对象权限。
+</p>
+</div>
+
+<div id="outline-container-sec-4-2-1" class="outline-4">
+<h4 id="sec-4-2-1">系统权限 (执行特定命令)</h4>
+<div class="outline-text-4" id="text-4-2-1">
+</div><ul class="org-ul"><li><a id="sec-4-2-1-1" name="sec-4-2-1-1"></a>授权语法<br ><div class="outline-text-5" id="text-4-2-1-1">
+<pre class="example">
+grant 权限名字 to 用户 [with admin option]
+</pre>
+<p>
+with admin option 参数可以使得到授权的用户有权把得到的权限授予其他用户。
+</p>
+</div>
+</li>
+
+<li><a id="sec-4-2-1-2" name="sec-4-2-1-2"></a>撤销语法<br ><div class="outline-text-5" id="text-4-2-1-2">
+<pre class="example">
+revoke 权限名字 from 用户
+</pre>
+</div>
+</li>
+
+<li><a id="sec-4-2-1-3" name="sec-4-2-1-3"></a>相关的字典表<br ><div class="outline-text-5" id="text-4-2-1-3">
+<pre class="example">
+select * from system_privilege_map;  -- 所有的系统权限
+select * from dba_sys_privs where grantee='SCOTT';         -- 目前已经被授权的系统权限
+</pre>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-4-2-2" class="outline-4">
+<h4 id="sec-4-2-2">对象权限 (访问数据库对象)</h4>
+<div class="outline-text-4" id="text-4-2-2">
+</div><ul class="org-ul"><li><a id="sec-4-2-2-1" name="sec-4-2-2-1"></a>授权语法<br ><div class="outline-text-5" id="text-4-2-2-1">
+<pre class="example">
+grant 对象权限的关键词(select/update/..)on [schema.]对象名字 to 用户 [with granted option];
+grant all on scott.emp to vip with grant option;
+</pre>
+</div>
+</li>
+
+<li><a id="sec-4-2-2-2" name="sec-4-2-2-2"></a>撤销权限<br ><div class="outline-text-5" id="text-4-2-2-2">
+<pre class="example">
+revoke 权限名字 from 用户
+</pre>
+</div>
+</li>
+
+<li><a id="sec-4-2-2-3" name="sec-4-2-2-3"></a>相关的字典表<br ><div class="outline-text-5" id="text-4-2-2-3">
+<pre class="example">
+select * from dba_tab_privs/all_tab_privs/user_tab_privs;      -- 存放的是所有对象权限的授权情况。
+</pre>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-4-2-3" class="outline-4">
+<h4 id="sec-4-2-3">示例</h4>
+<div class="outline-text-4" id="text-4-2-3">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#25480;&#26435;</span>
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #0000FF;">to</span> vip;
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">session</span> <span style="color: #0000FF;">to</span> vip <span style="color: #707183;">[</span><span style="color: #0000FF;">with</span> <span style="color: #0000FF;">admin</span> <span style="color: #0000FF;">option</span><span style="color: #707183;">]</span>;
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">select</span>, <span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">on</span> sys.dba_tab_privs <span style="color: #0000FF;">to</span> vip;
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">all</span> <span style="color: #0000FF;">on</span> scott <span style="color: #0000FF;">to</span> vip;           <span style="color: #8D8D84; font-style: italic;">-- &#25480;&#20104;&#25152;&#26377;</span>
+
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> synonym <span style="color: #0000FF;">to</span> vip;         <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#20026;&#33258;&#24049;&#21019;&#24314; synonym</span>
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">any</span> synonym <span style="color: #0000FF;">to</span> vip;     <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#20026;&#20219;&#24847;&#29992;&#25143;&#21019;&#24314; synonym</span>
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">public</span> synonym <span style="color: #0000FF;">to</span> vip;  <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#21019;&#24314; public synonym</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#25764;&#26435;</span>
+<span style="color: #0000FF;">revoke</span> <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span>, <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">session</span> <span style="color: #0000FF;">from</span> rain;
+<span style="color: #0000FF;">revoke</span> <span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">on</span> scott <span style="color: #0000FF;">from</span> vip;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3">角色</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+角色是权限的命名集合。
+</p>
+</div>
+
+<div id="outline-container-sec-4-3-1" class="outline-4">
+<h4 id="sec-4-3-1">创建角色</h4>
+<div class="outline-text-4" id="text-4-3-1">
+<pre class="example">
+create role name
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3-2" class="outline-4">
+<h4 id="sec-4-3-2">配置角色</h4>
+<div class="outline-text-4" id="text-4-3-2">
+<pre class="example">
+grant 权限名字 to 角色名字
+grant 角色名字 to 角色名字
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3-3" class="outline-4">
+<h4 id="sec-4-3-3">使用角色</h4>
+<div class="outline-text-4" id="text-4-3-3">
+<pre class="example">
+grant 角色名字 to 用户名字
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3-4" class="outline-4">
+<h4 id="sec-4-3-4">删除角色</h4>
+<div class="outline-text-4" id="text-4-3-4">
+<pre class="example">
+drop ROLE 角色名字
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3-5" class="outline-4">
+<h4 id="sec-4-3-5">相关的字典表</h4>
+<div class="outline-text-4" id="text-4-3-5">
+<pre class="example">
+select * from dba_roles;                            -- 列出系统中所有存在的角色。
+select * from dba_sys_privs where grantee='DBA';    -- 查看DBA所拥有的所有系统权限
+select * from dba_role_privs where grantee='SYSTEM' -- 查看用户所拥有的所有角色
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3-6" class="outline-4">
+<h4 id="sec-4-3-6">特殊的 PUBLIC 角色</h4>
+<div class="outline-text-4" id="text-4-3-6">
+<p>
+公用角色，默认是授予每个用户的。
+</p>
+</div>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="todo TODO">TODO</span> 阶段性实践</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+计算大家完成以下工作所消耗的时间：
+</p>
+<ol class="org-ol">
+<li>连接上指定服务器的指定数据库。
+</li>
+<li>为新的用户创建所需要的默认表空间。
+</li>
+<li>为新的用户创建所需要的资源文件。
+</li>
+<li>创建用户，指定表空间、资源文件，设置配额。
+</li>
+<li>为所创建的用户授予特定的系统权限，如创建会话、创建表、更新数据等。
+</li>
+<li>为 scott 用户授予相应的对象权限，让 scott 用户能够操纵我们所创建用户下的一些对象。
+</li>
+<li>进行一系列的简单操作。
+</li>
+</ol>
+</div>
+</section>
+
+
+
+<section id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">SQL</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Structured Query Language，结构性查询语言。
+</p>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1">SQL 的历史及概念</h3>
+</div>
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2">SQL 的分类</h3>
+<div class="outline-text-3" id="text-6-2">
+</div><div id="outline-container-sec-6-2-1" class="outline-4">
+<h4 id="sec-6-2-1">DDL（Data Definition Language）</h4>
+<div class="outline-text-4" id="text-6-2-1">
+</div><ul class="org-ul"><li><a id="sec-6-2-1-1" name="sec-6-2-1-1"></a>CREATE<br ><div class="outline-text-5" id="text-6-2-1-1">
+<p>
+创建表的典型语句为:
+</p>
+<pre class="example">
+create TABLE table_name
+(column_name column_type,[column_name column_type...]);
+</pre>
+
+<p>
+例子:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22522;&#26412;&#30340;&#21019;&#24314;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">OrderTB</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span>, <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#28155;&#21152;&#20027;&#38190;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">OrderTB</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>, <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">OrderTB</span> 
+  <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span>,
+   <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>,
+   <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span><span style="color: #7388D6;">(</span>id<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">OrderTB</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span>, <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, <span style="color: #0000FF;">constraints</span> pk_ordertb <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span><span style="color: #7388D6;">(</span>id<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#28155;&#21152;&#22806;&#38190;&#65292;&#22806;&#38190;&#26144;&#23556;&#21040;&#30340;&#24517;&#39035;&#26159;&#20027;&#38190;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sex</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">value</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>, detail varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">Mates</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>, <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, sex <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">references</span> sex<span style="color: #7388D6;">(</span><span style="color: #0000FF;">value</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">Mates</span> 
+  <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>,
+   <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>,
+   sex <span style="color: #0000FF;">number</span>,
+   <span style="color: #0000FF;">foreign</span> <span style="color: #0000FF;">key</span> <span style="color: #7388D6;">(</span>sex<span style="color: #7388D6;">)</span> <span style="color: #0000FF;">references</span> sex<span style="color: #7388D6;">(</span><span style="color: #0000FF;">value</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">Mates</span> 
+  <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>,
+   <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>,
+   sex <span style="color: #0000FF;">number</span>,
+   <span style="color: #0000FF;">constraints</span> fk_mates <span style="color: #0000FF;">foreign</span> <span style="color: #0000FF;">key</span> <span style="color: #7388D6;">(</span>sex<span style="color: #7388D6;">)</span> <span style="color: #0000FF;">references</span> sex<span style="color: #7388D6;">(</span><span style="color: #0000FF;">value</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- check &#32422;&#26463;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">Classes</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span>, <span style="color: #006FE0;">count</span> <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">check</span> <span style="color: #7388D6;">(</span><span style="color: #006FE0;">count</span> &gt; 10 <span style="color: #0000FF;">and</span> <span style="color: #006FE0;">count</span> &lt; 100<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">Classes222</span>
+<span style="color: #707183;">(</span> id <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>,
+  <span style="color: #006FE0;">count</span> <span style="color: #0000FF;">number</span>,
+  <span style="color: #0000FF;">constraints</span> ck_classes <span style="color: #0000FF;">check</span> <span style="color: #7388D6;">(</span><span style="color: #006FE0;">count</span> &gt; 10 <span style="color: #0000FF;">and</span> <span style="color: #006FE0;">count</span> &lt; 100<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- TODO Unique &#32422;&#26463;</span>
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21452;&#24341;&#21495;&#24378;&#21046;&#34920;&#21517;&#20445;&#30041;&#21407;&#26469;&#30340;&#22823;&#23567;&#20889;&#12290;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> "XiaoMing" <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, age <span style="color: #6434A3;">int</span><span style="color: #707183;">)</span>;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#19968;&#24352;&#34920;&#65292;&#19981;&#29983;&#20135;&#37325;&#20570;&#26085;&#24535;&#30340;&#35805;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">nologtab</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span> nologging;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#19968;&#24352;&#34920;&#65292;&#25351;&#23450;&#21478;&#22806;&#30340;&#34920;&#31354;&#38388;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">spetab</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span> tablespace <span style="color: #0000FF;">system</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#24378;&#21046;&#23383;&#27573;&#20869;&#23481;&#19981;&#33021;&#20026;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">notnulltab</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span> <span style="color: #0000FF;">not</span> <span style="color: #0000FF;">null</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#25351;&#23450;&#26576;&#20010;&#23383;&#27573;&#30340;&#40664;&#35748;&#20540;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">tab_defaultval</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span> <span style="color: #0000FF;">not</span> <span style="color: #0000FF;">null</span>, sex <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">default</span> 1<span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+<p>
+需要注意，首先，表的名字要符合一定的规范(长度，组成字符，保留字，以及其他)。
+</p>
+
+<p>
+Oracle 会自动把表名转换为大写，但是如果想保留大小写的话，可以在创建表的时候，把表名用双引号括起来。
+</p>
+
+<p>
+主键：
+</p>
+
+<p>
+需要简短、效率、不重复、不可改变。
+所以，不要用业务字段作为主键，即使觉得业务字段是唯一且不可改变的。因为，你觉得不可改变的东西，往往经不住时间的考验。
+需要用自增的，简单的，跟业务没有关系的，所谓的代理主键。<a href="http://www.w3school.com.cn/sql/sql_autoincrement.asp">就比如 sqlserver 中的 identity, MySQL 中的 auto_increment</a>.
+</p>
+
+<p>
+查看数据库中表的 DDL 语句：
+</p>
+<pre class="example">
+set long 999
+select DBMS_METADATA.get_ddl('TABLE', 'EMP') from dual;
+</pre>
+
+
+<p>
+从已经存在的表中，创建新的表
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#35821;&#27861;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">&#34920;&#21517;</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> cause...
+
+<span style="color: #8D8D84; font-style: italic;">-- &#31616;&#21333;&#24212;&#29992;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">emp1</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#38480;&#23450;&#21015;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">emp2</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> empno, ename, hiredate <span style="color: #0000FF;">from</span> scott.emp;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#38480;&#23450;&#21015;&#30340;&#36807;&#31243;&#20013;&#65292;&#21487;&#20197;&#20351;&#29992;&#36816;&#31639;&#31526;&#25110;&#32773;&#20989;&#25968;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">emp2</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> empno, ename, sal/1000 s <span style="color: #0000FF;">from</span> scott.emp;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#38480;&#23450;&#34892;(&#38480;&#23450;&#25554;&#20837;&#30340;&#25968;&#25454;)</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">emp3</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> empno, ename <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> empno &lt; 7566;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#21482;&#24819;&#22797;&#21046;&#34920;&#30340;&#32467;&#26500;&#30340;&#35805;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">emp4</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> 1=2;
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">emp4</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> rownum &lt; 1;
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-6-2-1-2" name="sec-6-2-1-2"></a>ALTER<br ><div class="outline-text-5" id="text-6-2-1-2">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22522;&#26412;&#30340;&#29992;&#27861;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">&#34920;&#21517;</span> &#25805;&#20316;&#20851;&#38190;&#35789; &#23646;&#24615;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#28155;&#21152;&#19968;&#20010;&#21015;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> sss <span style="color: #0000FF;">add</span> howsoon <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">default</span> <span style="color: #006699;">0</span>;
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">add</span> <span style="color: #707183;">(</span>status <span style="color: #6434A3;">char</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">add</span> <span style="color: #707183;">(</span>status <span style="color: #6434A3;">char</span> <span style="color: #0000FF;">not</span> <span style="color: #0000FF;">null</span><span style="color: #707183;">)</span>;         <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#28155;&#21152;&#20854;&#20182;&#30340;&#23646;&#24615;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">add</span> <span style="color: #707183;">(</span>status <span style="color: #6434A3;">char</span> <span style="color: #0000FF;">default</span> <span style="color: #008000;">'1'</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#28155;&#21152;&#19968;&#20010;&#20027;&#38190;&#32422;&#26463;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">add</span> <span style="color: #0000FF;">constraints</span> pk_sss <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span> <span style="color: #707183;">(</span>id<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#19968;&#20010;&#21015;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">COLUMN</span> howsoon;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#20027;&#38190;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">CONSTRAINTS</span> pk_sss;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#22806;&#38190;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">&#34920;&#21517;</span> <span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">constraints</span> &#22806;&#38190;&#21517;;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20462;&#25913;&#21015;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> <span style="color: #0000FF;">modify</span> <span style="color: #707183;">(</span>status varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span> <span style="color: #0000FF;">not</span> <span style="color: #0000FF;">null</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26356;&#25913;&#21015;&#21517;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> rename <span style="color: #0000FF;">COLUMN</span> status <span style="color: #0000FF;">TO</span> flag;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26356;&#25913;&#34920;&#30340;&#34920;&#31354;&#38388;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> move tablespace <span style="color: #0000FF;">system</span>;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26356;&#25913;&#26159;&#21542;&#35760;&#24405;&#26085;&#24535;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> logging;
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">sss</span> nologging;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#20309;&#21435;&#32473;&#19968;&#20010;&#34920;&#25913;&#21517;&#23383;</span>
+<span style="color: #0000FF;">ALTER</span> <span style="color: #0000FF;">TABLE</span> <span style="color: #006699;">sss</span> RENAME <span style="color: #0000FF;">TO</span> sss_new;
+rename sss <span style="color: #0000FF;">to</span> sss_new;
+</pre>
+</div>
+</div>
+</li>
+
+
+<li><a id="sec-6-2-1-3" name="sec-6-2-1-3"></a>DROP<br ><div class="outline-text-5" id="text-6-2-1-3">
+<pre class="example">
+drop table 表名;
+drop table 表名 cascade constraints;  -- 注意，只是删除约束
+</pre>
+
+<p>
+如果表存在被外键引用的情况的话，要删除有一下几种方式：
+</p>
+<ol class="org-ol">
+<li>删除外键引用的表
+</li>
+<li>删除外键引用表上存在的外键约束
+</li>
+<li>在删除的过程中加上关键字 cascade constraints.
+</li>
+</ol>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-6-2-2" class="outline-4">
+<h4 id="sec-6-2-2">DML（Data Definition Language）</h4>
+<div class="outline-text-4" id="text-6-2-2">
+<p>
+概念，增删改查，又叫 CRUD(Create/Read/Update/Delete)
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="sec-6-2-2-1" name="sec-6-2-2-1"></a>查询(select)<br ><div class="outline-text-5" id="text-6-2-2-1">
+<p>
+基本语法:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">select</span> <span style="color: #0000FF;">distinct</span> &#23383;&#27573;&#21517;|&#34920;&#36798;&#24335; <span style="color: #0000FF;">from</span> <span style="color: #707183;">[</span><span style="color: #0000FF;">schema</span>.<span style="color: #707183;">]</span>&#34920;&#21517;
+  <span style="color: #0000FF;">where</span> cause
+  <span style="color: #0000FF;">order</span> <span style="color: #0000FF;">by</span> cause
+  <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> cause
+  <span style="color: #0000FF;">having</span> cause;
+</pre>
+</div>
+
+
+<p>
+用法示例：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22522;&#26412;&#30340;&#26597;&#35810;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp;   <span style="color: #8D8D84; font-style: italic;">-- * &#20195;&#34920;&#25152;&#26377;&#30340;&#21015;&#65292;&#20294;&#22312;&#29983;&#20135;&#29615;&#22659;&#20013;&#19981;&#24314;&#35758;&#20351;&#29992;&#12290;&#26377;&#26102;&#20505;&#20250;&#24456;&#20302;&#25928;&#12290;&#32780;&#19988;&#19981;&#20415;&#20110;&#35299;&#32806;&#21512;&#12290;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22522;&#26412;&#30340;&#26465;&#20214;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> empno &lt; 7802;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#25490;&#24207;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> empno &lt; 7902 <span style="color: #0000FF;">order</span> <span style="color: #0000FF;">by</span> empno;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> empno &lt; 7902 <span style="color: #0000FF;">order</span> <span style="color: #0000FF;">by</span> empno <span style="color: #0000FF;">desc</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#38477;&#24207;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.emp <span style="color: #0000FF;">where</span> empno &lt; 7902 <span style="color: #0000FF;">order</span> <span style="color: #0000FF;">by</span> job, empno;   <span style="color: #8D8D84; font-style: italic;">-- &#32452;&#21512;&#22810;&#20010;&#25490;&#24207;&#30340;&#21015;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- distinct</span>
+<span style="color: #0000FF;">select</span> <span style="color: #0000FF;">distinct</span> job <span style="color: #0000FF;">from</span> emp;
+<span style="color: #0000FF;">select</span> <span style="color: #0000FF;">distinct</span> job, sal <span style="color: #0000FF;">from</span> emp;
+
+<span style="color: #8D8D84; font-style: italic;">-- alias</span>
+<span style="color: #0000FF;">select</span> to_char<span style="color: #707183;">(</span>empno<span style="color: #707183;">)</span> <span style="color: #0000FF;">as</span> empnochar <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> sal &gt; 5000;
+</pre>
+</div>
+
+
+<p>
+表的连接
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- cross join(&#21449;&#20056;&#65292;&#31515;&#21345;&#23572;&#31215;)&#12290;&#23637;&#31034;&#25152;&#26377;&#30340;&#35760;&#24405;&#30340;&#32452;&#21512;&#12290;&#26159;&#20869;&#36830;&#25509;&#21644;&#22806;&#36830;&#25509;&#30340;&#22522;&#30784;&#12290;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">cross</span> <span style="color: #0000FF;">join</span> b;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a, b;
+
+<span style="color: #8D8D84; font-style: italic;">-- inner join(&#20869;&#36830;&#25509;)</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">inner</span> <span style="color: #0000FF;">join</span> b <span style="color: #0000FF;">on</span> a.deptno = b.deptno;
+<span style="color: #0000FF;">select</span> a.ename, b.deptname <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">inner</span> <span style="color: #0000FF;">join</span> b <span style="color: #0000FF;">using</span> <span style="color: #707183;">(</span>deptno<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">select</span> a.ename, b.deptname <span style="color: #0000FF;">from</span> a,b <span style="color: #0000FF;">where</span> b.deptno=a.deptno; <span style="color: #8D8D84; font-style: italic;">-- oracle &#20013;&#30340;&#20889;&#27861;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- outer join(&#22806;&#36830;&#25509;)</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">left</span> <span style="color: #0000FF;">join</span> b <span style="color: #0000FF;">on</span> a.deptno = b.deptno;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">left</span> <span style="color: #0000FF;">outer</span> <span style="color: #0000FF;">join</span> b <span style="color: #0000FF;">using</span> <span style="color: #707183;">(</span>deptno<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">right</span> <span style="color: #0000FF;">outer</span> <span style="color: #0000FF;">join</span> b <span style="color: #0000FF;">on</span> a.deptno = b.deptno;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a <span style="color: #0000FF;">full</span> <span style="color: #0000FF;">join</span> b <span style="color: #0000FF;">on</span> a.deptno = b.deptno;   <span style="color: #8D8D84; font-style: italic;">-- &#20840;&#36830;&#25509;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a, b <span style="color: #0000FF;">where</span> a.deptno=b.deptno<span style="color: #707183;">(</span>+<span style="color: #707183;">)</span>;        <span style="color: #8D8D84; font-style: italic;">-- &#24038;&#22806;&#36830;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> a, b <span style="color: #0000FF;">where</span> a.deptno<span style="color: #707183;">(</span>+<span style="color: #707183;">)</span>=b.deptno;        <span style="color: #8D8D84; font-style: italic;">-- &#21491;&#36830;&#25509;</span>
+</pre>
+</div>
+</div>
+
+<ul class="org-ul"><li><a id="sec-6-2-2-1-1" name="sec-6-2-2-1-1"></a><span class="todo TODO">TODO</span> 阶段性作业（scott用户下的表）<br ><div class="outline-text-6" id="text-6-2-2-1-1">
+<ol class="org-ol">
+<li>查询每个部门下有多少员工
+</li>
+<li>查询除去 salesman 所有平均工资超过 1500 的部门
+</li>
+<li>查询在 new york 工作的所有员工的姓名，部门名称和工资信息
+</li>
+<li>查询姓名为 King 的员工的编号，名称跟部门
+</li>
+<li>查询各种工作的最低工资
+</li>
+<li>查询工龄大于10年的所有员工信息
+</li>
+<li>查询每个部门员工数量，平均工资和平均工作年限
+</li>
+<li>统计各部门每个工种的人数，平均工资。
+</li>
+<li>查询从事同一种工作但不属于同一部门的员工信息。
+</li>
+<li>查询所有员工工资都大于1000的部门的信息及员工信息
+</li>
+<li>查询入职日期早于其直接上级的所有员工信息。
+</li>
+<li>列出雇员中（除去mgr为空的人)工资第二高的人。
+</li>
+<li>列出1981年来公司所有员工的总收入（包括sal和comm）
+</li>
+</ol>
+</div>
+</li>
+
+<li><a id="sec-6-2-2-1-2" name="sec-6-2-2-1-2"></a>Group By<br ><div class="outline-text-6" id="text-6-2-2-1-2">
+<p>
+示例：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> deptno;    <span style="color: #8D8D84; font-style: italic;">-- &#38169;&#35823;&#30340;&#29992;&#27861;&#12290;&#22240;&#20026;&#29992;group by&#20043;&#21518;&#65292;&#38656;&#35201;&#25351;&#23450;&#36319;&#20998;&#32452;&#30456;&#20851;&#30340;&#21015;&#12289;&#23383;&#27573;&#12290;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26597;&#30475;&#27599;&#19968;&#32452;&#30340;&#25968;&#30446;</span>
+<span style="color: #0000FF;">select</span> deptno, <span style="color: #006FE0;">count</span><span style="color: #707183;">(</span>*<span style="color: #707183;">)</span> <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> deptno;  <span style="color: #8D8D84; font-style: italic;">-- &#26597;&#30475;&#27599;&#19968;&#20010;&#37096;&#38376;&#26377;&#22810;&#23569;&#20154;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26597;&#35810;&#27599;&#20010;&#37096;&#38376;&#19979;&#26377;&#22810;&#23569;&#21592;&#24037;</span>
+<span style="color: #0000FF;">select</span> d.dname, <span style="color: #006FE0;">count</span><span style="color: #707183;">(</span>*<span style="color: #707183;">)</span> <span style="color: #0000FF;">from</span> dept d, emp e 
+  <span style="color: #0000FF;">where</span> d.deptno = e.deptno <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> d.dname;
+<span style="color: #0000FF;">select</span> d.dname,e.c 
+  <span style="color: #0000FF;">from</span> dept d,
+       <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> deptno, <span style="color: #006FE0;">count</span><span style="color: #7388D6;">(</span>*<span style="color: #7388D6;">)</span> c <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> deptno<span style="color: #707183;">)</span> e
+ <span style="color: #0000FF;">where</span> d.deptno = e.deptno;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20998;&#32452;&#30340;&#39034;&#24207;&#26159;&#36825;&#26679;&#30340;&#65306; </span>
+<span style="color: #8D8D84; font-style: italic;">-- &#39318;&#20808;&#65292;where&#36807;&#28388;&#21407;&#22987;&#25968;&#25454;&#65307;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#20854;&#27425;,&#20381;&#25454; group by &#36827;&#34892;&#20998;&#32452;&#65292;&#24471;&#21040;&#36319;&#20998;&#32452;&#25968;&#30456;&#21516;&#30340;&#35760;&#24405;&#25968;&#30446;&#65307;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#26368;&#21518;&#65292;&#29992;having&#23545;groupby&#20043;&#21518;&#20135;&#29983;&#30340;&#32467;&#26524;&#20877;&#36827;&#34892;&#36807;&#28388;&#12290;</span>
+<span style="color: #0000FF;">select</span> gno,
+    <span style="color: #006FE0;">count</span><span style="color: #707183;">(</span>*<span style="color: #707183;">)</span> &#20154;&#25968;,
+    <span style="color: #006FE0;">max</span><span style="color: #707183;">(</span>yanzhi<span style="color: #707183;">)</span> &#26368;&#32654;,
+    <span style="color: #006FE0;">min</span><span style="color: #707183;">(</span>yanzhi<span style="color: #707183;">)</span> &#26368;&#26377;&#25165;,
+    <span style="color: #006FE0;">avg</span><span style="color: #707183;">(</span>yanzhi<span style="color: #707183;">)</span> &#24179;&#22343;,
+    <span style="color: #006FE0;">sum</span><span style="color: #707183;">(</span>yanzhi<span style="color: #707183;">)</span> &#24635;&#21644;
+  <span style="color: #0000FF;">from</span> boysandgirls
+    <span style="color: #0000FF;">where</span> <span style="color: #0000FF;">name</span> &lt;&gt; <span style="color: #008000;">'&#40644;'</span>
+    <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> gno
+    <span style="color: #0000FF;">having</span> <span style="color: #006FE0;">sum</span><span style="color: #707183;">(</span>yanzhi<span style="color: #707183;">)</span>&gt;400;
+
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span>
+  <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> gno,
+      <span style="color: #006FE0;">count</span><span style="color: #7388D6;">(</span>*<span style="color: #7388D6;">)</span> &#20154;&#25968;,
+      <span style="color: #006FE0;">max</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#26368;&#32654;,
+      <span style="color: #006FE0;">min</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#26368;&#26377;&#25165;,
+      <span style="color: #006FE0;">avg</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#24179;&#22343;,
+      <span style="color: #006FE0;">sum</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#24635;&#21644;
+    <span style="color: #0000FF;">from</span> boysandgirls
+      <span style="color: #0000FF;">where</span> <span style="color: #0000FF;">name</span> &lt;&gt; <span style="color: #008000;">'&#40644;'</span>
+      <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> gno<span style="color: #707183;">)</span> a
+   <span style="color: #0000FF;">where</span> a.&#24635;&#21644;&gt;400;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20998;&#32452;&#20043;&#21518;&#30340;&#34920;&#30340;&#36830;&#25509;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span>
+  groups a,
+  <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> gno,
+       <span style="color: #006FE0;">count</span><span style="color: #7388D6;">(</span>*<span style="color: #7388D6;">)</span> &#20154;&#25968;,
+       <span style="color: #006FE0;">max</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#26368;&#32654;,
+       <span style="color: #006FE0;">min</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#26368;&#26377;&#25165;,
+       <span style="color: #006FE0;">avg</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#24179;&#22343;,
+       <span style="color: #006FE0;">sum</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span> &#24635;&#21644;
+     <span style="color: #0000FF;">from</span> boysandgirls
+       <span style="color: #0000FF;">where</span> <span style="color: #0000FF;">name</span> &lt;&gt; <span style="color: #008000;">'&#40644;'</span>
+       <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> gno
+       <span style="color: #0000FF;">having</span> <span style="color: #006FE0;">sum</span><span style="color: #7388D6;">(</span>yanzhi<span style="color: #7388D6;">)</span>&gt;400<span style="color: #707183;">)</span> b
+<span style="color: #0000FF;">where</span> a.gno = b.gno;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#34920;&#30340;&#36830;&#25509;&#20043;&#21518;&#20877;&#20998;&#32452;</span>
+<span style="color: #0000FF;">select</span> gname, <span style="color: #006FE0;">sum</span><span style="color: #707183;">(</span>yanzhi<span style="color: #707183;">)</span> 
+  <span style="color: #0000FF;">from</span> mates a, groups b 
+  <span style="color: #0000FF;">where</span> a.gno=b.gno <span style="color: #0000FF;">and</span> <span style="color: #0000FF;">name</span>&lt;&gt;<span style="color: #008000;">'&#40644;&#23567;&#27874;'</span> 
+  <span style="color: #0000FF;">group</span> <span style="color: #0000FF;">by</span> gname
+  <span style="color: #0000FF;">having</span> <span style="color: #006FE0;">sum</span><span style="color: #707183;">(</span>a.yanzhi<span style="color: #707183;">)</span>&gt;350;
+</pre>
+</div>
+</div>
+</li></ul>
+</li>
+
+<li><a id="sec-6-2-2-2" name="sec-6-2-2-2"></a>插入(insert)<br ><div class="outline-text-5" id="text-6-2-2-2">
+<p>
+最基本的语法
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> <span style="color: #0000FF;">table_name</span> <span style="color: #707183;">[</span>columns<span style="color: #707183;">]</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">value</span>...<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#31034;&#20363;&#34920;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">demo</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span>, <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26368;&#31616;&#21333;&#25554;&#20837;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>1, <span style="color: #008000;">'haha'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #707183;">(</span>id, <span style="color: #0000FF;">name</span><span style="color: #707183;">)</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>2, <span style="color: #008000;">'hehe'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #707183;">(</span>id<span style="color: #707183;">)</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>3<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span>, id<span style="color: #707183;">)</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #008000;">'heihei'</span>, 4<span style="color: #707183;">)</span>;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#27880;&#24847;&#65292;&#25554;&#20837;&#26102;&#65292;&#26368;&#22909;&#25351;&#23450;&#25554;&#20837;&#30340;&#23383;&#27573;&#12290;&#22240;&#20026;&#21487;&#20197;&#25552;&#39640;&#25928;&#29575;&#65292;&#21487;&#20197;&#36991;&#20813;&#38169;&#35823;&#12290;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">demo</span> <span style="color: #0000FF;">add</span> age <span style="color: #0000FF;">number</span>;      <span style="color: #8D8D84; font-style: italic;">-- &#23545;&#34920;&#36827;&#34892;&#25193;&#20805;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>1, <span style="color: #008000;">'haha'</span><span style="color: #707183;">)</span>;  <span style="color: #8D8D84; font-style: italic;">-- &#20250;&#20986;&#38169;&#65292;&#22240;&#20026;&#22810;&#20102;&#19968;&#21015;&#65292;&#20294;&#26159;&#25554;&#20837;&#30340;&#35821;&#27861;&#27809;&#21464;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span>, id<span style="color: #707183;">)</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #008000;">'heihei'</span>, 4<span style="color: #707183;">)</span>;  <span style="color: #8D8D84; font-style: italic;">-- &#27809;&#26377;&#38382;&#39064;&#12290;</span>
+
+
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20174;&#20854;&#20182;&#30340;&#34920;&#20013;&#21152;&#36733;&#25968;&#25454;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> <span style="color: #0000FF;">table_name</span> <span style="color: #0000FF;">select</span> xxx <span style="color: #0000FF;">from</span> yyy;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22797;&#21046; scott.dept &#20013;&#30340;deptno&gt;20&#30340;&#25152;&#26377;&#25968;&#25454;&#21040;&#25351;&#23450;&#34920;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">d</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> 1=2;  <span style="color: #8D8D84; font-style: italic;">-- &#25353;&#29031;&#20043;&#21069;&#23398;&#30340;&#35821;&#27861;&#65292;&#22797;&#21046;&#34920;&#30340;&#32467;&#26500;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> dept <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> deptno&gt;20;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> dept <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> deptno&gt;20<span style="color: #707183;">)</span>;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#19968;&#24352;&#34920;&#65292;&#21482;&#26377;&#19968;&#20010;&#23383;&#27573;&#65292; varchar2(20)</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#25226; scott.dept &#20013;&#25152;&#26377; deptno &gt; 20 &#30340;&#37096;&#38376;&#30340;&#21517;&#31216;&#25554;&#20837;&#20854;&#20013;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">dept2</span> <span style="color: #707183;">(</span>dname varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#34920;&#30340;&#35821;&#21477;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#19979;&#38754;&#19977;&#31181;&#26159;&#31561;&#20215;&#30340;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> dept2 <span style="color: #0000FF;">select</span> dname <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> deptno &gt; 20;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> dept2 <span style="color: #707183;">(</span>dname<span style="color: #707183;">)</span> <span style="color: #0000FF;">select</span> dname <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> deptno &gt; 20;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> dept2 <span style="color: #0000FF;">value</span> <span style="color: #0000FF;">select</span> dname <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> deptno &gt; 20;
+<span style="color: #8D8D84; font-style: italic;">-- &#19979;&#38754;&#19968;&#31181;&#26159;&#38169;&#35823;&#30340;&#65292;&#22240;&#20026;&#22312;&#25351;&#23450;&#23383;&#27573;&#30340;&#26102;&#20505;&#65292;&#19981;&#33021;&#22815;&#36319; value &#20851;&#38190;&#23383;&#19968;&#36215;&#20351;&#29992;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> dept2 <span style="color: #707183;">(</span>dname<span style="color: #707183;">)</span> <span style="color: #0000FF;">value</span> <span style="color: #0000FF;">select</span> dname <span style="color: #0000FF;">from</span> scott.dept <span style="color: #0000FF;">where</span> deptno &gt; 20;  <span style="color: #8D8D84; font-style: italic;">---</span>
+</pre>
+</div>
+</div>
+</li>
+
+
+
+
+
+<li><a id="sec-6-2-2-3" name="sec-6-2-2-3"></a>更新(update)<br ><div class="outline-text-5" id="text-6-2-2-3">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22522;&#26412;&#35821;&#27861;</span>
+<span style="color: #0000FF;">UPDATE</span> <span style="color: #0000FF;">table_name</span> <span style="color: #0000FF;">SET</span> <span style="color: #0000FF;">column</span>=<span style="color: #0000FF;">value</span><span style="color: #707183;">[</span>, <span style="color: #0000FF;">column</span>=<span style="color: #0000FF;">value</span>...<span style="color: #707183;">]</span> <span style="color: #707183;">[</span><span style="color: #0000FF;">WHERE</span> condition<span style="color: #707183;">]</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#27880;&#24847;&#65292;&#19968;&#23450;&#19981;&#35201;&#32570;&#23569;&#30456;&#24212;&#30340;where&#65292;&#31895;&#24515;&#22823;&#24847;&#26159;dba&#25110;&#32773;&#25968;&#25454;&#24211;&#25805;&#20316;&#21592;&#30340;&#22825;&#25932;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- where &#26465;&#20214;&#65292;&#23613;&#21487;&#33021;&#20351;&#29992;&#20027;&#38190;&#65292;&#22240;&#20026;&#20027;&#38190;&#26159;&#29992;&#26469;&#26631;&#35782;&#21807;&#19968;&#19968;&#26465;&#35760;&#24405;&#30340;&#12290;</span>
+<span style="color: #0000FF;">update</span> dept <span style="color: #0000FF;">set</span> dname=<span style="color: #008000;">'&#38144;&#21806;&#37096;'</span> <span style="color: #0000FF;">where</span> deptno = 30;
+</pre>
+</div>
+</div>
+</li>
+<li><a id="sec-6-2-2-4" name="sec-6-2-2-4"></a>删除(delete)<br ><div class="outline-text-5" id="text-6-2-2-4">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#35821;&#27861;</span>
+<span style="color: #0000FF;">delete</span> <span style="color: #0000FF;">from</span> <span style="color: #0000FF;">table_name</span> <span style="color: #707183;">[</span><span style="color: #0000FF;">where</span> cause<span style="color: #707183;">]</span>
+
+<span style="color: #0000FF;">delete</span> <span style="color: #0000FF;">from</span> dept;   <span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#34920;&#20013;&#25152;&#26377;&#35760;&#24405;</span>
+<span style="color: #0000FF;">delete</span> <span style="color: #0000FF;">from</span> dept <span style="color: #0000FF;">where</span> dname = <span style="color: #008000;">'SALES'</span>; <span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#34920;&#20013;&#25152;&#26377; SALES &#30340;&#35760;&#24405;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- truncate &#35821;&#27861;&#65292;&#25130;&#26029;&#25968;&#25454;&#65292;&#20250;&#28165;&#31354;&#34920;&#20013;&#30340;&#25152;&#26377;&#25968;&#25454;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#19981;&#38656;&#35201;&#25552;&#20132;&#20107;&#21153;&#65292;&#20063;&#19981;&#33021;&#22815;&#22238;&#28378;&#12290;&#22240;&#20026; truncate &#19981;&#20135;&#29983;&#22238;&#28378;&#27573;&#65292;&#19981;&#20889; redolog</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#23427;&#21024;&#38500;&#30340;&#25928;&#29575;&#35201;&#39640;&#20110; delete from&#65292;&#20294;&#22240;&#20026;&#19981;&#33021;&#22238;&#28378;&#65292;&#25152;&#20197;&#24212;&#29992;&#20013;&#24212;&#35813;&#24910;&#20043;&#21448;&#24910;&#12290;</span>
+truncate <span style="color: #0000FF;">table</span> <span style="color: #0000FF;">table_name</span>;
+</pre>
+</div>
+</div>
+</li></ul>
+</div>
+
+
+
+<div id="outline-container-sec-6-2-3" class="outline-4">
+<h4 id="sec-6-2-3">TCL（Transaction Control Language)</h4>
+<div class="outline-text-4" id="text-6-2-3">
+<p>
+控制数据的事务。事务就是把数据当做一个完整的操作单元，一起成功或者一起失败。这样才能保证数据的一致性。
+</p>
+<ul class="org-ul">
+<li>set transaction xxx 配置事务属性
+</li>
+<li>savepoint name 保存点
+</li>
+<li>rollback to [savepint] 回撤
+</li>
+<li>commit 提交
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2-4" class="outline-4">
+<h4 id="sec-6-2-4">DCL（Data Control Language)</h4>
+<div class="outline-text-4" id="text-6-2-4">
+<ul class="org-ul">
+<li>grant
+</li>
+<li>revoke
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3">数据类型</h3>
+<div class="outline-text-3" id="text-6-3">
+</div><div id="outline-container-sec-6-3-1" class="outline-4">
+<h4 id="sec-6-3-1">字符类型</h4>
+<div class="outline-text-4" id="text-6-3-1">
+</div><ul class="org-ul"><li><a id="sec-6-3-1-1" name="sec-6-3-1-1"></a>char 类型(nchar)<br ><div class="outline-text-5" id="text-6-3-1-1">
+<p>
+固定长度，默认是1，最大长度是2000个字节。不够的长度，oracle 会用空格进行填充。
+</p>
+<pre class="example">
+create table s1 (c char(2001));  -- 错误，因为2001超出了类型的范围
+create table s2 (c char);        -- 默认char的长度为1.
+insert into s2 values ('a');     -- 它是正确的。
+insert into s2 values ('你');    -- 它是错误的。列的值太大，(实际值: 2, 最大值: 1)
+</pre>
+</div>
+</li>
+
+<li><a id="sec-6-3-1-2" name="sec-6-3-1-2"></a>varchar 类型<br ><div class="outline-text-5" id="text-6-3-1-2">
+<p>
+是SQL的标准类型。
+不建议使用，用 varchar2 代替。因为 varchar2 有更高的效率和更好的兼容性。
+</p>
+</div>
+</li>
+<li><a id="sec-6-3-1-3" name="sec-6-3-1-3"></a>varchar2 类型(nvarchar2)<br ><div class="outline-text-5" id="text-6-3-1-3">
+<p>
+可变长度的。最大长度为 4000。效率不及固定长度的char类型。英文占用一个字节，中文占用多字节，所以，中文跟中文占用空间不一致。
+nvarchar2, 在 varchar2 基础上加入了字符集支持。
+</p>
+
+<p>
+nvarchar2中，长度表示的是字符个数。
+</p>
+
+<pre class="example">
+create table demo (a char(100), b varchar2(100), c nvarchar2(100));
+insert into demo values ('a', 'a', 'a');
+insert into demo values ('你', '你', '你');
+select lengthb(a), lengthb(b), lengthb(c) from demo;
+create table s4 (c varchar2(4 char));    -- char 是代表字符个数，是一个单位符号。这个语句创建的表格，只有一个字段， 是 varchar2 类型，可以填充 4 个字符（注意，不是字节）。
+create table s4 (c varchar2(4 byte));    -- byte 是跟上面语句一样的单位符号，代表的是字节。这是 varchar2 的默认单位。这个语句创建的表格，只有一个字段，是 varchar2 类型，可以填充 4 个字节（注意，不是字符）。
+</pre>
+</div>
+</li>
+
+<li><a id="sec-6-3-1-4" name="sec-6-3-1-4"></a>long 类型<br ><div class="outline-text-5" id="text-6-3-1-4">
+<p>
+用来存储大容量数据的，最大是 2GB。已弃用，建议使用 LOB 字段代替。
+</p>
+</div>
+</li></ul>
+</div>
+
+
+<div id="outline-container-sec-6-3-2" class="outline-4">
+<h4 id="sec-6-3-2">数字类型</h4>
+<div class="outline-text-4" id="text-6-3-2">
+</div><ul class="org-ul"><li><a id="sec-6-3-2-1" name="sec-6-3-2-1"></a>NUMBER 类型<br ><div class="outline-text-5" id="text-6-3-2-1">
+<p>
+定义语法为：
+</p>
+<pre class="example">
+COLUMN number[(precision, scale)]
+</pre>
+<p>
+默认的长度是38。
+</p>
+
+<p>
+如果不带参数，精度和小数的位数是根据填充的数字自动判定的。
+</p>
+<pre class="example">
+create table s5 (c number);
+</pre>
+<p>
+如果 scale 为空，那么默认， scale 为 0。小数点后被截断的数位，采取的是四舍五入制。
+</p>
+<pre class="example">
+create table s7 (c number(5));
+insert into s7 values (9.2222);   -- 插入的是 9
+insert into s7 values (9.7777);   -- 插入的是 10
+</pre>
+<p>
+如果 precision 为空，那么，确定小数点位数为 scale，precision 自动判定。
+</p>
+<pre class="example">
+create table s8 (c number(*, 2));
+insert into s8 values (6.23236);
+</pre>
+<p>
+两个参数都具备的情况：
+</p>
+<pre class="example">
+create table demo (a number(4, 2));
+insert into demo values (987.1);  -- 值大于为此列指定的允许精度
+insert into demo values (7.101);  -- 实际上插入的是 7.10
+</pre>
+<p>
+两个参数，第一个代表精度，第二个代表小数位数。
+</p>
+
+<p>
+还有两个子类型 int/float
+</p>
+<pre class="example">
+create table s9 (c int);
+insert into s9 values (22.22);
+</pre>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-6-3-3" class="outline-4">
+<h4 id="sec-6-3-3">时间类型</h4>
+<div class="outline-text-4" id="text-6-3-3">
+</div><ul class="org-ul"><li><a id="sec-6-3-3-1" name="sec-6-3-3-1"></a>DATE 数据类型<br ><div class="outline-text-5" id="text-6-3-3-1">
+<p>
+显示的是年月日。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26597;&#30475;&#24403;&#22825;&#30340;&#26085;&#26399;</span>
+<span style="color: #0000FF;">select</span> sysdate <span style="color: #0000FF;">from</span> dual;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20462;&#25913;&#24403;&#21069;&#26085;&#26399;&#26174;&#31034;&#30340;&#26684;&#24335;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">session</span> <span style="color: #0000FF;">set</span> nls_date_format=<span style="color: #008000;">'yyyy.mm.dd'</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#24212;&#29992;&#31034;&#20363;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">d1</span> <span style="color: #707183;">(</span>birth <span style="color: #6434A3;">date</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> d1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>sysdate<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> d1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>sysdate - 1<span style="color: #707183;">)</span>;             <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#36827;&#34892;&#31616;&#21333;&#36816;&#31639;&#65292;&#40664;&#35748;&#21333;&#20301;&#26159;&#8220;&#22825;&#8221;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> d1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'20120701'</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;     <span style="color: #8D8D84; font-style: italic;">-- &#29992; to_date &#20989;&#25968;&#23545;&#23383;&#31526;&#20018;&#36827;&#34892;&#36716;&#25442;&#12290;&#21487;&#20197;&#24102;&#20004;&#20010;&#21442;&#25968;&#65292;&#31532;&#19968;&#20010;&#26159;&#24517;&#39035;&#30340;&#12290;&#22914;&#26524;&#31532;&#20108;&#20010;&#21442;&#25968;&#34987;&#24573;&#30053;&#65292;&#37027;&#20040; oracle &#20250;&#26681;&#25454; yyyy/mm/dd &#30340;&#39034;&#24207;&#23581;&#35797;&#23545;&#26085;&#26399;&#36827;&#34892;&#26684;&#24335;&#21270;&#12290;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> d1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'2012/07/01'</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> d1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'2012=07=01'</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> d1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'01.07.2012'</span>, <span style="color: #008000;">'dd.mm.yyyy'</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#20004;&#20010;&#21442;&#25968;&#37117;&#26159;&#23383;&#31526;&#20018;&#65292;&#38656;&#35201;&#29992;&#21333;&#24341;&#21495;&#24341;&#36215;&#26469;&#12290;</span>
+
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">s1</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>birth varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> s1 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>to_char<span style="color: #7388D6;">(</span>sysdate, <span style="color: #008000;">'yyyy-mm-dd'</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;        <span style="color: #8D8D84; font-style: italic;">-- to_char &#26159;&#25226;&#20854;&#20182;&#30340;&#31867;&#22411;&#36716;&#25442;&#20026; char &#31867;&#22411;</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-6-3-3-2" name="sec-6-3-3-2"></a>TIMESTAMP 数据类型<br ><div class="outline-text-5" id="text-6-3-3-2">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#36820;&#22238;&#30340;&#26159; timestamp with timezone &#31867;&#22411;&#65292;&#21253;&#21547;&#24180;&#26376;&#26085;&#26102;&#20998;&#31186;&#24494;&#22937;&#27627;&#31186;&#65292;&#19978;&#21320;&#19979;&#21320;&#65292;&#26102;&#21306;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#22312;&#19968;&#33324;&#19994;&#21153;&#31995;&#32479;&#20013;&#65292;&#26102;&#38388;&#22522;&#26412;&#19978;&#29992;&#30340;&#37117;&#26159; timestamp &#31867;&#22411;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#29992; nls_timestamp_format &#23450;&#21046;&#26174;&#31034;&#26041;&#24335;</span>
+<span style="color: #0000FF;">select</span> systimestamp <span style="color: #0000FF;">from</span> dual;;
+</pre>
+</div>
+</div>
+</li></ul>
+</div>
+
+
+<div id="outline-container-sec-6-3-4" class="outline-4">
+<h4 id="sec-6-3-4">RAW 类型</h4>
+<div class="outline-text-4" id="text-6-3-4">
+<p>
+主要用来处理二进制的。
+</p>
+
+<p>
+分为
+</p>
+</div>
+<ul class="org-ul"><li><a id="sec-6-3-4-1" name="sec-6-3-4-1"></a>RAW<br ><div class="outline-text-5" id="text-6-3-4-1">
+<p>
+默认占用空间为 2kb
+</p>
+</div>
+</li>
+
+<li><a id="sec-6-3-4-2" name="sec-6-3-4-2"></a>Long RAW<br ><div class="outline-text-5" id="text-6-3-4-2">
+<p>
+不建议使用，跟 long 类型有相同的缺点。
+</p>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-sec-6-3-5" class="outline-4">
+<h4 id="sec-6-3-5">LOB类型(large Object)</h4>
+<div class="outline-text-4" id="text-6-3-5">
+</div><ul class="org-ul"><li><a id="sec-6-3-5-1" name="sec-6-3-5-1"></a>CLOB 类型<br ><div class="outline-text-5" id="text-6-3-5-1">
+<p>
+是存储字符的大对象类型。
+</p>
+<pre class="example">
+create table lobdemo1 (c clob);  -- 创建一个具备 blob 字段的表
+insert into lobdemo1 values ('ssss');
+insert into lobdemo1 values (22222222222222222);
+insert into lobdemo1 values (null);
+insert into lobdemo1 values (empty_clob());   -- 插入的不是空值
+</pre>
+</div>
+</li>
+
+<li><a id="sec-6-3-5-2" name="sec-6-3-5-2"></a>BLOB 类型<br ><div class="outline-text-5" id="text-6-3-5-2">
+<p>
+是存储二进制数据的大对象类型。主要的用处是存储图形，音频，视频等。
+</p>
+
+<p>
+oracle 提供了dbms_lob 包，对 lob 字段进行操作。
+</p>
+</div>
+</li>
+
+<li><a id="sec-6-3-5-3" name="sec-6-3-5-3"></a>BFILE 类型<br ><div class="outline-text-5" id="text-6-3-5-3">
+<p>
+也是存储二进制。是以外部文件的形式进行存储的。
+</p>
+</div>
+</li>
+
+<li><a id="sec-6-3-5-4" name="sec-6-3-5-4"></a>XMLType 类型<br ><div class="outline-text-5" id="text-6-3-5-4">
+<p>
+主要是为了处理 xml 文档的。
+</p>
+</div>
+</li></ul>
+</div>
+
+
+<div id="outline-container-sec-6-3-6" class="outline-4">
+<h4 id="sec-6-3-6">ROWID/ROWNUM</h4>
+<div class="outline-text-4" id="text-6-3-6">
+</div><ul class="org-ul"><li><a id="sec-6-3-6-1" name="sec-6-3-6-1"></a>rowid<br ><div class="outline-text-5" id="text-6-3-6-1">
+<p>
+rowid 是 oracle 中的伪列。可以通过下面语句显示:
+</p>
+<pre class="example">
+select d.rowid, d.* from dept d
+</pre>
+<p>
+它是唯一的，不可变的，固定长度的。
+</p>
+
+<p>
+它是数据存储物理地址的一种映射。一共有18位，前6位表示对象id，后3位表示fno，后6位表示块编号，最后3位表示行编号。
+所以，通过rowid可以最快速度地定位到数据所在的位置。
+</p>
+
+<p>
+rowid 是 oracle 特有的。
+</p>
+
+<p>
+不建议使用 rowid 作为表的主键。迁移的需求，有改变的风险。
+</p>
+</div>
+</li>
+
+
+
+<li><a id="sec-6-3-6-2" name="sec-6-3-6-2"></a>rownum<br ><div class="outline-text-5" id="text-6-3-6-2">
+<p>
+列出每一行数据的行数，从1开始，自然增长。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22522;&#26412;&#29992;&#27861;</span>
+<span style="color: #0000FF;">select</span> rownum, d.* <span style="color: #0000FF;">from</span> dept;
+<span style="color: #0000FF;">select</span> rownum, d.* <span style="color: #0000FF;">from</span> dept d <span style="color: #0000FF;">where</span> rownum &lt; 3;     <span style="color: #8D8D84; font-style: italic;">-- &#26174;&#31034;&#21069;&#20004;&#26465;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> rownum rn, d.* <span style="color: #0000FF;">from</span> dept d<span style="color: #707183;">)</span> t <span style="color: #0000FF;">where</span> t.rn = 3;   <span style="color: #8D8D84; font-style: italic;">-- &#21482;&#26174;&#31034;&#31532;&#19977;&#26465;</span>
+
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">order</span> <span style="color: #0000FF;">by</span> sal <span style="color: #0000FF;">desc</span><span style="color: #707183;">)</span> <span style="color: #0000FF;">where</span> rownum&lt;=3;  <span style="color: #8D8D84; font-style: italic;">-- &#26174;&#31034; emp &#34920;&#20013;&#24037;&#36164;&#21069;&#19977;&#20301;&#30340;&#38599;&#21592;&#20449;&#24687;&#12290;</span>
+</pre>
+</div>
+</div>
+</li></ul>
+</div>
+
+
+<div id="outline-container-sec-6-3-7" class="outline-4">
+<h4 id="sec-6-3-7">NULL</h4>
+<div class="outline-text-4" id="text-6-3-7">
+<p>
+它是 Oracle 中非常特殊的一种类型。它表示不确定，表示没有值。并且它能转化成所有的类型。
+向数据库中插入空字符串时，oracle 会把它自动转化为 null 类型。所以，在查询空字符的时候：
+</p>
+<pre class="example">
+select * from n3 where s = '';
+</pre>
+<p>
+上面的语句是非法，不合适的。应该这样查：
+</p>
+<pre class="example">
+select * from n3 where s is null;
+select * from n3 where s is not null;
+</pre>
+<p>
+创建表的时候，为了约束插入的数据不能为空，应该在字段的后面写上 not null 约束。
+</p>
+<pre class="example">
+create table n5 (s varchar2(20) not null);
+</pre>
+<p>
+跟 null 做任何的运算，结果仍然是 null.
+</p>
+<pre class="example">
+select null + '' from dual;
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4">运算符</h3>
+<div class="outline-text-3" id="text-6-4">
+</div><ul class="org-ul"><li><a id="sec-6-4-0-1" name="sec-6-4-0-1"></a>算术运算符<br ><div class="outline-text-5" id="text-6-4-0-1">
+<p>
+加/减/乘/除
+</p>
+</div>
+</li>
+<li><a id="sec-6-4-0-2" name="sec-6-4-0-2"></a>连接运算符<br ><div class="outline-text-5" id="text-6-4-0-2">
+<p>
+是用来连接字符串的。跟java中的 + 是一致的。
+</p>
+<pre class="example">
+select 'abc' || ' bcd ' as 连接后的结果 from dual;
+select d.dname || ' 部门' from dept d;
+</pre>
+</div>
+</li>
+
+<li><a id="sec-6-4-0-3" name="sec-6-4-0-3"></a>关系运算符<br ><div class="outline-text-5" id="text-6-4-0-3">
+<p>
+见课本
+</p>
+</div>
+</li>
+<li><a id="sec-6-4-0-4" name="sec-6-4-0-4"></a>比较运算符<br ><div class="outline-text-5" id="text-6-4-0-4">
+<p>
+IS NULL / Like / Between / In / Exsist.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#21028;&#26029; null &#20540;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> n5 <span style="color: #0000FF;">where</span> s <span style="color: #0000FF;">is</span> <span style="color: #0000FF;">null</span>;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> n5 <span style="color: #0000FF;">where</span> s <span style="color: #0000FF;">is</span> <span style="color: #0000FF;">not</span> <span style="color: #0000FF;">null</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- like &#27169;&#31946;&#26597;&#35810;&#12290;&#24910;&#29992;&#65292;&#26377;&#21487;&#33021;&#20250;&#23548;&#33268;&#20840;&#34920;&#25195;&#25551;&#65292;&#25928;&#29575;&#20302;&#12290;</span>
+<span style="color: #0000FF;">select</span> username <span style="color: #0000FF;">from</span> dba_users <span style="color: #0000FF;">where</span> username <span style="color: #0000FF;">like</span> <span style="color: #008000;">'VI_'</span>;
+<span style="color: #0000FF;">select</span> username <span style="color: #0000FF;">from</span> dba_users <span style="color: #0000FF;">where</span> username <span style="color: #0000FF;">like</span> <span style="color: #008000;">'SC%'</span>;
+<span style="color: #0000FF;">select</span> username <span style="color: #0000FF;">from</span> dba_users <span style="color: #0000FF;">where</span> username <span style="color: #0000FF;">like</span> <span style="color: #008000;">'%SC%'</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- in&#65292;&#26159; where x = a or x = b or x = c &#30340;&#19968;&#31181;&#32553;&#20889;&#12290;&#19979;&#38754;&#20004;&#26465;&#26159;&#31561;&#20215;&#30340;&#12290;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> empno <span style="color: #0000FF;">in</span> <span style="color: #707183;">(</span>700, 800, 900<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> empno = 700 <span style="color: #0000FF;">or</span> empno = 800 <span style="color: #0000FF;">or</span> empno = 900;
+<span style="color: #8D8D84; font-style: italic;">-- in &#21518;&#38754;&#36319;&#30340;&#19981;&#19968;&#23450;&#26159;&#36887;&#21495;&#20998;&#38548;&#30340;&#21333;&#39033;&#65292;&#20063;&#21487;&#33021;&#26159;&#19968;&#20010;&#23436;&#25972;&#30340;&#26597;&#35810;&#35821;&#21477;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#19979;&#38754;&#20004;&#26465;&#32467;&#26524;&#26159;&#19968;&#33268;&#30340;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#36825;&#31181; in &#24910;&#29992;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> deptno <span style="color: #0000FF;">in</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> deptno <span style="color: #0000FF;">from</span> dept <span style="color: #0000FF;">where</span> dname = <span style="color: #008000;">'SALES'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">select</span> a.* <span style="color: #0000FF;">from</span> emp a,dept d <span style="color: #0000FF;">where</span> a.deptno =d.deptno <span style="color: #0000FF;">and</span> d.dname=<span style="color: #008000;">'SALES'</span>;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- between...and</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> empno <span style="color: #0000FF;">between</span> 7800 <span style="color: #0000FF;">and</span> 9000;
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="sec-6-4-0-5" name="sec-6-4-0-5"></a>逻辑运算符<br ><div class="outline-text-5" id="text-6-4-0-5">
+<p>
+and / or / not
+</p>
+
+<p>
+<a href="http://www.cnblogs.com/nick-huang/p/4027038.html">not 的优先级 &gt; and 的优先级 &gt; or 的优先级</a>
+</p>
+</div>
+</li>
+
+<li><a id="sec-6-4-0-6" name="sec-6-4-0-6"></a>集合操作符<br ><div class="outline-text-5" id="text-6-4-0-6">
+<p>
+Union/UnionAll/Intersect/Minus
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">depd</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> dept <span style="color: #0000FF;">where</span> rownum &lt; 2;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> depd <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>99, <span style="color: #008000;">'&#22806;&#21334;&#37096;'</span>, <span style="color: #008000;">'&#29664;&#28023;'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> depd <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>98, <span style="color: #008000;">'&#23567;&#21507;&#37096;'</span>, <span style="color: #008000;">'&#26007;&#38376;'</span><span style="color: #707183;">)</span>;
+
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> depd
+<span style="color: #0000FF;">union</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> dept;
+
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> depd
+<span style="color: #0000FF;">union</span> <span style="color: #0000FF;">all</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> dept;
+
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> depd
+<span style="color: #0000FF;">intersect</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> dept;
+
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> depd
+minus
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> dept;
+</pre>
+</div>
+</div>
+</li></ul>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5">函数</h3>
+<div class="outline-text-3" id="text-6-5">
+</div><div id="outline-container-sec-6-5-1" class="outline-4">
+<h4 id="sec-6-5-1">数值函数</h4>
+<div class="outline-text-4" id="text-6-5-1">
+<ul class="org-ul">
+<li>abs 求绝对值
+<pre class="example">
+select abs(-22) from dual;
+</pre>
+</li>
+<li>round 四舍五入
+<pre class="example">
+SELECT ROUND(123415.193) "Round" FROM DUAL;
+SELECT ROUND(123415.193, 2) "Round" FROM DUAL;
+SELECT ROUND(123415.193, -1) "Round" FROM DUAL;
+</pre>
+</li>
+<li>power 求幂
+</li>
+<li>sqrt 开根号
+</li>
+<li>trunc 保留小数有效数字
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-2" class="outline-4">
+<h4 id="sec-6-5-2">字符函数</h4>
+<div class="outline-text-4" id="text-6-5-2">
+<ul class="org-ul">
+<li>lower 转化为小写
+</li>
+<li>upper 转换为大写
+</li>
+<li>trim 去除某些字符
+<pre class="example">
+select trim('x' from 'xsxdfsxxxx') from dual;
+select trim(both 'x' from 'xsxdfsxxxx') from dual; -- 去除开始的 x 字符
+select trim(leading 'x' from 'xsxdfsxxxx') from dual; -- 去除开始的 x 字符
+select trim(trailing 'x' from 'xsxdfsxxxx') from dual; -- 去除结尾的 x 字符
+</pre>
+</li>
+<li>ltrim / rtrim 左右去除字符
+<pre class="example">
+SELECT RTRIM('BROWNING: ./=./=./=./=./=.=',      '/=.') FROM DUAL;  -- 第二个参数包含了要砍掉的所有字符的集合
+SELECT RTRIM('BROWNING: ./=./=./=./=./=.=     ') FROM DUAL;         -- 如果第二个参数为空，那么默认 trim 掉的是空格
+</pre>
+</li>
+<li>lpad / rpad 填充字符
+<pre class="example">
+SELECT LPAD('Page 1',15,'*.') "LPAD example" FROM DUAL;  -- 第二个参数代表了返回值的总长度，最后一个参数如果去掉的话，那么默认填充的是空格
+</pre>
+</li>
+<li>concate(||) 连接字符
+</li>
+<li>REGEXP_REPLACE 正则替换
+</li>
+<li>replace 常规替换
+<pre class="example">
+SELECT REPLACE('JACK and JUE','J','BL') "Changes" FROM DUAL; -- 一共 3 个参数，第一个是源字符串，第二个是要替换的字符串，第三个是要替换为的字符串。
+SELECT REPLACE('JACK and JUE','J') "Changes" FROM DUAL;      -- 如果第三个参数为空的话，默认把第二个字符串替换为空。
+</pre>
+</li>
+<li>SUBSTR 
+<pre class="example">
+SELECT SUBSTR('ABCDEFG',3,4) "Substring" FROM DUAL;   -- 第一参数表示要处理的源字符串，第二个参数表示子串起始的位置，第三个参数是可选的，表示子串的长度
+SELECT SUBSTR('ABCDEFG',3) "Substring" FROM DUAL;     -- 如果不适用第三个参数，那么子串默认到源字符串的结尾。
+SELECT SUBSTR('ABCDEFG',-2,1) "Substring" FROM DUAL;  -- 如果第二个参数是负数，表示从结尾往回回溯。
+</pre>
+</li>
+<li>TRANSLATE 替换相应的字符
+<pre class="example">
+select translate('hehehello,haha', 'o,h', '0!') from dual;  -- 三个参数，第一个源字符串，第二个和第三个参数里面的字符是按顺序一一对应的。这个函数就是按照后面两个参数内的字符，进行顺序替换。
+</pre>
+</li>
+
+<li>ASCII 显示字符ascii码
+<pre class="example">
+select ascii('A') from dual;   -- 结果是 65
+select * from scott.emp e where ascii(substr(e.ename, 1, 1)) = 67;  -- 显示 emp 中所有名字以 C 开头的员工。
+</pre>
+</li>
+<li>LENGTH/LENGTHB 表示长度。
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-3" class="outline-4">
+<h4 id="sec-6-5-3">时间函数</h4>
+<div class="outline-text-4" id="text-6-5-3">
+<ul class="org-ul">
+<li>sysdate/systimestamp systimestamp 显示的时间时区是从操作系统中获取的。的返回值是 TIMESTAMP WITH TIME ZONE 类型。
+</li>
+<li>current_date/current_timestamp 返回的是当前会话时区的时间。跟 sessiontimezone 有关系的。可以通过 alter session set time_zone='-5:0' 来修改会话的时区。
+</li>
+<li>localtimestamp 显示当前时间，但是不带时区信息
+</li>
+<li>add_months 增加日期
+<pre class="example">
+select add_months(sysdate, 5) from dual;
+select add_months(sysdate, -5) from dual;   -- 如果第二个参数是负数，相应的是减少几个月
+</pre>
+</li>
+<li>LAST_DAY 一个月的最后一天
+<pre class="example">
+select last_day(sysdate) from dual;
+</pre>
+</li>
+<li>MONTHS_BETWEEN 计算相差的月数
+<pre class="example">
+select months_between(sysdate, to_date('19981105')) from dual;  -- 周强从出生到现在经历了多少个月。如果把两个参数换过来，得到的是相应的负数。
+select (sysdate - to_date('19981105'))/30 from dual;  -- 这样写是错误的，因为，一个月未必是30天
+</pre>
+</li>
+<li>next_day 计算日期之后的第一个相应工作日日期
+<pre class="example">
+SELECT NEXT_DAY(sysdate, 1) "NEXT DAY" from dual;    -- 如果是数字，那么只能是1-7。相应1表示星期日，2代表星期一...
+SELECT NEXT_DAY(to_date('20111111', '星期六') "NEXT DAY" from dual;    -- 第二个参数必须跟 nls_date_language 指定的字符集相关联
+</pre>
+</li>
+<li>round(date) 最接近的日期
+<pre class="example">
+select round(sysdate - 200, 'YEAR') from dual;  -- 跟现在最接近的年份
+select round(sysdate, 'MONTH') from dual;       -- 跟今天最接近的月份
+</pre>
+</li>
+<li>trunc(date) 截取日期
+<pre class="example">
+SELECT TRUNC(TO_DATE('2010-09-20'), 'MONTH') "New Year" FROM DUAL;
+</pre>
+</li>
+<li>dbtimezone 显示时区
+</li>
+<li>EXTRACT(datetime) 分解时间
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">SELECT</span> <span style="color: #006FE0;">EXTRACT</span><span style="color: #707183;">(</span><span style="color: #0000FF;">year</span> <span style="color: #0000FF;">FROM</span> systimestamp<span style="color: #707183;">)</span> "&#24180;",
+  <span style="color: #006FE0;">EXTRACT</span><span style="color: #707183;">(</span><span style="color: #0000FF;">month</span> <span style="color: #0000FF;">FROM</span> systimestamp<span style="color: #707183;">)</span> "&#26376;",
+  <span style="color: #006FE0;">EXTRACT</span><span style="color: #707183;">(</span><span style="color: #0000FF;">day</span> <span style="color: #0000FF;">FROM</span> systimestamp<span style="color: #707183;">)</span> "&#26085;" <span style="color: #0000FF;">from</span> dual;  <span style="color: #8D8D84; font-style: italic;">-- &#40664;&#35748;&#37319;&#21462;&#30340;&#26159; 0 &#26102;&#21306;&#65292;&#21363; unk &#26102;&#21306;&#30340;&#20540;.</span>
+
+<span style="color: #0000FF;">select</span> <span style="color: #006FE0;">extract</span><span style="color: #707183;">(</span><span style="color: #0000FF;">hour</span> <span style="color: #0000FF;">from</span> <span style="color: #6434A3;">timestamp</span> <span style="color: #008000;">'1998-03-03 9:10:11'</span><span style="color: #707183;">)</span> <span style="color: #0000FF;">from</span> dual;  <span style="color: #8D8D84; font-style: italic;">-- &#36820;&#22238;&#30340;&#26159; 9</span>
+</pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-6-5-4" class="outline-4">
+<h4 id="sec-6-5-4">比较函数</h4>
+<div class="outline-text-4" id="text-6-5-4">
+<ul class="org-ul">
+<li>GREATEST 取最大值
+<pre class="example">
+select greatest(2, 3, 4) from dual;  -- 结果 4
+</pre>
+</li>
+<li>LEAST 取最小值
+<pre class="example">
+select least(2, 3, 4) from dual;     -- 结果 2
+</pre>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-5" class="outline-4">
+<h4 id="sec-6-5-5">转换函数</h4>
+<div class="outline-text-4" id="text-6-5-5">
+<ul class="org-ul">
+<li>to_char
+</li>
+<li>to_date
+</li>
+<li>to_number
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-6" class="outline-4">
+<h4 id="sec-6-5-6">其他函数</h4>
+<div class="outline-text-4" id="text-6-5-6">
+<ul class="org-ul">
+<li>nvl(e1, e2) 判定e1是否为空，如果为空那么替换为指定的e2.
+<pre class="example">
+select nvl(null, 2) from dual;
+select e.ename, nvl(e.comm, 0) from scott.emp e where comm is null;
+</pre>
+</li>
+<li>nvl2(e1, e2, e3)
+<pre class="example">
+select e.ename, nvl2(e.comm, e.comm/10, 0) "佣金/10"  from scott.emp e; -- 三个参数。判定第一个是否为 null，如果不是，返回第二个参数，如果是，返回第三个参数。
+</pre>
+</li>
+<li>nullif
+<pre class="example">
+select nullif(100, 50*2) n1, nullif(100, 33*3) n2 from dual;
+</pre>
+</li>
+<li>decode 大家自我修炼，继续深入。因为它很强大，很厉害，很牛x。我们要掌握它，熟练使用它，让它成为我们的好朋友。
+<pre class="example">
+select m.name, decode(m.sex, 2, '男', 1, '女', '未知') from mates m;
+</pre>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-7" class="outline-4">
+<h4 id="sec-6-5-7">分组函数</h4>
+<div class="outline-text-4" id="text-6-5-7">
+<ul class="org-ul">
+<li>avg
+</li>
+<li>max
+</li>
+<li>sum
+</li>
+<li>count(*|1)
+<pre class="example">
+select count(*) from scott.emp;
+select count(1) from scott.emp;
+select count(distinct deptno) from scott.emp;
+</pre>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-8" class="outline-4">
+<h4 id="sec-6-5-8">分析函数</h4>
+<div class="outline-text-4" id="text-6-5-8">
+<ul class="org-ul">
+<li>row_number
+</li>
+<li>rank
+</li>
+<li>dense_rank
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6">自定义函数</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+语法:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">create</span> <span style="color: #707183;">[</span><span style="color: #0000FF;">or</span> replace<span style="color: #707183;">]</span> <span style="color: #0000FF;">function</span> function_name <span style="color: #707183;">[</span><span style="color: #7388D6;">(</span>&#21442;&#25968; &#21442;&#25968;&#31867;&#22411; := &#40664;&#35748;&#20540; <span style="color: #909183;">[</span>, &#20854;&#20182;&#21442;&#25968;<span style="color: #909183;">]</span><span style="color: #7388D6;">)</span><span style="color: #707183;">]</span> <span style="color: #0000FF;">return</span> &#21442;&#25968;&#31867;&#22411;
+  <span style="color: #0000FF;">as</span>|<span style="color: #0000FF;">is</span>
+    &#23450;&#20041;&#30340;&#21464;&#37327;
+  <span style="color: #0000FF;">begin</span>
+    &#36923;&#36753;
+    <span style="color: #0000FF;">return</span> xxx;
+  <span style="color: #0000FF;">end</span>;
+</pre>
+</div>
+
+<p>
+示例:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#38543;&#26426;&#25277;&#21462; 1-n &#20043;&#38388;&#30340;&#19968;&#20010;&#25972;&#25968;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">or</span> replace <span style="color: #0000FF;">function</span> <span style="color: #006699;">hehe</span> <span style="color: #707183;">(</span>n <span style="color: #0000FF;">number</span> := 10<span style="color: #707183;">)</span> <span style="color: #0000FF;">return</span> <span style="color: #0000FF;">number</span>
+<span style="color: #0000FF;">is</span>
+  s <span style="color: #0000FF;">number</span>;
+<span style="color: #0000FF;">begin</span>
+  s = round<span style="color: #707183;">(</span>dbms_random.<span style="color: #0000FF;">value</span><span style="color: #7388D6;">(</span>0.5, n + 0.5<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+  <span style="color: #0000FF;">return</span> s;
+<span style="color: #0000FF;">end</span> hehe;
+/
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20320;&#35201;&#36824;&#35201;&#22810;&#20037;&#27605;&#19994;&#65311;&#31034;&#20363;&#12290;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">or</span> replace <span style="color: #0000FF;">function</span> <span style="color: #006699;">howsoon</span> <span style="color: #707183;">(</span>d <span style="color: #6434A3;">date</span> := to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'20170101'</span>, <span style="color: #008000;">'yyyymmdd'</span><span style="color: #7388D6;">)</span><span style="color: #707183;">)</span> <span style="color: #0000FF;">return</span> <span style="color: #0000FF;">number</span>
+<span style="color: #0000FF;">is</span>
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">return</span> to_number<span style="color: #707183;">(</span>d - sysdate<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+/
+</pre>
+</div>
+</div>
+</div>
+</section>
+
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">同义词（Synonymous)</h2>
+<div class="outline-text-2" id="text-7">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#24517;&#39035;&#35201;&#25317;&#26377;&#21019;&#24314;&#21516;&#20041;&#35789;&#30340;&#26435;&#38480;</span>
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> synonym <span style="color: #0000FF;">to</span> vip;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22522;&#26412;&#30340;&#21019;&#24314;</span>
+<span style="color: #0000FF;">create</span> synonym s10 <span style="color: #0000FF;">for</span> sssssssss;         <span style="color: #8D8D84; font-style: italic;">-- &#31616;&#21270; sql &#35821;&#21477;.</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">or</span> replace synonym e <span style="color: #0000FF;">for</span> scott.emp;           <span style="color: #8D8D84; font-style: italic;">-- &#30465;&#30053; schema&#65292;&#38544;&#34255;&#32454;&#33410;&#65292;&#31616;&#21270;&#25805;&#20316;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21516;&#20041;&#35789;&#30340;&#21024;&#38500;</span>
+<span style="color: #0000FF;">drop</span> synonym e;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20849;&#26377;&#21516;&#20041;&#35789;&#30340;&#20351;&#29992;&#12290;&#19968;&#27425;&#21019;&#24314;&#65292;&#27599;&#20010;&#29992;&#25143;&#37117;&#21487;&#20197;&#20351;&#29992;&#12290;</span>
+<span style="color: #0000FF;">grant</span> <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">public</span> synonym <span style="color: #0000FF;">to</span> vip;
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">public</span> synonym e <span style="color: #0000FF;">for</span> sott.emp;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#20844;&#29992;&#21516;&#20041;&#35789;</span>
+<span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">public</span> synonym e;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- DBA_XXX &#31561;&#20854;&#23454;&#20063;&#26159;&#21516;&#20041;&#35789;&#65292;&#25152;&#20197;&#22312;&#35843;&#29992;&#30340;&#26102;&#20505;&#65292;&#19981;&#38656;&#35201;&#20889; SYS.</span>
+<span style="color: #0000FF;">select</span> object_name, object_type <span style="color: #0000FF;">from</span> dba_objects <span style="color: #0000FF;">where</span> object_name = <span style="color: #008000;">'DBA_OBJECTS;'</span>
+</pre>
+</div>
+
+<p>
+有余力的同学也可以看一下 database link 的概念。
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">序列(Sequence)</h2>
+<div class="outline-text-2" id="text-8">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- SQLServer &#20013;&#33258;&#22686;&#23383;&#27573;&#30340;&#20889;&#27861;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">test</span><span style="color: #707183;">(</span>id <span style="color: #6434A3;">int</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span> <span style="color: #0000FF;">identity</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84; font-style: italic;">-- MySQL &#20013;&#33258;&#22686;&#23383;&#27573;&#30340;&#20889;&#27861;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">test</span><span style="color: #707183;">(</span>id <span style="color: #6434A3;">int</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span> auto_increment<span style="color: #707183;">)</span>;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#19968;&#20010;&#24207;&#21015;&#35821;&#27861;</span>
+<span style="color: #0000FF;">CREATE</span> <span style="color: #0000FF;">SEQUENCE</span> <span style="color: #006699;">&#24207;&#21015;&#21517;&#23383;</span>
+  <span style="color: #707183;">[</span><span style="color: #0000FF;">start</span> <span style="color: #0000FF;">with</span> &#25968;&#23383;<span style="color: #707183;">]</span>     <span style="color: #8D8D84; font-style: italic;">-- &#21021;&#22987;&#25968;&#23383;</span>
+  <span style="color: #707183;">[</span>minvalue &#25968;&#23383;<span style="color: #707183;">]</span>       <span style="color: #8D8D84; font-style: italic;">-- &#26368;&#23567;&#20540;</span>
+  <span style="color: #707183;">[</span>maxvalue &#25968;&#23383;<span style="color: #707183;">]</span>       <span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22823;&#20540;</span>
+  <span style="color: #707183;">[</span>increment <span style="color: #0000FF;">by</span> &#25968;&#23383;<span style="color: #707183;">]</span>   <span style="color: #8D8D84; font-style: italic;">-- &#22686;&#37327;</span>
+  <span style="color: #707183;">[</span><span style="color: #0000FF;">cycle</span><span style="color: #707183;">]</span>               <span style="color: #8D8D84; font-style: italic;">-- &#26159;&#21542;&#35201;&#24490;&#29615;</span>
+  <span style="color: #707183;">[</span>cache &#25968;&#23383;<span style="color: #707183;">]</span>          <span style="color: #8D8D84; font-style: italic;">-- &#26159;&#21542;&#32531;&#23384;&#65292;&#21363;&#26159;&#21542;&#22312;&#20869;&#23384;&#20013;&#39044;&#20808;&#20998;&#37197;&#25509;&#19979;&#26469;&#35201;&#29992;&#21040;&#30340;&#25968;&#23383;</span>
+  <span style="color: #707183;">[</span><span style="color: #0000FF;">order</span> | nooreder<span style="color: #707183;">]</span>    <span style="color: #8D8D84; font-style: italic;">-- &#25490;&#24207;</span>
+&#12288;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22522;&#26412;&#30340;&#21019;&#24314;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">sequence</span> <span style="color: #006699;">seq_001</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- start with &#30340;&#20540;&#34920;&#31034;&#21021;&#22987;&#65292;&#24517;&#39035;&#35201;&#22823;&#20110;&#31561;&#20110; minvalue</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#26159; nocycle &#27169;&#24335;&#65292;&#21040;&#36798;&#26368;&#22823;&#20540;&#32487;&#32493;&#25191;&#34892;&#20250;&#25253;&#38169;&#12290;&#21542;&#21017;&#65292;&#20250;&#24490;&#29615;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#24490;&#29615;&#30340;&#36215;&#22987;&#25968;&#20540;&#26159; minvalue &#32780;&#19981;&#26159; start with &#30340;&#20540;&#12290;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">sequence</span> <span style="color: #006699;">seq_006</span> <span style="color: #0000FF;">start</span> <span style="color: #0000FF;">with</span> 3 minvalue -6 maxvalue 8 <span style="color: #0000FF;">cycle</span> nocache;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20462;&#25913;</span>
+<span style="color: #0000FF;">alter</span> <span style="color: #0000FF;">sequence</span> <span style="color: #006699;">increment</span> <span style="color: #0000FF;">by</span> 8;
+rename seq_006 <span style="color: #0000FF;">to</span> seq_666;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#24207;&#21015;</span>
+<span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">sequence</span> <span style="color: #006699;">seq_006</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#24207;&#21015;&#30340;&#20351;&#29992;</span>
+<span style="color: #0000FF;">select</span> &#24207;&#21015;&#21517;&#23383;.nextval <span style="color: #0000FF;">from</span> dual;    <span style="color: #8D8D84; font-style: italic;">-- &#24207;&#21015;&#30340;&#19979;&#19968;&#20010;&#20540;&#65292;&#35843;&#29992;&#20043;&#21518;&#20250;&#33258;&#21160;&#22686;&#38271;&#65292;&#27599;&#27425;&#36820;&#22238;&#20540;&#19981;&#19968;&#23450;&#30456;&#21516;&#12290;</span>
+<span style="color: #0000FF;">select</span> &#24207;&#21015;&#21517;&#23383;.currval <span style="color: #0000FF;">from</span> dual;    <span style="color: #8D8D84; font-style: italic;">-- &#36820;&#22238;&#24207;&#21015;&#30340;&#24403;&#21069;&#20540;&#65292;&#27599;&#27425;&#35843;&#29992;&#36820;&#22238;&#20540;&#26159;&#19968;&#33268;&#30340;&#12290;&#38656;&#35201;&#24207;&#21015;&#34987;&#21021;&#22987;&#21270;(nextval)&#20043;&#21518;&#25165;&#33021;&#20351;&#29992;&#65292;&#21542;&#21017;&#25253;&#38169;&#12290;</span>
+
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">seqtab</span> <span style="color: #707183;">(</span>id <span style="color: #0000FF;">number</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>, <span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> seqtab <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>seq_001.nextval, <span style="color: #008000;">'hello'</span><span style="color: #707183;">)</span>; <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#31181;&#20889;&#27861;&#34429;&#28982;&#30475;&#36215;&#26469;&#40635;&#28902;&#65292;&#20294;&#26159;&#22312;&#24320;&#21457;&#20013;&#26377;&#20854;&#28789;&#27963;&#24615;&#21644;&#36890;&#29992;&#24615;&#65292;&#26159;&#38750;&#24120;&#24378;&#22823;&#30340;&#12290;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#33258;&#21160;&#25554;&#20837;&#65292;&#38656;&#35201;&#37197;&#21512;&#35302;&#21457;&#22120; (triggle) &#20351;&#29992;&#12290;&#22914;&#26524;&#26377;&#20852;&#36259;&#12289;&#26377;&#20313;&#21147;&#30340;&#21516;&#23398;&#65292;&#35831;&#33258;&#24049;&#20851;&#27880;&#12290;&#20854;&#20182;&#20154;&#26080;&#35270;&#21017;&#21487;&#12290;</span>
+</pre>
+</div>
+</div>
+</section>
+
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">表的分区(Partition)</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+建议在下面两种情况下要对表进行分区:
+</p>
+<ol class="org-ol">
+<li>表的数据量超过 2G
+</li>
+<li>表里面存在大量的历史数据
+</li>
+</ol>
+
+<p>
+表分区是为了达到分而治之的目的，是鸡蛋不能放在同一个篮子里的切实实践。首先能提高效率，再者能保证安全。
+</p>
+
+<p>
+Oracle 里的基本分区有：
+</p>
+<ol class="org-ol">
+<li>范围分区(Range)
+</li>
+<li>列表分区(List)
+</li>
+<li>哈希分区(Hash)
+</li>
+</ol>
+
+<p>
+另外可以对表的分区进行复合，建立子分区。 Oracle 11 之后添加了很多不同的复合形式，但常用的有两种：
+</p>
+<ol class="org-ol">
+<li>范围-哈希分区
+</li>
+<li>范围-列表分区
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26597;&#30475;&#24403;&#21069;&#29992;&#25143;&#19979;&#34920;&#30340;&#20998;&#21306;&#35814;&#24773;&#12290;</span>
+<span style="color: #0000FF;">select</span> <span style="color: #0000FF;">table_name</span>, partition_name <span style="color: #0000FF;">from</span> user_tab_partitions;
+<span style="color: #0000FF;">select</span> <span style="color: #0000FF;">table_name</span>, partition_name, subpartition_name <span style="color: #0000FF;">from</span> user_tab_subpartitions;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20174;&#20998;&#21306;&#20013;&#26597;&#35810;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> <span style="color: #0000FF;">table_name</span> partition <span style="color: #707183;">(</span>partition_name<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22797;&#21512;&#20998;&#21306;&#20013;&#36827;&#34892;&#26597;&#35810;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> cxbe3 subpartition <span style="color: #707183;">(</span>p1_ps4<span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#34920;&#31034; p1 &#23376;&#20998;&#21306;&#19979;&#30340; ps4 &#20998;&#21306;</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1">范围分区</h3>
+<div class="outline-text-3" id="text-9-1">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22522;&#26412;&#21019;&#24314;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">bea1</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#34920;&#30340;&#21019;&#24314;&#65292;&#19981;&#24102;&#20998;&#21306;&#30340;&#24773;&#20917;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">bea2</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>    <span style="color: #8D8D84; font-style: italic;">-- &#25353;&#29031;&#29983;&#26085;&#65292;&#33539;&#22260;&#20998;&#21306;&#12290;</span>
+partition <span style="color: #0000FF;">by</span> range <span style="color: #707183;">(</span>birth<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>to_date<span style="color: #909183;">(</span><span style="color: #008000;">'19900101'</span>, <span style="color: #008000;">'yyyymmdd'</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>to_date<span style="color: #909183;">(</span><span style="color: #008000;">'20000101'</span>, <span style="color: #008000;">'yyyymmdd'</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+<span style="color: #8D8D84; font-style: italic;">-- &#27979;&#35797; bea2</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> bea2 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #008000;">'xxx'</span>, to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'19880102'</span><span style="color: #7388D6;">)</span>, 87<span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#20250;&#34987;&#25554;&#20837;&#21040; p1 &#20998;&#21306;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> bea2 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #008000;">'yyy'</span>, to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'19920102'</span><span style="color: #7388D6;">)</span>, 82<span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#20250;&#34987;&#25554;&#20837;&#21040; p2 &#20998;&#21306;</span>
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> bea2 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #008000;">'zzz'</span>, to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'20010102'</span><span style="color: #7388D6;">)</span>, 89<span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#20250;&#20986;&#29616;&#38169;&#35823;&#65292;ORA-14400: &#25554;&#20837;&#30340;&#20998;&#21306;&#20851;&#38190;&#23383;&#26410;&#26144;&#23556;&#21040;&#20219;&#20309;&#20998;&#21306;&#12290;&#22240;&#20026;&#27809;&#20026;&#36825;&#26465;&#25968;&#25454;&#21019;&#24314;&#30456;&#24212;&#20998;&#21306;&#12290;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> bea2;                   <span style="color: #8D8D84; font-style: italic;">-- &#20004;&#26465;&#25968;&#25454;&#65292;xxx &#21644; yyy</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> bea2 partition <span style="color: #707183;">(</span>p1<span style="color: #707183;">)</span>;    <span style="color: #8D8D84; font-style: italic;">-- &#26174;&#31034;&#30340;&#26159; xxx &#30340;&#25968;&#25454;&#12290;&#36825;&#26159;&#20174;&#29305;&#23450;&#20998;&#21306;&#20013;&#26597;&#35810;&#25968;&#25454;&#30340;&#35821;&#27861;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> bea2 partition <span style="color: #707183;">(</span>p2<span style="color: #707183;">)</span>;    <span style="color: #8D8D84; font-style: italic;">-- &#26174;&#31034;&#30340;&#26159; yyy &#30340;&#25968;&#25454;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- maxvalue &#30340;&#20351;&#29992;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">bea3</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>    <span style="color: #8D8D84; font-style: italic;">-- &#25353;&#29031;&#29983;&#26085;&#65292;&#33539;&#22260;&#20998;&#21306;&#12290;</span>
+partition <span style="color: #0000FF;">by</span> range <span style="color: #707183;">(</span>birth<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>to_date<span style="color: #909183;">(</span><span style="color: #008000;">'19900101'</span>, <span style="color: #008000;">'yyyymmdd'</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>to_date<span style="color: #909183;">(</span><span style="color: #008000;">'20000101'</span>, <span style="color: #008000;">'yyyymmdd'</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>MAXVALUE<span style="color: #7388D6;">)</span>;
+<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> bea3 <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span><span style="color: #008000;">'zzz'</span>, to_date<span style="color: #7388D6;">(</span><span style="color: #008000;">'20010102'</span><span style="color: #7388D6;">)</span>, 89<span style="color: #707183;">)</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#25554;&#20837;&#30340;&#26159;&#26377;maxvalue&#20851;&#38190;&#23383;&#30340; p3 &#20998;&#21306;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> bea3 partition <span style="color: #707183;">(</span>p3<span style="color: #707183;">)</span>;                          <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#26597;&#35810;&#21040;.</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20998;&#21306;&#30340;&#20851;&#38190;&#23383;&#65292;&#21487;&#20197;&#26159;&#25968;&#20540;&#65292;&#21487;&#20197;&#26159;&#26085;&#26399;&#65292;&#20063;&#21487;&#20197;&#26159;&#23383;&#31526;&#20018;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">bea5</span><span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>,birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> range<span style="color: #707183;">(</span><span style="color: #0000FF;">name</span><span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'i'</span><span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'x'</span><span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>MAXVALUE<span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22312;&#21019;&#24314;&#27599;&#20010;&#20998;&#21306;&#30340;&#26102;&#20505;&#65292;&#20026;&#27599;&#20010;&#20998;&#21306;&#25351;&#23450;&#34920;&#31354;&#38388;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">bea6</span><span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>,birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> range<span style="color: #707183;">(</span>yz<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>60<span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>85<span style="color: #7388D6;">)</span> tablespace users,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>MAXVALUE<span style="color: #7388D6;">)</span> tablespace <span style="color: #0000FF;">system</span>
+<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#25353;&#29031;&#22810;&#20010;&#23383;&#27573;&#36827;&#34892;&#20998;&#21306;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">bea7</span><span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>,birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> range<span style="color: #707183;">(</span><span style="color: #0000FF;">name</span>, yz<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'j'</span>, 60<span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'z'</span>, 90<span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>MAXVALUE, MAXVALUE<span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2">列表分区</h3>
+<div class="outline-text-3" id="text-9-2">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">beaa</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, sex varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> list <span style="color: #707183;">(</span>sex<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'&#30007;'</span><span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'&#22899;'</span><span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #0000FF;">DEFAULT</span><span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#25351;&#23450;&#30456;&#24212;&#30340;&#23384;&#20648;&#34920;&#31354;&#38388;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">beaa</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, sex varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> list <span style="color: #707183;">(</span>sex<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'&#30007;'</span><span style="color: #7388D6;">)</span> tablespace users,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'&#22899;'</span><span style="color: #7388D6;">)</span> tablespace <span style="color: #0000FF;">system</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #0000FF;">DEFAULT</span><span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-3" class="outline-3">
+<h3 id="sec-9-3">哈希分区</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+<a href="http://www.bing.com/knows/search?q=%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&mkt=zh-cn&FORM=BKACAI">哈希算法</a>,散列表是也~
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">beax</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> hash <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span><span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 tablespace users,
+  partition p2,
+  partition p3,
+  partition p4,
+  partition p5
+<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21019;&#24314;&#22810;&#20010;&#20998;&#21306;&#30340;&#31616;&#30053;&#20889;&#27861;&#12290;&#20998;&#21306;&#30340;&#21517;&#23383;&#30001;oracle&#33258;&#21160;&#32500;&#25252;&#12290;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">beax</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> hash <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span><span style="color: #707183;">)</span> partitions 5;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#25351;&#23450;&#34920;&#31354;&#38388;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">beax</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> hash <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span><span style="color: #707183;">)</span> partitions 5 stores <span style="color: #0000FF;">in</span> <span style="color: #707183;">(</span>users, <span style="color: #0000FF;">system</span>, users, <span style="color: #0000FF;">system</span>, <span style="color: #0000FF;">system</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-4" class="outline-3">
+<h3 id="sec-9-4">范围-列表分区</h3>
+<div class="outline-text-3" id="text-9-4">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#20808;&#25353;&#29031;&#29983;&#26085;&#20998;&#21306;&#65292;&#20043;&#21518;&#23376;&#20998;&#21306;&#26159;&#25353;&#29031;&#21517;&#23383;&#21704;&#24076;&#20998;&#21306;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">cxbe1</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> range <span style="color: #707183;">(</span>birth<span style="color: #707183;">)</span>
+subpartition <span style="color: #0000FF;">by</span> hash <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span><span style="color: #707183;">)</span>
+subpartitions 3
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>to_date<span style="color: #909183;">(</span><span style="color: #008000;">'19900101'</span>,<span style="color: #008000;">'yyyymmdd'</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>to_date<span style="color: #909183;">(</span><span style="color: #008000;">'20000101'</span>,<span style="color: #008000;">'yyyymmdd'</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>maxvalue<span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20808;&#25353;&#29031;&#39068;&#20540;&#20998;&#21306;&#65292;&#20043;&#21518;&#23376;&#20998;&#21306;&#26159;&#25353;&#29031;&#29983;&#26085;&#21704;&#24076;&#20998;&#21306;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">cxbe2</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, birth <span style="color: #6434A3;">date</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> range <span style="color: #707183;">(</span>yz<span style="color: #707183;">)</span>
+subpartition <span style="color: #0000FF;">by</span> hash <span style="color: #707183;">(</span>birth<span style="color: #707183;">)</span>
+subpartitions 3
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>50<span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>80<span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>MAXVALUE<span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-5" class="outline-3">
+<h3 id="sec-9-5">范围-列表分区</h3>
+<div class="outline-text-3" id="text-9-5">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">cxbe3</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">name</span> varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, sex varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, yz <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>
+partition <span style="color: #0000FF;">by</span> range <span style="color: #707183;">(</span>yz<span style="color: #707183;">)</span>
+subpartition <span style="color: #0000FF;">by</span> list <span style="color: #707183;">(</span>sex<span style="color: #707183;">)</span>
+subpartitions template
+<span style="color: #707183;">(</span>
+  subpartition ps1 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'&#30007;'</span><span style="color: #7388D6;">)</span> tablespace users,
+  subpartition ps2 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #008000;">'&#22899;'</span><span style="color: #7388D6;">)</span> tablespace users,
+  subpartition ps2 <span style="color: #0000FF;">values</span> <span style="color: #7388D6;">(</span><span style="color: #0000FF;">DEFAULT</span><span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>
+<span style="color: #707183;">(</span>
+  partition p1 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>60<span style="color: #7388D6;">)</span>,
+  partition p2 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>80<span style="color: #7388D6;">)</span>,
+  partition p3 <span style="color: #0000FF;">values</span> <span style="color: #0000FF;">less</span> <span style="color: #0000FF;">than</span> <span style="color: #7388D6;">(</span>MAXVALUE<span style="color: #7388D6;">)</span>
+<span style="color: #707183;">)</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-6" class="outline-3">
+<h3 id="sec-9-6">分区的修改</h3>
+<div class="outline-text-3" id="text-9-6">
+<ul class="org-ul">
+<li>添加分区
+<pre class="example">
+alter table bea2 add partition p9 values less than (MAXVALUE);
+-- 按照 list 分区的添加？
+</pre>
+</li>
+<li>删除分区内数据
+<pre class="example">
+alter table bea2 truncate partition p3;
+</pre>
+</li>
+<li>删除分区
+<pre class="example">
+alter table bea2 drop partition p3;
+</pre>
+</li>
+<li>合并相邻分区
+<pre class="example">
+alter table bea2 merge partition p2, p3 into partition p8;
+</pre>
+</li>
+<li>拆分分区
+<pre class="example">
+alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);
+-- 其他类型的
+</pre>
+</li>
+<li>重命名分区
+<pre class="example">
+alter table bea2 rename partition p2 to p12;
+</pre>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: imfine</p>
+<p class="date">Created: 2016-09-21 周三 08:42</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation">Go ahead, never stop.</p>
+</div>
+</body>
+</html>

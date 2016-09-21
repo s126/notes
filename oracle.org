@@ -1,0 +1,1459 @@
+#+TITLE: Oracle11g
+
+
+* Emacs 常用命令
+1. 保存
+   Ctrl-x Ctrl-s
+
+2. 生成 html
+   Ctrl-C Ctrl-e h h
+
+3. 复制
+   Alt-W
+
+
+* Oracle 的体系结构
+数据库是一个以某种有组织的方式存储的数据集合。
+它本质上是用计算机存储记录的系统，是位于用户和系统之间的一层管理软件。
+Oracle 数据库是目前最流行、最强大的面向对象的关系型数据库(ORDBMS)。
+
+
+Oracle 是基于请求响应的方式，分为服务端和客户端。
+
+** 服务端
+Oracle 是由实例和数据库两部分组成的。
+
+*** 实例 (INSTANCE)
+又称为oracle数据库引擎，由由内存即SGA(System Global Area,系统全局区)和后台处理进程组成。
+
+*** 数据库 (DATABASE)
+保存在计算机上的数据文件等。可以从物理物件或逻辑组件的角度看待。
+
+**** 物理组件
+1. 控制文件 (Control File)
+  : select * from v$controlfile;
+  记录数据库的物理结构和其他控制信息，如数据库名称，数据文件、日志文件名称和位置等。多副本保证安全。
+  
+2. 数据文件 (Data File)
+  : select name,status,enabled from v$datafile;
+    
+3. 日志文件 (联机日志文件/归档日志文件)
+  : select * from v$log;   -- 查看日志
+  
+  保存用户的所有操作。一个数据库至少有两个日志组，轮流写入。\\
+  每个日志组至少有一个日志成员，成员之间是镜像关系，这是为了保护数据。\\
+  联机日志组的交换过程叫切换。当一个组写完会自动切换下一组，也可以手动切换：
+  : alter system switch logfile   -- 切换日志文件
+
+  如果打开归档模式，切换日志的时候会产生归档文件。打开归档模式命令:
+  : alter database archivelog
+
+4. 初始化参数文件 (Parameter File)
+   : $ORA_HOME/admin/<SID>/pfile/init.ora.xxx
+   记录了数据库启动运行的一系列参数，内存、控制文件等
+
+**** 逻辑组件
+1. 表空间 (tablespace)
+   : select * from v$tablespace;
+   - *最基本的逻辑结构* ，是数据库恢复的最小单位, 容纳着许多数据库实体, 如表、视图、索引、聚簇、回退段和临时段等。
+   - 默认创建的表空间有 SYSTEM/SYSAUX/TEMP/UNDO/USERS
+   - 表空间跟数据文件是 1vN 的关系。一个表空间至少需要一个相应的数据文件
+   - 在实际生产中，不建议用默认表空间，要根据情况自己创建
+   - 创建/删除表空间的语法：
+     #+BEGIN_SRC sql
+     -- 表空间创建
+     create tablespace xxx
+       logging
+       datafile 'D:\xxx.dbf'
+       size 50m
+       autoextend on
+       next 50m maxsize 20480m
+       extent management local;
+     
+     -- 创建临时表空间
+     create temporary tablespace yyy
+       tempfile 'D:\yyy.dbf';
+     
+     -- 删除
+     drop tablespace yyy;
+     #+END_SRC
+   - 逻辑上说，一个表空间是由一到多个段组成的。
+
+2. 段 (Segment)
+   - 段是对象在数据库中占用的空间
+   - 每个段，对应的是每个对象，有 table/index/view 等
+   - 按照存储对象类型的不同，分为数据段、索引段、回滚段和临时段
+   - 逻辑上说，段是由区组成的
+
+3. 区 (Extend)
+   - 由连续的数据块组成，由 Oracle 自动分配管理
+   - 当段中的空间已满时，会自动扩展新区
+
+4. 块 (Block)
+   - 数据块是Oracle服务器所能分配、读取或写入的最小逻辑单位。
+   - Oracle服务器以数据块为单位管理数据文件的存储空间。 
+   - 正常情况下，块的大小是操作系统块的整数倍，称作标准块。
+   - 可以通过参数 db_block_size 控制，默认 8k.
+
+*** 启动过程
+: startup nomount        -- 只启动了实例 (Instance)
+: alter database mount   -- 数据库挂载
+: alter database open    -- 数据库打开
+
+: shutdown immediate     -- 立刻关闭
+
+
+** 客户端
+*** sqlplus
+**** 连接语法：
+: sqlplus sys/southit as sysdba     -- 管理员登录
+: sqlplus / as sysdba               -- 操作系统认证
+: sqlplus scott/tiger               -- 普通用户登录
+: sqlplus scott/tiger@remotedb      -- 连接远程数据库
+: sqlplus /nolog                    -- 未连接状态，之后可以用 conn user/pass 语法登录
+
+**** 常用命令 (set/show)
+: linesize/pagesize/header/autocommit/echo/pause/serveroutput/autotrace/timing...
+: column xxx format a22
+: show parameters [系统参数]
+
+**** 快速编辑之修改
+1. list 定位到需要修改的行
+2. 通过 change 去做替换
+   : change /table_names/table_name
+3. 通过list 命令，查看修改完的语句 
+4. 通过调用 run 命令，运行目前缓存区存在的语句。
+
+**** 快速编辑之追加单词
+1. list 定位到需要修改的行
+2. 通过 append 去追加字段
+   : append table_name
+3. 通过list做检查
+4. 通过 run 去执行命令。
+
+**** 快速编辑之删除
+1. list 定位到需要修改的行
+   : list 1
+2. 通过 del 直接删除 / 通过 change 命令，把本行替换为空。
+3. list 查看结果
+4. run 运行语句
+
+**** 快速编辑之添加新行
+1. list 定位
+2. 通过 input 输入新行的内容
+3. list 查看结果
+4. run 运行命令
+
+**** 快速编辑之其他
+: list last         -- 定位到缓冲区内容的最后一行
+: save name         -- 保存当前缓冲区的内容到 .sql 文件。默认为当前目录，可以添加详细路径
+: start name.sql    -- 加载 .sql 文件并执行。简写为 @name
+: get name          -- 加载 .sql 文件但不执行
+: run               -- 执行缓冲区内容。简写为 /
+: edit              -- 调用外部编辑器修改缓冲区内容
+: clear buffer      -- 清空缓存区
+: clear screen      -- 清屏
+
+*** jdbc
+利用 java 连接 Oracle. 需要 ojdbc.jar
+
+*** 其他的图形化工具
+Toad / PLSQL Developer 等
+
+
+* Oracle 网络配置
+** 配置途径
+1. 直接修改 NETWORK/ADMIN 下的配置文件
+2. 通过 Oracle 的 Net Manager 工具配置
+
+** 服务端 (NETWORK/ADMIN/listener.ora)
+1. 直接修改配置文件或通过图形界面配置。主要配置元素有：
+   - 协议 (TCP/IP)
+   - 连接地址
+   - 端口号 (默认1521，一般不需要修改)
+2. 开启 TNSListener 服务
+
+** 客户端 (NETWORK/ADMIN/tnsnames.ora)
+1. 直接修改配置文件或通过图形界面配置。主要配置元素有：
+   - 协议 (TCP/IP)
+   - 连接地址 (机器名或IP地址)
+   - 端口号 (默认1521，需要跟服务器端的一致)
+   - 数据库的服务名(默认跟SID/数据库名等是一致的)
+2. 配置完后，就可以通过类似如下语句连接：
+   : sqlplus scott/tiger@DBALIAS
+
+
+
+* 用户与权限
+** 用户
+用户是用于资源控制和权限管理的一个概念
+
+
+开始新的项目时，保持良好的习惯： 
+为项目创建新的用户，指定新的表空间。
+
+*** 系统缺省用户
+**** SYS 用户，又叫特权用户，数据库中至高无上的用户。
+- 它是数据库的系统管理员，负责的是数据的安装、维护、升级、备份、恢复、优化等操作。
+- 不能用 normal 的身份登录，必须用 SYSDBA/SYSOPER 的身份登录。
+- 即使其他的用户用 SYSDBA/SYSOPER 的身份登录，实际上登录的也是 SYS。
+
+**** SYSTEM 用户。
+数据库的管理员。SYSTEM 用户之下保存着数据库运行的一些基本字典数据。
+它拥有 DBA 的角色。主要负责对数据库中各种对象，各种资源的管理。
+
+**** 其他用户 (如SCOTT)
+普通用户，能够执行被授权范围之内的操作。
+
+*** 用户的默认表空间
+SYS/SYSTEM -> SYSTEM 表空间
+
+普通用户  -> USERS 表空间
+
+*** 资源文件 (Profile)
+资源文件是口令限制、资源限制的命名集合
+
+#+BEGIN_SRC sql
+-- 查询
+select *from dba_profiles where profile = 'DEFAULT';    -- default profile
+
+-- 创建
+CREATE PROFILE filename LIMIT
+  SESSION_PER_USER integer
+  CPU_PER_SESSION integer
+  USER_PER_CALL integer
+  CONNECT_TIME integer|UNLIMITED
+
+-- RESOURCE_LIMIT 设置为 TRUE，才会有效
+alter system set RESOURCE_LIMIT = TRUE;
+-- 创建资源限制文件
+create profile myprofile limit failed_login_attempts 3;
+
+#+END_SRC
+
+常用选项（我随便写的，你们自己再整理修订下）
+| FAILED_LOGIN_ATTEMPTS    | 用于指定联系登陆的最大失败次数.                   |
+| PASSWORD_LOCK_TIME       | 用于指定帐户被锁定的天数.                         |
+| PASSWORD_LIFE_TIME       | 用于指定口令有效期                                |
+| PASSWORD_GRACE_TIME      | 用于指定口令宽限期.                               |
+| PASSWORD_REUSE_TIME      | 用于指定口令可用时间.                             |
+| PASSWORD_REUSE_MAX       | 用于指定口令在有效期内可更改次数.                 |
+| PASSWORD_VERIFY_FUNCTION | 是否校验口令(校验将值改为VERIFY_FUNCTION)         |
+| CPU_PER_SESSION          | 用于指定每个会话可以占用的最大CPU时间.            |
+| LOGICAL_READS_PER_SESSON | 用于指定会话的最大逻辑读取次数.                   |
+| PRIVATE_SGA              | 用于指定会话在共享池中可以分配的最大总计私有空间. |
+| COMPOSITE_LIMIT          | 用于指定会话的总计资源消耗                        |
+| CPU_PER_CALL             | 限制每次调用可占用的最大CPU时间                   |
+| LOGICAL_READS_PER_CALL   | 用于限制每次调用的最大逻辑I/O次数.                |
+| SESSIONS_PER_USER        | 用于指定每个用户的最大并发会话个数.               |
+| CONNECT_TIME             | 用于指定会话的最大连接时间.                       |
+| IDLE_TIME                | 用于指定会话的最大空闲时间.                       |
+
+*** 创建/修改/删除用户
+
+1. 创建用户语法格式
+   : create USER name
+   :   identified by password
+   :   [default tablespace users]
+   :   [temporary tablespace temp]
+   :   [profile default]
+   :   [quota xxx on users]
+   :   [other key/value pair]
+
+2. 修改用户语法格式
+   : alter USER name
+   :   identified by password
+   :   [default tablespace users]
+   :   [temporary tablespace temp]
+   :   [profile default]
+   :   [quota xxx on users]
+   :   [other key/value pair]
+
+3. 删除用户
+   : drop USER name [cascade]
+
+4. 操作示例
+   #+BEGIN_SRC sql
+   -- 查询
+   select * from dba_users where username='SCOTT';
+   
+   -- 最基本的创建语法（用户名+密码）
+   create user vip identified by vip;
+   
+   -- 较详细的创建语法
+   create User vip
+     identified by vip
+     default tablespace users
+     temporary temporary temp
+     profile default
+     quota ulimited on users;
+   
+   -- 修改用户
+   alter user vip identified by vop;
+   alter user vip profile ttt;
+   alter user vip default tablespace system;
+   alter user vip temporary tablespace mytemp;
+   alter user vip account unlock/lock;
+   alter user vip quota unlimited on test;  -- very good
+   
+   -- 删除用户。如果用户下存在对象，需要添加 cascade 关键词。
+   drop user vip;
+   drop user vip cascade;
+   
+   #+END_SRC
+
+
+** 权限
+权限指的是执行特定命令或访问数据库对象的权利。分为系统权限和对象权限。
+
+*** 系统权限 (执行特定命令)
+**** 授权语法
+: grant 权限名字 to 用户 [with admin option]
+with admin option 参数可以使得到授权的用户有权把得到的权限授予其他用户。
+
+****  撤销语法
+: revoke 权限名字 from 用户
+
+**** 相关的字典表
+: select * from system_privilege_map;  -- 所有的系统权限
+: select * from dba_sys_privs where grantee='SCOTT';         -- 目前已经被授权的系统权限
+
+*** 对象权限 (访问数据库对象)
+
+**** 授权语法
+: grant 对象权限的关键词(select/update/..)on [schema.]对象名字 to 用户 [with granted option];
+: grant all on scott.emp to vip with grant option;
+
+**** 撤销权限
+: revoke 权限名字 from 用户
+
+**** 相关的字典表
+: select * from dba_tab_privs/all_tab_privs/user_tab_privs;      -- 存放的是所有对象权限的授权情况。
+
+*** 示例
+#+BEGIN_SRC sql
+-- 授权
+grant create table to vip;
+grant create session to vip [with admin option];
+grant select, insert on sys.dba_tab_privs to vip;
+grant all on scott to vip;           -- 授予所有
+
+grant create synonym to vip;         -- 可以为自己创建 synonym
+grant create any synonym to vip;     -- 可以为任意用户创建 synonym
+grant create public synonym to vip;  -- 可以创建 public synonym
+
+-- 撤权
+revoke create table, create session from rain;
+revoke alter on scott from vip;
+
+#+END_SRC
+
+
+
+** 角色
+角色是权限的命名集合。
+
+*** 创建角色
+: create role name
+
+*** 配置角色
+: grant 权限名字 to 角色名字
+: grant 角色名字 to 角色名字
+
+*** 使用角色
+: grant 角色名字 to 用户名字
+
+*** 删除角色
+: drop ROLE 角色名字
+
+*** 相关的字典表
+: select * from dba_roles;                            -- 列出系统中所有存在的角色。
+: select * from dba_sys_privs where grantee='DBA';    -- 查看DBA所拥有的所有系统权限
+: select * from dba_role_privs where grantee='SYSTEM' -- 查看用户所拥有的所有角色
+
+*** 特殊的 PUBLIC 角色
+公用角色，默认是授予每个用户的。
+
+
+* TODO 阶段性实践
+计算大家完成以下工作所消耗的时间：
+1. 连接上指定服务器的指定数据库。
+2. 为新的用户创建所需要的默认表空间。
+3. 为新的用户创建所需要的资源文件。
+4. 创建用户，指定表空间、资源文件，设置配额。
+5. 为所创建的用户授予特定的系统权限，如创建会话、创建表、更新数据等。
+6. 为 scott 用户授予相应的对象权限，让 scott 用户能够操纵我们所创建用户下的一些对象。
+7. 进行一系列的简单操作。
+
+
+
+* SQL
+Structured Query Language，结构性查询语言。
+
+** SQL 的历史及概念
+** SQL 的分类
+*** DDL（Data Definition Language）
+**** CREATE
+ 创建表的典型语句为:
+: create TABLE table_name
+: (column_name column_type,[column_name column_type...]);
+
+例子:
+#+BEGIN_SRC sql
+-- 最基本的创建
+create table OrderTB (id number, name varchar2(20));
+
+-- 添加主键
+create table OrderTB (id number primary key, name varchar2(20));
+create table OrderTB 
+  (id number,
+   name varchar2(20),
+   primary key(id));
+create table OrderTB (id number, name varchar2(20), constraints pk_ordertb primary key(id));
+
+-- 添加外键，外键映射到的必须是主键
+create table sex (value primary key, detail varchar2(20));
+create table Mates (id number primary key, name varchar2(20), sex number references sex(value));
+
+create table Mates 
+  (id number primary key,
+   name varchar2(20),
+   sex number,
+   foreign key (sex) references sex(value));
+
+create table Mates 
+  (id number primary key,
+   name varchar2(20),
+   sex number,
+   constraints fk_mates foreign key (sex) references sex(value));
+
+-- check 约束
+create table Classes (id number, count number check (count > 10 and count < 100));
+create table Classes222
+( id number primary key,
+  count number,
+  constraints ck_classes check (count > 10 and count < 100));
+
+-- TODO Unique 约束
+
+
+-- 双引号强制表名保留原来的大小写。
+create table "XiaoMing" (name varchar2(20), age int);
+
+
+-- 创建一张表，不生产重做日志的话
+create table nologtab (id number) nologging;
+
+
+-- 创建一张表，指定另外的表空间
+create table spetab (id number) tablespace system;
+
+-- 强制字段内容不能为
+create table notnulltab (name varchar2(20) not null);
+
+-- 指定某个字段的默认值
+create table tab_defaultval (name varchar2(20) not null, sex number default 1);
+
+#+END_SRC
+
+需要注意，首先，表的名字要符合一定的规范(长度，组成字符，保留字，以及其他)。
+
+Oracle 会自动把表名转换为大写，但是如果想保留大小写的话，可以在创建表的时候，把表名用双引号括起来。
+
+主键：
+
+需要简短、效率、不重复、不可改变。
+所以，不要用业务字段作为主键，即使觉得业务字段是唯一且不可改变的。因为，你觉得不可改变的东西，往往经不住时间的考验。
+需要用自增的，简单的，跟业务没有关系的，所谓的代理主键。[[http://www.w3school.com.cn/sql/sql_autoincrement.asp][就比如 sqlserver 中的 identity, MySQL 中的 auto_increment]].
+
+查看数据库中表的 DDL 语句：
+: set long 999
+: select DBMS_METADATA.get_ddl('TABLE', 'EMP') from dual;
+
+
+从已经存在的表中，创建新的表
+
+#+BEGIN_SRC sql
+-- 语法
+create table 表名 as select cause...
+
+-- 简单应用
+create table emp1 as select * from scott.emp;
+
+-- 限定列
+create table emp2 as select empno, ename, hiredate from scott.emp;
+
+-- 限定列的过程中，可以使用运算符或者函数
+create table emp2 as select empno, ename, sal/1000 s from scott.emp;
+
+-- 限定行(限定插入的数据)
+create table emp3 as select empno, ename from scott.emp where empno < 7566;
+
+-- 如果只想复制表的结构的话
+create table emp4 as select * from scott.emp where 1=2;
+create table emp4 as select * from scott.emp where rownum < 1;
+
+#+END_SRC
+
+
+**** ALTER
+#+BEGIN_SRC sql
+-- 最基本的用法
+alter table 表名 操作关键词 属性
+
+
+-- 添加一个列
+alter table sss add howsoon number default 0;
+alter table sss add (status char);
+alter table sss add (status char not null);         -- 可以添加其他的属性
+alter table sss add (status char default '1');
+
+-- 添加一个主键约束
+alter table sss add constraints pk_sss primary key (id);
+
+-- 删除一个列
+alter table sss drop COLUMN howsoon;
+
+-- 删除主键
+alter table sss drop CONSTRAINTS pk_sss;
+
+-- 删除外键
+alter table 表名 drop constraints 外键名;
+
+-- 修改列
+alter table sss modify (status varchar2(20) not null);
+
+-- 更改列名
+alter table sss rename COLUMN status TO flag;
+
+
+-- 更改表的表空间
+alter table sss move tablespace system;
+
+
+-- 更改是否记录日志
+alter table sss logging;
+alter table sss nologging;
+
+
+-- 如何去给一个表改名字
+ALTER TABLE sss RENAME TO sss_new;
+rename sss to sss_new;
+
+
+#+END_SRC
+
+
+**** DROP
+: drop table 表名;
+: drop table 表名 cascade constraints;  -- 注意，只是删除约束
+
+如果表存在被外键引用的情况的话，要删除有一下几种方式：
+1. 删除外键引用的表
+2. 删除外键引用表上存在的外键约束
+3. 在删除的过程中加上关键字 cascade constraints.
+
+*** DML（Data Definition Language）
+概念，增删改查，又叫 CRUD(Create/Read/Update/Delete)
+
+**** 查询(select)
+基本语法:
+#+BEGIN_SRC sql
+select distinct 字段名|表达式 from [schema.]表名
+  where cause
+  order by cause
+  group by cause
+  having cause;
+#+END_SRC
+
+
+用法示例：
+#+BEGIN_SRC sql
+-- 基本的查询
+select * from scott.emp;   -- * 代表所有的列，但在生产环境中不建议使用。有时候会很低效。而且不便于解耦合。
+
+-- 基本的条件
+select * from scott.emp where empno < 7802;
+
+-- 排序
+select * from scott.emp where empno < 7902 order by empno;
+select * from scott.emp where empno < 7902 order by empno desc;   -- 降序
+select * from scott.emp where empno < 7902 order by job, empno;   -- 组合多个排序的列
+
+-- distinct
+select distinct job from emp;
+select distinct job, sal from emp;
+
+-- alias
+select to_char(empno) as empnochar from emp where sal > 5000;
+
+#+END_SRC
+
+
+表的连接
+#+BEGIN_SRC sql
+-- cross join(叉乘，笛卡尔积)。展示所有的记录的组合。是内连接和外连接的基础。
+select * from a cross join b;
+select * from a, b;
+
+-- inner join(内连接)
+select * from a inner join b on a.deptno = b.deptno;
+select a.ename, b.deptname from a inner join b using (deptno);
+select a.ename, b.deptname from a,b where b.deptno=a.deptno; -- oracle 中的写法
+
+-- outer join(外连接)
+select * from a left join b on a.deptno = b.deptno;
+select * from a left outer join b using (deptno);
+select * from a right outer join b on a.deptno = b.deptno;
+select * from a full join b on a.deptno = b.deptno;   -- 全连接
+select * from a, b where a.deptno=b.deptno(+);        -- 左外连
+select * from a, b where a.deptno(+)=b.deptno;        -- 右连接
+
+#+END_SRC
+
+***** TODO 阶段性作业（scott用户下的表）
+1. 查询每个部门下有多少员工
+2. 查询除去 salesman 所有平均工资超过 1500 的部门
+3. 查询在 new york 工作的所有员工的姓名，部门名称和工资信息
+4. 查询姓名为 King 的员工的编号，名称跟部门
+5. 查询各种工作的最低工资
+6. 查询工龄大于10年的所有员工信息
+7. 查询每个部门员工数量，平均工资和平均工作年限
+8. 统计各部门每个工种的人数，平均工资。
+9. 查询从事同一种工作但不属于同一部门的员工信息。
+10. 查询所有员工工资都大于1000的部门的信息及员工信息
+11. 查询入职日期早于其直接上级的所有员工信息。
+12. 列出雇员中（除去mgr为空的人)工资第二高的人。
+13. 列出1981年来公司所有员工的总收入（包括sal和comm）
+
+***** Group By
+示例：
+#+BEGIN_SRC sql
+
+select * from emp group by deptno;    -- 错误的用法。因为用group by之后，需要指定跟分组相关的列、字段。
+
+-- 查看每一组的数目
+select deptno, count(*) from emp group by deptno;  -- 查看每一个部门有多少人
+
+-- 查询每个部门下有多少员工
+select d.dname, count(*) from dept d, emp e 
+  where d.deptno = e.deptno group by d.dname;
+select d.dname,e.c 
+  from dept d,
+       (select deptno, count(*) c from emp group by deptno) e
+ where d.deptno = e.deptno;
+
+
+-- 分组的顺序是这样的： 
+-- 首先，where过滤原始数据；
+-- 其次,依据 group by 进行分组，得到跟分组数相同的记录数目；
+-- 最后，用having对groupby之后产生的结果再进行过滤。
+select gno,
+    count(*) 人数,
+    max(yanzhi) 最美,
+    min(yanzhi) 最有才,
+    avg(yanzhi) 平均,
+    sum(yanzhi) 总和
+  from boysandgirls
+    where name <> '黄'
+    group by gno
+    having sum(yanzhi)>400;
+
+select * from
+  (select gno,
+      count(*) 人数,
+      max(yanzhi) 最美,
+      min(yanzhi) 最有才,
+      avg(yanzhi) 平均,
+      sum(yanzhi) 总和
+    from boysandgirls
+      where name <> '黄'
+      group by gno) a
+   where a.总和>400;
+
+-- 分组之后的表的连接
+select * from
+  groups a,
+  (select gno,
+       count(*) 人数,
+       max(yanzhi) 最美,
+       min(yanzhi) 最有才,
+       avg(yanzhi) 平均,
+       sum(yanzhi) 总和
+     from boysandgirls
+       where name <> '黄'
+       group by gno
+       having sum(yanzhi)>400) b
+where a.gno = b.gno;
+
+-- 表的连接之后再分组
+select gname, sum(yanzhi) 
+  from mates a, groups b 
+  where a.gno=b.gno and name<>'黄小波' 
+  group by gname
+  having sum(a.yanzhi)>350;
+
+
+#+End_src
+
+**** 插入(insert)
+最基本的语法
+#+BEGIN_SRC sql
+insert into table_name [columns] values (value...);
+
+-- 示例表
+create table demo (id number, name varchar2(20));
+
+-- 最简单插入
+insert into demo values (1, 'haha');
+insert into demo (id, name) values (2, 'hehe');
+insert into demo (id) values (3);
+insert into demo (name, id) values ('heihei', 4);
+
+
+-- 注意，插入时，最好指定插入的字段。因为可以提高效率，可以避免错误。
+alter table demo add age number;      -- 对表进行扩充
+insert into demo values (1, 'haha');  -- 会出错，因为多了一列，但是插入的语法没变
+insert into demo (name, id) values ('heihei', 4);  -- 没有问题。
+
+
+
+
+-- 从其他的表中加载数据
+insert into table_name select xxx from yyy;
+
+-- 复制 scott.dept 中的deptno>20的所有数据到指定表
+create table d as select * from scott.dept where 1=2;  -- 按照之前学的语法，复制表的结构
+insert into dept select * from scott.dept where deptno>20;
+insert into dept (select * from scott.dept where deptno>20);
+
+
+-- 创建一张表，只有一个字段， varchar2(20)
+-- 把 scott.dept 中所有 deptno > 20 的部门的名称插入其中
+create table dept2 (dname varchar2(20));   -- 创建表的语句
+-- 下面三种是等价的
+insert into dept2 select dname from scott.dept where deptno > 20;
+insert into dept2 (dname) select dname from scott.dept where deptno > 20;
+insert into dept2 value select dname from scott.dept where deptno > 20;
+-- 下面一种是错误的，因为在指定字段的时候，不能够跟 value 关键字一起使用
+insert into dept2 (dname) value select dname from scott.dept where deptno > 20;  ---
+
+
+#+END_SRC
+
+
+
+
+
+**** 更新(update)
+#+BEGIN_SRC sql
+-- 基本语法
+UPDATE table_name SET column=value[, column=value...] [WHERE condition]
+
+-- 注意，一定不要缺少相应的where，粗心大意是dba或者数据库操作员的天敌。
+-- where 条件，尽可能使用主键，因为主键是用来标识唯一一条记录的。
+update dept set dname='销售部' where deptno = 30;
+
+
+#+END_SRC
+**** 删除(delete)
+#+BEGIN_SRC sql
+-- 语法
+delete from table_name [where cause]
+
+delete from dept;   -- 删除表中所有记录
+delete from dept where dname = 'SALES'; -- 删除表中所有 SALES 的记录
+
+-- truncate 语法，截断数据，会清空表中的所有数据。
+-- 不需要提交事务，也不能够回滚。因为 truncate 不产生回滚段，不写 redolog
+-- 它删除的效率要高于 delete from，但因为不能回滚，所以应用中应该慎之又慎。
+truncate table table_name;
+
+#+END_SRC
+
+
+
+*** TCL（Transaction Control Language)
+控制数据的事务。事务就是把数据当做一个完整的操作单元，一起成功或者一起失败。这样才能保证数据的一致性。
+- set transaction xxx 配置事务属性
+- savepoint name 保存点
+- rollback to [savepint] 回撤
+- commit 提交
+
+*** DCL（Data Control Language)
+- grant
+- revoke
+
+
+
+
+
+
+
+
+
+
+** 数据类型
+*** 字符类型
+**** char 类型(nchar)
+固定长度，默认是1，最大长度是2000个字节。不够的长度，oracle 会用空格进行填充。
+: create table s1 (c char(2001));  -- 错误，因为2001超出了类型的范围
+: create table s2 (c char);        -- 默认char的长度为1.
+: insert into s2 values ('a');     -- 它是正确的。
+: insert into s2 values ('你');    -- 它是错误的。列的值太大，(实际值: 2, 最大值: 1)
+
+**** varchar 类型
+是SQL的标准类型。
+不建议使用，用 varchar2 代替。因为 varchar2 有更高的效率和更好的兼容性。
+**** varchar2 类型(nvarchar2)
+可变长度的。最大长度为 4000。效率不及固定长度的char类型。英文占用一个字节，中文占用多字节，所以，中文跟中文占用空间不一致。
+nvarchar2, 在 varchar2 基础上加入了字符集支持。
+
+nvarchar2中，长度表示的是字符个数。
+
+: create table demo (a char(100), b varchar2(100), c nvarchar2(100));
+: insert into demo values ('a', 'a', 'a');
+: insert into demo values ('你', '你', '你');
+: select lengthb(a), lengthb(b), lengthb(c) from demo;
+: create table s4 (c varchar2(4 char));    -- char 是代表字符个数，是一个单位符号。这个语句创建的表格，只有一个字段， 是 varchar2 类型，可以填充 4 个字符（注意，不是字节）。
+: create table s4 (c varchar2(4 byte));    -- byte 是跟上面语句一样的单位符号，代表的是字节。这是 varchar2 的默认单位。这个语句创建的表格，只有一个字段，是 varchar2 类型，可以填充 4 个字节（注意，不是字符）。
+
+**** long 类型
+用来存储大容量数据的，最大是 2GB。已弃用，建议使用 LOB 字段代替。
+
+
+*** 数字类型
+**** NUMBER 类型
+定义语法为：
+: COLUMN number[(precision, scale)]
+默认的长度是38。
+
+如果不带参数，精度和小数的位数是根据填充的数字自动判定的。
+: create table s5 (c number);
+如果 scale 为空，那么默认， scale 为 0。小数点后被截断的数位，采取的是四舍五入制。
+: create table s7 (c number(5));
+: insert into s7 values (9.2222);   -- 插入的是 9
+: insert into s7 values (9.7777);   -- 插入的是 10
+如果 precision 为空，那么，确定小数点位数为 scale，precision 自动判定。
+: create table s8 (c number(*, 2));
+: insert into s8 values (6.23236);
+两个参数都具备的情况：
+: create table demo (a number(4, 2));
+: insert into demo values (987.1);  -- 值大于为此列指定的允许精度
+: insert into demo values (7.101);  -- 实际上插入的是 7.10
+两个参数，第一个代表精度，第二个代表小数位数。
+
+还有两个子类型 int/float
+: create table s9 (c int);
+: insert into s9 values (22.22);
+
+*** 时间类型
+**** DATE 数据类型
+显示的是年月日。
+#+BEGIN_SRC sql
+-- 查看当天的日期
+select sysdate from dual;
+
+-- 修改当前日期显示的格式
+alter session set nls_date_format='yyyy.mm.dd';
+
+-- 应用示例
+create table d1 (birth date);
+insert into d1 values (sysdate);
+insert into d1 values (sysdate - 1);             -- 可以进行简单运算，默认单位是“天”
+insert into d1 values (to_date('20120701'));     -- 用 to_date 函数对字符串进行转换。可以带两个参数，第一个是必须的。如果第二个参数被忽略，那么 oracle 会根据 yyyy/mm/dd 的顺序尝试对日期进行格式化。
+insert into d1 values (to_date('2012/07/01'));
+insert into d1 values (to_date('2012=07=01'));
+
+insert into d1 values (to_date('01.07.2012', 'dd.mm.yyyy'));   -- 两个参数都是字符串，需要用单引号引起来。
+
+create table s1 values (birth varchar2(20));
+insert into s1 values (to_char(sysdate, 'yyyy-mm-dd'));        -- to_char 是把其他的类型转换为 char 类型
+
+
+
+#+END_SRC
+
+**** TIMESTAMP 数据类型
+
+#+BEGIN_SRC sql
+
+-- 返回的是 timestamp with timezone 类型，包含年月日时分秒微妙毫秒，上午下午，时区
+-- 在一般业务系统中，时间基本上用的都是 timestamp 类型
+-- 可以用 nls_timestamp_format 定制显示方式
+select systimestamp from dual;;
+
+#+END_SRC
+
+
+*** RAW 类型
+主要用来处理二进制的。
+
+分为
+**** RAW
+默认占用空间为 2kb
+
+**** Long RAW
+不建议使用，跟 long 类型有相同的缺点。
+
+*** LOB类型(large Object)
+**** CLOB 类型
+是存储字符的大对象类型。
+: create table lobdemo1 (c clob);  -- 创建一个具备 blob 字段的表
+: insert into lobdemo1 values ('ssss');
+: insert into lobdemo1 values (22222222222222222);
+: insert into lobdemo1 values (null);
+: insert into lobdemo1 values (empty_clob());   -- 插入的不是空值
+
+**** BLOB 类型
+是存储二进制数据的大对象类型。主要的用处是存储图形，音频，视频等。
+
+oracle 提供了dbms_lob 包，对 lob 字段进行操作。
+
+**** BFILE 类型
+也是存储二进制。是以外部文件的形式进行存储的。
+
+**** XMLType 类型
+主要是为了处理 xml 文档的。
+
+
+*** ROWID/ROWNUM
+**** rowid
+rowid 是 oracle 中的伪列。可以通过下面语句显示:
+: select d.rowid, d.* from dept d
+它是唯一的，不可变的，固定长度的。
+
+它是数据存储物理地址的一种映射。一共有18位，前6位表示对象id，后3位表示fno，后6位表示块编号，最后3位表示行编号。
+所以，通过rowid可以最快速度地定位到数据所在的位置。
+
+rowid 是 oracle 特有的。
+
+不建议使用 rowid 作为表的主键。迁移的需求，有改变的风险。
+
+
+
+**** rownum
+列出每一行数据的行数，从1开始，自然增长。
+
+#+BEGIN_SRC sql
+-- 基本用法
+select rownum, d.* from dept;
+select rownum, d.* from dept d where rownum < 3;     -- 显示前两条
+select * from (select rownum rn, d.* from dept d) t where t.rn = 3;   -- 只显示第三条
+
+select * from (select * from emp order by sal desc) where rownum<=3;  -- 显示 emp 表中工资前三位的雇员信息。
+
+
+#+END_SRC
+
+
+*** NULL
+它是 Oracle 中非常特殊的一种类型。它表示不确定，表示没有值。并且它能转化成所有的类型。
+向数据库中插入空字符串时，oracle 会把它自动转化为 null 类型。所以，在查询空字符的时候：
+: select * from n3 where s = '';
+上面的语句是非法，不合适的。应该这样查：
+: select * from n3 where s is null;
+: select * from n3 where s is not null;
+创建表的时候，为了约束插入的数据不能为空，应该在字段的后面写上 not null 约束。
+: create table n5 (s varchar2(20) not null);
+跟 null 做任何的运算，结果仍然是 null.
+: select null + '' from dual;
+
+
+
+** 运算符
+**** 算术运算符
+加/减/乘/除
+**** 连接运算符
+是用来连接字符串的。跟java中的 + 是一致的。
+: select 'abc' || ' bcd ' as 连接后的结果 from dual;
+: select d.dname || ' 部门' from dept d;
+
+**** 关系运算符
+见课本
+**** 比较运算符
+IS NULL / Like / Between / In / Exsist.
+#+BEGIN_SRC sql
+
+
+-- 判断 null 值
+select * from n5 where s is null;
+select * from n5 where s is not null;
+
+-- like 模糊查询。慎用，有可能会导致全表扫描，效率低。
+select username from dba_users where username like 'VI_';
+select username from dba_users where username like 'SC%';
+select username from dba_users where username like '%SC%';
+
+-- in，是 where x = a or x = b or x = c 的一种缩写。下面两条是等价的。
+select * from emp where empno in (700, 800, 900);
+select * from emp where empno = 700 or empno = 800 or empno = 900;
+-- in 后面跟的不一定是逗号分隔的单项，也可能是一个完整的查询语句。
+-- 下面两条结果是一致的
+-- 这种 in 慎用
+select * from emp where deptno in (select deptno from dept where dname = 'SALES');
+select a.* from emp a,dept d where a.deptno =d.deptno and d.dname='SALES';
+
+
+-- between...and
+select * from emp where empno between 7800 and 9000;
+
+#+END_SRC
+
+**** 逻辑运算符
+and / or / not
+
+[[http://www.cnblogs.com/nick-huang/p/4027038.html][not 的优先级 > and 的优先级 > or 的优先级]]
+
+**** 集合操作符
+Union/UnionAll/Intersect/Minus
+#+BEGIN_SRC sql
+
+create table depd as select * from dept where rownum < 2;
+insert into depd values (99, '外卖部', '珠海');
+insert into depd values (98, '小吃部', '斗门');
+
+select * from depd
+union
+select * from dept;
+
+select * from depd
+union all
+select * from dept;
+
+select * from depd
+intersect
+select * from dept;
+
+select * from depd
+minus
+select * from dept;
+
+
+#+END_SRC
+
+
+
+
+
+** 函数
+*** 数值函数
+- abs 求绝对值
+  : select abs(-22) from dual;
+- round 四舍五入
+  : SELECT ROUND(123415.193) "Round" FROM DUAL;
+  : SELECT ROUND(123415.193, 2) "Round" FROM DUAL;
+  : SELECT ROUND(123415.193, -1) "Round" FROM DUAL;
+- power 求幂
+- sqrt 开根号
+- trunc 保留小数有效数字
+
+*** 字符函数
+- lower 转化为小写
+- upper 转换为大写
+- trim 去除某些字符
+  : select trim('x' from 'xsxdfsxxxx') from dual;
+  : select trim(both 'x' from 'xsxdfsxxxx') from dual; -- 去除开始的 x 字符
+  : select trim(leading 'x' from 'xsxdfsxxxx') from dual; -- 去除开始的 x 字符
+  : select trim(trailing 'x' from 'xsxdfsxxxx') from dual; -- 去除结尾的 x 字符
+- ltrim / rtrim 左右去除字符
+  : SELECT RTRIM('BROWNING: ./=./=./=./=./=.=',      '/=.') FROM DUAL;  -- 第二个参数包含了要砍掉的所有字符的集合
+  : SELECT RTRIM('BROWNING: ./=./=./=./=./=.=     ') FROM DUAL;         -- 如果第二个参数为空，那么默认 trim 掉的是空格
+- lpad / rpad 填充字符
+  : SELECT LPAD('Page 1',15,'*.') "LPAD example" FROM DUAL;  -- 第二个参数代表了返回值的总长度，最后一个参数如果去掉的话，那么默认填充的是空格
+- concate(||) 连接字符
+- REGEXP_REPLACE 正则替换
+- replace 常规替换
+  : SELECT REPLACE('JACK and JUE','J','BL') "Changes" FROM DUAL; -- 一共 3 个参数，第一个是源字符串，第二个是要替换的字符串，第三个是要替换为的字符串。
+  : SELECT REPLACE('JACK and JUE','J') "Changes" FROM DUAL;      -- 如果第三个参数为空的话，默认把第二个字符串替换为空。
+- SUBSTR 
+  : SELECT SUBSTR('ABCDEFG',3,4) "Substring" FROM DUAL;   -- 第一参数表示要处理的源字符串，第二个参数表示子串起始的位置，第三个参数是可选的，表示子串的长度
+  : SELECT SUBSTR('ABCDEFG',3) "Substring" FROM DUAL;     -- 如果不适用第三个参数，那么子串默认到源字符串的结尾。
+  : SELECT SUBSTR('ABCDEFG',-2,1) "Substring" FROM DUAL;  -- 如果第二个参数是负数，表示从结尾往回回溯。
+- TRANSLATE 替换相应的字符
+  : select translate('hehehello,haha', 'o,h', '0!') from dual;  -- 三个参数，第一个源字符串，第二个和第三个参数里面的字符是按顺序一一对应的。这个函数就是按照后面两个参数内的字符，进行顺序替换。
+
+- ASCII 显示字符ascii码
+  : select ascii('A') from dual;   -- 结果是 65
+  : select * from scott.emp e where ascii(substr(e.ename, 1, 1)) = 67;  -- 显示 emp 中所有名字以 C 开头的员工。
+- LENGTH/LENGTHB 表示长度。
+
+*** 时间函数
+- sysdate/systimestamp systimestamp 显示的时间时区是从操作系统中获取的。的返回值是 TIMESTAMP WITH TIME ZONE 类型。
+- current_date/current_timestamp 返回的是当前会话时区的时间。跟 sessiontimezone 有关系的。可以通过 alter session set time_zone='-5:0' 来修改会话的时区。
+- localtimestamp 显示当前时间，但是不带时区信息
+- add_months 增加日期
+  : select add_months(sysdate, 5) from dual;
+  : select add_months(sysdate, -5) from dual;   -- 如果第二个参数是负数，相应的是减少几个月
+- LAST_DAY 一个月的最后一天
+  : select last_day(sysdate) from dual;
+- MONTHS_BETWEEN 计算相差的月数
+  : select months_between(sysdate, to_date('19981105')) from dual;  -- 周强从出生到现在经历了多少个月。如果把两个参数换过来，得到的是相应的负数。
+  : select (sysdate - to_date('19981105'))/30 from dual;  -- 这样写是错误的，因为，一个月未必是30天
+- next_day 计算日期之后的第一个相应工作日日期
+  : SELECT NEXT_DAY(sysdate, 1) "NEXT DAY" from dual;    -- 如果是数字，那么只能是1-7。相应1表示星期日，2代表星期一...
+  : SELECT NEXT_DAY(to_date('20111111', '星期六') "NEXT DAY" from dual;    -- 第二个参数必须跟 nls_date_language 指定的字符集相关联
+- round(date) 最接近的日期
+  : select round(sysdate - 200, 'YEAR') from dual;  -- 跟现在最接近的年份
+  : select round(sysdate, 'MONTH') from dual;       -- 跟今天最接近的月份
+- trunc(date) 截取日期
+  : SELECT TRUNC(TO_DATE('2010-09-20'), 'MONTH') "New Year" FROM DUAL;
+- dbtimezone 显示时区
+- EXTRACT(datetime) 分解时间
+  #+BEGIN_SRC sql
+  SELECT EXTRACT(year FROM systimestamp) "年",
+    EXTRACT(month FROM systimestamp) "月",
+    EXTRACT(day FROM systimestamp) "日" from dual;  -- 默认采取的是 0 时区，即 unk 时区的值.
+
+  select extract(hour from timestamp '1998-03-03 9:10:11') from dual;  -- 返回的是 9
+  #+END_SRC
+
+
+*** 比较函数
+- GREATEST 取最大值
+  : select greatest(2, 3, 4) from dual;  -- 结果 4
+- LEAST 取最小值
+  : select least(2, 3, 4) from dual;     -- 结果 2
+
+*** 转换函数
+- to_char
+- to_date
+- to_number
+
+*** 其他函数
+- nvl(e1, e2) 判定e1是否为空，如果为空那么替换为指定的e2.
+  : select nvl(null, 2) from dual;
+  : select e.ename, nvl(e.comm, 0) from scott.emp e where comm is null;
+- nvl2(e1, e2, e3)
+  : select e.ename, nvl2(e.comm, e.comm/10, 0) "佣金/10"  from scott.emp e; -- 三个参数。判定第一个是否为 null，如果不是，返回第二个参数，如果是，返回第三个参数。
+- nullif
+  : select nullif(100, 50*2) n1, nullif(100, 33*3) n2 from dual;
+- decode 大家自我修炼，继续深入。因为它很强大，很厉害，很牛x。我们要掌握它，熟练使用它，让它成为我们的好朋友。
+  : select m.name, decode(m.sex, 2, '男', 1, '女', '未知') from mates m;
+
+*** 分组函数
+- avg
+- max
+- sum
+- count(*|1)
+  : select count(*) from scott.emp;
+  : select count(1) from scott.emp;
+  : select count(distinct deptno) from scott.emp;
+
+*** 分析函数
+- row_number
+- rank
+- dense_rank
+
+
+
+
+** 自定义函数
+语法:
+#+BEGIN_SRC sql
+create [or replace] function function_name [(参数 参数类型 := 默认值 [, 其他参数])] return 参数类型
+  as|is
+    定义的变量
+  begin
+    逻辑
+    return xxx;
+  end;
+#+END_SRC
+
+示例:
+#+BEGIN_SRC sql
+-- 随机抽取 1-n 之间的一个整数
+create or replace function hehe (n number := 10) return number
+is
+  s number;
+begin
+  s = round(dbms_random.value(0.5, n + 0.5));
+  return s;
+end hehe;
+/
+
+
+-- 你要还要多久毕业？示例。
+create or replace function howsoon (d date := to_date('20170101', 'yyyymmdd')) return number
+is
+begin
+  return to_number(d - sysdate);
+end;
+/
+
+
+#+END_SRC
+
+* 同义词（Synonymous)
+#+BEGIN_SRC sql
+-- 必须要拥有创建同义词的权限
+grant create synonym to vip;
+
+-- 基本的创建
+create synonym s10 for sssssssss;         -- 简化 sql 语句.
+create or replace synonym e for scott.emp;           -- 省略 schema，隐藏细节，简化操作
+
+-- 同义词的删除
+drop synonym e;
+
+
+-- 共有同义词的使用。一次创建，每个用户都可以使用。
+grant create public synonym to vip;
+create public synonym e for sott.emp;
+
+-- 删除公用同义词
+drop public synonym e;
+
+
+-- DBA_XXX 等其实也是同义词，所以在调用的时候，不需要写 SYS.
+select object_name, object_type from dba_objects where object_name = 'DBA_OBJECTS;'
+
+#+END_SRC
+
+有余力的同学也可以看一下 database link 的概念。
+
+* 序列(Sequence)
+#+BEGIN_SRC sql
+-- SQLServer 中自增字段的写法
+create table test(id int primary key identity);
+-- MySQL 中自增字段的写法
+create table test(id int primary key auto_increment);
+
+
+-- 创建一个序列语法
+CREATE SEQUENCE 序列名字
+  [start with 数字]     -- 初始数字
+  [minvalue 数字]       -- 最小值
+  [maxvalue 数字]       -- 最大值
+  [increment by 数字]   -- 增量
+  [cycle]               -- 是否要循环
+  [cache 数字]          -- 是否缓存，即是否在内存中预先分配接下来要用到的数字
+  [order | nooreder]    -- 排序
+　
+
+-- 最基本的创建
+create sequence seq_001;
+
+-- start with 的值表示初始，必须要大于等于 minvalue
+-- 如果是 nocycle 模式，到达最大值继续执行会报错。否则，会循环。
+-- 循环的起始数值是 minvalue 而不是 start with 的值。
+create sequence seq_006 start with 3 minvalue -6 maxvalue 8 cycle nocache;
+
+-- 修改
+alter sequence increment by 8;
+rename seq_006 to seq_666;
+
+-- 删除序列
+drop sequence seq_006;
+
+-- 序列的使用
+select 序列名字.nextval from dual;    -- 序列的下一个值，调用之后会自动增长，每次返回值不一定相同。
+select 序列名字.currval from dual;    -- 返回序列的当前值，每次调用返回值是一致的。需要序列被初始化(nextval)之后才能使用，否则报错。
+
+create table seqtab (id number primary key, name varchar2(20));
+insert into seqtab values (seq_001.nextval, 'hello'); -- 这种写法虽然看起来麻烦，但是在开发中有其灵活性和通用性，是非常强大的。
+
+-- 自动插入，需要配合触发器 (triggle) 使用。如果有兴趣、有余力的同学，请自己关注。其他人无视则可。
+
+#+END_SRC
+
+* 表的分区(Partition)
+建议在下面两种情况下要对表进行分区:
+1. 表的数据量超过 2G
+2. 表里面存在大量的历史数据
+
+表分区是为了达到分而治之的目的，是鸡蛋不能放在同一个篮子里的切实实践。首先能提高效率，再者能保证安全。
+
+Oracle 里的基本分区有：
+1. 范围分区(Range)
+2. 列表分区(List)
+3. 哈希分区(Hash)
+
+另外可以对表的分区进行复合，建立子分区。 Oracle 11 之后添加了很多不同的复合形式，但常用的有两种：
+1. 范围-哈希分区
+2. 范围-列表分区
+
+#+BEGIN_SRC sql
+
+-- 查看当前用户下表的分区详情。
+select table_name, partition_name from user_tab_partitions;
+select table_name, partition_name, subpartition_name from user_tab_subpartitions;
+
+-- 从分区中查询
+select * from table_name partition (partition_name);
+
+-- 复合分区中进行查询
+select * from cxbe3 subpartition (p1_ps4);   -- 表示 p1 子分区下的 ps4 分区
+
+#+END_SRC
+
+** 范围分区
+#+BEGIN_SRC sql
+-- 基本创建
+create table bea1 (name varchar2(20), birth date, yz number);   -- 表的创建，不带分区的情况
+create table bea2 (name varchar2(20), birth date, yz number)    -- 按照生日，范围分区。
+partition by range (birth)
+(
+  partition p1 values less than (to_date('19900101', 'yyyymmdd')),
+  partition p2 values less than (to_date('20000101', 'yyyymmdd'))
+);
+-- 测试 bea2
+insert into bea2 values ('xxx', to_date('19880102'), 87);   -- 会被插入到 p1 分区
+insert into bea2 values ('yyy', to_date('19920102'), 82);   -- 会被插入到 p2 分区
+insert into bea2 values ('zzz', to_date('20010102'), 89);   -- 会出现错误，ORA-14400: 插入的分区关键字未映射到任何分区。因为没为这条数据创建相应分区。
+select * from bea2;                   -- 两条数据，xxx 和 yyy
+select * from bea2 partition (p1);    -- 显示的是 xxx 的数据。这是从特定分区中查询数据的语法
+select * from bea2 partition (p2);    -- 显示的是 yyy 的数据
+
+-- maxvalue 的使用
+create table bea3 (name varchar2(20), birth date, yz number)    -- 按照生日，范围分区。
+partition by range (birth)
+(
+  partition p1 values less than (to_date('19900101', 'yyyymmdd')),
+  partition p2 values less than (to_date('20000101', 'yyyymmdd')),
+  partition p3 values less than (MAXVALUE);
+);
+insert into bea3 values ('zzz', to_date('20010102'), 89);   -- 插入的是有maxvalue关键字的 p3 分区
+select * from bea3 partition (p3);                          -- 可以查询到.
+
+-- 分区的关键字，可以是数值，可以是日期，也可以是字符串
+create table bea5(name varchar2(20),birth date, yz number)
+partition by range(name)
+(
+  partition p1 values less than ('i'),
+  partition p2 values less than ('x'),
+  partition p3 values less than (MAXVALUE)
+);
+
+-- 在创建每个分区的时候，为每个分区指定表空间
+create table bea6(name varchar2(20),birth date, yz number)
+partition by range(yz)
+(
+  partition p1 values less than (60),
+  partition p2 values less than (85) tablespace users,
+  partition p3 values less than (MAXVALUE) tablespace system
+);
+
+-- 可以按照多个字段进行分区
+create table bea7(name varchar2(20),birth date, yz number)
+partition by range(name, yz)
+(
+  partition p1 values less than ('j', 60),
+  partition p2 values less than ('z', 90),
+  partition p3 values less than (MAXVALUE, MAXVALUE)
+);
+
+
+#+END_SRC
+
+
+** 列表分区
+#+BEGIN_SRC sql
+create table beaa (name varchar2(20), sex varchar2(20), yz number)
+partition by list (sex)
+(
+	partition p1 values ('男'),
+	partition p2 values ('女'),
+	partition p3 values (DEFAULT)
+);
+
+-- 指定相应的存储表空间
+create table beaa (name varchar2(20), sex varchar2(20), yz number)
+partition by list (sex)
+(
+	partition p1 values ('男') tablespace users,
+	partition p2 values ('女') tablespace system,
+	partition p3 values (DEFAULT)
+);
+
+#+END_SRC
+
+** 哈希分区
+
+[[http://www.bing.com/knows/search?q=%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&mkt=zh-cn&FORM=BKACAI][哈希算法]],散列表是也~
+
+#+BEGIN_SRC sql
+create table beax (name varchar2(20), yz number)
+partition by hash (name)
+(
+  partition p1 tablespace users,
+  partition p2,
+  partition p3,
+  partition p4,
+  partition p5
+);
+
+-- 创建多个分区的简略写法。分区的名字由oracle自动维护。
+create table beax (name varchar2(20), yz number)
+partition by hash (name) partitions 5;
+
+-- 指定表空间
+create table beax (name varchar2(20), yz number)
+partition by hash (name) partitions 5 stores in (users, system, users, system, system);
+
+
+#+END_SRC
+
+** 范围-列表分区
+#+BEGIN_SRC sql
+-- 先按照生日分区，之后子分区是按照名字哈希分区
+create table cxbe1 (name varchar2(20), birth date, yz number)
+partition by range (birth)
+subpartition by hash (name)
+subpartitions 3
+(
+  partition p1 values less than (to_date('19900101','yyyymmdd')),
+  partition p2 values less than (to_date('20000101','yyyymmdd')),
+  partition p3 values less than (maxvalue)
+);
+
+-- 先按照颜值分区，之后子分区是按照生日哈希分区
+create table cxbe2 (name varchar2(20), birth date, yz number)
+partition by range (yz)
+subpartition by hash (birth)
+subpartitions 3
+(
+  partition p1 values less than (50),
+  partition p2 values less than (80),
+  partition p3 values less than (MAXVALUE)
+);
+
+
+#+END_SRC
+
+** 范围-列表分区
+#+BEGIN_SRC sql
+create table cxbe3 (name varchar2(20), sex varchar2(20), yz number)
+partition by range (yz)
+subpartition by list (sex)
+subpartitions template
+(
+  subpartition ps1 values ('男') tablespace users,
+  subpartition ps2 values ('女') tablespace users,
+  subpartition ps2 values (DEFAULT)
+)
+(
+  partition p1 values less than (60),
+  partition p2 values less than (80),
+  partition p3 values less than (MAXVALUE)
+);
+
+
+#+END_SRC
+
+** 分区的修改
+- 添加分区
+  : alter table bea2 add partition p9 values less than (MAXVALUE);
+  : -- 按照 list 分区的添加？
+- 删除分区内数据
+  : alter table bea2 truncate partition p3;
+- 删除分区
+  : alter table bea2 drop partition p3;
+- 合并相邻分区
+  : alter table bea2 merge partition p2, p3 into partition p8;
+- 拆分分区
+  : alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);
+  : -- 其他类型的
+- 重命名分区
+  : alter table bea2 rename partition p2 to p12;
+
