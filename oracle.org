@@ -475,7 +475,7 @@ Oracle »á×Ô¶¯°Ñ±íÃû×ª»»Îª´óĞ´£¬µ«ÊÇÈç¹ûÏë±£Áô´óĞ¡Ğ´µÄ»°£¬¿ÉÒÔÔÚ´´½¨±íµÄÊ±ºò£¬°Ñ±
 
 #+BEGIN_SRC sql
 -- Óï·¨
-create table ±íÃû as select cause...
+create table ±íÃû as select clause...
 
 -- ¼òµ¥Ó¦ÓÃ
 create table emp1 as select * from scott.emp;
@@ -560,10 +560,10 @@ rename sss to sss_new;
 »ù±¾Óï·¨:
 #+BEGIN_SRC sql
 select distinct ×Ö¶ÎÃû|±í´ïÊ½ from [schema.]±íÃû
-  where cause
-  order by cause
-  group by cause
-  having cause;
+  where clause
+  order by clause
+  group by clause
+  having clause;
 #+END_SRC
 
 
@@ -759,7 +759,7 @@ update dept set dname='ÏúÊÛ²¿' where deptno = 30;
 **** É¾³ı(delete)
 #+BEGIN_SRC sql
 -- Óï·¨
-delete from table_name [where cause]
+delete from table_name [where condition]
 
 delete from dept;   -- É¾³ı±íÖĞËùÓĞ¼ÇÂ¼
 delete from dept where dname = 'SALES'; -- É¾³ı±íÖĞËùÓĞ SALES µÄ¼ÇÂ¼
@@ -776,6 +776,8 @@ truncate table table_name;
 *** TCL£¨Transaction Control Language)
 ¿ØÖÆÊı¾İµÄÊÂÎñ¡£ÊÂÎñ¾ÍÊÇ°ÑÊı¾İµ±×öÒ»¸öÍêÕûµÄ²Ù×÷µ¥Ôª£¬Ò»Æğ³É¹¦»òÕßÒ»ÆğÊ§°Ü¡£ÕâÑù²ÅÄÜ±£Ö¤Êı¾İµÄÒ»ÖÂĞÔ¡£
 - set transaction xxx ÅäÖÃÊÂÎñÊôĞÔ
+  : set transaction read only/write      -- ÉèÖÃÊÂÎñÊÇ·ñÖ»¶Á
+  : set transaction ISOLATION level read committed   -- ÉèÖÃÊÂÎñµÄ¸ôÀëÊôĞÔ
 - savepoint name ±£´æµã
 - rollback to [savepint] »Ø³·
 - commit Ìá½»
@@ -1184,22 +1186,24 @@ end;
 
 #+END_SRC
 
-* Í¬Òå´Ê£¨Synonymous)
+* Í¬Òå´Ê (Synonymous)
 #+BEGIN_SRC sql
 -- ±ØĞëÒªÓµÓĞ´´½¨Í¬Òå´ÊµÄÈ¨ÏŞ
 grant create synonym to vip;
 
 -- »ù±¾µÄ´´½¨
-create synonym s10 for sssssssss;         -- ¼ò»¯ sql Óï¾ä.
+create synonym s10 for sssssssss;                    -- ¼ò»¯ sql Óï¾ä.
 create or replace synonym e for scott.emp;           -- Ê¡ÂÔ schema£¬Òş²ØÏ¸½Ú£¬¼ò»¯²Ù×÷
+
 
 -- Í¬Òå´ÊµÄÉ¾³ı
 drop synonym e;
 
 
--- ¹²ÓĞÍ¬Òå´ÊµÄÊ¹ÓÃ¡£Ò»´Î´´½¨£¬Ã¿¸öÓÃ»§¶¼¿ÉÒÔÊ¹ÓÃ¡£
+-- ¹«ÓÃÍ¬Òå´ÊµÄÊ¹ÓÃ¡£Ò»´Î´´½¨£¬Ã¿¸öÓÃ»§¶¼¿ÉÒÔÊ¹ÓÃ¡£
 grant create public synonym to vip;
-create public synonym e for sott.emp;
+create public synonym e for scott.emp;
+
 
 -- É¾³ı¹«ÓÃÍ¬Òå´Ê
 drop public synonym e;
@@ -1212,7 +1216,7 @@ select object_name, object_type from dba_objects where object_name = 'DBA_OBJECT
 
 ÓĞÓàÁ¦µÄÍ¬Ñ§Ò²¿ÉÒÔ¿´Ò»ÏÂ database link µÄ¸ÅÄî¡£
 
-* ĞòÁĞ(Sequence)
+* ĞòÁĞ (Sequence)
 #+BEGIN_SRC sql
 -- SQLServer ÖĞ×ÔÔö×Ö¶ÎµÄĞ´·¨
 create table test(id int primary key identity);
@@ -1231,7 +1235,7 @@ CREATE SEQUENCE ĞòÁĞÃû×Ö
   [order | nooreder]    -- ÅÅĞò
 ¡¡
 
--- ×î»ù±¾µÄ´´½¨
+-- ×î»ù±¾µÄ´´½¨¡£Ä¬ÈÏ´Ó1¿ªÊ¼£¬ÔöÁ¿Îª1
 create sequence seq_001;
 
 -- start with µÄÖµ±íÊ¾³õÊ¼£¬±ØĞëÒª´óÓÚµÈÓÚ minvalue
@@ -1253,7 +1257,7 @@ select ĞòÁĞÃû×Ö.currval from dual;    -- ·µ»ØĞòÁĞµÄµ±Ç°Öµ£¬Ã¿´Îµ÷ÓÃ·µ»ØÖµÊÇÒ»ÖÂµ
 create table seqtab (id number primary key, name varchar2(20));
 insert into seqtab values (seq_001.nextval, 'hello'); -- ÕâÖÖĞ´·¨ËäÈ»¿´ÆğÀ´Âé·³£¬µ«ÊÇÔÚ¿ª·¢ÖĞÓĞÆäÁé»îĞÔºÍÍ¨ÓÃĞÔ£¬ÊÇ·Ç³£Ç¿´óµÄ¡£
 
--- ×Ô¶¯²åÈë£¬ĞèÒªÅäºÏ´¥·¢Æ÷ (triggle) Ê¹ÓÃ¡£Èç¹ûÓĞĞËÈ¤¡¢ÓĞÓàÁ¦µÄÍ¬Ñ§£¬Çë×Ô¼º¹Ø×¢¡£ÆäËûÈËÎŞÊÓÔò¿É¡£
+-- ×Ô¶¯²åÈë£¬ĞèÒªÅäºÏ´¥·¢Æ÷ (triggle) Ê¹ÓÃ¡£ÓĞĞËÈ¤¡¢ÓĞÓàÁ¦µÄÍ¬Ñ§£¬Çë×Ô¼º¹Ø×¢¡£ÆäËûÈËÎŞÊÓÔò¿É¡£
 
 #+END_SRC
 
@@ -1262,7 +1266,7 @@ insert into seqtab values (seq_001.nextval, 'hello'); -- ÕâÖÖĞ´·¨ËäÈ»¿´ÆğÀ´Âé·³£
 1. ±íµÄÊı¾İÁ¿³¬¹ı 2G
 2. ±íÀïÃæ´æÔÚ´óÁ¿µÄÀúÊ·Êı¾İ
 
-±í·ÖÇøÊÇÎªÁË´ïµ½·Ö¶øÖÎÖ®µÄÄ¿µÄ£¬ÊÇ¼¦µ°²»ÄÜ·ÅÔÚÍ¬Ò»¸öÀº×ÓÀïµÄÇĞÊµÊµ¼ù¡£Ê×ÏÈÄÜÌá¸ßĞ§ÂÊ£¬ÔÙÕßÄÜ±£Ö¤°²È«¡£
+±í·ÖÇøÊÇÎªÁË´ïµ½·Ö¶øÖÎÖ®µÄÄ¿µÄ£¬ÊÇ¼¦µ°²»ÄÜ·ÅÔÚÍ¬Ò»¸öÀº×ÓÀïµÄÇĞÊµÊµ¼ù¡£Ê×ÏÈÄÜÌá¸ßĞ§ÂÊ£¬ÔÙÕß¿É±£ÕÏ°²È«¡£
 
 Oracle ÀïµÄ»ù±¾·ÖÇøÓĞ£º
 1. ·¶Î§·ÖÇø(Range)
@@ -1279,18 +1283,18 @@ Oracle ÀïµÄ»ù±¾·ÖÇøÓĞ£º
 select table_name, partition_name from user_tab_partitions;
 select table_name, partition_name, subpartition_name from user_tab_subpartitions;
 
--- ´Ó·ÖÇøÖĞ²éÑ¯
+-- ´Ó·ÖÇøÖĞ²éÑ¯Êı¾İ
 select * from table_name partition (partition_name);
 
--- ¸´ºÏ·ÖÇøÖĞ½øĞĞ²éÑ¯
-select * from cxbe3 subpartition (p1_ps4);   -- ±íÊ¾ p1 ×Ó·ÖÇøÏÂµÄ ps4 ·ÖÇø
+-- ¸´ºÏ·ÖÇøÖĞ½øĞĞ²éÑ¯Êı¾İ
+select * from cxbe3 subpartition (p1_ps4);   -- ±íÊ¾ p1 ·ÖÇøÏÂµÄ ps4 ×Ó·ÖÇø
 
 #+END_SRC
 
 ** ·¶Î§·ÖÇø
 #+BEGIN_SRC sql
 -- »ù±¾´´½¨
-create table bea1 (name varchar2(20), birth date, yz number);   -- ±íµÄ´´½¨£¬²»´ø·ÖÇøµÄÇé¿ö
+create table bea1 (name varchar2(20), birth date, yz number);   -- ±íµÄ´´½¨Óï¾ä£¬²»´ø·ÖÇøµÄÇé¿ö
 create table bea2 (name varchar2(20), birth date, yz number)    -- °´ÕÕÉúÈÕ£¬·¶Î§·ÖÇø¡£
 partition by range (birth)
 (
@@ -1349,6 +1353,7 @@ partition by range(name, yz)
 
 ** ÁĞ±í·ÖÇø
 #+BEGIN_SRC sql
+-- °´ÕÕĞÔ±ğ½øĞĞ·ÖÇø¡£²»ÒªÍü¼ÇÖ¸¶¨Ä¬ÈÏ·ÖÇø
 create table beaa (name varchar2(20), sex varchar2(20), yz number)
 partition by list (sex)
 (
@@ -1370,7 +1375,7 @@ partition by list (sex)
 
 ** ¹şÏ£·ÖÇø
 
-[[http://www.bing.com/knows/search?q=%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&mkt=zh-cn&FORM=BKACAI][¹şÏ£Ëã·¨]],É¢ÁĞ±íÊÇÒ²~
+[[http://www.bing.com/knows/search?q=%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&mkt=zh-cn&FORM=BKACAI][¹şÏ£Ëã·¨]],É¢ÁĞÊÇÒ²~
 
 #+BEGIN_SRC sql
 create table beax (name varchar2(20), yz number)
@@ -1385,11 +1390,13 @@ partition by hash (name)
 
 -- ´´½¨¶à¸ö·ÖÇøµÄ¼òÂÔĞ´·¨¡£·ÖÇøµÄÃû×ÖÓÉoracle×Ô¶¯Î¬»¤¡£
 create table beax (name varchar2(20), yz number)
-partition by hash (name) partitions 5;
+partition by hash (name)
+partitions 5;
 
 -- Ö¸¶¨±í¿Õ¼ä
 create table beax (name varchar2(20), yz number)
-partition by hash (name) partitions 5 stores in (users, system, users, system, system);
+partition by hash (name)
+partitions 5 stores in (users, system, users, system, system);
 
 
 #+END_SRC
@@ -1423,6 +1430,7 @@ subpartitions 3
 
 ** ·¶Î§-ÁĞ±í·ÖÇø
 #+BEGIN_SRC sql
+-- ÏÈ°´ÕÕÑÕÖµ·¶Î§·ÖÇø£¬ÔÚÃ¿¸ö·ÖÇøÄÚÔÙ½øĞĞ¹şÏ£·ÖÇø
 create table cxbe3 (name varchar2(20), sex varchar2(20), yz number)
 partition by range (yz)
 subpartition by list (sex)
@@ -1442,18 +1450,27 @@ subpartitions template
 #+END_SRC
 
 ** ·ÖÇøµÄĞŞ¸Ä
-- Ìí¼Ó·ÖÇø
-  : alter table bea2 add partition p9 values less than (MAXVALUE);
-  : -- °´ÕÕ list ·ÖÇøµÄÌí¼Ó£¿
-- É¾³ı·ÖÇøÄÚÊı¾İ
-  : alter table bea2 truncate partition p3;
-- É¾³ı·ÖÇø
-  : alter table bea2 drop partition p3;
-- ºÏ²¢ÏàÁÚ·ÖÇø
-  : alter table bea2 merge partition p2, p3 into partition p8;
-- ²ğ·Ö·ÖÇø
-  : alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);
-  : -- ÆäËûÀàĞÍµÄ
-- ÖØÃüÃû·ÖÇø
-  : alter table bea2 rename partition p2 to p12;
+#+BEGIN_SRC sql
+
+-- Ìí¼Ó·ÖÇø
+alter table bea2 add partition p9 values less than (MAXVALUE);
+-- °´ÕÕ list ·ÖÇøµÄÌí¼Ó£¿
+
+-- É¾³ı·ÖÇøÄÚÊı¾İ
+alter table bea2 truncate partition p3;
+
+-- É¾³ı·ÖÇø
+alter table bea2 drop partition p3;
+
+-- ºÏ²¢ÏàÁÚ·ÖÇø
+alter table bea2 merge partition p2, p3 into partition p8;
+
+-- ²ğ·Ö·ÖÇø
+alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);
+-- ÆäËûÀàĞÍµÄ
+
+-- ÖØÃüÃû·ÖÇø
+alter table bea2 rename partition p2 to p12;
+
+#+END_SRC
 
