@@ -1463,7 +1463,7 @@ alter table bea2 truncate partition p3;
 alter table bea2 drop partition p3;
 
 -- 合并相邻分区
-alter table bea2 merge partition p2, p3 into partition p8;
+alter table bea2 merge partitions p2, p3 into partition p8;
 
 -- 拆分分区
 alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);

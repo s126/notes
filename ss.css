@@ -166,7 +166,8 @@ pre {
     padding: 0.8em;
     margin-bottom: 1rem;
     font-size: 1.6rem;
-    background-color: rgba(255, 206, 66,0.7);
+    background-color: rgba(255, 206, 66,0.5);
+	
     
 	  overflow: auto;
 }
