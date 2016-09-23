@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>常用工具</title>
+<!-- 2016-09-23 周五 16:44 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="imfine">
+<link rel="stylesheet" href="ss.css">
+</head>
+<body>
+<div id="content">
+<h1 class="title">常用工具</h1>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">版本控制工具之 GIT</a></li>
+<li><a href="#sec-2">Emacs 常用命令</a></li>
+</ul>
+</div>
+</nav>
+
+
+<section id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">版本控制工具之 GIT</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Git 是一个版本控制工具，它能实现团队中的代码协作开发，在代码同步和管理方面功能强大、理念先进。
+</p>
+
+<p>
+Git 是当下最流行的分布式版本控制工具，轻量级，但功能强大，由 linux 之父 linus 开发。它的使用特别广泛，尤其开源社区基本都用它作为版本控制工具。我们每个人也要尽量掌握它。
+</p>
+
+<p>
+而网站 github.com 是基于 git 工具的一个代码托管网站，目前基本所有知名的开源项目都选择把代码部署到这个网站。这里的代码包罗万象，是个学习的天堂。实属居家旅行、杀人拿塔的必备网站。
+</p>
+
+<p>
+我们自己的 github 主页是 <a href="https://github.com/s126">github.com/s126</a>， 大家可以直接用浏览器访问。另外笔记的项目为 <a href="https://github.com/s126/notes">github.com/s126/notes</a>， 直接查看oracle笔记内容的话是 <a href="https://github.com/s126/notes/oracle.org">github.com/s126/notes/oracle.org</a>。 如果想用 git 工具下载同步代码，方法如下：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="color: #998f84;"># </span><span style="color: #998f84;">1. &#36827;&#20837; git bash&#65292;&#20999;&#25442;&#21040;&#30456;&#24212;&#30446;&#24405;&#65292;&#27604;&#22914;&#65292;e &#30424;&#19979;&#30340; course &#30446;&#24405;&#65306;</span>
+<span style="color: #f8f6f2;">cd</span> /e/course/
+
+<span style="color: #998f84;"># </span><span style="color: #998f84;">2. &#22914;&#26524;&#26159;&#31532;&#19968;&#27425;&#19979;&#36733;&#65292;&#25191;&#34892;&#20197;&#19979;&#21629;&#20196;</span>
+git clone https://github.com/s126/notes.git
+
+<span style="color: #998f84;"># </span><span style="color: #998f84;">3. &#22914;&#26524;&#19981;&#26159;&#31532;&#19968;&#27425;&#19979;&#36733;&#65292;&#21482;&#26159;&#26356;&#26032;&#20195;&#30721;&#65292;&#25191;&#34892;&#20197;&#19979;&#21629;&#20196;&#12290;</span>
+<span style="color: #998f84;"># </span><span style="color: #998f84;">ps. &#35201;&#32463;&#24120;&#36816;&#34892;&#36825;&#20010;&#21629;&#20196;&#65292;&#20445;&#25345;&#19982;&#26381;&#21153;&#22120;&#30340;&#21516;&#27493;</span>
+<span style="color: #f8f6f2;">cd</span> /e/course/notes/
+git pull
+</pre>
+</div>
+
+<p>
+这是 Git 的一个教程，大家有时间可以按照上面的看看、练练，以后务必掌握基本用法： <a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">Git 廖雪峰 教程</a>
+</p>
+
+
+
+
+<p>
+下面总结了一下常用的基本命令：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="color: #998f84;">## </span><span style="color: #998f84;">&#20462;&#25913; .gitconfig &#25991;&#20214;&#65292;&#36825;&#26159; git &#30340;&#37197;&#32622;&#25991;&#20214;</span>
+vi ~/.gitconfig 
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#21021;&#22987;&#21270; &#29256;&#26412;&#24211;</span>
+git init
+git init-db
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#28155;&#21152;&#24573;&#30053;&#25991;&#20214;&#12290;&#36825;&#20010;&#25991;&#20214;&#25511;&#21046;&#65292;&#21738;&#20123;&#25991;&#20214;&#19981;&#35201;&#34987;&#25552;&#20132;</span>
+<span style="color: #f8f6f2;">echo</span> <span style="color: #f4cf86;">"*.svn"</span> &gt; .gitignore
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#23558;&#25913;&#21464;&#22686;&#21152;&#33267;&#32034;&#24341;</span>
+git add .
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#20174;&#32034;&#24341;&#20889;&#20837;&#21040;&#24211;</span>
+git commit -m <span style="color: #f4cf86;">"&#25552;&#20132;&#21040;&#29256;&#26412;&#24211;"</span>
+git commit -a -m <span style="color: #f4cf86;">"&#25552;&#20132;&#65292;&#36830;&#21516;&#25152;&#26377;&#26410; add &#30340;&#20462;&#25913;&#25991;&#20214;"</span>
+git commit --amend -a -m <span style="color: #f4cf86;">"&#26367;&#25442;&#26368;&#21518;&#19968;&#27425;&#30340;&#25552;&#20132;&#20449;&#24687;"</span>
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#26597;&#30475;&#20462;&#25913;&#20102;&#20160;&#20040;&#19996;&#35199;</span>
+git diff
+git diff --cached
+git status
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#22238;&#25764;&#29256;&#26412;&#65292;&#37325;&#26032;&#25552;&#20132;&#12290;&#21518;&#24724;&#33647;&#12290;</span>
+git reset HEAD^           <span style="color: #998f84;"># </span><span style="color: #998f84;">&#22238;&#25764;&#21040;&#19978;&#19968;&#29256;&#26412;&#65292;&#40664;&#35748;&#26159; --mix &#24418;&#24335;&#65292;&#21478;&#26377; --soft &#21644; --hard &#24418;&#24335;</span>
+git status                <span style="color: #998f84;"># </span><span style="color: #998f84;">&#21487;&#20197;&#30475;&#21040;&#65292;&#19978;&#19968;&#29256;&#26412;&#25552;&#20132;&#30340;&#25991;&#20214;&#27809;&#26377;&#22686;&#21152;&#21040; index &#30340;&#29366;&#24577;</span>
+git add/commit...         <span style="color: #998f84;"># </span><span style="color: #998f84;">&#20570;&#23436;&#22788;&#29702;&#21518;&#65292;&#37325;&#26032;&#25552;&#20132;</span>
+
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#26597;&#30475;&#26085;&#24535;&#65292;&#21382;&#21490;&#35760;&#24405;</span>
+git show
+git log
+git log --pretty=oneline  <span style="color: #998f84;"># </span><span style="color: #998f84;">&#23450;&#21046; log &#30340;&#26174;&#31034;&#26679;&#24335;</span>
+git log -2 -p             <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26174;&#31034;&#26368;&#36817;&#20004;&#27425;&#25552;&#20132;&#30340;&#35814;&#32454;&#20449;&#24687;</span>
+git log --stat --summary  <span style="color: #998f84;"># </span><span style="color: #998f84;">&#31616;&#35201;&#26174;&#31034;&#27599;&#27425;&#26356;&#26032;&#30340;&#32479;&#35745;&#20449;&#24687;&#65288;&#25552;&#20132;&#36807;&#37027;&#20123;&#25991;&#20214;&#65292;&#26377;&#22810;&#23569;&#34892;&#20462;&#25913;&#65289;</span>
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#22686;&#21152;/&#26597;&#30475;/&#20999;&#25442;/&#21024;&#38500; &#20998;&#25903;</span>
+git branch                <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26597;&#30475;&#20998;&#25903;</span>
+git branch s126           <span style="color: #998f84;"># </span><span style="color: #998f84;">&#21019;&#24314;&#20998;&#25903; s126</span>
+git checkout s126         <span style="color: #998f84;"># </span><span style="color: #998f84;">&#20999;&#25442;&#21040;&#20998;&#25903; s126</span>
+git checkout -b tmp       <span style="color: #998f84;"># </span><span style="color: #998f84;">&#21019;&#24314;&#24182;&#20999;&#25442;&#21040;&#20998;&#25903; tmp</span>
+git branch -D tmp         <span style="color: #998f84;"># </span><span style="color: #998f84;">&#21024;&#38500;&#20998;&#25903; tmp</span>
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#21512;&#24182;&#24037;&#20316;&#21040;&#20027;&#20998;&#25903;(s126 -&gt; master)</span>
+git checkout master       <span style="color: #998f84;"># </span><span style="color: #998f84;">&#20999;&#25442;&#21040;&#20027;&#20998;&#25903;</span>
+git merge HEAD s126       <span style="color: #998f84;"># </span><span style="color: #998f84;">&#23558; s126 &#30340;&#26368;&#26032;&#29256;&#26412;&#21512;&#24182;&#21040;&#24403;&#21069;&#20998;&#25903;</span>
+git pull . s126           <span style="color: #998f84;"># </span><span style="color: #998f84;">&#30456;&#24403;&#20110; git fetch &amp;&amp; git merge</span>
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#29983;&#25104;&#24182;&#24212;&#29992;&#34917;&#19969;&#65292;&#36825;&#26159;&#21478;&#22806;&#19968;&#20010;&#21512;&#24182;&#24037;&#20316;&#30340;&#26041;&#27861;&#12290;&#26242;&#26102;&#19981;&#38656;&#35201;&#25630;&#22826;&#28165;&#26970;&#12290;</span>
+git format-patch master &gt; A.patch
+git checkout master       <span style="color: #998f84;"># </span><span style="color: #998f84;">&#20808;&#29983;&#25104;&#34917;&#19969;&#25991;&#20214;&#65292;&#20877;&#20999;&#25442;&#21040;&#20998;&#25903;&#30446;&#24405;</span>
+git apply A.patch         <span style="color: #998f84;"># </span><span style="color: #998f84;">&#24212;&#29992;&#34917;&#19969;&#25991;&#20214;&#21040;&#24403;&#21069;&#20998;&#25903;</span>
+git add/commit...         <span style="color: #998f84;"># </span><span style="color: #998f84;">&#28982;&#21518;&#25552;&#20132;&#20462;&#25913;</span>
+
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#19979;&#36733;/&#19978;&#20256;/&#26356;&#26032; &#20449;&#24687;&#21040;&#25351;&#23450;&#29256;&#26412;&#24211;</span>
+git clone git://192.168.1.1/repo.git
+git push git://192.168.1.1/repo.git s126:master
+git pull git://192.168.1.1/repo.git master:s126
+git fetch public
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#20854;&#20182;&#21629;&#20196;&#65306;</span>
+git tag                   <span style="color: #998f84;"># </span><span style="color: #998f84;">&#23558;&#26576;&#20010;&#29256;&#26412;&#20570;&#20010;&#26631;&#35760;&#65292;&#21363;&#36171;&#20104;&#19968;&#20010;&#22909;&#35760;&#30340;&#21517;&#23383;</span>
+git gc                    <span style="color: #998f84;"># </span><span style="color: #998f84;">&#22403;&#22334;&#25910;&#38598;&#65292;&#33021;&#22823;&#22823;&#20943;&#23567;&#29256;&#26412;&#24211;&#22823;&#23567;</span>
+git repack                <span style="color: #998f84;"># </span><span style="color: #998f84;">&#21516;&#19978;&#65292;&#20063;&#33021;&#22823;&#22823;&#20943;&#23567;&#29256;&#26412;&#24211;&#22823;&#23567;</span>
+git ls-tree HEAD          <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26597;&#30475;&#29256;&#26412;&#24211;&#20013;&#30340;&#25991;&#20214;&#32467;&#26500;&#65292;&#19979;&#38754;&#35821;&#21477;&#26159;&#36319; awk &#21512;&#20316;&#65292;&#25171;&#21360;&#25972;&#20010;&#30446;&#24405;&#32467;&#26500;</span>
+git ls-tree -r HEAD | awk <span style="color: #f4cf86;">'{print $4}'</span> &gt; d:/home/index/repTree
+git whatchanged           <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26174;&#31034;&#26576;&#20010;&#29256;&#26412;&#25913;&#21464;&#20102;&#21738;&#20123;&#25991;&#20214;</span>
+git show-branch           <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26174;&#31034;&#20998;&#25903;&#21464;&#21160;&#24773;&#20917;</span>
+git reflog                <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26174;&#31034;&#25152;&#26377;&#21464;&#26356;&#21382;&#21490;(&#36319; git log &#19981;&#21516;)</span>
+git clone                 <span style="color: #998f84;"># </span><span style="color: #998f84;">&#30456;&#24403;&#20110; git init &amp;&amp; git fetch</span>
+git pull                  <span style="color: #998f84;"># </span><span style="color: #998f84;">&#30456;&#24403;&#20110; git fetch &amp;&amp; git merge</span>
+git rebase                <span style="color: #998f84;"># </span><span style="color: #998f84;">git merge &#22806;&#65292;&#21512;&#24182;&#20179;&#24211;&#30340;&#21478;&#19968;&#31181;&#24418;&#24335;</span>
+
+
+<span style="color: #998f84;">## </span><span style="color: #998f84;">&#19979;&#38754;&#30340;&#20363;&#23376;&#26159;&#24314;&#31435;&#19968;&#20010;&#32431;&#20179;&#24211;&#65292;&#24182;&#20316;&#20026;&#24320;&#21457;&#30340;&#20013;&#24515;&#20179;&#24211;&#65288;&#21363; GIT &#26381;&#21153;&#31471;&#65289;</span>
+git clone --bare /workspace/hnpmi /repo/s126.git   <span style="color: #998f84;"># </span><span style="color: #998f84;">&#21019;&#24314;&#19968;&#20010;&#26032;&#30340;&#32431;&#20179;&#24211;&#65292;&#29992;&#20110;&#22791;&#20221;&#12289;&#20849;&#20139;</span>
+<span style="color: #f8f6f2;">cd</span> /workspace/s126                                 <span style="color: #998f84;"># </span><span style="color: #998f84;">&#36825;&#26159;&#25105;&#20204;&#30340;&#24037;&#20316;&#30446;&#24405;</span>
+git remote add origin /repo/s126.git               <span style="color: #998f84;"># </span><span style="color: #998f84;">&#23558;&#21018;&#25165;&#26032;&#24314;&#30340;&#20179;&#24211;&#28155;&#21152;&#20026;h&#25105;&#20204;&#30340;&#36828;&#31243;&#20998;&#25903;</span>
+git push origin master                             <span style="color: #998f84;"># </span><span style="color: #998f84;">&#26412;&#22320;&#30340; master &#20998;&#25903;&#26377;&#26356;&#26032;&#65292;&#21516;&#27493;&#21040;&#36828;&#31243;&#20998;&#25903;</span>
+</pre>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Emacs 常用命令</h2>
+<div class="outline-text-2" id="text-2">
+<ol class="org-ol">
+<li>保存
+Ctrl-x Ctrl-s
+</li>
+
+<li>生成 html
+Ctrl-C Ctrl-e h h
+</li>
+
+<li>复制
+Alt-W
+</li>
+</ol>
+</div>
+</section>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: imfine</p>
+<p class="date">Created: 2016-09-23 周五 16:44</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation">Go ahead, never stop.</p>
+</div>
+</body>
+</html>

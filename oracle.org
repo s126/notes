@@ -1,20 +1,5 @@
 #+TITLE: Oracle11g
 
-* GIT 工具的使用
-1. 下载
-2. 看教程
-   [[http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000][Git 教程]]。认真看，要学会使用。
-
-* Emacs 常用命令
-1. 保存
-   Ctrl-x Ctrl-s
-
-2. 生成 html
-   Ctrl-C Ctrl-e h h
-
-3. 复制
-   Alt-W
-
 
 * Oracle 的体系结构
 数据库是一个以某种有组织的方式存储的数据集合。
@@ -1495,7 +1480,7 @@ alter table bea2 rename partition p2 to p12;
 4. 物化视图 (Materialize View)
 
 ** 关系视图
-即虚表，不存储数据。主要用户查询。
+又称为虚表，不占物理空间，存储在数据字典中。它能简化命令，隐藏复杂度，解耦，增强安全性。
 
 #+BEGIN_SRC sql
 -- 初始化要使用的表
@@ -1504,7 +1489,7 @@ alter table emp add constraints pk_emp primary key (empno);   -- 添加主键
 create table dept as select * from dept;
 
 -- 创建语法
-create [or replace] [force]
+create [or replace] [force | noforce]
 view view_name as select * from table_name
 [with read only]              -- 强迫视图只能查看，不能修改
 [with check option]
@@ -1524,10 +1509,8 @@ drop view v_emp01;
 #+END_SRC
 
 
-
-
-
 ** 内嵌视图
+
 #+BEGIN_SRC sql
 
 -- 查询的基本语句，from 后面跟的是表或者视图
@@ -1549,16 +1532,78 @@ drop view linshigong001;
 
 #+END_SRC
 
-** 物化视图
+** 对象视图（可选）
 #+BEGIN_SRC sql
-create materialized view mv_emp3
+-- 创建对象
+CREATE OR REPLACE TYPE depttype 
+AS OBJECT 
+(
+deptid number,
+deptname varchar2(30),
+loc number
+);
+
+CREATE OR REPLACE VIEW v_dept OF depttype
+  WITH OBJECT OID (deptid) 
+AS 
+  SELECT deptid, deptname, loc FROM emp;
+
+SELECT * FROM v_dept;
+select ref(t) from v_dept t;  -- oid
+
+#+END_SRC
+
+
+
+** 物化视图
+
+它是 Oracle 中保存了查询结果的对象。它把查询的数据保存为实实在在的数据，再次访问的时候，就不需要从基表中去查询，而直接从保存的数据里拿取。所以能大大提高效率，增强性能。我们可以用能自动同步数据的临时表的概念来理解它。所以，它不是虚表，它占用存储空间。
+
+它主要用来提高效率，所以用在查询消耗比较大的连接上。也可以用来把远程的数据缓存到本地，通过这种方式保障性能。
+
+这是一种以空间换时间的方法。
+
+创建物化视图要考虑一下几个方面：
+1. 什么时候生成数据。
+   : build immediate/deferred                               -- 在创建无话视图的时候立刻创建，或者推迟到需要的时候手动创建
+2. 如果基表里的数据发生变化，以一种什么样的策略保持同步
+   : refresh complete/fast/force/never                      -- 四中方式依次对应： 全量刷新，即删除后重新生成 / 增量刷新 / oracle 自动判断，如果能增量则增量否则全量 / 不同步数据
+3. 如果基表里的数据发生变化，刷新的时机
+   : on commit/demand start with sysdate next sysdate + 1   -- 分别为： 基本有更新的话立刻同步 / 按照时间段，按需同步，按需同步要与 start with next 一起使用
+4. 告诉 Oracle，如果从基本中查询数据的时候，允不允许参考使用物化视图里的结果。（如果使用物化视图的话，实质上 oracle 要修改你查询的语句，所以才叫查询重写）
+   : enable/disable query rewrite
+
+#+BEGIN_SRC sql
+-- 最基本的创建。这里用的是全量更新。全量更新会很笨重。
+create materialized view mv_emp
   build immediate
-  refresh fast
+  refresh complete
   on demand start with sysdate next sysdate + 1
-  with primary key
   enable query rewrite
   as
   select * from emp;
+
+
+
+
+-- 但如果要用 refresh fast 方式，即增量更新方式，那么，需要在原来的表上创建物化视图日志表，以便让 oracle 知道需要同步些什么东西。
+-- 创建语句为如下，后面需要 with 语句指定按照 rowid 还是主键作为每一行数据的身份证号码。
+create materialized view log on emp with primary key;
+-- 之后创建增量刷新的物化视图
+create materialized view mv_emp_fast
+  build immediate
+  refresh fast
+  on demand start with sysdate next sysdate + 1
+  with primary key   -- 这里要跟物化视图日志指定的相对应。
+  enable query rewrite
+  as
+  select * from emp;
+
+
+
+-- 删除
+drop materialized view log on emp;
+drop materialized view mv_emp;
 
 #+END_SRC
 

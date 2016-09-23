@@ -1,0 +1,121 @@
+#+TITLE: 常用工具
+
+
+* GIT
+1. 下载
+2. 看教程
+   [[http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000][Git 教程]]。认真看，要学会使用。
+
+* the Use of Git
+基本命令：
+#+BEGIN_SRC sh
+$ vim ~/.gitconfig
+$ cd ~/WORKDIR
+## 初始化 版本库
+$ git init
+$ git init-db
+## 添加忽略文件
+$ echo "*.svn" > .gitignore
+## 将改变增加至索引
+$ git update-index --add .
+$ git add .    # 是上面内核命令的的缩写形式，是一个脚本命令
+## 查看改变
+$ git diff
+$ git diff --cached
+$ git status
+## 从索引写入到库
+$ git commit -m "提交到版本库"
+$ git commit -a -m "提交，连同所有未 add 的修改文件"
+$ git commit --amend -a -m "替换最后一次的提交信息"
+## 查看日志
+$ git show
+$ git log
+$ git log --pretty=oneline  # 定制 log 的显示样式
+$ git log -2 -p             # 显示最近两次提交的详细信息
+$ git log --stat --summary  # 简要显示每次更新的统计信息（提交过那些文件，有多少行修改）
+## 增加/查看/切换/删除 分支
+$ git branch                # 查看分支
+$ git branch niuchh         # 创建分支 niuchh
+$ git checkout niuchh       # 切换到分支 niuchh
+$ git checkout -b tmp       # 创建并切换到分支 tmp
+$ git branch -D tmp         # 删除分支 tmp
+## 合并工作到主分支(niuchh -> master)
+$ git checkout master       # 切换到主分支
+$ git merge HEAD niuchh     # 将 niuchh 的最新版本合并到当前分支
+$ git pull . niuchh         # 相当于 git fetch && git merge
+## 生成并应用补丁，这是另外一个合并工作的方法
+$ git format-patch master > A.patch
+$ git checkout master       # 先生成补丁文件，再切换到分支目录
+$ git apply A.patch         # 应用补丁文件到当前分支
+$ git add/commit...         # 然后提交修改
+## 回撤版本，重新提交
+$ git reset HEAD^           # 回撤到上一版本，默认是 --mix 形式，另有 --soft 和 --hard 形式
+$ git status                # 可以看到，上一版本提交的文件没有增加到 index 的状态
+$ git add/commit...         # 做完处理后，重新提交
+## 下载/上传/更新 信息到指定版本库
+$ git clone git://192.168.1.1/repo.git
+$ git push git://192.168.1.1/repo.git niuchh:master
+$ git pull git://192.168.1.1/repo.git master:niuchh
+$ git fetch public
+## 其他命令：
+$ git tag                   # 将某个版本做个标记，即赋予一个好记的名字
+$ git gc                    # 垃圾收集，能大大减小版本库大小
+$ git repack                # 同上，也能大大减小版本库大小
+$ git ls-tree HEAD          # 查看版本库中的文件结构，下面语句是跟 awk 合作，打印整个目录结构
+$ git ls-tree -r HEAD | awk '{print $4}' > d:/home/index/repTree
+$ git whatchanged           # 显示某个版本改变了哪些文件
+$ git show-branch           # 显示分支变动情况
+$ git reflog                # 显示所有变更历史(跟 git log 不同)
+$ git clone                 # 相当于 git init && git fetch
+$ git pull                  # 相当于 git fetch && git merge
+$ git rebase                # git merge 外，合并仓库的另一种形式
+## 下面的例子是建立一个纯仓库，并作为开发的中心仓库（即 GIT 服务端）
+$ git clone --bare /workspace/hnpmi /repo/hnpmi.git  # 创建一个新的纯仓库，用于备份、共享
+$ cd /workspace/hnpmi                                # 这是我们的工作目录
+$ git remote add origin /repo/hnpmi.git              # 将刚才新建的仓库添加为h我们的远程分支
+$ git push origin master                             # 本地的 master 分支有更新，同步到远程分支
+#+END_SRC
+
+github config
+#+BEGIN_SRC sh
+## 在本地初始化版本库
+$ mkdir docs && cd docs
+$ git init
+$ touch README
+$ commit add README
+$ git commit -m "first commit"
+
+## ssh 认证，不需要输入密码了
+$ ssh-keygen -t rsa -C "lorniu@gmail" -f /root/.ssh/id_rsa_github
+$ vi /root/.ssh/config   # for multi-keygen
+  Host *.github.com
+  IdentityFile /root/.ssh/id_rsa_github
+  User git
+$ # paste id_rsa_github content to Github.com/setting
+
+## 上传文件，首先要在github中建立rep
+$ git remote add origin git@github.com:lorniu/docs.git
+$ git push origin master
+#+END_SRC
+
+
+Git via Proxy
+#+BEGIN_SRC sh
+$ connect-proxy.exe --help
+$ gcc -o /usr/bin/connect-proxy connect.c
+$ echo "/usr/bin/connect-proxy -S 192.168.7.36:1080 \$@" >> /usr/bin/myproxy
+$ chmod +x ~/usr/bin/myproxy
+$ export GIT_PROXY_COMMAND=myproxy
+$ git clone git://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git
+#+END_SRC
+
+* Emacs 常用命令
+1. 保存
+   Ctrl-x Ctrl-s
+
+2. 生成 html
+   Ctrl-C Ctrl-e h h
+
+3. 复制
+   Alt-W
+
