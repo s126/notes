@@ -1458,7 +1458,8 @@ subpartitions template
 
 -- 添加分区
 alter table bea2 add partition p9 values less than (MAXVALUE);
--- 按照 list 分区的添加？
+alter table bea2 add partition p9 values (1, 2);   -- 针对 list 分区
+alter table bea2 add partition;                    -- 针对 hash 分区
 
 -- 删除分区内数据
 alter table bea2 truncate partition p3;
@@ -1470,11 +1471,72 @@ alter table bea2 drop partition p3;
 alter table bea2 merge partitions p2, p3 into partition p8;
 
 -- 拆分分区
-alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);
--- 其他类型的
+alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);     -- 范围分区的拆分
+alter table bea2 split partition p2 values (1,2) into (partition p3, partition p4);   -- 列表分区的拆分
+alter table bea2 split partition p2 into (partition p3 values (1, 2), partition p4 values (3), partition p5);   -- 列表分区的拆分
 
 -- 重命名分区
 alter table bea2 rename partition p2 to p12;
 
 #+END_SRC
 
+如果分区字段的数据被 update，发生了跨分区的情况，会发生什么？
+: 错误:更新分区关键字列将导致分区的更改
+可以通过以下语法，使行数据可以移动
+: alter table m8 enable row movement;
+通过这种方式，实现了行数据的迁移。但是数据的 rowid 也会随之发生变化。
+
+* 视图 (View)
+
+四种类型
+1. 关系视图 (Relational View)
+2. 内嵌式图 (Nested View)
+3. 对象视图 (Object View)
+4. 物化视图 (Materialize View)
+
+** 关系视图
+即虚表，不存储数据。主要用户查询。
+
+#+BEGIN_SRC sql
+-- 初始化要使用的表
+create table emp as select * from emp;                        -- 复制表
+alter table emp add constraints pk_emp primary key (empno);   -- 添加主键
+create table dept as select * from dept;
+
+-- 创建语法
+create [or replace] [force]
+view view_name as select * from table_name
+[with read only]              -- 强迫视图只能查看，不能修改
+[with check option]
+;
+
+-- 创建视图
+create view v_emp as select empno, ename, sal from emp where sal > 1000;
+
+create view v_emp01 as
+select e.ename, e.sal, d.dname from emp e, dept d where e.deptno = d.deptno;
+
+
+
+
+
+#+END_SRC
+
+
+
+
+
+* 作业相关
+#+BEGIN_SRC sql
+-- 简单的过程语句。用来在 t1 表中插入 100000 条数据。
+create table t1 (id number, name varchar2(20));
+
+begin
+  for i in 1..100000 loop
+    insert into t1 values (i, 'zhouqiang');
+    commit;
+  end loop;
+
+end;
+/
+#+END_SRC
