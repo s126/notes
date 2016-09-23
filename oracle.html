@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Oracle11g</title>
-<!-- 2016-09-23 周五 03:22 -->
+<!-- 2016-09-23 周五 07:03 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -125,6 +125,8 @@
 <li><a href="#sec-11">视图 (View)</a>
 <ul>
 <li><a href="#sec-11-1">关系视图</a></li>
+<li><a href="#sec-11-2">内嵌视图</a></li>
+<li><a href="#sec-11-3">物化视图</a></li>
 </ul>
 </li>
 <li><a href="#sec-12">作业相关</a></li>
@@ -2606,7 +2608,7 @@ alter table m8 enable row movement;
 <ol class="org-ol">
 <li>关系视图 (Relational View)
 </li>
-<li>内嵌式图 (Nested View)
+<li>内嵌式图 (Inline View)
 </li>
 <li>对象视图 (Object View)
 </li>
@@ -2641,14 +2643,63 @@ alter table m8 enable row movement;
 
 <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">view</span> <span style="color: #006699;">v_emp01</span> <span style="color: #0000FF;">as</span>
 <span style="color: #0000FF;">select</span> e.ename, e.sal, d.dname <span style="color: #0000FF;">from</span> emp e, dept d <span style="color: #0000FF;">where</span> e.deptno = d.deptno;
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21024;&#38500;&#35270;&#22270;</span>
+<span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">view</span> <span style="color: #006699;">v_emp01</span>;
+</pre>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-11-2" class="outline-3">
+<h3 id="sec-11-2">内嵌视图</h3>
+<div class="outline-text-3" id="text-11-2">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26597;&#35810;&#30340;&#22522;&#26412;&#35821;&#21477;&#65292;from &#21518;&#38754;&#36319;&#30340;&#26159;&#34920;&#25110;&#32773;&#35270;&#22270;</span>
+<span style="color: #0000FF;">select</span> &#25152;&#26377;&#35201;&#26597;&#35810;&#30340;&#21015; <span style="color: #0000FF;">from</span> &#35201;&#26597;&#35810;&#30340;&#34920;/&#35270;&#22270; <span style="color: #0000FF;">where</span> clause;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#36825;&#26159;&#20043;&#21069;&#25105;&#20204;&#29992;&#36807;&#30340;&#19968;&#20010;&#26597;&#35810;&#65292;&#26597;&#35810;&#25152;&#26377; rownum &gt; 2 &#30340;&#25152;&#26377;&#25968;&#25454;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#22312;&#36825;&#20010;&#26597;&#35810;&#20013;&#65292;&#25105;&#20204;&#22312; from &#20043;&#21518;&#29992;&#21040;&#20102;&#19968;&#20010;&#24102;&#25324;&#21495;&#30340;&#26597;&#35810;&#35821;&#21477;&#65292;&#36825;&#20010;&#26597;&#35810;&#35821;&#21477;&#23601;&#26159;&#20869;&#23884;&#35270;&#22270;&#12290;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> 
+  <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> rownum rn, empno, ename, sal <span style="color: #0000FF;">from</span> scott.emp<span style="color: #707183;">)</span> 
+  <span style="color: #0000FF;">where</span> rn &gt; 2;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#20869;&#23884;&#35270;&#22270;&#65292;&#20174;&#36923;&#36753;&#19978;&#21487;&#20197;&#20998;&#35299;&#20026;:</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#31532;&#19968;&#27493;&#65306;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">view</span> <span style="color: #006699;">linshigong001</span> <span style="color: #0000FF;">as</span> <span style="color: #0000FF;">select</span> rownum rn, empno, ename, sal <span style="color: #0000FF;">from</span> scott.emp;
+<span style="color: #8D8D84; font-style: italic;">-- &#31532;&#20108;&#27493;&#65306;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> linshigong001 <span style="color: #0000FF;">where</span> rn &gt; 2;
+<span style="color: #8D8D84; font-style: italic;">-- &#31532;&#19977;&#27493;&#65306;</span>
+<span style="color: #0000FF;">drop</span> <span style="color: #0000FF;">view</span> <span style="color: #006699;">linshigong001</span>;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-11-3" class="outline-3">
+<h3 id="sec-11-3">物化视图</h3>
+<div class="outline-text-3" id="text-11-3">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">create</span> materialized <span style="color: #0000FF;">view</span> <span style="color: #006699;">mv_emp3</span>
+  build <span style="color: #0000FF;">immediate</span>
+  refresh fast
+  <span style="color: #0000FF;">on</span> demand <span style="color: #0000FF;">start</span> <span style="color: #0000FF;">with</span> sysdate <span style="color: #0000FF;">next</span> sysdate + 1
+  <span style="color: #0000FF;">with</span> <span style="color: #0000FF;">primary</span> <span style="color: #0000FF;">key</span>
+  enable query rewrite
+  <span style="color: #0000FF;">as</span>
+  <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> emp;
 </pre>
 </div>
 </div>
 </div>
 </section>
-
-
-
 
 
 <section id="outline-container-sec-12" class="outline-2">
@@ -2674,7 +2725,7 @@ alter table m8 enable row movement;
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-09-23 周五 03:22</p>
+<p class="date">Created: 2016-09-23 周五 07:03</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

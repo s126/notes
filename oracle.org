@@ -1490,7 +1490,7 @@ alter table bea2 rename partition p2 to p12;
 
 四种类型
 1. 关系视图 (Relational View)
-2. 内嵌式图 (Nested View)
+2. 内嵌式图 (Inline View)
 3. 对象视图 (Object View)
 4. 物化视图 (Materialize View)
 
@@ -1517,13 +1517,50 @@ create view v_emp01 as
 select e.ename, e.sal, d.dname from emp e, dept d where e.deptno = d.deptno;
 
 
-
+-- 删除视图
+drop view v_emp01;
 
 
 #+END_SRC
 
 
 
+
+
+** 内嵌视图
+#+BEGIN_SRC sql
+
+-- 查询的基本语句，from 后面跟的是表或者视图
+select 所有要查询的列 from 要查询的表/视图 where clause;
+
+-- 这是之前我们用过的一个查询，查询所有 rownum > 2 的所有数据
+-- 在这个查询中，我们在 from 之后用到了一个带括号的查询语句，这个查询语句就是内嵌视图。
+select * from 
+  (select rownum rn, empno, ename, sal from scott.emp) 
+  where rn > 2;
+
+-- 内嵌视图，从逻辑上可以分解为:
+-- 第一步：
+create view linshigong001 as select rownum rn, empno, ename, sal from scott.emp;
+-- 第二步：
+select * from linshigong001 where rn > 2;
+-- 第三步：
+drop view linshigong001;
+
+#+END_SRC
+
+** 物化视图
+#+BEGIN_SRC sql
+create materialized view mv_emp3
+  build immediate
+  refresh fast
+  on demand start with sysdate next sysdate + 1
+  with primary key
+  enable query rewrite
+  as
+  select * from emp;
+
+#+END_SRC
 
 
 * 作业相关
