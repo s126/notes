@@ -1569,7 +1569,7 @@ select ref(t) from v_dept t;  -- oid
 2. 如果基表里的数据发生变化，以一种什么样的策略保持同步
    : refresh complete/fast/force/never                      -- 四中方式依次对应： 全量刷新，即删除后重新生成 / 增量刷新 / oracle 自动判断，如果能增量则增量否则全量 / 不同步数据
 3. 如果基表里的数据发生变化，刷新的时机
-   : on commit/demand start with sysdate next sysdate + 1   -- 分别为： 基本有更新的话立刻同步 / 按照时间段，按需同步，按需同步要与 start with next 一起使用
+   : on commit/demand start with sysdate next sysdate + 1   -- 分别为： 基表有更新的话立刻同步 / 按照时间段，按需同步，按需同步要与 start with next 一起使用
 4. 告诉 Oracle，如果从基本中查询数据的时候，允不允许参考使用物化视图里的结果。（如果使用物化视图的话，实质上 oracle 要修改你查询的语句，所以才叫查询重写）
    : enable/disable query rewrite
 
@@ -1622,3 +1622,75 @@ begin
 end;
 /
 #+END_SRC
+
+
+列出当月所有的星期五.
+1. 需要列出当月所有的日期。
+
+   需要用到的知识点：
+   1) 本月第一天： trunc
+   2) 本月最后一天： last_day
+   3) 计算本月的天数： 天数 = 月末 - 月初 + 1
+   3) 如何获取连续的时间
+      (1) connect by
+          : select level from dual connect by level <= 本月的天数;
+      (2) rownum
+          : select rownum from dba_objects where rownum <= 本月的天数;
+
+
+2. 在当月所有的日期中查询所有是星期五的日期
+   1) 获取星期几： decode
+
+
+select xxx from (select level from dual connect by level <= 本月的天数);
+* 索引
+
+创建语句
+: CREATE INDEX 索引名字 ON 表名 (表的字段名) [TABLESPACE 表空间名字];
+重建索引
+: alter index ind_s rebuild;
+删除语句
+: drop index ind_s;
+
+索引的类型
+
+1. 唯一索引
+   : create unique index ind_s on s (name);
+2. 组合索引
+   : create index ind_s on s (name, addr);
+3. 反向索引
+   : create index ind_s_reverse on s (name) reverse;
+4. 函数索引
+   #+BEGIN_SRC sql
+   -- 创建一个表
+   create table ss (name varchar2(20), value number);
+   
+   -- 插入几条数据
+   insert into ss values ('abc', 100);
+   insert into ss values ('hello', 99);
+   insert into ss values ('ok', 22);
+   insert into ss values ('miss', 111);
+   insert into ss values ('admin', 190);
+   commit;
+
+   -- 在 name 字段上创建普通的索引
+   create index ind_ss_normal on ss (name);
+
+   -- 打开 autotrace，查看执行计划。
+   -- 结果， table_access_full，即全表扫描，也就是说，没有走索引
+   set autotrace on;
+   select * from ss where substr(name, 1, 1) = 'h';
+
+   -- 创建关于 name 的函数索引
+   create index ind_ss_substr on ss (substr(name, 1, 1));
+
+   -- 再次查看执行计划
+   select * from ss where substr(name, 1, 1) = 'h';
+   -- 显示结果如下，即走了索引，走的是我们创建的函数索引。
+   -- | TABLE ACCESS BY INDEX ROWID | SS              |
+   -- | INDEX RANGE SCAN            | INDEX_SS_SUBSTR |
+   
+   #+END_SRC
+
+5. 位图索引
+
