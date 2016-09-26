@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Oracle11g</title>
-<!-- 2016-09-26 周一 03:19 -->
+<!-- 2016-09-26 周一 08:33 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -2898,15 +2898,80 @@ create index ind_s_reverse on s (name) reverse;
 </pre>
 </div>
 </li>
+
 <li>位图索引
 </li>
 </ol>
+
+
+
+
+
+
+<p>
+注意，要合理使用索引。因为，不合理的索引，不仅不能带来效率的提升，反而会拖累系统。
+索引的更新同步，是比较消耗资源的。
+</p>
+
+
+
+
+<p>
+不要只凭主观去看 SQL 语句到底有没有走索引，要学会看Oracle的 Explain Plan（解释计划)。
+主要有两种方式:
+</p>
+<ol class="org-ol">
+<li>在 sqlplus 之下，打开 autotrace 选项:
+<pre class="example">
+set autotrace on
+</pre>
+<p>
+这样，每条语句执行之后就会打印出相关的执行计划情况。
+其中， Table_Access_Full 表示全表扫描， xxx_by_index_rowid 表示扫描索引。
+</p>
+</li>
+
+<li>手动生成解释计划，在 sqlplus 下的语法为:
+<div class="org-src-container">
+
+<pre class="src src-sql">explain plan <span style="color: #0000FF;">for</span> <span style="color: #0000FF;">select</span> CLAUSE;   <span style="color: #8D8D84; font-style: italic;">-- &#36890;&#36807; explain plan for &#29983;&#25104;&#35745;&#21010;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> plan_table;         <span style="color: #8D8D84; font-style: italic;">-- plan_table &#20445;&#23384;&#30340;&#26159;&#19978;&#36848;&#35299;&#37322;&#35745;&#21010;&#30340;&#32467;&#26524;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> <span style="color: #0000FF;">table</span><span style="color: #707183;">(</span>dbms_xplan.display<span style="color: #707183;">)</span>;  <span style="color: #8D8D84; font-style: italic;">-- &#26159;&#23545;&#19978;&#38754;&#34920;&#37324;&#38754;&#25968;&#25454;&#30340;&#26356;&#30452;&#35266;&#26174;&#31034;</span>
+</pre>
+</div>
+</li>
+</ol>
+
+
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#31532;&#19968;&#31181;&#65292;&#29983;&#25104;&#38543;&#26426;&#25968;&#65292;&#38543;&#26426;&#23383;&#31526;&#20018;</span>
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">sequence</span> <span style="color: #006699;">shello</span>;
+
+<span style="color: #0000FF;">create</span> <span style="color: #0000FF;">table</span> <span style="color: #006699;">demo</span> <span style="color: #0000FF;">as</span>
+ <span style="color: #0000FF;">select</span> 
+     shello.nextval id,
+     <span style="color: #008000;">'SIT_'</span> || dbms_random.string<span style="color: #707183;">(</span><span style="color: #008000;">'l'</span>, 5<span style="color: #707183;">)</span> abc,
+     round<span style="color: #707183;">(</span>dbms_random.<span style="color: #0000FF;">value</span><span style="color: #7388D6;">(</span>0, 100<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span> score
+   <span style="color: #0000FF;">from</span> dual <span style="color: #0000FF;">connect</span> <span style="color: #0000FF;">by</span> <span style="color: #0000FF;">level</span> &lt;= 100000;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#31532;&#20108;&#31181;&#65292;&#29992;&#24050;&#26377;&#30340;&#25968;&#25454;&#65292;&#20363;&#65306;</span>
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">for</span> i <span style="color: #0000FF;">in</span> 1..100 loop
+     <span style="color: #8D8D84; font-style: italic;">-- &#22797;&#21046;&#22810;&#20221;&#25968;&#25454;</span>
+     <span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> demo <span style="color: #0000FF;">select</span> xxx,yyy <span style="color: #0000FF;">from</span> dba_objects;
+  <span style="color: #0000FF;">end</span> loop;
+<span style="color: #0000FF;">end</span>;
+<span style="color: #0000FF;">select</span> row_number over <span style="color: #707183;">(</span><span style="color: #0000FF;">order</span> <span style="color: #0000FF;">by</span> <span style="color: #707183;">)</span>
+</pre>
+</div>
 </div>
 </section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-09-26 周一 03:19</p>
+<p class="date">Created: 2016-09-26 周一 08:33</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

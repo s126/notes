@@ -1694,3 +1694,56 @@ select xxx from (select level from dual connect by level <= 本月的天数);
 
 5. 位图索引
 
+
+
+
+
+
+注意，要合理使用索引。因为，不合理的索引，不仅不能带来效率的提升，反而会拖累系统。
+索引的更新同步，是比较消耗资源的。
+
+
+
+
+不要只凭主观去看 SQL 语句到底有没有走索引，要学会看Oracle的 Explain Plan（解释计划)。
+主要有两种方式:
+1. 在 sqlplus 之下，打开 autotrace 选项:
+   : set autotrace on
+   这样，每条语句执行之后就会打印出相关的执行计划情况。
+   其中， Table_Access_Full 表示全表扫描， xxx_by_index_rowid 表示扫描索引。
+
+2. 手动生成解释计划，在 sqlplus 下的语法为:
+   #+BEGIN_SRC sql
+   explain plan for select CLAUSE;   -- 通过 explain plan for 生成计划
+   select * from plan_table;         -- plan_table 保存的是上述解释计划的结果
+   select * from table(dbms_xplan.display);  -- 是对上面表里面数据的更直观显示
+   #+END_SRC
+
+
+
+#+BEGIN_SRC sql
+-- 第一种，生成随机数，随机字符串
+create sequence shello;
+
+create table demo as
+ select 
+     shello.nextval id,
+     'SIT_' || dbms_random.string('l', 5) abc,
+     round(dbms_random.value(0, 100)) score
+   from dual connect by level <= 100000;
+
+-- 第二种，用已有的数据，例：
+begin
+  for i in 1..100 loop
+     -- 复制多份数据
+     insert into demo select xxx,yyy from dba_objects;
+  end loop;
+end;
+select row_number over (order by )
+
+
+
+
+
+
+#+END_SRC
