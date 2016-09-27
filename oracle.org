@@ -1720,7 +1720,7 @@ select xxx from (select level from dual connect by level <= 本月的天数);
    #+END_SRC
 
 
-
+批量生成数据的方式
 #+BEGIN_SRC sql
 -- 第一种，生成随机数，随机字符串
 create sequence shello;
@@ -1747,3 +1747,175 @@ select row_number over (order by )
 
 
 #+END_SRC
+
+* PL/SQL
+全称为 Procedure Language / Structured Query Language.
+
+它是Oracle开发的，结合过程与结构化查询语言的一种程序语言。
+所以，它充分利用了 SQL 语言的优势，又添加了过程化的性能。
+在解决实际问题的过程中，非常强大、实用。
+
+
+
+基本语法:
+#+BEGIN_SRC sql
+
+-- 简单来说，结构
+[declare]
+...
+begin
+...
+[exception]
+...
+end;
+
+-- 详细点，是这样的
+DECLARE
+  -- 变量定义区，在这里定义所有要使用的变量（或常量）
+  -- 这一部分是可选的
+  name varchar2(20) := 'hello';
+  name2 varchar2(20);
+
+BEGIN
+  -- 代码区，过程块的主体。
+  -- 里面包含 DDL/DML 等 SQL 语句，也包含一些面向过程的控制语句。
+  select ename into name from emp where empno = 333;
+
+  create sequence s_001;
+
+  for i in 1..100 loop
+    insert into emp (empno, ename, sal) values (s_001.nextval, 'hello' || to_char(i), i*100)
+    returning ename into name2;
+
+    -- 这句相当于 java 中的 System.out.println(string);
+    dbms_output.put_line('员工的名字为: ' || ename);
+
+    commit;
+
+  end loop;
+
+EXCEPTION
+  -- 这里是异常处理区，处理捕获到的异常
+  -- 这部分也是可选的
+  WHEN no_data_found THEN
+    dbms_output.put_line('没有查询到任何的数据');
+  WHEN others THEN
+    dbms_output.put_line('未知错误:' || sqlerrm);
+
+END;
+
+
+
+-- pl/sql 版本的 hello,world
+-- 一个 pl/sql 块，至少要包含 begin 和 end;
+-- 需要把 serveroutput 选项设为 on，才能看到打印的结果
+begin
+  dbms_output.put_line('hello,world');
+end;
+
+
+-- 再复杂一点点，增加变量，需要用到 declare 段
+declare
+  str varchar2(20);
+begin
+  str := 'hello, world';
+  dbms_output.put_line(str);
+end;
+
+
+-- 再复杂一点，增加异常处理，需要用到 exception 段
+declare
+  n number;
+begin
+  n := 10/0;
+exception
+  when others then
+    dbms_output.put_line('有错误发生');
+end;
+
+
+-- 再复杂一点，把错误的信息保存到指定表中
+declare
+  n number;
+  emsg varchar2(20);
+begin
+  n := 10/0;
+exception
+  when others then
+    emsg := sqlerrm;
+    insert into log values (emsg);
+    commit;
+end;
+
+#+END_SRC
+
+
+
+** 变量类型
+1. 基本类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
+   #+BEGIN_SRC sql
+   -- 这是最常用的数值类型的定义
+   declare
+     a number;
+     b number(20);
+     c int;
+     d integer;
+     f float;
+   begin
+     d := 222;
+     dbms_output.put_line(d);
+   end;
+   /
+
+   -- 其他常用类型
+   declare
+     a varchar2(20);
+     b char(20);
+     c blob;
+     d date;
+   begin
+     a := 'hello';
+     b := ' world';
+     d := sysdate;
+   
+     dbms_output.put_line(a || b || to_char(d, 'yyyy/mm/dd'));
+   
+   end;
+   /
+   
+   #+END_SRC
+
+2. 引用类型之 TYPE/ROWTYPE
+
+
+
+
+
+** 常用的一些操作
+#+BEGIN_SRC sql
+
+-- 在 begin 之后，如果 select 语句不带 into 关键词的话，会报错。
+-- 通过 select x into y from 这样的句式，可以把查询到的结果赋值给相应变量。
+declare
+  a emp.ename%type;
+begin
+  select ename into a from emp where rownum < 2;
+  dbms_output.put_line('print result: ' || a);
+end;
+/
+
+-- 如果有多个变量，那么，依次用逗号隔开
+declare
+  a emp.ename%type;
+  b emp.sal%type;
+begin
+  select ename, sal into a, b from emp where rownum < 2;
+  dbms_output.put_line('print result: ' || a || '  的工资是: ' || b || '美元');
+end;
+/
+-- result: SMITH  的工资是: 800美元
+
+
+#+END_SRC
+insert into emp (empno, ename, sal) values (a, b, c);
+select empno, ename, sal from emp where rownum < 2;
