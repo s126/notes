@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Oracle11g</title>
-<!-- 2016-09-27 周二 03:21 -->
+<!-- 2016-09-27 周二 07:33 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -132,8 +132,8 @@
 <li><a href="#sec-11">索引</a></li>
 <li><a href="#sec-12">PL/SQL</a>
 <ul>
-<li><a href="#sec-12-1">变量类型</a></li>
-<li><a href="#sec-12-2">常用的一些操作</a></li>
+<li><a href="#sec-12-1">基本赋值</a></li>
+<li><a href="#sec-12-2">变量类型</a></li>
 </ul>
 </li>
 </ul>
@@ -3088,10 +3088,54 @@ set autotrace on
 </div>
 
 
-
 <div id="outline-container-sec-12-1" class="outline-3">
-<h3 id="sec-12-1">变量类型</h3>
+<h3 id="sec-12-1">基本赋值</h3>
 <div class="outline-text-3" id="text-12-1">
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22522;&#26412;&#30340;&#36171;&#20540;&#36816;&#31639;&#31526;&#26159;:</span>
+a := 666;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22312; begin &#20043;&#21518;&#65292;&#22914;&#26524; select &#35821;&#21477;&#19981;&#24102; into &#20851;&#38190;&#35789;&#30340;&#35805;&#65292;&#20250;&#25253;&#38169;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#36890;&#36807; select x into y from &#36825;&#26679;&#30340;&#21477;&#24335;&#65292;&#21487;&#20197;&#25226;&#26597;&#35810;&#21040;&#30340;&#32467;&#26524;&#36171;&#20540;&#32473;&#30456;&#24212;&#21464;&#37327;&#12290;</span>
+<span style="color: #0000FF;">declare</span>
+  a emp.ename%<span style="color: #0000FF;">type</span>;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">select</span> ename <span style="color: #0000FF;">into</span> a <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'print result: '</span> || a<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+/
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#26377;&#22810;&#20010;&#21464;&#37327;&#65292;&#37027;&#20040;&#65292;&#20381;&#27425;&#29992;&#36887;&#21495;&#38548;&#24320;</span>
+<span style="color: #0000FF;">declare</span>
+  a emp.ename%<span style="color: #0000FF;">type</span>;
+  b emp.sal%<span style="color: #0000FF;">type</span>;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">select</span> ename, sal <span style="color: #0000FF;">into</span> a, b <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'print result: '</span> || a || <span style="color: #008000;">'  &#30340;&#24037;&#36164;&#26159;: '</span> || b || <span style="color: #008000;">'&#32654;&#20803;'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+/
+<span style="color: #8D8D84; font-style: italic;">-- result: SMITH  &#30340;&#24037;&#36164;&#26159;: 800&#32654;&#20803;</span>
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22312;&#22686;&#21024;&#25913;&#30340;&#36807;&#31243;&#20013;&#65292;DML&#35821;&#21477;&#20043;&#21518;&#36890;&#36807;&#21152;&#20837; returning into &#35821;&#21477;&#65292;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#20063;&#21487;&#20197;&#23454;&#29616;&#36319; select into &#31867;&#20284;&#30340;&#21464;&#37327;&#36171;&#20540;&#12290;</span>
+<span style="color: #0000FF;">declare</span>
+  a <span style="color: #0000FF;">number</span>;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">update</span> emp <span style="color: #0000FF;">set</span> comm=800 <span style="color: #0000FF;">where</span> ename=<span style="color: #008000;">'KING'</span>
+    returning sal + comm <span style="color: #0000FF;">into</span> a;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'King &#29616;&#22312;&#30340;&#24037;&#36164;&#26159;:'</span> || a<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-12-2" class="outline-3">
+<h3 id="sec-12-2">变量类型</h3>
+<div class="outline-text-3" id="text-12-2">
 <ol class="org-ol">
 <li>基本类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
 <div class="org-src-container">
@@ -3100,7 +3144,7 @@ set autotrace on
 <span style="color: #0000FF;">declare</span>
   a <span style="color: #0000FF;">number</span>;
   b <span style="color: #0000FF;">number</span><span style="color: #707183;">(</span>20<span style="color: #707183;">)</span>;
-  c <span style="color: #6434A3;">int</span>;
+  c <span style="color: #6434A3;">int</span> := 222;
   d <span style="color: #6434A3;">integer</span>;
   f <span style="color: #6434A3;">float</span>;
 <span style="color: #0000FF;">begin</span>
@@ -3128,54 +3172,86 @@ set autotrace on
 </div>
 </li>
 
-<li>引用类型之 TYPE/ROWTYPE
-</li>
-</ol>
-</div>
-</div>
-
-
-
-
-
-<div id="outline-container-sec-12-2" class="outline-3">
-<h3 id="sec-12-2">常用的一些操作</h3>
-<div class="outline-text-3" id="text-12-2">
+<li>TYPE/ROWTYPE
 <div class="org-src-container">
 
-<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22312; begin &#20043;&#21518;&#65292;&#22914;&#26524; select &#35821;&#21477;&#19981;&#24102; into &#20851;&#38190;&#35789;&#30340;&#35805;&#65292;&#20250;&#25253;&#38169;&#12290;</span>
-<span style="color: #8D8D84; font-style: italic;">-- &#36890;&#36807; select x into y from &#36825;&#26679;&#30340;&#21477;&#24335;&#65292;&#21487;&#20197;&#25226;&#26597;&#35810;&#21040;&#30340;&#32467;&#26524;&#36171;&#20540;&#32473;&#30456;&#24212;&#21464;&#37327;&#12290;</span>
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- %type &#26159;&#29992;&#26469;&#24555;&#36895;&#33719;&#21462;&#34920;&#20013;&#26576;&#20010;&#23383;&#27573;&#20855;&#20307;&#31867;&#22411;&#30340;&#19968;&#31181;&#26041;&#24335;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#36890;&#36807;&#21033;&#29992;&#36825;&#31181;&#26041;&#24335;&#65292;&#21487;&#20197;&#31616;&#21270;&#25105;&#20204;&#30340;&#23450;&#20041;&#12290;</span>
 <span style="color: #0000FF;">declare</span>
-  a emp.ename%<span style="color: #0000FF;">type</span>;
+  a emp.ename%<span style="color: #0000FF;">type</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#30456;&#24403;&#20110; a varchar2(xx)</span>
+  b emp.sal%<span style="color: #0000FF;">type</span>;     <span style="color: #8D8D84; font-style: italic;">-- &#30456;&#24403;&#20110; b number(7,2)</span>
 <span style="color: #0000FF;">begin</span>
-  <span style="color: #0000FF;">select</span> ename <span style="color: #0000FF;">into</span> a <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
-  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'print result: '</span> || a<span style="color: #707183;">)</span>;
+  <span style="color: #0000FF;">select</span> ename, sal <span style="color: #0000FF;">into</span> a, b <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#21592;&#24037;&#30340;&#21517;&#23383;&#26159;:'</span> || a || <span style="color: #008000;">', &#20182;&#30340;&#24037;&#36164;&#26159;: '</span> || b || <span style="color: #008000;">' &#32654;&#20803;'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+
+<span style="color: #8D8D84; font-style: italic;">-- %rowtype &#26159;&#19968;&#31181;&#33719;&#21462;&#34892;&#35760;&#24405;&#30340;&#26041;&#24335;&#65292;&#23427;&#21253;&#21547;&#20102;&#19968;&#34892;&#35760;&#24405;&#25152;&#26377;&#30340;&#23383;&#27573;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#25152;&#20197;&#65292;&#25105;&#20204;&#21487;&#20197;&#29992;js&#20013;&#25968;&#32452;&#30340;&#35282;&#24230;&#21435;&#27604;&#36739;&#20043;&#12290;</span>
+<span style="color: #0000FF;">declare</span>
+  v_emp emp%rowtype;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">into</span> v_emp <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#32467;&#26524;&#26159;&#65306;'</span> || v_emp.ename || <span style="color: #008000;">'&#30340;&#24037;&#36164;&#26159;'</span> || v_emp.sal || <span style="color: #008000;">'&#33521;&#38225; , &#37096;&#38376;&#32534;&#21495;&#26159;: '</span> || v_emp.deptno2<span style="color: #707183;">)</span>;
+
+<span style="color: #0000FF;">end</span>;
+/
+</pre>
+</div>
+</li>
+
+<li>自定义记录/数组类型
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#22312;&#22522;&#26412;&#31867;&#22411;&#30340;&#22522;&#30784;&#19978;&#65292;&#26500;&#36896;&#20986;&#35768;&#22810;&#30340;&#22797;&#26434;&#30340;&#31867;&#22411;&#65292;&#27604;&#22914;&#25968;&#32452;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- record &#31867;&#22411;&#65292;&#20351;&#29992; name &#26469;&#33719;&#21462;&#37324;&#38754;&#30340;&#20540;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- Oracle &#20013;&#65292;&#23450;&#20041;&#26032;&#31867;&#22411;&#30340;&#35821;&#21477;&#20026; type&#12290;&#27604;&#22914;&#65292;&#23450;&#20041;&#19968;&#20010; record &#25968;&#32452;&#65292;&#35821;&#21477;&#22914;&#19979;&#65306;</span>
+<span style="color: #0000FF;">TYPE</span> type_name <span style="color: #0000FF;">IS</span> RECORD <span style="color: #707183;">(</span>&#31532;&#19968;&#20010;&#20803;&#32032;&#30340;&#21517;&#23383; &#31532;&#19968;&#20010;&#20803;&#32032;&#30340;&#22522;&#26412;&#31867;&#22411;, &#31532;&#20108;&#20010;..., &#31532;&#19977;&#20010;<span style="color: #707183;">)</span>;
+<span style="color: #8D8D84; font-style: italic;">-- &#31867;&#22411;&#23450;&#20041;&#23436;&#27605;&#20043;&#21518;&#65292;&#23601;&#21487;&#20197;&#20687;&#26222;&#36890;&#30340;&#31867;&#22411;&#37027;&#26679;&#21435;&#20351;&#29992;&#20102;&#12290;&#22914;&#26524;&#65292;&#25105;&#20204;&#21487;&#20197;&#36825;&#26679;&#21019;&#24314;&#19968;&#20010;&#19978;&#36848;&#31867;&#22411;&#30340;&#21464;&#37327;</span>
+v_name type_name;
+
+<span style="color: #8D8D84; font-style: italic;">-- &#19979;&#38754;&#26159;&#19968;&#20010;&#20855;&#20307;&#28857;&#30340;&#20363;&#23376;</span>
+<span style="color: #0000FF;">declare</span>
+  <span style="color: #0000FF;">type</span> t_emp <span style="color: #0000FF;">is</span> record <span style="color: #707183;">(</span>ename varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, sal <span style="color: #0000FF;">number</span><span style="color: #707183;">)</span>;
+  v_emp t_emp;     <span style="color: #8D8D84; font-style: italic;">-- &#23450;&#20041;&#19968;&#20010; t_emp &#31867;&#22411;&#30340;&#21464;&#37327;&#12290;&#23450;&#20041;&#23436;&#21464;&#37327;&#20043;&#21518;&#65292;&#25105;&#20204;&#25165;&#21487;&#20197;&#20351;&#29992;&#12290;</span>
+  v_emp2 t_emp;    <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#26159;&#23450;&#20041;&#30340;&#31532;&#20108;&#20010; t_emp &#31867;&#22411;&#30340;&#21464;&#37327;.</span>
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">select</span> ename, sal <span style="color: #0000FF;">into</span> v_emp <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#32467;&#26524;&#26159;&#65306;'</span> || v_emp.ename || <span style="color: #008000;">'&#30340;&#24037;&#36164;&#26159;'</span> || v_emp.sal || <span style="color: #008000;">'&#33521;&#38225; '</span><span style="color: #707183;">)</span>;
 <span style="color: #0000FF;">end</span>;
 /
 
-<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#26377;&#22810;&#20010;&#21464;&#37327;&#65292;&#37027;&#20040;&#65292;&#20381;&#27425;&#29992;&#36887;&#21495;&#38548;&#24320;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#26597;&#35810; KING &#30340;&#24037;&#36164;&#21644;&#37096;&#38376;&#12290;&#21033;&#29992;&#20102; record &#31867;&#22411;&#12290;</span>
 <span style="color: #0000FF;">declare</span>
-  a emp.ename%<span style="color: #0000FF;">type</span>;
-  b emp.sal%<span style="color: #0000FF;">type</span>;
+  <span style="color: #0000FF;">type</span> t_emp <span style="color: #0000FF;">is</span> record <span style="color: #707183;">(</span>ename varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span>, sal <span style="color: #0000FF;">number</span>,dname varchar2<span style="color: #7388D6;">(</span>20<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+  v_emp t_emp;
 <span style="color: #0000FF;">begin</span>
-  <span style="color: #0000FF;">select</span> ename, sal <span style="color: #0000FF;">into</span> a, b <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> rownum &lt; 2;
-  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'print result: '</span> || a || <span style="color: #008000;">'  &#30340;&#24037;&#36164;&#26159;: '</span> || b || <span style="color: #008000;">'&#32654;&#20803;'</span><span style="color: #707183;">)</span>;
+  <span style="color: #0000FF;">select</span> ename, sal ,dname <span style="color: #0000FF;">into</span> v_emp <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">join</span> scott.dept <span style="color: #0000FF;">on</span> emp.deptno=scott.dept.deptno <span style="color: #0000FF;">where</span> sal&gt;1000;
+  dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#32467;&#26524;&#26159;&#65306;'</span> || v_emp.ename || <span style="color: #008000;">'&#30340;&#24037;&#36164;&#26159;'</span> || v_emp.sal || <span style="color: #008000;">'&#33521;&#38225; '</span>||<span style="color: #008000;">'&#37096;&#38376;&#26159;'</span>||v_emp.dname<span style="color: #707183;">)</span>;
 <span style="color: #0000FF;">end</span>;
-/
-<span style="color: #8D8D84; font-style: italic;">-- result: SMITH  &#30340;&#24037;&#36164;&#26159;: 800&#32654;&#20803;</span>
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#25968;&#32452;&#31867;&#22411;&#65292;&#29992;&#24207;&#21495;&#26469;&#33719;&#21462;&#37324;&#38754;&#30340;&#20540;&#12290;</span>
+<span style="color: #0000FF;">declare</span>
+  <span style="color: #0000FF;">type</span> t_numarr <span style="color: #0000FF;">is</span> varray<span style="color: #707183;">(</span>3<span style="color: #707183;">)</span> <span style="color: #0000FF;">of</span> <span style="color: #0000FF;">number</span>;
+  a t_numarr;
+<span style="color: #0000FF;">begin</span>
+  a := t_numarr<span style="color: #707183;">(</span>1, 22, 333, 4444<span style="color: #707183;">)</span>;
+  dbms_output.put_line<span style="color: #707183;">(</span>a<span style="color: #7388D6;">(</span>1<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+  dbms_output.put_line<span style="color: #707183;">(</span>a<span style="color: #7388D6;">(</span>2<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+  dbms_output.put_line<span style="color: #707183;">(</span>a<span style="color: #7388D6;">(</span>3<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+  dbms_output.put_line<span style="color: #707183;">(</span>a<span style="color: #7388D6;">(</span>4<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
 </pre>
 </div>
-<p>
-insert into emp (empno, ename, sal) values (a, b, c);
-select empno, ename, sal from emp where rownum &lt; 2;
-</p>
+</li>
+</ol>
 </div>
 </div>
 </section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-09-27 周二 03:21</p>
+<p class="date">Created: 2016-09-27 周二 07:33</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
