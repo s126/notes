@@ -1850,6 +1850,47 @@ end;
 #+END_SRC
 
 
+** 基本赋值
+#+BEGIN_SRC sql
+
+-- 最基本的赋值运算符是:
+a := 666;
+
+-- 在 begin 之后，如果 select 语句不带 into 关键词的话，会报错。
+-- 通过 select x into y from 这样的句式，可以把查询到的结果赋值给相应变量。
+declare
+  a emp.ename%type;
+begin
+  select ename into a from emp where rownum < 2;
+  dbms_output.put_line('print result: ' || a);
+end;
+/
+
+-- 如果有多个变量，那么，依次用逗号隔开
+declare
+  a emp.ename%type;
+  b emp.sal%type;
+begin
+  select ename, sal into a, b from emp where rownum < 2;
+  dbms_output.put_line('print result: ' || a || '  的工资是: ' || b || '美元');
+end;
+/
+-- result: SMITH  的工资是: 800美元
+
+
+-- 在增删改的过程中，DML语句之后通过加入 returning into 语句，
+-- 也可以实现跟 select into 类似的变量赋值。
+declare
+  a number;
+begin
+  update emp set comm=800 where ename='KING'
+    returning sal + comm into a;
+  dbms_output.put_line('King 现在的工资是:' || a);
+end;
+
+
+#+END_SRC
+
 
 ** 变量类型
 1. 基本类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
@@ -1858,7 +1899,7 @@ end;
    declare
      a number;
      b number(20);
-     c int;
+     c int := 222;
      d integer;
      f float;
    begin
@@ -1885,37 +1926,76 @@ end;
    
    #+END_SRC
 
-2. 引用类型之 TYPE/ROWTYPE
+2. TYPE/ROWTYPE
+   #+BEGIN_SRC sql
+   -- %type 是用来快速获取表中某个字段具体类型的一种方式。
+   -- 通过利用这种方式，可以简化我们的定义。
+   declare
+     a emp.ename%type;   -- 相当于 a varchar2(xx)
+     b emp.sal%type;     -- 相当于 b number(7,2)
+   begin
+     select ename, sal into a, b from emp where rownum < 2;
+     dbms_output.put_line('员工的名字是:' || a || ', 他的工资是: ' || b || ' 美元');
+   end;
+
+   -- %rowtype 是一种获取行记录的方式，它包含了一行记录所有的字段。
+   -- 所以，我们可以用js中数组的角度去比较之。
+   declare
+     v_emp emp%rowtype;
+   begin
+     select * into v_emp from emp where rownum < 2;
+     dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 , 部门编号是: ' || v_emp.deptno2);
+   
+   end;
+   /
+   
+   
+   #+END_SRC
+
+3. 自定义记录/数组类型
+   #+BEGIN_SRC sql
+   -- 可以在基本类型的基础上，构造出许多的复杂的类型，比如数组。
+   -- record 类型，使用 name 来获取里面的值。
+   -- Oracle 中，定义新类型的语句为 type。比如，定义一个 record 数组，语句如下：
+   TYPE type_name IS RECORD (第一个元素的名字 第一个元素的基本类型, 第二个..., 第三个);
+   -- 类型定义完毕之后，就可以像普通的类型那样去使用了。如果，我们可以这样创建一个上述类型的变量
+   v_name type_name;
+   
+   -- 下面是一个具体点的例子
+   declare
+     type t_emp is record (ename varchar2(20), sal number);
+     v_emp t_emp;     -- 定义一个 t_emp 类型的变量。定义完变量之后，我们才可以使用。
+     v_emp2 t_emp;    -- 这是定义的第二个 t_emp 类型的变量.
+   begin
+     select ename, sal into v_emp from emp where rownum < 2;
+     dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 ');
+   end;
+   /
+
+   -- 查询 KING 的工资和部门。利用了 record 类型。
+   declare
+     type t_emp is record (ename varchar2(20), sal number,dname varchar2(20));
+     v_emp t_emp;
+   begin
+     select ename, sal ,dname into v_emp from emp join scott.dept on emp.deptno=scott.dept.deptno where sal>1000;
+     dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 '||'部门是'||v_emp.dname);
+   end;
+
+
+   -- 数组类型，用序号来获取里面的值。
+   declare
+     type t_numarr is varray(3) of number;
+     a t_numarr;
+   begin
+     a := t_numarr(1, 22, 333, 4444);
+     dbms_output.put_line(a(1));
+     dbms_output.put_line(a(2));
+     dbms_output.put_line(a(3));
+     dbms_output.put_line(a(4));
+   end;
+
+   
+   #+END_SRC
 
 
 
-
-
-** 常用的一些操作
-#+BEGIN_SRC sql
-
--- 在 begin 之后，如果 select 语句不带 into 关键词的话，会报错。
--- 通过 select x into y from 这样的句式，可以把查询到的结果赋值给相应变量。
-declare
-  a emp.ename%type;
-begin
-  select ename into a from emp where rownum < 2;
-  dbms_output.put_line('print result: ' || a);
-end;
-/
-
--- 如果有多个变量，那么，依次用逗号隔开
-declare
-  a emp.ename%type;
-  b emp.sal%type;
-begin
-  select ename, sal into a, b from emp where rownum < 2;
-  dbms_output.put_line('print result: ' || a || '  的工资是: ' || b || '美元');
-end;
-/
--- result: SMITH  的工资是: 800美元
-
-
-#+END_SRC
-insert into emp (empno, ename, sal) values (a, b, c);
-select empno, ename, sal from emp where rownum < 2;
