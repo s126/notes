@@ -1142,13 +1142,13 @@ select * from dept;
 ** 自定义函数
 语法:
 #+BEGIN_SRC sql
-create [or replace] function function_name [(参数 参数类型 := 默认值 [, 其他参数])] return 参数类型
-  as|is
-    定义的变量
-  begin
-    逻辑
-    return xxx;
-  end;
+CREATE [or REPLACE] FUNCTION function_name [(参数 参数类型 := 默认值 [, 其他参数])] RETURN 参数类型
+AS|IS
+  定义的变量
+BEGIN
+  逻辑
+  return xxx;
+END;
 #+END_SRC
 
 示例:
@@ -1171,6 +1171,27 @@ begin
   return to_number(d - sysdate);
 end;
 /
+
+
+-- 函数的参数可以带三种类型， in/out/in out
+-- 如果参数没有注明in或out等，那么默认就是 in 类型
+-- in 类型的参数，是传入值，所以，必须在传入的时候，赋予一个具体的值。
+-- out 类型的参数，是传出值，所以，在传入的时候，不必赋值，但是，在函数体内，必须要给与一个值。
+create or replace function mtimes (a number, res out number) return number
+as
+begin
+  res := a*a*a;  -- 必须要有这样的赋值操作，才能使 res 得到一个值，这样才有意义。
+  return a;  
+end;
+
+-- 上述函数的调用方式
+declare
+  abc number;
+begin
+  dbms_output.put_line('我们传入的参数是:' || mtimes(82, abc));
+  dbms_output.put_line('它的的三次方是:' || abc);
+end;
+
 
 
 #+END_SRC
@@ -1893,7 +1914,7 @@ end;
 
 
 ** 变量类型
-1. 基本类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
+1. 标量类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
    #+BEGIN_SRC sql
    -- 这是最常用的数值类型的定义
    declare
@@ -1984,7 +2005,7 @@ end;
 
    -- 数组类型，用序号来获取里面的值。
    declare
-     type t_numarr is varray(3) of number;
+     type t_numarr is varray(4) of number;
      a t_numarr;
    begin
      a := t_numarr(1, 22, 333, 4444);
@@ -1999,3 +2020,266 @@ end;
 
 
 
+** 操作符
+详情看 p227.
+** 流程控制
+*** 分支判断(if/case)
+1. IF
+   #+BEGIN_SRC sql
+   -- 语法为
+   IF 条件 THEN
+     要执行的代码;
+   END IF;
+
+   -- 复杂一点，需要用 elsif 和 else 添加更多的分支
+   IF 条件 THEN
+     要执行的代码;
+   ELSIF 另外的条件 THEN
+     要执行的代码;
+   ELSE
+     要执行的代码;
+   END IF;
+
+   -- 例子1，这是一个稍微详尽的例子
+   declare
+     a number;
+   begin
+     a := dbms_random.value(0, 4);
+     dbms_output.put_line('你输入的是:' || a);
+     if (a < 1) then
+       dbms_output.put_line('你输入的数字太小了');
+     elsif a < 2 then
+       dbms_output.put_line('诶呀，刚刚好啊');
+     else
+       dbms_output.put_line('您输入的太大了');
+     end if;
+   end;
+   /
+
+
+   -- if 的使用，例子2
+   declare
+     a number;
+   begin
+     a := round(dbms_random.value(0.5,3.5));  -- 取一个随机数，可能的值是 1/2/3
+
+     if a = 1 then
+       dbms_output.put_line('你是男生，应该多干活');
+     elsif a = 2 then
+       dbms_output.put_line('你是女生，应该多保养');
+     else
+       dbms_output.put_line('你先去验一下性别吧');
+     end if;
+
+   end;
+   /
+	 
+   #+END_SRC
+
+2. Case
+   #+BEGIN_SRC sql
+   CASE [字段]
+     WHEN 条件 THEN 要执行的代码
+     [WHEN 条件 THEN 要执行的代码]
+     [ELSE 要执行的代码]
+   END CASE;
+
+
+   -- 把上面 if/else 的例子1翻译过来就是：
+   declare
+     a number;
+   begin
+     a := dbms_random.value(0, 4);
+     dbms_output.put_line(a);
+     case
+       when a < 1 then
+         dbms_output.put_line('你输入的数字太小了');
+       when a < 2 then
+         dbms_output.put_line('诶呀，刚刚好啊');
+       else 
+         dbms_output.put_line('您输入的太大了');
+     end case;
+   end;
+   /
+
+   -- 把上面 if 里面例子2翻译过来是：
+   declare
+     a number;
+   begin
+     a := round(dbms_random.value(0.5,3.5));
+     case a
+       when 1 then
+         dbms_output.put_line('你是男生，应该多干活');
+       when 2 then
+         dbms_output.put_line('你是女生，应该多保养');
+       else
+         dbms_output.put_line('你先去验一下性别吧');
+     end case;
+   end;
+   /
+   
+   #+END_SRC
+
+*** 循环迭代
+loop
+#+BEGIN_SRC sql
+-- 最简单的语法
+LOOP
+  循环的代码;
+  -- 注意，在这样的 loop 语句中，要添加合适的中止语句。
+END LOOP;
+
+
+-- 这是 loop 的基本用法
+declare
+  a number := 10;
+begin
+  loop
+    a := a - 1;
+    dbms_output.put_line(systimestamp);
+    if a < 1 then  -- 需要根据条件判断，写相应的退出语句
+      exit;
+    end if;
+  end loop;
+end;
+/
+
+-- 退出语句可以如下简写，即 exit when 条件
+declare
+  a number := 10;
+begin
+  loop
+    a := a - 1;
+    dbms_output.put_line(systimestamp);
+    exit when a < 1;
+  end loop;
+end;
+/
+
+#+END_SRC
+
+
+for
+#+BEGIN_SRC sql
+-- 语法
+FOR 变量 IN 最小值..最大值 LOOP
+  执行的语句;
+
+END LOOP;
+
+-- 下面是 loop 的进阶用法，要跟 for 结合使用
+-- 这种方式很实用
+begin
+  for i in 1..10 loop
+    dbms_output.put_line(systimestamp);
+  end loop;
+end;
+
+#+END_SRC
+
+
+while
+#+BEGIN_SRC sql
+-- 语法
+WHILE 条件 LOOP
+  执行的语句;
+END LOOP;
+
+-- 举例
+declare
+  a number := 10;
+begin
+  while a > 0 loop
+    dbms_output.put_line(systimestamp);
+    a := a - 1;
+  end loop;
+end;
+
+#+END_SRC
+
+
+** 异常处理
+
+#+BEGIN_SRC sql
+
+declare
+  变量定义
+
+begin
+  代码运行
+
+exception
+  when others then
+    dbms_output.put_line('haha，你也会有今天。');
+end;
+
+#+END_SRC
+
+
+
+
+*** 系统自带的异常
+
+#+BEGIN_SRC sql
+-- 里面有两种异常，一种是字母为零的异常，另一种呢，是没有查询到数据的异常。
+-- 这两种都是 Oracle 已经自定义好的异常，我们可以直接使用。
+declare
+  a varchar2(20);
+  b number;
+begin
+  b := 10000 / round(dbms_random.value(-0.1, 1.1));
+  select ename into a from emp where empno = 2222222222;
+  dbms_output.put_line('ok，您查询成功了');
+exception
+  when no_data_found then
+    dbms_output.put_line('hehe, 没数据，亲');
+  when ZERO_DIVIDE then
+    dbms_output.put_line('字母不能为零哦，亲');
+  when others then
+    dbms_output.put_line('hehe,you are great');
+end;
+/
+
+
+#+END_SRC
+
+*** 用户自定义的异常
+
+#+BEGIN_SRC sql
+-- 自定义一个异常，需要在 declare 里面声明一个 exception 类型的变量
+-- 如果想手动抛出异常的话，需要用到 【raise 异常名字】 这样的语法
+declare
+   womendajiadeyichang exception;  
+   a number;
+begin
+   a := dbms_random.value(0, 4);
+   if a > 2 then
+     dbms_output.put_line('hehe, it is very great.');
+   else
+     raise womendajiadeyichang;
+   end if;
+exception
+   when others then
+     dbms_output.put_line('womdyi 得到了有效处理');
+end;
+/
+
+
+#+END_SRC
+
+*** 打印异常信息
+#+BEGIN_SRC sql
+
+declare
+  a number;
+  c varchar2(88);
+begin
+  a := 10/0;
+exception
+  when others then
+    c := sqlerrm;
+    dbms_output.put_line(c);
+end;
+  
+
+#+END_SRC
