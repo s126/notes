@@ -376,7 +376,7 @@ revoke alter on scott from vip;
 
 
 
-* SQL
+* SQL Óï¾ä
 Structured Query Language£¬½á¹¹ĞÔ²éÑ¯ÓïÑÔ¡£
 
 ** SQL µÄÀúÊ·¼°¸ÅÄî
@@ -1271,7 +1271,7 @@ insert into seqtab values (seq_001.nextval, 'hello'); -- ÕâÖÖĞ´·¨ËäÈ»¿´ÆğÀ´Âé·³£
 
 #+END_SRC
 
-* ±íµÄ·ÖÇø(Partition)
+* ·ÖÇø (Partition)
 ½¨ÒéÔÚÏÂÃæÁ½ÖÖÇé¿öÏÂÒª¶Ô±í½øĞĞ·ÖÇø:
 1. ±íµÄÊı¾İÁ¿³¬¹ı 2G
 2. ±íÀïÃæ´æÔÚ´óÁ¿µÄÀúÊ·Êı¾İ
@@ -1594,6 +1594,8 @@ select ref(t) from v_dept t;  -- oid
 4. ¸æËß Oracle£¬Èç¹û´Ó»ù±¾ÖĞ²éÑ¯Êı¾İµÄÊ±ºò£¬ÔÊ²»ÔÊĞí²Î¿¼Ê¹ÓÃÎï»¯ÊÓÍ¼ÀïµÄ½á¹û¡££¨Èç¹ûÊ¹ÓÃÎï»¯ÊÓÍ¼µÄ»°£¬ÊµÖÊÉÏ oracle ÒªĞŞ¸ÄÄã²éÑ¯µÄÓï¾ä£¬ËùÒÔ²Å½Ğ²éÑ¯ÖØĞ´£©
    : enable/disable query rewrite
 
+
+ÏêÏ¸µÄÀõ×ÓÈçÏÂ£º
 #+BEGIN_SRC sql
 -- ×î»ù±¾µÄ´´½¨¡£ÕâÀïÓÃµÄÊÇÈ«Á¿¸üĞÂ¡£È«Á¿¸üĞÂ»áºÜ±¿ÖØ¡£
 create materialized view mv_emp
@@ -1629,42 +1631,7 @@ drop materialized view mv_emp;
 #+END_SRC
 
 
-* ×÷ÒµÏà¹Ø
-#+BEGIN_SRC sql
--- ¼òµ¥µÄ¹ı³ÌÓï¾ä¡£ÓÃÀ´ÔÚ t1 ±íÖĞ²åÈë 100000 ÌõÊı¾İ¡£
-create table t1 (id number, name varchar2(20));
-
-begin
-  for i in 1..100000 loop
-    insert into t1 values (i, 'zhouqiang');
-    commit;
-  end loop;
-
-end;
-/
-#+END_SRC
-
-
-ÁĞ³öµ±ÔÂËùÓĞµÄĞÇÆÚÎå.
-1. ĞèÒªÁĞ³öµ±ÔÂËùÓĞµÄÈÕÆÚ¡£
-
-   ĞèÒªÓÃµ½µÄÖªÊ¶µã£º
-   1) ±¾ÔÂµÚÒ»Ìì£º trunc
-   2) ±¾ÔÂ×îºóÒ»Ìì£º last_day
-   3) ¼ÆËã±¾ÔÂµÄÌìÊı£º ÌìÊı = ÔÂÄ© - ÔÂ³õ + 1
-   3) ÈçºÎ»ñÈ¡Á¬ĞøµÄÊ±¼ä
-      (1) connect by
-          : select level from dual connect by level <= ±¾ÔÂµÄÌìÊı;
-      (2) rownum
-          : select rownum from dba_objects where rownum <= ±¾ÔÂµÄÌìÊı;
-
-
-2. ÔÚµ±ÔÂËùÓĞµÄÈÕÆÚÖĞ²éÑ¯ËùÓĞÊÇĞÇÆÚÎåµÄÈÕÆÚ
-   1) »ñÈ¡ĞÇÆÚ¼¸£º decode
-
-
-select xxx from (select level from dual connect by level <= ±¾ÔÂµÄÌìÊı);
-* Ë÷Òı
+* Ë÷Òı (Index)
 
 ´´½¨Óï¾ä
 : CREATE INDEX Ë÷ÒıÃû×Ö ON ±íÃû (±íµÄ×Ö¶ÎÃû) [TABLESPACE ±í¿Õ¼äÃû×Ö];
@@ -1714,10 +1681,9 @@ select xxx from (select level from dual connect by level <= ±¾ÔÂµÄÌìÊı);
    #+END_SRC
 
 5. Î»Í¼Ë÷Òı
-
-
-
-
+   : create bitmap index ind_aaa on s (sex);
+   : create bitmap index ind_aaa on s (status);
+   : create bitmap index ind_aaa on s (mz);
 
 
 ×¢Òâ£¬ÒªºÏÀíÊ¹ÓÃË÷Òı¡£ÒòÎª£¬²»ºÏÀíµÄË÷Òı£¬²»½ö²»ÄÜ´øÀ´Ğ§ÂÊµÄÌáÉı£¬·´¶ø»áÍÏÀÛÏµÍ³¡£
@@ -1741,44 +1707,14 @@ select xxx from (select level from dual connect by level <= ±¾ÔÂµÄÌìÊı);
    #+END_SRC
 
 
-ÅúÁ¿Éú³ÉÊı¾İµÄ·½Ê½
-#+BEGIN_SRC sql
--- µÚÒ»ÖÖ£¬Éú³ÉËæ»úÊı£¬Ëæ»ú×Ö·û´®
-create sequence shello;
-
-create table demo as
- select 
-     shello.nextval id,
-     'SIT_' || dbms_random.string('l', 5) abc,
-     round(dbms_random.value(0, 100)) score
-   from dual connect by level <= 100000;
-
--- µÚ¶şÖÖ£¬ÓÃÒÑÓĞµÄÊı¾İ£¬Àı£º
-begin
-  for i in 1..100 loop
-     -- ¸´ÖÆ¶à·İÊı¾İ
-     insert into demo select xxx,yyy from dba_objects;
-  end loop;
-end;
-select row_number over (order by )
-
-
-
-
-
-
-#+END_SRC
-
 * PL/SQL
 È«³ÆÎª Procedure Language / Structured Query Language.
 
 ËüÊÇOracle¿ª·¢µÄ£¬½áºÏ¹ı³ÌÓë½á¹¹»¯²éÑ¯ÓïÑÔµÄÒ»ÖÖ³ÌĞòÓïÑÔ¡£
-ËùÒÔ£¬Ëü³ä·ÖÀûÓÃÁË SQL ÓïÑÔµÄÓÅÊÆ£¬ÓÖÌí¼ÓÁË¹ı³Ì»¯µÄĞÔÄÜ¡£
+ËùÒÔ£¬Ëü³ä·ÖÀûÓÃÁË SQL ÓïÑÔµÄÓÅÊÆ£¬ÓÖÌí¼ÓÁË¹ı³Ì»¯µÄ¹¦ÄÜ¡£
 ÔÚ½â¾öÊµ¼ÊÎÊÌâµÄ¹ı³ÌÖĞ£¬·Ç³£Ç¿´ó¡¢ÊµÓÃ¡£
 
-
-
-»ù±¾Óï·¨:
+** »ù±¾Óï·¨
 #+BEGIN_SRC sql
 
 -- ¼òµ¥À´Ëµ£¬½á¹¹
@@ -1876,15 +1812,14 @@ begin
 exception
   when others then
     dbms_output.put_line('ÓĞ´íÎó·¢Éú');
-    emsg := sqlerrm;
+    emsg := sqlerrm;   -- sqlerrm º¯Êı¿ÉÒÔ»ñÈ¡Òì³£µÄÃèÊöĞÅÏ¢
     insert into log values (emsg);
     commit;
 end;
 
 #+END_SRC
 
-
-** »ù±¾¸³Öµ
+** ±äÁ¿¸³Öµ
 #+BEGIN_SRC sql
 
 -- ×î»ù±¾µÄ¸³ÖµÔËËã·ûÊÇ:
@@ -1927,7 +1862,7 @@ end;
 
 
 
--- ÔÚÓÎ±êµÄÊ¹ÓÃÖĞ£¬ ÊÇÍ¨¹ı fetch into ¸³Öµ
+-- ÔÚÓÎ±êµÄÊ¹ÓÃÖĞ£¬Í¨¹ı fetch into ¸³Öµ
 declare
   cursor a is select ename from emp;
   b varchar2(20);
@@ -1943,8 +1878,8 @@ end;
 
 
 ** ±äÁ¿ÀàĞÍ
-
-*** ±êÁ¿ÀàĞÍ(Scalar)£¬»ù±¾µÈÍ¬ÓÚ sql ÖĞµÄÊı¾İÀàĞÍ£¬±ÈÈç varchar2, number, date, blob, raw µÈ£¬»¹°üÀ¨ boolean ÀàĞÍ¡£
+*** ±êÁ¿ÀàĞÍ(Scalar)
+»ù±¾µÈÍ¬ÓÚ sql ÖĞµÄÊı¾İÀàĞÍ£¬±ÈÈç varchar2, number, date, blob, raw µÈ£¬»¹°üÀ¨ boolean ÀàĞÍ¡£
 
 #+BEGIN_SRC sql
 -- ÕâÊÇ×î³£ÓÃµÄÊıÖµÀàĞÍµÄ¶¨Òå
@@ -1976,9 +1911,55 @@ begin
 end;
 /
 
+
+
+-- ¶ÔÓÚ lob ÀàĞÍ£¬¿ÉÒÔÍ¨¹ı Oracle Ìá¹©µÄ dbms_lob °ü½øĞĞ²Ù×÷
+-- ÏÂÃæÊÇÒ»¸öÀõ×Ó£¬Ò»ÆªÎÄÕÂ¡£
+-- Ò»ÆªÎÄÕÂ¿ÉÄÜÓĞÒÔÏÂ×Ö¶Î£ºÖ÷¼ü¡¢×÷Õß¡¢ÌâÄ¿¡¢ÄÚÈİ¡¢´´×÷ÈÕÆÚ¡¢µãÔŞÊıµÈ£¬·Ö±ğÊ¹ÓÃÁË²»Í¬µÄ±äÁ¿ÀàĞÍ¡£
+-- ÒòÎªÎÄÕÂÕıÎÄµÄÄÚÈİ¿ÉÄÜºÜ³¤£¬»á³¬¹ı varchar2 ÀàĞÍ 4000 ×Ö½ÚµÄÏŞÖÆ£¬ËùÒÔ×îºÃÊ¹ÓÃµÄÊÇ clob ÀàĞÍ¡£
+-- Ê×ÏÈ´´½¨±í£¬ÈçÏÂ:
+create table article 
+(
+  id number primary key,
+  author varchar2(20) not null,
+  title varchar2(20) not null, 
+  content clob not null,
+  create_date timestamp default sysdate,
+  score number
+);
+
+-- Îª²åÈëÊı¾İ´´½¨Ò»¸öĞòÁĞ¡£Ä¬ÈÏ´Ó1¿ªÊ¼£¬²½³¤Îª1
+create sequence seq_article;
+-- ²åÈëÒ»ÌõÊı¾İ
+insert into article values (seq_article.nextval, 'º«º®', '´©×ÅÃŞ°ÀÏ´Ôè', 'ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À', systimestamp, 0);
+-- ²åÈëÒ»ÌõÄÚÈİÎª¿ÕµÄÎÄÕÂ¡£ÓÃ empty_clob() º¯Êı³õÊ¼»¯ clob ×Ö¶Î
+insert into article values (seq_article.nextval, '¹ù¾´Ã÷', '¾Ş´óÊ±´ú', empty_clob(), systimestamp, 0);
+
+-- Ğ´Ò»¸öÀõ×Ó£¬´òÓ¡ÎÄÕÂµÄ×÷Õß¡¢´´×÷ÈÕÆÚ¡¢±êÌâ¡¢ÄÚÈİ¼ò½é£¨Ç°20¸ö×Ö£©¡£
+declare
+  amount number default 20;
+  v_author varchar2(20);
+  v_date varchar2(40);
+  v_title varchar2(40);
+  v_content clob;
+  v_desc varchar2(400);
+begin
+  -- ²éÑ¯£¬¸³Öµ
+  select author, to_char(create_date, 'yyyy.mm.dd hh:mi:ss'), title, content into v_author, v_date, v_title, v_content from article where rownum < 2;
+  -- »ñÈ¡Ç°20¸ö×Ö·ûµÄÓï·¨¡£º¯Êı read µÄ²ÎÊı·Ö±ğÎª blob×Ö¶Î¡¢Òª¶ÁÈ¡µÄ³¤¶È¡¢¿ªÊ¼µÄÎ»ÖÃ¡¢¶ÁÈ¡µÄ½á¹û¡£
+  dbms_lob.read(v_content, amount, 1, v_desc);
+  dbms_output.put_line(v_author || '(' || v_date || ')');
+  dbms_output.put_line('±êÌâ£º' || v_title);
+  dbms_output.put_line(v_desc || '...');
+end;
+/
+-- ½á¹ûÏÔÊ¾£º
+-- º«º®(2016.09.29 05:00:56)
+-- ±êÌâ£º´©×ÅÃŞ°ÀÏ´Ôè
+-- ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ...
+
+
 #+END_SRC
-
-
 
 *** TYPE/ROWTYPE
 
@@ -2060,9 +2041,8 @@ end;
 ** ²Ù×÷·û
 ÏêÇé¿´ p227
 ** Á÷³Ì¿ØÖÆ
-*** ·ÖÖ§ÅĞ¶Ï(if/case)
+*** ·ÖÖ§ÅĞ¶Ï
 IF Óï¾ä
-
 #+BEGIN_SRC sql
 -- ×î¼òÓï·¨Îª
 IF Ìõ¼ş THEN
@@ -2115,9 +2095,7 @@ end;
 
 #+END_SRC
 
-
 Case Óï¾ä
-
 #+BEGIN_SRC sql
 CASE [×Ö¶Î]
   WHEN Ìõ¼ş THEN ÒªÖ´ĞĞµÄ´úÂë
@@ -2244,7 +2222,7 @@ end;
 ** Òì³£´¦Àí
 ×÷ÎªÒ»¸öÓÅĞãµÄ³ÌĞòÔ±£¬¿Ï¶¨ÒªÄÜĞ´³ö½¡×³µÄ´úÂë£¬¶ø½¡×³´úÂëµÄÊ×Òª¿¼ÂÇ£¬¾ÍÊÇ´¦ÀíºÃÒì³£¡£
 
-Oracle ÔËĞĞ¹ı³ÌÖĞ³öÏÖµÄ´íÎó£¬³ÆÖ®Îª Oracle Òì³£¡£Ö÷Òª·ÖÎªÁ½ÖÖ£¬Ò»ÖÖÊÇÏµÍ³×Ô¶¨ÒåÒì³£(¼´ÄÚ²¿Òì³£)£¬Ò»ÖÖÊÇÓÃ»§×Ô¶¨ÒåÒì³£¡£
+Oracle ÔËĞĞ¹ı³ÌÖĞ³öÏÖµÄ´íÎó£¬³ÆÖ®Îª Oracle Òì³£¡£Ö÷Òª·ÖÎªÁ½ÖÖ£¬Ò»ÖÖÊÇÏµÍ³Ô¤¶¨ÒåÒì³£(¼´ÄÚ²¿Òì³£)£¬Ò»ÖÖÊÇÓÃ»§×Ô¶¨ÒåÒì³£¡£
 
 Òì³£ÒªÓĞÒ»¸öÃû×Ö£¬Ò»¸ö±àºÅ(sqlcode)£¬Ò»¸öÃèÊö(sqlerrm)¡£
 
@@ -2275,11 +2253,11 @@ begin
   select ename into a from emp where empno = 2222222222;  -- Èç¹û²éÑ¯²»µ½¼ÇÂ¼£¬Ôò»áÅ×³öÎŞÊı¾İ¼ÇÂ¼Òì³£¡£
   dbms_output.put_line('ok£¬Äú²éÑ¯³É¹¦ÁË');
 exception
-  when no_data_found then
+  when NO_DATA_FOUND then
     dbms_output.put_line('hehe, Ã»Êı¾İ£¬Ç×');
   when ZERO_DIVIDE then
     dbms_output.put_line('×ÖÄ¸²»ÄÜÎªÁãÅ¶£¬Ç×');
-  when others then
+  when OTHERS then
     dbms_output.put_line('hehe,you are great');
 end;
 /
@@ -2291,10 +2269,10 @@ end;
 ÓĞµÄÄÚ²¿Òì³££¬Ö»ÓĞ±àºÅ¸úÃèÊö£¬Ã»ÓĞ¾ßÌåÃû×Ö£¬ÄÇÃ´£¬ÎÒÃÇĞèÒªÓÃ PRAGMA EXCEPTION_INIT À´¸øÒì³£ÆğÒ»¸öÃû×Ö¡£
 #+BEGIN_SRC sql
 declare
-  nested_delete exception;   -- ÏÈ×Ô¶¨¶¨ÒåÒì³££¬Ãû×ÖÎª nested_delete
-  PRAGMA EXCEPTION_INIT(nested_delete, -2292);  -- ÒÔÎª¼ÇÂ¼´æÔÚÍâ¼üÔ¼ÊøÕâ¸öÏµÍ³Òì³£Ö»ÓĞÒ»¸ö±àºÅÎª -2292£¬Ã»ÓĞÃû×Ö¡£ÎÒÃÇÍ¨¹ıÕâ¸öÓï¾ä£¬¸ø -2292 Õâ¸öÒì³£¸³ÓèÃû×Ö nested_delete¡£
+  nested_delete exception;   -- ÏÈ×Ô¶¨ÒåÒì³££¬Ãû×ÖÎª nested_delete
+  PRAGMA EXCEPTION_INIT(nested_delete, -2292);  -- ÒòÎª¡°¼ÇÂ¼´æÔÚÍâ¼üÔ¼Êø¡±Õâ¸öÏµÍ³Òì³£Ö»ÓĞ±àºÅ£¬Îª -2292£¬Ã»ÓĞÃû×Ö¡£ÎÒÃÇÍ¨¹ıÕâ¸öÓï¾ä¸øÕâ¸öÒì³£¸³ÓèÃû×Ö nested_delete¡£
 begin
-  delete from dept where deptno = 10;           -- ÕâÌõ¼ÇÂ¼´æÔÚÍâ¼üÔ¼Êø£¬ËùÒÔÉ¾³ıÊ§°Ü£¬Å×³öÒì³£ -2292¡£ÒòÎªÉÏÃæ¶¨ÒåÁË -2292 Îª nested_delete£¬ËùÒÔ»áÅ×³öÒ»¸ö nested_delete Òì³£¡£
+  delete from dept where deptno = 10;           -- ÕâÌõ¼ÇÂ¼´æÔÚÍâ¼üÔ¼Êø£¬ËùÒÔÉ¾³ıÊ§°Ü£¬Å×³öÒì³£ -2292¡£ÒòÎªÉÏÃæ¶¨ÒåÁË -2292 Îª nested_delete£¬ËùÒÔÕâ¸öÒì³£¿ÉÒÔÓÃ nested_delete À´²¶»ñ¡£
 exception
   when nested_delete then
     dbms_output.put_line('´íÎó´úÂë: ' || sqlcode);
@@ -2308,7 +2286,7 @@ end;
 *** ÓÃ»§×Ô¶¨ÒåµÄÒì³£(UserDefined)
 ÊÖ¶¯Å×³öÒ»¸öÒì³£µÄÓï¾äÈçÏÂ£¬¸ú java ÖĞµÄ throw Óï¾äÀàËÆ¡£
 : raise exception
-Èç¹ûÏëÅ×³öÒ»¸ö´øÏêÏ¸ĞÅÏ¢µÄÒì³££¬¿ÉÒÔÓÃµ½ Oracle Ìá¹©¸øÎÒÃÇµÄ raise_application_error£¬ÕâÊÇÒ»¸ö´æ´¢¹ı³Ì¡£
+Èç¹ûÏëÅ×³öÒ»¸ö´øÏêÏ¸ĞÅÏ¢µÄÒì³££¬¿ÉÒÔÓÃµ½ Oracle Ìá¹©¸øÎÒÃÇµÄ´æ´¢¹ı³Ì raise_application_error À´¼ò»¯²Ù×÷¡£
 
 #+BEGIN_SRC sql
 -- ×Ô¶¨ÒåÒ»¸öÒì³££¬ĞèÒªÔÚ declare ÀïÃæÉùÃ÷Ò»¸ö exception ÀàĞÍµÄ±äÁ¿
@@ -2386,16 +2364,237 @@ end;
 /
 
 #+END_SRC
-<<<<<<< HEAD
-** ¶¯Ì¬SQL
+
+** ¶¯Ì¬ SQL
+Oracle µÄ PL/SQL ÔËĞĞ·ÖÎª±àÒë£¬ÔËĞĞÁ½¸ö¹ı³Ì¡£
+ÎÒÃÇĞ´ÔÚ PL/SQL ¿éÖĞµÄ DDL/DML Óï¾äÔÚÇ°ÆÚÁª±àµÄ¹ı³ÌÖĞ¾Í±»È·¶¨ÁË£¬ËùÒÔ³ÉÎª¾²Ì¬ SQL¡£
+µ«ÊÇÓĞĞ©ÒªÖ´ĞĞµÄÓï¾ä£¬ÔÚÇ°ÆÚµÄÁª±à¹ı³ÌÖĞÎŞ·¨È·¶¨£¬Ö»ÓĞµ½ÔËĞĞÊ±²Å»áÈ·¶¨¡£ÄÇÃ´ÎÒÃÇ¾ÍĞèÒªÓÃµ½¶¯Ì¬ SQL¡£
+
+ÓĞÁ½ÖÖ·½Ê½´¦Àí¶¯Ì¬ SQL£º
+1. EXECUTE IMMEDIATE
+2. ÔËÓÃ Oracle Ìá¹©µÄ DBMS_SQL °ü
+
 #+BEGIN_SRC sql
+-- EXECUTE IMMEDIATE »ù±¾Óï·¨
+EXECUTE IMMEDIATE ÎÒÃÇÒªÖ´ĞĞµÄ¶¯Ì¬Óï¾ä
+[INTO Òª¸³ÖµµÄ±äÁ¿]
+[USING ĞèÒª°ó¶¨µÄÖµ];
+
+
+-- Ò»¸öÀõ×Ó
 declare
-  sqls varchar2(40);
+  sqlstr1 varchar2(88) := 'create table ssabc (a varchar2(20))';
+  sqlstr2 varchar2(88);
+  varstr varchar2(20) := 'hello';
+  varres varchar2(20);
 begin
-  sqls := 'drop table vi2';
-  execute immediate sqls;
+  -- ´´½¨±íµÄ·½Ê½
+  execute immediate sqlstr1;
+
+  -- ²åÈëµÚÒ»ÌõÊı¾İ¡£oracle Í¨¹ıÁ½¸ö''´ú±í×Ö·û´®ÀïµÄÒ»¸ö'·ûºÅ
+  sqlstr2 := 'insert into ssabc values (''world'')';
+  execute immediate sqlstr2;
+  commit;
+
+  -- ²åÈëµÚ¶şÌõÊı¾İ
+  execute immediate ('insert into ssabc values (''' || varstr || ''')');
+  commit;
+
+  -- ²åÈëµÚÈıÌõÊı¾İ£¬ÆäÖĞ :1 ÊÇ½øĞĞ±äÁ¿°ó¶¨µÄÒ»ÖÖĞÎÊ½
+  execute immediate 'insert into ssabc values (:1)' using varstr;
+  commit;
+
+  -- ²éÑ¯Ò»ÌõÊı¾İ£¬ÀûÓÃ select into£¬¶Ô²éÑ¯½á¹û½øĞĞ¸³Öµ
+  execute immediate 'select a from ssabc where rownum < 2' into varres;
+  dbms_output.put_line(varres);
+    
 end;
 /
 
 #+END_SRC
+
+DBMS_SQL µÄ·½Ê½£¬Çë¿´¿Î±¾ p260.
+
+
+** ÓÎ±ê (Cursor)
+ÓÎ±êÊÇÒ»ÖÖÊı¾İ¼¯ºÏ£¬¿ÉÒÔÀàÍ¬ÓÚ java ÀïµÄ ResultSet£¬ÓÃÓÚ±£´æ SQL ²éÑ¯µÄ½á¹û¼¯¡£
+
+µ±²éÑ¯Ò»ÌõÓï¾äÊ±£¬ Oracle »á´ò¿ªÒ»Æ¬¹¤×÷Çø£¬°Ñ½á¹û±£´æÔÚÀïÃæ£¬ÔÚÕâÆ¬¹¤×÷Çø£¬´æÔÚÒ»¸öÖ¸Õë£¬Ä¬ÈÏÖ¸ÏòµÚÒ»Ìõ¼ÇÂ¼¡£ÎÒÃÇ¿ÉÒÔÍ¨¹ıÒÆ¶¯Ö¸Õë´ïµ½»ñÈ¡²»Í¬¼ÇÂ¼µÄÄ¿µÄ¡£
+
+Õâ¸öÖ¸Õë£¬¾ÍÊÇÓÎ±ê¡£
+
+ÓÎ±ê·ÖÎªÒşÊ½ÓÎ±êºÍÏÔÊ½ÓÎ±ê¡£
+
+ÒşÊ½ÓÎ±êÊÇ Oracle ×Ô¶¯¹ÜÀíµÄ£¬±ÈÈçÎÒÃÇ½øĞĞÒ»´Î update£¬Oracle »á´ò¿ªÒ»¸öÓÎ±ê¶¨Î»µ½Êı¾İ£¬ÎÒÃÇ¸üĞÂ½áÊøºó£¬Oracle ¾Í»á°ÑÓÎ±ê¸ø¹Ø±Õ¡£
+
+ÏÔÊ½ÓÎ±ê£¬¾ÍÊÇÎÒÃÇÒª×Ô¶¨ÒåµÄÓÎ±ê£¬Ö÷ÒªÓÃÀ´´¦ÀíÓĞ¶àÌõÊı¾İ·µ»ØµÄ²éÑ¯¡£ÏÂÃæÊÇ¼òµ¥½éÉÜ¡£
+
+ÓÎ±êµÄÊ¹ÓÃ·ÖÎªÏÂÃæ¼¸²½£º
+1. ¶¨ÒåÓÎ±ê
+2. ´ò¿ªÓÎ±ê
+3. ´Óµ±Ç°Î»ÖÃ»ñÈ¡Êı¾İ
+4. Ñ­»·Ö±µ½¶ÁÈ¡½áÊø
+5. ¹Ø±ÕÓÎ±ê
+
+#+BEGIN_SRC sql
+declare
+  cursor c_emp is select * from emp where deptno = 10;  -- ¶¨ÒåÓÎ±ê
+  v_emp emp%rowtype;
+begin
+  open c_emp;              -- ´ò¿ªÓÎ±ê
+  fetch c_emp into v_emp;  -- ÌáÈ¡Êı¾İ
+  loop
+    dbms_output.put_line(v_emp.ename || ' ¹¤×Ê ' || v_emp.sal);
+    fetch c_emp into v_emp;
+    exit when c_emp%notfound;
+  end loop;
+  close c_emp;             -- ¹Ø±ÕÓÎ±ê
+end;
+/
+
+-- for »á×Ô¶¯´ò¿ª¹Ø±ÕÓÎ±ê
+declare
+  cursor c_emp is select * from emp where deptno = 10;
+begin
+  for v_emp in c_emp loop
+    dbms_output.put_line(v_emp.name || ' ¹¤×Ê ' || v_emp.sal);
+  end loop;
+end;
+/
+
+-- ÔÙ¼òµ¥Ò»µãµã
+BEGIN
+  for item in 
+  ( select last_name, job_id
+     from employees
+     where job_id like '%CLERK%'
+     and manager_id > 120 ) loop
+    dbms_output.put_line('name = ' || item.last_name || ', Job = ' || item.job_id);
+  end loop;
+END;
+/
+
+#+END_SRC
+
+** ´æ´¢¹ı³Ì
+¶Ô PL/SQL ¿éÆğ¸öÃû×Ö£¬´ïµ½¸´ÓÃµÄ½á¹û¡£
+
+¸úº¯Êı±È£¬¹ı³ÌÃ»ÓĞ return Óï¾ä¡£ËùÒÔ¸ü×¨×¢ÓÚ¹ı³Ì£¬¶ø·Ç·µ»Ø½á¹û¡£
+
+#+BEGIN_SRC sql
+-- ¼òµ¥Àõ×Ó
+create or replace procedure demo_procedure (arg number)
+is
+  name varchar2(20) := 'Tom';
+begin
+  dbms_output.put_line(name || ' is ' || arg || ' years old now.');
+end;
+/
+
+-- Ö´ĞĞ´æ´¢¹ı³Ì
+exec demo_procedure(9);
+-- or
+begin
+  demo_procedure(9);
+end;
+/
+
+#+END_SRC
+
+* LOCK
+ËøÊÇÎªÁË±£Ö¤Êı¾İµÄ²¢ĞĞĞÔ£¬Ò»ÖÂĞÔ£¬ÍêÕûĞÔ
+
+** ĞĞ¼¶Ëø£¬ÊÂÎñËø
+¿ÉÒÔÍ¨¹ı update/insert/delete/select for update ¶ÔÖ¸¶¨Êı¾İ¼ÓÉÏĞĞ¼¶Ëø¡£
+
+´óÖÂµÄÔ­ÀíÈçÏÂ£º
+#+BEGIN_QUOTE
+Oracle µÄÃ¿ĞĞÊı¾İÉÏ£¬¶¼´æÔÚÒ»¸ö±êÖ¾Î»±íÊ¾Ã¿ĞĞÊı¾İÊÇ·ñ±»Ëø¶¨¡£Ã¿¸ö±íÒ²ÓĞ±êÖ¾Î»±íÊ¾±íµÄËø¶¨Çé¿ö¡£
+: update emp set sal = sal + 1000 where empno = 7788;
+Oracle ¶ÔÓï¾ä½øĞĞ½âÎöºó£¬ÕÒµ½7788¼ÇÂ¼µÄÊı¾İ¿é£¬²¢ÕÒµ½Ò»¸ö¿ÉÓÃµÄundo¿é£¬½«salÁĞµÄÔ­Êı¾İ·ÅÈëundo¿é£¬
+È»ºóÔÚÊı¾İÍ·²¿ÉèÖÃÏàÓ¦SCN (System Change Number) ºÅ¡¢ÊÂÎñ²ÛĞÅÏ¢¡¢Ëø¶¨±êÖ¾µÈ£¬±íÃ÷ĞĞ±»Ëø¶¨¡£
+ÈôÓĞÆäËûÈËÒ²ÒªĞŞ¸ÄÕâÒ»ĞĞ£¬Æä¹ı³ÌÊÇÒ»ÑùµÄ£¬µ«ÔÚÉèÖÃËø¶¨±êÖ¾µÄÊ±ºò£¬Èç¹û·¢ÏÖËø¶¨ÒÑ¾­´æÔÚ£¬¾Í»áµÈ´ı£¬Ö±µ½Ö®Ç°µÄËøÏûÊ§¡£
+#+END_QUOTE
+
+ÏÂÃæ¾ä×ÓÖĞ£¬nowait±íÊ¾£¬Èç¹û·¢ÏÖÊı¾İËø¶¨ÁË£¬²»µÈ´ı£¬¶øÊÇÁ¢¿Ì·µ»Ø´íÎó¡£
+: select for update nowait;
+
+** ÀÖ¹ÛËø¡¢±¯¹ÛËø
+×Ô¼ºÕÒÒ»ÏÂÏà¹Ø×ÊÁÏ
+
+
+* µ¼Èëµ¼³ö
+ÕâÀïÖ»ÊÇ¼òµ¥Àõ×Ó£¬¸ü¶àÑ¡ÏîÇë²éÔÄ×ÊÁÏ
+#+BEGIN_SRC sh
+
+# exp ÃüÁîÓÃÀ´µ¼³öÊı¾İ
+# ÏÔÊ¾°ïÖúĞÅÏ¢
+exp help=y
+
+# ¾ÙÀı£º°Ñ scott ºÍ vip ÓÃ»§ÏÂµÄËùÓĞ±í¶¼µ¼³öÀ´£¬±£´æµ½ aaa ÎÄ¼ş
+exp system/orcl file=D:\aaa.dmp owner=(scott,vip)
+
+# imp ÃüÁîÓÃÀ´µ¼ÈëÊı¾İ
+# ¾ÙÀı£¬°Ñ aaa ÎÄ¼şÖĞµÄ scott ÓÃ»§µÄ±íµ¼Èëµ½ vip ÓÃ»§ÖĞ
+imp system/orcl file=D:\aaa.dmp fromuser=(scott) touser=(vip);
+
+#+END_SRC
+* Éú³ÉÅúÁ¿Êı¾İ
+#+BEGIN_SRC sql
+-- µÚÒ»ÖÖ£¬Éú³ÉËæ»úÊı£¬Ëæ»ú×Ö·û´®
+create sequence shello;
+
+create table demo as
+ select 
+     shello.nextval id,
+     'SIT_' || dbms_random.string('l', 5) abc,
+     round(dbms_random.value(0, 100)) score
+   from dual connect by level <= 100000;
+
+-- µÚ¶şÖÖ£¬ÓÃÒÑÓĞµÄÊı¾İ£¬Àı£º
+begin
+  for i in 1..100 loop
+     -- ¸´ÖÆ¶à·İÊı¾İ
+     insert into demo select xxx,yyy from dba_objects;
+  end loop;
+end;
+select row_number over (order by )
+
+
+
+
+
+
+#+END_SRC
+
+
+* ×÷ÒµÏà¹Ø
+#+BEGIN_SRC sql
+-- ¼òµ¥µÄ¹ı³ÌÓï¾ä¡£ÓÃÀ´ÔÚ t1 ±íÖĞ²åÈë 100000 ÌõÊı¾İ¡£
+create table t1 (id number, name varchar2(20));
+
+begin
+  for i in 1..100000 loop
+    insert into t1 values (i, 'zhouqiang');
+    commit;
+  end loop;
+
+end;
+/
+#+END_SRC
+
+ÁĞ³öµ±ÔÂËùÓĞµÄĞÇÆÚÎå.
+1. ĞèÒªÁĞ³öµ±ÔÂËùÓĞµÄÈÕÆÚ¡£
+
+   ĞèÒªÓÃµ½µÄÖªÊ¶µã£º
+   1) ±¾ÔÂµÚÒ»Ìì£º trunc
+   2) ±¾ÔÂ×îºóÒ»Ìì£º last_day
+   3) ¼ÆËã±¾ÔÂµÄÌìÊı£º ÌìÊı = ÔÂÄ© - ÔÂ³õ + 1
+   3) ÈçºÎ»ñÈ¡Á¬ĞøµÄÊ±¼ä
+
+      a. connect by
+         : select level from dual connect by level <= ±¾ÔÂµÄÌìÊı;
+      b. rownum
+         : select rownum from dba_objects where rownum <= ±¾ÔÂµÄÌìÊı;
+
 

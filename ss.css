@@ -2,7 +2,7 @@
  *  样式表，如果觉得不漂亮，自己修改
  */
 html {
-    font-size: 75%;
+    font-size: 70%;
     font-family: Tahoma,Helvetica,Arial,'新宋体',sans-serif;
     line-height: 1.5;
     color: #332;
@@ -145,8 +145,9 @@ section h2 {
     color: red;
 }
 section h3 {
-    font-size: 1.8rem;
-    color:orangered;
+    font-size: 2rem;
+    color: orangered;
+    margin-top: 80px;
 }
 .outline-3 {
     margin-top: 1rem;
