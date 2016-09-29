@@ -1790,30 +1790,41 @@ begin
 ...
 end;
 
--- 详细点，是这样的
+-- 一个完整点的栗子
 DECLARE
   -- 变量定义区，在这里定义所有要使用的变量（或常量）
   -- 这一部分是可选的
-  name varchar2(20) := 'hello';
-  name2 varchar2(20);
+  id number;
+  flag CONSTANT number := 1;      -- CONSTANT 关键字定义的是常量，后面不能被修改
+  name varchar2(20) := 'hello';   -- 可以在定义的时候，赋予初始值
+  sal emp.sal%TYPE;               -- 定义变量的类型可以用 %TYPE/%ROWTYPE 获取
 
 BEGIN
   -- 代码区，过程块的主体。
   -- 里面包含 DDL/DML 等 SQL 语句，也包含一些面向过程的控制语句。
-  select ename into name from emp where empno = 333;
 
-  create sequence s_001;
-
-  for i in 1..100 loop
-    insert into emp (empno, ename, sal) values (s_001.nextval, 'hello' || to_char(i), i*100)
-    returning ename into name2;
-
+  -- 判断语句
+  if flag = 1 then
     -- 这句相当于 java 中的 System.out.println(string);
-    dbms_output.put_line('员工的名字为: ' || ename);
+    dbms_output.put_line('号码： ' || flag);
+  end if;
 
+
+  -- select into 语句获取记录，并给变量赋值
+  select max(empno) into id from emp;
+
+
+  -- 循环语句
+  for i in 1..10 loop
+    -- insert into returning，完成插入操作，并把本行相关的信息赋值给变量
+    insert into emp (empno, ename, sal) values (id + i, dbms_random.string('u', 5), i*100)
+      returning ename, sal into name, sal;
+
+    dbms_output.put_line('员工' || name || '的工资为：' || sal);
     commit;
 
   end loop;
+
 
 EXCEPTION
   -- 这里是异常处理区，处理捕获到的异常
@@ -1824,6 +1835,7 @@ EXCEPTION
     dbms_output.put_line('未知错误:' || sqlerrm);
 
 END;
+/
 
 
 
@@ -1863,6 +1875,7 @@ begin
   n := 10/0;
 exception
   when others then
+    dbms_output.put_line('有错误发生');
     emsg := sqlerrm;
     insert into log values (emsg);
     commit;
@@ -1876,6 +1889,7 @@ end;
 
 -- 最基本的赋值运算符是:
 a := 666;
+
 
 -- 在 begin 之后，如果 select 语句不带 into 关键词的话，会报错。
 -- 通过 select x into y from 这样的句式，可以把查询到的结果赋值给相应变量。
@@ -1899,6 +1913,7 @@ end;
 -- result: SMITH  的工资是: 800美元
 
 
+
 -- 在增删改的过程中，DML语句之后通过加入 returning into 语句，
 -- 也可以实现跟 select into 类似的变量赋值。
 declare
@@ -1908,217 +1923,243 @@ begin
     returning sal + comm into a;
   dbms_output.put_line('King 现在的工资是:' || a);
 end;
+/
 
+
+
+-- 在游标的使用中， 是通过 fetch into 赋值
+declare
+  cursor a is select ename from emp;
+  b varchar2(20);
+begin
+  open a;
+  fetch a into b;   -- 通过 fetch into 把结果赋予 a;
+  dbms_output.put_line(b);
+  close a;
+end;
+/
 
 #+END_SRC
 
 
 ** 变量类型
-1. 标量类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
-   #+BEGIN_SRC sql
-   -- 这是最常用的数值类型的定义
-   declare
-     a number;
-     b number(20);
-     c int := 222;
-     d integer;
-     f float;
-   begin
-     d := 222;
-     dbms_output.put_line(d);
-   end;
-   /
 
-   -- 其他常用类型
-   declare
-     a varchar2(20);
-     b char(20);
-     c blob;
-     d date;
-   begin
-     a := 'hello';
-     b := ' world';
-     d := sysdate;
-   
-     dbms_output.put_line(a || b || to_char(d, 'yyyy/mm/dd'));
-   
-   end;
-   /
-   
-   #+END_SRC
+*** 标量类型(Scalar)，基本等同于 sql 中的数据类型，比如 varchar2, number, date, blob, raw 等，还包括 boolean 类型。
 
-2. TYPE/ROWTYPE
-   #+BEGIN_SRC sql
-   -- %type 是用来快速获取表中某个字段具体类型的一种方式。
-   -- 通过利用这种方式，可以简化我们的定义。
-   declare
-     a emp.ename%type;   -- 相当于 a varchar2(xx)
-     b emp.sal%type;     -- 相当于 b number(7,2)
-   begin
-     select ename, sal into a, b from emp where rownum < 2;
-     dbms_output.put_line('员工的名字是:' || a || ', 他的工资是: ' || b || ' 美元');
-   end;
+#+BEGIN_SRC sql
+-- 这是最常用的数值类型的定义
+declare
+  a number;
+  b number(20);
+  c int := 222;
+  d integer;
+  f float;
+begin
+  d := 222;
+  dbms_output.put_line(d);
+end;
+/
 
-   -- %rowtype 是一种获取行记录的方式，它包含了一行记录所有的字段。
-   -- 所以，我们可以用js中数组的角度去比较之。
-   declare
-     v_emp emp%rowtype;
-   begin
-     select * into v_emp from emp where rownum < 2;
-     dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 , 部门编号是: ' || v_emp.deptno2);
-   
-   end;
-   /
-   
-   
-   #+END_SRC
+-- 其他常用类型
+declare
+  a varchar2(20);
+  b char(20);
+  c blob;
+  d date;
+begin
+  a := 'hello';
+  b := ' world';
+  d := sysdate;
 
-3. 自定义记录/数组类型
-   #+BEGIN_SRC sql
-   -- 可以在基本类型的基础上，构造出许多的复杂的类型，比如数组。
-   -- record 类型，使用 name 来获取里面的值。
-   -- Oracle 中，定义新类型的语句为 type。比如，定义一个 record 数组，语句如下：
-   TYPE type_name IS RECORD (第一个元素的名字 第一个元素的基本类型, 第二个..., 第三个);
-   -- 类型定义完毕之后，就可以像普通的类型那样去使用了。如果，我们可以这样创建一个上述类型的变量
-   v_name type_name;
-   
-   -- 下面是一个具体点的例子
-   declare
-     type t_emp is record (ename varchar2(20), sal number);
-     v_emp t_emp;     -- 定义一个 t_emp 类型的变量。定义完变量之后，我们才可以使用。
-     v_emp2 t_emp;    -- 这是定义的第二个 t_emp 类型的变量.
-   begin
-     select ename, sal into v_emp from emp where rownum < 2;
-     dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 ');
-   end;
-   /
+  dbms_output.put_line(a || b || to_char(d, 'yyyy/mm/dd'));
 
-   -- 查询 KING 的工资和部门。利用了 record 类型。
-   declare
-     type t_emp is record (ename varchar2(20), sal number,dname varchar2(20));
-     v_emp t_emp;
-   begin
-     select ename, sal ,dname into v_emp from emp join scott.dept on emp.deptno=scott.dept.deptno where sal>1000;
-     dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 '||'部门是'||v_emp.dname);
-   end;
+end;
+/
+
+#+END_SRC
 
 
-   -- 数组类型，用序号来获取里面的值。
-   declare
-     type t_numarr is varray(4) of number;
-     a t_numarr;
-   begin
-     a := t_numarr(1, 22, 333, 4444);
-     dbms_output.put_line(a(1));
-     dbms_output.put_line(a(2));
-     dbms_output.put_line(a(3));
-     dbms_output.put_line(a(4));
-   end;
 
-   
-   #+END_SRC
+*** TYPE/ROWTYPE
+
+这是用来引用数据库中表的某一行，或某个字段的类型。
+
+#+BEGIN_SRC sql
+-- %type 是用来快速获取表中某个字段具体类型的一种方式。
+-- 通过利用这种方式，可以简化我们的定义。
+declare
+  a emp.ename%type;   -- 相当于 a varchar2(xx)
+  b emp.sal%type;     -- 相当于 b number(7,2)
+begin
+  select ename, sal into a, b from emp where rownum < 2;
+  dbms_output.put_line('员工的名字是:' || a || ', 他的工资是: ' || b || ' 美元');
+end;
+
+-- %rowtype 是一种获取行记录的方式，它包含了一行记录所有的字段。
+-- 所以，我们可以用js中数组的角度去比较之。
+declare
+  v_emp emp%rowtype;
+begin
+  select * into v_emp from emp where rownum < 2;
+  dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 , 部门编号是: ' || v_emp.deptno2);
+
+end;
+/
 
 
+#+END_SRC
+
+*** 自定义记录/数组类型
+#+BEGIN_SRC sql
+-- 可以在基本类型的基础上，构造出许多的复杂的类型，比如数组。
+-- record 类型，使用 name 来获取里面的值。
+-- Oracle 中，定义新类型的语句为 type。比如，定义一个 record 数组，语句如下：
+TYPE type_name IS RECORD (第一个元素的名字 第一个元素的基本类型, 第二个..., 第三个);
+-- 类型定义完毕之后，就可以像普通的类型那样去使用了。如果，我们可以这样创建一个上述类型的变量
+v_name type_name;
+
+-- 下面是一个具体点的例子
+declare
+  type t_emp is record (ename varchar2(20), sal number);
+  v_emp t_emp;     -- 定义一个 t_emp 类型的变量。定义完变量之后，我们才可以使用。
+  v_emp2 t_emp;    -- 这是定义的第二个 t_emp 类型的变量.
+begin
+  select ename, sal into v_emp from emp where rownum < 2;
+  dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 ');
+end;
+/
+
+-- 查询 KING 的工资和部门。利用了 record 类型。
+declare
+  type t_emp is record (ename varchar2(20), sal number,dname varchar2(20));
+  v_emp t_emp;
+begin
+  select ename, sal ,dname into v_emp from emp join scott.dept on emp.deptno=scott.dept.deptno where sal>1000;
+  dbms_output.put_line('结果是：' || v_emp.ename || '的工资是' || v_emp.sal || '英镑 '||'部门是'||v_emp.dname);
+end;
+
+
+
+-- 数组类型，用序号来获取里面的值。
+-- varray 关键字，需要指明长度，指明类型
+-- type 除了 record 和 varray 外，还有很多其他类型，比如 table,object 等。有兴趣的同学自己找资料。
+declare
+  type t_numarr is varray(4) of number;
+  a t_numarr;
+begin
+  a := t_numarr(1, 22, 333, 4444);
+  dbms_output.put_line(a(1));
+  dbms_output.put_line(a(2));
+  dbms_output.put_line(a(3));
+  dbms_output.put_line(a(4));
+end;
+
+
+#+END_SRC
 
 ** 操作符
-详情看 p227.
+详情看 p227
 ** 流程控制
 *** 分支判断(if/case)
-1. IF
-   #+BEGIN_SRC sql
-   -- 语法为
-   IF 条件 THEN
-     要执行的代码;
-   END IF;
+IF 语句
 
-   -- 复杂一点，需要用 elsif 和 else 添加更多的分支
-   IF 条件 THEN
-     要执行的代码;
-   ELSIF 另外的条件 THEN
-     要执行的代码;
-   ELSE
-     要执行的代码;
-   END IF;
+#+BEGIN_SRC sql
+-- 最简语法为
+IF 条件 THEN
+  要执行的代码;
+END IF;
 
-   -- 例子1，这是一个稍微详尽的例子
-   declare
-     a number;
-   begin
-     a := dbms_random.value(0, 4);
-     dbms_output.put_line('你输入的是:' || a);
-     if (a < 1) then
-       dbms_output.put_line('你输入的数字太小了');
-     elsif a < 2 then
-       dbms_output.put_line('诶呀，刚刚好啊');
-     else
-       dbms_output.put_line('您输入的太大了');
-     end if;
-   end;
-   /
+-- 复杂一点，需要用 elsif 和 else 添加更多的分支
+IF 条件 THEN
+  要执行的代码;
+ELSIF 另外的条件 THEN
+  要执行的代码;
+ELSE
+  要执行的代码;
+END IF;
 
 
-   -- if 的使用，例子2
-   declare
-     a number;
-   begin
-     a := round(dbms_random.value(0.5,3.5));  -- 取一个随机数，可能的值是 1/2/3
 
-     if a = 1 then
-       dbms_output.put_line('你是男生，应该多干活');
-     elsif a = 2 then
-       dbms_output.put_line('你是女生，应该多保养');
-     else
-       dbms_output.put_line('你先去验一下性别吧');
-     end if;
-
-   end;
-   /
-	 
-   #+END_SRC
-
-2. Case
-   #+BEGIN_SRC sql
-   CASE [字段]
-     WHEN 条件 THEN 要执行的代码
-     [WHEN 条件 THEN 要执行的代码]
-     [ELSE 要执行的代码]
-   END CASE;
+-- 例子1，这是一个稍微详尽的例子
+declare
+  a number;
+begin
+  a := dbms_random.value(0, 4);
+  dbms_output.put_line('你输入的是:' || a);
+  if (a < 1) then
+    dbms_output.put_line('你输入的数字太小了');
+  elsif a < 2 then
+    dbms_output.put_line('诶呀，刚刚好啊');
+  else
+    dbms_output.put_line('您输入的太大了');
+  end if;
+end;
+/
 
 
-   -- 把上面 if/else 的例子1翻译过来就是：
-   declare
-     a number;
-   begin
-     a := dbms_random.value(0, 4);
-     dbms_output.put_line(a);
-     case
-       when a < 1 then
-         dbms_output.put_line('你输入的数字太小了');
-       when a < 2 then
-         dbms_output.put_line('诶呀，刚刚好啊');
-       else 
-         dbms_output.put_line('您输入的太大了');
-     end case;
-   end;
-   /
+-- if 的使用，例子2
+declare
+  a number;
+begin
+  a := round(dbms_random.value(0.5,3.5));  -- 取一个随机数，可能的值是 1/2/3
+  if a = 1 then
+    dbms_output.put_line('你是男生，应该多干活');
+  elsif a = 2 then
+    dbms_output.put_line('你是女生，应该多保养');
+  else
+    dbms_output.put_line('你先去验一下性别吧');
+  end if;
 
-   -- 把上面 if 里面例子2翻译过来是：
-   declare
-     a number;
-   begin
-     a := round(dbms_random.value(0.5,3.5));
-     case a
-       when 1 then
-         dbms_output.put_line('你是男生，应该多干活');
-       when 2 then
-         dbms_output.put_line('你是女生，应该多保养');
-       else
-         dbms_output.put_line('你先去验一下性别吧');
-     end case;
-   end;
-   /
-   
-   #+END_SRC
+end;
+/
+
+#+END_SRC
+
+
+Case 语句
+
+#+BEGIN_SRC sql
+CASE [字段]
+  WHEN 条件 THEN 要执行的代码
+  [WHEN 条件 THEN 要执行的代码]
+  [ELSE 要执行的代码]
+END CASE;
+
+
+-- 把上面 if/else 的例子1翻译过来就是：
+declare
+  a number;
+begin
+  a := dbms_random.value(0, 4);
+  dbms_output.put_line(a);
+  case
+    when a < 1 then
+      dbms_output.put_line('你输入的数字太小了');
+    when a < 2 then
+      dbms_output.put_line('诶呀，刚刚好啊');
+    else 
+      dbms_output.put_line('您输入的太大了');
+  end case;
+end;
+/
+
+-- 把上面 if 里面例子2翻译过来是：
+declare
+  a number;
+begin
+  a := round(dbms_random.value(0.5,3.5));
+  case a
+    when 1 then
+      dbms_output.put_line('你是男生，应该多干活');
+    when 2 then
+      dbms_output.put_line('你是女生，应该多保养');
+    else
+      dbms_output.put_line('你先去验一下性别吧');
+  end case;
+end;
+/
+
+#+END_SRC
 
 *** 循环迭代
 loop
@@ -2164,7 +2205,6 @@ for
 -- 语法
 FOR 变量 IN 最小值..最大值 LOOP
   执行的语句;
-
 END LOOP;
 
 -- 下面是 loop 的进阶用法，要跟 for 结合使用
@@ -2178,12 +2218,15 @@ end;
 #+END_SRC
 
 
+
 while
 #+BEGIN_SRC sql
 -- 语法
 WHILE 条件 LOOP
   执行的语句;
 END LOOP;
+
+
 
 -- 举例
 declare
@@ -2199,36 +2242,37 @@ end;
 
 
 ** 异常处理
+作为一个优秀的程序员，肯定要能写出健壮的代码，而健壮代码的首要考虑，就是处理好异常。
 
+Oracle 运行过程中出现的错误，称之为 Oracle 异常。主要分为两种，一种是系统自定义异常(即内部异常)，一种是用户自定义异常。
+
+异常要有一个名字，一个编号(sqlcode)，一个描述(sqlerrm)。
+
+异常的基本捕获语句为：
 #+BEGIN_SRC sql
-
 declare
-  变量定义
-
+  变量定义;
 begin
-  代码运行
-
+  代码运行;
 exception
-  when others then
-    dbms_output.put_line('haha，你也会有今天。');
+  when 异常名称或者others then
+    出现异常后的处理代码;
 end;
-
 #+END_SRC
 
-
-
-
-*** 系统自带的异常
+*** 系统自定义的异常(Predefined)
+这种异常无需定义，当出现的时候会自动抛出，我们只需要在 exception 中做好相应的捕获处理就可以了。
+可以使用 sqlcode 和 sqlerrm 分别返回异常的代码编号，以及异常的描述信息。
 
 #+BEGIN_SRC sql
--- 里面有两种异常，一种是字母为零的异常，另一种呢，是没有查询到数据的异常。
+-- 栗子中有两种异常，一种是字母为零的异常(ZERO_DIVIDE)，另一种，是没有查询到数据的异常(NO_DATA_FOUND)。
 -- 这两种都是 Oracle 已经自定义好的异常，我们可以直接使用。
 declare
   a varchar2(20);
   b number;
 begin
-  b := 10000 / round(dbms_random.value(-0.1, 1.1));
-  select ename into a from emp where empno = 2222222222;
+  b := 10000 / round(dbms_random.value(-0.1, 1.1));       -- 随机数，0或者1，如果随机到0，则会抛出相应异常。
+  select ename into a from emp where empno = 2222222222;  -- 如果查询不到记录，则会抛出无数据记录异常。
   dbms_output.put_line('ok，您查询成功了');
 exception
   when no_data_found then
@@ -2243,14 +2287,35 @@ end;
 
 #+END_SRC
 
+
+有的内部异常，只有编号跟描述，没有具体名字，那么，我们需要用 PRAGMA EXCEPTION_INIT 来给异常起一个名字。
+#+BEGIN_SRC sql
+declare
+  nested_delete exception;   -- 先自定定义异常，名字为 nested_delete
+  PRAGMA EXCEPTION_INIT(nested_delete, -2292);  -- 以为记录存在外键约束这个系统异常只有一个编号为 -2292，没有名字。我们通过这个语句，给 -2292 这个异常赋予名字 nested_delete。
+begin
+  delete from dept where deptno = 10;           -- 这条记录存在外键约束，所以删除失败，抛出异常 -2292。因为上面定义了 -2292 为 nested_delete，所以会抛出一个 nested_delete 异常。
+exception
+  when nested_delete then
+    dbms_output.put_line('错误代码: ' || sqlcode);
+    dbms_output.put_line('错误信息: ' || sqlerrm);
+    dbms_output.put_line('deptno 被外键引用，所以删除失败');
+end;
+/
+
+#+END_SRC
+
 *** 用户自定义的异常
+手动抛出一个异常的语句如下，跟 java 中的 throw 语句类似。
+: raise exception
+如果想抛出一个带详细信息的异常，可以用到 Oracle 提供给我们的 raise_application_error，这是一个存储过程。
 
 #+BEGIN_SRC sql
 -- 自定义一个异常，需要在 declare 里面声明一个 exception 类型的变量
 -- 如果想手动抛出异常的话，需要用到 【raise 异常名字】 这样的语法
 declare
-   womendajiadeyichang exception;  
    a number;
+   womendajiadeyichang exception;  
 begin
    a := dbms_random.value(0, 4);
    if a > 2 then
@@ -2259,27 +2324,66 @@ begin
      raise womendajiadeyichang;
    end if;
 exception
+   when womendajiadeyichang then
+     dbms_output.put_line('我们大家的异常，我们大家的方案');
    when others then
-     dbms_output.put_line('womdyi 得到了有效处理');
+     dbms_output.put_line('我也不知道该怎么办');
 end;
 /
 
 
-#+END_SRC
-
-*** 打印异常信息
-#+BEGIN_SRC sql
-
+-- 可以通过上面的 PRAGMA 语句赋予编号等
+-- 这个代码编号应该在 -20000 到 -20999 之内，这是 Oracle 预留给我们用户使用的编号
 declare
-  a number;
-  c varchar2(88);
+   a number;
+   womendajiadeyichang exception;
+   pragma exception_init(womendajiadeyichang, -20001);
 begin
-  a := 10/0;
+   a := dbms_random.value(0, 4);
+   if a > 2 then
+     dbms_output.put_line('hehe, it is very great.');
+   else
+     raise womendajiadeyichang;
+   end if;
 exception
-  when others then
-    c := sqlerrm;
-    dbms_output.put_line(c);
+   when womendajiadeyichang then
+     dbms_output.put_line('我们大家的异常，我们大家的方案');
+   when others then
+     dbms_output.put_line('我也不知道该怎么办');
 end;
-  
+/
+
+
+-- 当然，也可以使用 raise_application_error(code, msg) 这个过程直接抛出异常。非常简单
+declare
+  res number := 0;
+begin
+  for i in 1..100 loop
+    res := res + i;
+    if res > 1000 then
+      raise_application_error(-20002, '当前的结果太大了！！！都超过1000了！！！');
+    end if;
+  end loop;
+end;
+/
+
+-- 如果想为上面的异常起一个名字，还是 pragma.
+declare
+  res number := 0;
+  out_of_range exception;
+  pragma exception_init(out_of_range, -20002);
+begin
+  for i in 1..100 loop
+    res := res + i;
+    if res > 1000 then
+      raise_application_error(-20002, '当前的结果太大了！！！都超过1000了！！！');
+    end if;
+  end loop;
+exception
+  when out_of_range then
+    dbms_output.put_line('outOfRangeError');
+end;
+/
 
 #+END_SRC
+
