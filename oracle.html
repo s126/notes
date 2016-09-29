@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Oracle11g</title>
-<!-- 2016-09-28 周三 08:38 -->
+<!-- 2016-09-29 周四 05:42 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -133,7 +133,13 @@
 <li><a href="#sec-12">PL/SQL</a>
 <ul>
 <li><a href="#sec-12-1">基本赋值</a></li>
-<li><a href="#sec-12-2">变量类型</a></li>
+<li><a href="#sec-12-2">变量类型</a>
+<ul>
+<li><a href="#sec-12-2-1">标量类型(Scalar)，基本等同于 sql 中的数据类型，比如 varchar2, number, date, blob, raw 等，还包括 boolean 类型。</a></li>
+<li><a href="#sec-12-2-2">TYPE/ROWTYPE</a></li>
+<li><a href="#sec-12-2-3">自定义记录/数组类型</a></li>
+</ul>
+</li>
 <li><a href="#sec-12-3">操作符</a></li>
 <li><a href="#sec-12-4">流程控制</a>
 <ul>
@@ -143,11 +149,11 @@
 </li>
 <li><a href="#sec-12-5">异常处理</a>
 <ul>
-<li><a href="#sec-12-5-1">系统自带的异常</a></li>
-<li><a href="#sec-12-5-2">用户自定义的异常</a></li>
-<li><a href="#sec-12-5-3">打印异常信息</a></li>
+<li><a href="#sec-12-5-1">系统自定义的异常(Predefined)</a></li>
+<li><a href="#sec-12-5-2">用户自定义的异常(UserDefined)</a></li>
 </ul>
 </li>
+<li><a href="#sec-12-6">动态SQL</a></li>
 </ul>
 </li>
 </ul>
@@ -3040,30 +3046,41 @@ set autotrace on
 ...
 <span style="color: #0000FF;">end</span>;
 
-<span style="color: #8D8D84; font-style: italic;">-- &#35814;&#32454;&#28857;&#65292;&#26159;&#36825;&#26679;&#30340;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#19968;&#20010;&#23436;&#25972;&#28857;&#30340;&#26647;&#23376;</span>
 <span style="color: #0000FF;">DECLARE</span>
   <span style="color: #8D8D84; font-style: italic;">-- &#21464;&#37327;&#23450;&#20041;&#21306;&#65292;&#22312;&#36825;&#37324;&#23450;&#20041;&#25152;&#26377;&#35201;&#20351;&#29992;&#30340;&#21464;&#37327;&#65288;&#25110;&#24120;&#37327;&#65289;</span>
   <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#19968;&#37096;&#20998;&#26159;&#21487;&#36873;&#30340;</span>
-  <span style="color: #0000FF;">name</span> varchar2<span style="color: #707183;">(</span>20<span style="color: #707183;">)</span> := <span style="color: #008000;">'hello'</span>;
-  name2 varchar2<span style="color: #707183;">(</span>20<span style="color: #707183;">)</span>;
+  id <span style="color: #0000FF;">number</span>;
+  flag CONSTANT <span style="color: #0000FF;">number</span> := 1;      <span style="color: #8D8D84; font-style: italic;">-- CONSTANT &#20851;&#38190;&#23383;&#23450;&#20041;&#30340;&#26159;&#24120;&#37327;&#65292;&#21518;&#38754;&#19981;&#33021;&#34987;&#20462;&#25913;</span>
+  <span style="color: #0000FF;">name</span> varchar2<span style="color: #707183;">(</span>20<span style="color: #707183;">)</span> := <span style="color: #008000;">'hello'</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#22312;&#23450;&#20041;&#30340;&#26102;&#20505;&#65292;&#36171;&#20104;&#21021;&#22987;&#20540;</span>
+  sal emp.sal%<span style="color: #0000FF;">TYPE</span>;               <span style="color: #8D8D84; font-style: italic;">-- &#23450;&#20041;&#21464;&#37327;&#30340;&#31867;&#22411;&#21487;&#20197;&#29992; %TYPE/%ROWTYPE &#33719;&#21462;</span>
 
 <span style="color: #0000FF;">BEGIN</span>
   <span style="color: #8D8D84; font-style: italic;">-- &#20195;&#30721;&#21306;&#65292;&#36807;&#31243;&#22359;&#30340;&#20027;&#20307;&#12290;</span>
   <span style="color: #8D8D84; font-style: italic;">-- &#37324;&#38754;&#21253;&#21547; DDL/DML &#31561; SQL &#35821;&#21477;&#65292;&#20063;&#21253;&#21547;&#19968;&#20123;&#38754;&#21521;&#36807;&#31243;&#30340;&#25511;&#21046;&#35821;&#21477;&#12290;</span>
-  <span style="color: #0000FF;">select</span> ename <span style="color: #0000FF;">into</span> <span style="color: #0000FF;">name</span> <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> empno = 333;
 
-  <span style="color: #0000FF;">create</span> <span style="color: #0000FF;">sequence</span> <span style="color: #006699;">s_001</span>;
-
-  <span style="color: #0000FF;">for</span> i <span style="color: #0000FF;">in</span> 1..100 loop
-    <span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> emp <span style="color: #707183;">(</span>empno, ename, sal<span style="color: #707183;">)</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>s_001.nextval, <span style="color: #008000;">'hello'</span> || to_char<span style="color: #7388D6;">(</span>i<span style="color: #7388D6;">)</span>, i*100<span style="color: #707183;">)</span>
-    returning ename <span style="color: #0000FF;">into</span> name2;
-
+  <span style="color: #8D8D84; font-style: italic;">-- &#21028;&#26029;&#35821;&#21477;</span>
+  if flag = 1 <span style="color: #0000FF;">then</span>
     <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#21477;&#30456;&#24403;&#20110; java &#20013;&#30340; System.out.println(string);</span>
-    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#21592;&#24037;&#30340;&#21517;&#23383;&#20026;: '</span> || ename<span style="color: #707183;">)</span>;
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#21495;&#30721;&#65306; '</span> || flag<span style="color: #707183;">)</span>;
+  <span style="color: #0000FF;">end</span> if;
 
+
+  <span style="color: #8D8D84; font-style: italic;">-- select into &#35821;&#21477;&#33719;&#21462;&#35760;&#24405;&#65292;&#24182;&#32473;&#21464;&#37327;&#36171;&#20540;</span>
+  <span style="color: #0000FF;">select</span> <span style="color: #006FE0;">max</span><span style="color: #707183;">(</span>empno<span style="color: #707183;">)</span> <span style="color: #0000FF;">into</span> id <span style="color: #0000FF;">from</span> emp;
+
+
+  <span style="color: #8D8D84; font-style: italic;">-- &#24490;&#29615;&#35821;&#21477;</span>
+  <span style="color: #0000FF;">for</span> i <span style="color: #0000FF;">in</span> 1..10 loop
+    <span style="color: #8D8D84; font-style: italic;">-- insert into returning&#65292;&#23436;&#25104;&#25554;&#20837;&#25805;&#20316;&#65292;&#24182;&#25226;&#26412;&#34892;&#30456;&#20851;&#30340;&#20449;&#24687;&#36171;&#20540;&#32473;&#21464;&#37327;</span>
+    <span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> emp <span style="color: #707183;">(</span>empno, ename, sal<span style="color: #707183;">)</span> <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>id + i, dbms_random.string<span style="color: #7388D6;">(</span><span style="color: #008000;">'u'</span>, 5<span style="color: #7388D6;">)</span>, i*100<span style="color: #707183;">)</span>
+      returning ename, sal <span style="color: #0000FF;">into</span> <span style="color: #0000FF;">name</span>, sal;
+
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#21592;&#24037;'</span> || <span style="color: #0000FF;">name</span> || <span style="color: #008000;">'&#30340;&#24037;&#36164;&#20026;&#65306;'</span> || sal<span style="color: #707183;">)</span>;
     <span style="color: #0000FF;">commit</span>;
 
   <span style="color: #0000FF;">end</span> loop;
+
 
 <span style="color: #0000FF;">EXCEPTION</span>
   <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#37324;&#26159;&#24322;&#24120;&#22788;&#29702;&#21306;&#65292;&#22788;&#29702;&#25429;&#33719;&#21040;&#30340;&#24322;&#24120;</span>
@@ -3074,6 +3091,7 @@ set autotrace on
     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#26410;&#30693;&#38169;&#35823;:'</span> || sqlerrm<span style="color: #707183;">)</span>;
 
 <span style="color: #0000FF;">END</span>;
+/
 
 
 
@@ -3113,6 +3131,7 @@ set autotrace on
   n := 10/0;
 <span style="color: #0000FF;">exception</span>
   <span style="color: #0000FF;">when</span> others <span style="color: #0000FF;">then</span>
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#26377;&#38169;&#35823;&#21457;&#29983;'</span><span style="color: #707183;">)</span>;
     emsg := sqlerrm;
     <span style="color: #0000FF;">insert</span> <span style="color: #0000FF;">into</span> log <span style="color: #0000FF;">values</span> <span style="color: #707183;">(</span>emsg<span style="color: #707183;">)</span>;
     <span style="color: #0000FF;">commit</span>;
@@ -3129,6 +3148,7 @@ set autotrace on
 
 <pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26368;&#22522;&#26412;&#30340;&#36171;&#20540;&#36816;&#31639;&#31526;&#26159;:</span>
 a := 666;
+
 
 <span style="color: #8D8D84; font-style: italic;">-- &#22312; begin &#20043;&#21518;&#65292;&#22914;&#26524; select &#35821;&#21477;&#19981;&#24102; into &#20851;&#38190;&#35789;&#30340;&#35805;&#65292;&#20250;&#25253;&#38169;&#12290;</span>
 <span style="color: #8D8D84; font-style: italic;">-- &#36890;&#36807; select x into y from &#36825;&#26679;&#30340;&#21477;&#24335;&#65292;&#21487;&#20197;&#25226;&#26597;&#35810;&#21040;&#30340;&#32467;&#26524;&#36171;&#20540;&#32473;&#30456;&#24212;&#21464;&#37327;&#12290;</span>
@@ -3152,6 +3172,7 @@ a := 666;
 <span style="color: #8D8D84; font-style: italic;">-- result: SMITH  &#30340;&#24037;&#36164;&#26159;: 800&#32654;&#20803;</span>
 
 
+
 <span style="color: #8D8D84; font-style: italic;">-- &#22312;&#22686;&#21024;&#25913;&#30340;&#36807;&#31243;&#20013;&#65292;DML&#35821;&#21477;&#20043;&#21518;&#36890;&#36807;&#21152;&#20837; returning into &#35821;&#21477;&#65292;</span>
 <span style="color: #8D8D84; font-style: italic;">-- &#20063;&#21487;&#20197;&#23454;&#29616;&#36319; select into &#31867;&#20284;&#30340;&#21464;&#37327;&#36171;&#20540;&#12290;</span>
 <span style="color: #0000FF;">declare</span>
@@ -3161,6 +3182,21 @@ a := 666;
     returning sal + comm <span style="color: #0000FF;">into</span> a;
   dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'King &#29616;&#22312;&#30340;&#24037;&#36164;&#26159;:'</span> || a<span style="color: #707183;">)</span>;
 <span style="color: #0000FF;">end</span>;
+/
+
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22312;&#28216;&#26631;&#30340;&#20351;&#29992;&#20013;&#65292; &#26159;&#36890;&#36807; fetch into &#36171;&#20540;</span>
+<span style="color: #0000FF;">declare</span>
+  <span style="color: #0000FF;">cursor</span> a <span style="color: #0000FF;">is</span> <span style="color: #0000FF;">select</span> ename <span style="color: #0000FF;">from</span> emp;
+  b varchar2<span style="color: #707183;">(</span>20<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">open</span> a;
+  <span style="color: #0000FF;">fetch</span> a <span style="color: #0000FF;">into</span> b;   <span style="color: #8D8D84; font-style: italic;">-- &#36890;&#36807; fetch into &#25226;&#32467;&#26524;&#36171;&#20104; a;</span>
+  dbms_output.put_line<span style="color: #707183;">(</span>b<span style="color: #707183;">)</span>;
+  <span style="color: #0000FF;">close</span> a;
+<span style="color: #0000FF;">end</span>;
+/
 </pre>
 </div>
 </div>
@@ -3170,8 +3206,9 @@ a := 666;
 <div id="outline-container-sec-12-2" class="outline-3">
 <h3 id="sec-12-2">变量类型</h3>
 <div class="outline-text-3" id="text-12-2">
-<ol class="org-ol">
-<li>标量类型，就是在 sql 中用到的数据类型，比如 varchar2, number, date, blob, raw 等。
+</div><div id="outline-container-sec-12-2-1" class="outline-4">
+<h4 id="sec-12-2-1">标量类型(Scalar)，基本等同于 sql 中的数据类型，比如 varchar2, number, date, blob, raw 等，还包括 boolean 类型。</h4>
+<div class="outline-text-4" id="text-12-2-1">
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#36825;&#26159;&#26368;&#24120;&#29992;&#30340;&#25968;&#20540;&#31867;&#22411;&#30340;&#23450;&#20041;</span>
@@ -3204,9 +3241,18 @@ a := 666;
 /
 </pre>
 </div>
-</li>
+</div>
+</div>
 
-<li>TYPE/ROWTYPE
+
+
+<div id="outline-container-sec-12-2-2" class="outline-4">
+<h4 id="sec-12-2-2">TYPE/ROWTYPE</h4>
+<div class="outline-text-4" id="text-12-2-2">
+<p>
+这是用来引用数据库中表的某一行，或某个字段的类型。
+</p>
+
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- %type &#26159;&#29992;&#26469;&#24555;&#36895;&#33719;&#21462;&#34920;&#20013;&#26576;&#20010;&#23383;&#27573;&#20855;&#20307;&#31867;&#22411;&#30340;&#19968;&#31181;&#26041;&#24335;&#12290;</span>
@@ -3231,9 +3277,12 @@ a := 666;
 /
 </pre>
 </div>
-</li>
+</div>
+</div>
 
-<li>自定义记录/数组类型
+<div id="outline-container-sec-12-2-3" class="outline-4">
+<h4 id="sec-12-2-3">自定义记录/数组类型</h4>
+<div class="outline-text-4" id="text-12-2-3">
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#22312;&#22522;&#26412;&#31867;&#22411;&#30340;&#22522;&#30784;&#19978;&#65292;&#26500;&#36896;&#20986;&#35768;&#22810;&#30340;&#22797;&#26434;&#30340;&#31867;&#22411;&#65292;&#27604;&#22914;&#25968;&#32452;&#12290;</span>
@@ -3264,7 +3313,10 @@ v_name type_name;
 <span style="color: #0000FF;">end</span>;
 
 
+
 <span style="color: #8D8D84; font-style: italic;">-- &#25968;&#32452;&#31867;&#22411;&#65292;&#29992;&#24207;&#21495;&#26469;&#33719;&#21462;&#37324;&#38754;&#30340;&#20540;&#12290;</span>
+<span style="color: #8D8D84; font-style: italic;">-- varray &#20851;&#38190;&#23383;&#65292;&#38656;&#35201;&#25351;&#26126;&#38271;&#24230;&#65292;&#25351;&#26126;&#31867;&#22411;</span>
+<span style="color: #8D8D84; font-style: italic;">-- type &#38500;&#20102; record &#21644; varray &#22806;&#65292;&#36824;&#26377;&#24456;&#22810;&#20854;&#20182;&#31867;&#22411;&#65292;&#27604;&#22914; table,object &#31561;&#12290;&#26377;&#20852;&#36259;&#30340;&#21516;&#23398;&#33258;&#24049;&#25214;&#36164;&#26009;&#12290;</span>
 <span style="color: #0000FF;">declare</span>
   <span style="color: #0000FF;">type</span> t_numarr <span style="color: #0000FF;">is</span> varray<span style="color: #707183;">(</span>4<span style="color: #707183;">)</span> <span style="color: #0000FF;">of</span> <span style="color: #0000FF;">number</span>;
   a t_numarr;
@@ -3277,18 +3329,15 @@ v_name type_name;
 <span style="color: #0000FF;">end</span>;
 </pre>
 </div>
-</li>
-</ol>
 </div>
 </div>
-
-
+</div>
 
 <div id="outline-container-sec-12-3" class="outline-3">
 <h3 id="sec-12-3">操作符</h3>
 <div class="outline-text-3" id="text-12-3">
 <p>
-详情看 p227.
+详情看 p227
 </p>
 </div>
 </div>
@@ -3298,11 +3347,13 @@ v_name type_name;
 </div><div id="outline-container-sec-12-4-1" class="outline-4">
 <h4 id="sec-12-4-1">分支判断(if/case)</h4>
 <div class="outline-text-4" id="text-12-4-1">
-<ol class="org-ol">
-<li>IF
+<p>
+IF 语句
+</p>
+
 <div class="org-src-container">
 
-<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#35821;&#27861;&#20026;</span>
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26368;&#31616;&#35821;&#27861;&#20026;</span>
 IF &#26465;&#20214; <span style="color: #0000FF;">THEN</span>
   &#35201;&#25191;&#34892;&#30340;&#20195;&#30721;;
 <span style="color: #0000FF;">END</span> IF;
@@ -3315,6 +3366,8 @@ ELSIF &#21478;&#22806;&#30340;&#26465;&#20214; <span style="color: #0000FF;">THE
 <span style="color: #0000FF;">ELSE</span>
   &#35201;&#25191;&#34892;&#30340;&#20195;&#30721;;
 <span style="color: #0000FF;">END</span> IF;
+
+
 
 <span style="color: #8D8D84; font-style: italic;">-- &#20363;&#23376;1&#65292;&#36825;&#26159;&#19968;&#20010;&#31245;&#24494;&#35814;&#23613;&#30340;&#20363;&#23376;</span>
 <span style="color: #0000FF;">declare</span>
@@ -3338,7 +3391,6 @@ ELSIF &#21478;&#22806;&#30340;&#26465;&#20214; <span style="color: #0000FF;">THE
   a <span style="color: #0000FF;">number</span>;
 <span style="color: #0000FF;">begin</span>
   a := round<span style="color: #707183;">(</span>dbms_random.<span style="color: #0000FF;">value</span><span style="color: #7388D6;">(</span>0.5,3.5<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;  <span style="color: #8D8D84; font-style: italic;">-- &#21462;&#19968;&#20010;&#38543;&#26426;&#25968;&#65292;&#21487;&#33021;&#30340;&#20540;&#26159; 1/2/3</span>
-
   if a = 1 <span style="color: #0000FF;">then</span>
     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#20320;&#26159;&#30007;&#29983;&#65292;&#24212;&#35813;&#22810;&#24178;&#27963;'</span><span style="color: #707183;">)</span>;
   elsif a = 2 <span style="color: #0000FF;">then</span>
@@ -3351,9 +3403,12 @@ ELSIF &#21478;&#22806;&#30340;&#26465;&#20214; <span style="color: #0000FF;">THE
 /
 </pre>
 </div>
-</li>
 
-<li>Case
+
+<p>
+Case 语句
+</p>
+
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #0000FF;">CASE</span> <span style="color: #707183;">[</span>&#23383;&#27573;<span style="color: #707183;">]</span>
@@ -3397,8 +3452,6 @@ ELSIF &#21478;&#22806;&#30340;&#26465;&#20214; <span style="color: #0000FF;">THE
 /
 </pre>
 </div>
-</li>
-</ol>
 </div>
 </div>
 
@@ -3454,7 +3507,6 @@ for
 <pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#35821;&#27861;</span>
 <span style="color: #0000FF;">FOR</span> &#21464;&#37327; <span style="color: #0000FF;">IN</span> &#26368;&#23567;&#20540;..&#26368;&#22823;&#20540; LOOP
   &#25191;&#34892;&#30340;&#35821;&#21477;;
-
 <span style="color: #0000FF;">END</span> LOOP;
 
 <span style="color: #8D8D84; font-style: italic;">-- &#19979;&#38754;&#26159; loop &#30340;&#36827;&#38454;&#29992;&#27861;&#65292;&#35201;&#36319; for &#32467;&#21512;&#20351;&#29992;</span>
@@ -3468,6 +3520,7 @@ for
 </div>
 
 
+
 <p>
 while
 </p>
@@ -3477,6 +3530,8 @@ while
 WHILE &#26465;&#20214; LOOP
   &#25191;&#34892;&#30340;&#35821;&#21477;;
 <span style="color: #0000FF;">END</span> LOOP;
+
+
 
 <span style="color: #8D8D84; font-style: italic;">-- &#20030;&#20363;</span>
 <span style="color: #0000FF;">declare</span>
@@ -3497,38 +3552,53 @@ WHILE &#26465;&#20214; LOOP
 <div id="outline-container-sec-12-5" class="outline-3">
 <h3 id="sec-12-5">异常处理</h3>
 <div class="outline-text-3" id="text-12-5">
+<p>
+作为一个优秀的程序员，肯定要能写出健壮的代码，而健壮代码的首要考虑，就是处理好异常。
+</p>
+
+<p>
+Oracle 运行过程中出现的错误，称之为 Oracle 异常。主要分为两种，一种是系统自定义异常(即内部异常)，一种是用户自定义异常。
+</p>
+
+<p>
+异常要有一个名字，一个编号(sqlcode)，一个描述(sqlerrm)。
+</p>
+
+<p>
+异常的基本捕获语句为：
+</p>
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #0000FF;">declare</span>
-  &#21464;&#37327;&#23450;&#20041;
-
+  &#21464;&#37327;&#23450;&#20041;;
 <span style="color: #0000FF;">begin</span>
-  &#20195;&#30721;&#36816;&#34892;
-
+  &#20195;&#30721;&#36816;&#34892;;
 <span style="color: #0000FF;">exception</span>
-  <span style="color: #0000FF;">when</span> others <span style="color: #0000FF;">then</span>
-    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'haha&#65292;&#20320;&#20063;&#20250;&#26377;&#20170;&#22825;&#12290;'</span><span style="color: #707183;">)</span>;
+  <span style="color: #0000FF;">when</span> &#24322;&#24120;&#21517;&#31216;&#25110;&#32773;others <span style="color: #0000FF;">then</span>
+    &#20986;&#29616;&#24322;&#24120;&#21518;&#30340;&#22788;&#29702;&#20195;&#30721;;
 <span style="color: #0000FF;">end</span>;
 </pre>
 </div>
 </div>
 
-
-
-
 <div id="outline-container-sec-12-5-1" class="outline-4">
-<h4 id="sec-12-5-1">系统自带的异常</h4>
+<h4 id="sec-12-5-1">系统自定义的异常(Predefined)</h4>
 <div class="outline-text-4" id="text-12-5-1">
+<p>
+这种异常无需定义，当出现的时候会自动抛出，我们只需要在 exception 中做好相应的捕获处理就可以了。
+可以使用 sqlcode 和 sqlerrm 分别返回异常的代码编号，以及异常的描述信息。
+</p>
+
 <div class="org-src-container">
 
-<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#37324;&#38754;&#26377;&#20004;&#31181;&#24322;&#24120;&#65292;&#19968;&#31181;&#26159;&#23383;&#27597;&#20026;&#38646;&#30340;&#24322;&#24120;&#65292;&#21478;&#19968;&#31181;&#21602;&#65292;&#26159;&#27809;&#26377;&#26597;&#35810;&#21040;&#25968;&#25454;&#30340;&#24322;&#24120;&#12290;</span>
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#26647;&#23376;&#20013;&#26377;&#20004;&#31181;&#24322;&#24120;&#65292;&#19968;&#31181;&#26159;&#23383;&#27597;&#20026;&#38646;&#30340;&#24322;&#24120;(ZERO_DIVIDE)&#65292;&#21478;&#19968;&#31181;&#65292;&#26159;&#27809;&#26377;&#26597;&#35810;&#21040;&#25968;&#25454;&#30340;&#24322;&#24120;(NO_DATA_FOUND)&#12290;</span>
 <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#20004;&#31181;&#37117;&#26159; Oracle &#24050;&#32463;&#33258;&#23450;&#20041;&#22909;&#30340;&#24322;&#24120;&#65292;&#25105;&#20204;&#21487;&#20197;&#30452;&#25509;&#20351;&#29992;&#12290;</span>
 <span style="color: #0000FF;">declare</span>
   a varchar2<span style="color: #707183;">(</span>20<span style="color: #707183;">)</span>;
   b <span style="color: #0000FF;">number</span>;
 <span style="color: #0000FF;">begin</span>
-  b := 10000 / round<span style="color: #707183;">(</span>dbms_random.<span style="color: #0000FF;">value</span><span style="color: #7388D6;">(</span>-0.1, 1.1<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
-  <span style="color: #0000FF;">select</span> ename <span style="color: #0000FF;">into</span> a <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> empno = 2222222222;
+  b := 10000 / round<span style="color: #707183;">(</span>dbms_random.<span style="color: #0000FF;">value</span><span style="color: #7388D6;">(</span>-0.1, 1.1<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;       <span style="color: #8D8D84; font-style: italic;">-- &#38543;&#26426;&#25968;&#65292;0&#25110;&#32773;1&#65292;&#22914;&#26524;&#38543;&#26426;&#21040;0&#65292;&#21017;&#20250;&#25243;&#20986;&#30456;&#24212;&#24322;&#24120;&#12290;</span>
+  <span style="color: #0000FF;">select</span> ename <span style="color: #0000FF;">into</span> a <span style="color: #0000FF;">from</span> emp <span style="color: #0000FF;">where</span> empno = 2222222222;  <span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#26597;&#35810;&#19981;&#21040;&#35760;&#24405;&#65292;&#21017;&#20250;&#25243;&#20986;&#26080;&#25968;&#25454;&#35760;&#24405;&#24322;&#24120;&#12290;</span>
   dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'ok&#65292;&#24744;&#26597;&#35810;&#25104;&#21151;&#20102;'</span><span style="color: #707183;">)</span>;
 <span style="color: #0000FF;">exception</span>
   <span style="color: #0000FF;">when</span> no_data_found <span style="color: #0000FF;">then</span>
@@ -3541,19 +3611,50 @@ WHILE &#26465;&#20214; LOOP
 /
 </pre>
 </div>
+
+
+<p>
+有的内部异常，只有编号跟描述，没有具体名字，那么，我们需要用 PRAGMA EXCEPTION_INIT 来给异常起一个名字。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #0000FF;">declare</span>
+  nested_delete <span style="color: #0000FF;">exception</span>;   <span style="color: #8D8D84; font-style: italic;">-- &#20808;&#33258;&#23450;&#23450;&#20041;&#24322;&#24120;&#65292;&#21517;&#23383;&#20026; nested_delete</span>
+  PRAGMA EXCEPTION_INIT<span style="color: #707183;">(</span>nested_delete, -2292<span style="color: #707183;">)</span>;  <span style="color: #8D8D84; font-style: italic;">-- &#20197;&#20026;&#35760;&#24405;&#23384;&#22312;&#22806;&#38190;&#32422;&#26463;&#36825;&#20010;&#31995;&#32479;&#24322;&#24120;&#21482;&#26377;&#19968;&#20010;&#32534;&#21495;&#20026; -2292&#65292;&#27809;&#26377;&#21517;&#23383;&#12290;&#25105;&#20204;&#36890;&#36807;&#36825;&#20010;&#35821;&#21477;&#65292;&#32473; -2292 &#36825;&#20010;&#24322;&#24120;&#36171;&#20104;&#21517;&#23383; nested_delete&#12290;</span>
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">delete</span> <span style="color: #0000FF;">from</span> dept <span style="color: #0000FF;">where</span> deptno = 10;           <span style="color: #8D8D84; font-style: italic;">-- &#36825;&#26465;&#35760;&#24405;&#23384;&#22312;&#22806;&#38190;&#32422;&#26463;&#65292;&#25152;&#20197;&#21024;&#38500;&#22833;&#36133;&#65292;&#25243;&#20986;&#24322;&#24120; -2292&#12290;&#22240;&#20026;&#19978;&#38754;&#23450;&#20041;&#20102; -2292 &#20026; nested_delete&#65292;&#25152;&#20197;&#20250;&#25243;&#20986;&#19968;&#20010; nested_delete &#24322;&#24120;&#12290;</span>
+<span style="color: #0000FF;">exception</span>
+  <span style="color: #0000FF;">when</span> nested_delete <span style="color: #0000FF;">then</span>
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#38169;&#35823;&#20195;&#30721;: '</span> || sqlcode<span style="color: #707183;">)</span>;
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#38169;&#35823;&#20449;&#24687;: '</span> || sqlerrm<span style="color: #707183;">)</span>;
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'deptno &#34987;&#22806;&#38190;&#24341;&#29992;&#65292;&#25152;&#20197;&#21024;&#38500;&#22833;&#36133;'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+/
+</pre>
+</div>
 </div>
 </div>
 
 <div id="outline-container-sec-12-5-2" class="outline-4">
-<h4 id="sec-12-5-2">用户自定义的异常</h4>
+<h4 id="sec-12-5-2">用户自定义的异常(UserDefined)</h4>
 <div class="outline-text-4" id="text-12-5-2">
+<p>
+手动抛出一个异常的语句如下，跟 java 中的 throw 语句类似。
+</p>
+<pre class="example">
+raise exception
+</pre>
+<p>
+如果想抛出一个带详细信息的异常，可以用到 Oracle 提供给我们的 raise_application_error，这是一个存储过程。
+</p>
+
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#33258;&#23450;&#20041;&#19968;&#20010;&#24322;&#24120;&#65292;&#38656;&#35201;&#22312; declare &#37324;&#38754;&#22768;&#26126;&#19968;&#20010; exception &#31867;&#22411;&#30340;&#21464;&#37327;</span>
 <span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#24819;&#25163;&#21160;&#25243;&#20986;&#24322;&#24120;&#30340;&#35805;&#65292;&#38656;&#35201;&#29992;&#21040; &#12304;raise &#24322;&#24120;&#21517;&#23383;&#12305; &#36825;&#26679;&#30340;&#35821;&#27861;</span>
 <span style="color: #0000FF;">declare</span>
-   womendajiadeyichang <span style="color: #0000FF;">exception</span>;  
    a <span style="color: #0000FF;">number</span>;
+   womendajiadeyichang <span style="color: #0000FF;">exception</span>;  
 <span style="color: #0000FF;">begin</span>
    a := dbms_random.<span style="color: #0000FF;">value</span><span style="color: #707183;">(</span>0, 4<span style="color: #707183;">)</span>;
    if a &gt; 2 <span style="color: #0000FF;">then</span>
@@ -3562,32 +3663,87 @@ WHILE &#26465;&#20214; LOOP
      raise womendajiadeyichang;
    <span style="color: #0000FF;">end</span> if;
 <span style="color: #0000FF;">exception</span>
+   <span style="color: #0000FF;">when</span> womendajiadeyichang <span style="color: #0000FF;">then</span>
+     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#25105;&#20204;&#22823;&#23478;&#30340;&#24322;&#24120;&#65292;&#25105;&#20204;&#22823;&#23478;&#30340;&#26041;&#26696;'</span><span style="color: #707183;">)</span>;
    <span style="color: #0000FF;">when</span> others <span style="color: #0000FF;">then</span>
-     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'womdyi &#24471;&#21040;&#20102;&#26377;&#25928;&#22788;&#29702;'</span><span style="color: #707183;">)</span>;
+     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#25105;&#20063;&#19981;&#30693;&#36947;&#35813;&#24590;&#20040;&#21150;'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+/
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#21487;&#20197;&#36890;&#36807;&#19978;&#38754;&#30340; PRAGMA &#35821;&#21477;&#36171;&#20104;&#32534;&#21495;&#31561;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#36825;&#20010;&#20195;&#30721;&#32534;&#21495;&#24212;&#35813;&#22312; -20000 &#21040; -20999 &#20043;&#20869;&#65292;&#36825;&#26159; Oracle &#39044;&#30041;&#32473;&#25105;&#20204;&#29992;&#25143;&#20351;&#29992;&#30340;&#32534;&#21495;</span>
+<span style="color: #0000FF;">declare</span>
+   a <span style="color: #0000FF;">number</span>;
+   womendajiadeyichang <span style="color: #0000FF;">exception</span>;
+   pragma exception_init<span style="color: #707183;">(</span>womendajiadeyichang, -20001<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">begin</span>
+   a := dbms_random.<span style="color: #0000FF;">value</span><span style="color: #707183;">(</span>0, 4<span style="color: #707183;">)</span>;
+   if a &gt; 2 <span style="color: #0000FF;">then</span>
+     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'hehe, it is very great.'</span><span style="color: #707183;">)</span>;
+   <span style="color: #0000FF;">else</span>
+     raise womendajiadeyichang;
+   <span style="color: #0000FF;">end</span> if;
+<span style="color: #0000FF;">exception</span>
+   <span style="color: #0000FF;">when</span> womendajiadeyichang <span style="color: #0000FF;">then</span>
+     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#25105;&#20204;&#22823;&#23478;&#30340;&#24322;&#24120;&#65292;&#25105;&#20204;&#22823;&#23478;&#30340;&#26041;&#26696;'</span><span style="color: #707183;">)</span>;
+   <span style="color: #0000FF;">when</span> others <span style="color: #0000FF;">then</span>
+     dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'&#25105;&#20063;&#19981;&#30693;&#36947;&#35813;&#24590;&#20040;&#21150;'</span><span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">end</span>;
+/
+
+
+<span style="color: #8D8D84; font-style: italic;">-- &#24403;&#28982;&#65292;&#20063;&#21487;&#20197;&#20351;&#29992; raise_application_error(code, msg) &#36825;&#20010;&#36807;&#31243;&#30452;&#25509;&#25243;&#20986;&#24322;&#24120;&#12290;&#38750;&#24120;&#31616;&#21333;</span>
+<span style="color: #0000FF;">declare</span>
+  res <span style="color: #0000FF;">number</span> := 0;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">for</span> i <span style="color: #0000FF;">in</span> 1..100 loop
+    res := res + i;
+    if res &gt; 1000 <span style="color: #0000FF;">then</span>
+      raise_application_error<span style="color: #707183;">(</span>-20002, <span style="color: #008000;">'&#24403;&#21069;&#30340;&#32467;&#26524;&#22826;&#22823;&#20102;&#65281;&#65281;&#65281;&#37117;&#36229;&#36807;1000&#20102;&#65281;&#65281;&#65281;'</span><span style="color: #707183;">)</span>;
+    <span style="color: #0000FF;">end</span> if;
+  <span style="color: #0000FF;">end</span> loop;
+<span style="color: #0000FF;">end</span>;
+/
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#24819;&#20026;&#19978;&#38754;&#30340;&#24322;&#24120;&#36215;&#19968;&#20010;&#21517;&#23383;&#65292;&#36824;&#26159; pragma.</span>
+<span style="color: #0000FF;">declare</span>
+  res <span style="color: #0000FF;">number</span> := 0;
+  out_of_range <span style="color: #0000FF;">exception</span>;
+  pragma exception_init<span style="color: #707183;">(</span>out_of_range, -20002<span style="color: #707183;">)</span>;
+<span style="color: #0000FF;">begin</span>
+  <span style="color: #0000FF;">for</span> i <span style="color: #0000FF;">in</span> 1..100 loop
+    res := res + i;
+    if res &gt; 1000 <span style="color: #0000FF;">then</span>
+      raise_application_error<span style="color: #707183;">(</span>-20002, <span style="color: #008000;">'&#24403;&#21069;&#30340;&#32467;&#26524;&#22826;&#22823;&#20102;&#65281;&#65281;&#65281;&#37117;&#36229;&#36807;1000&#20102;&#65281;&#65281;&#65281;'</span><span style="color: #707183;">)</span>;
+    <span style="color: #0000FF;">end</span> if;
+  <span style="color: #0000FF;">end</span> loop;
+<span style="color: #0000FF;">exception</span>
+  <span style="color: #0000FF;">when</span> out_of_range <span style="color: #0000FF;">then</span>
+    dbms_output.put_line<span style="color: #707183;">(</span><span style="color: #008000;">'outOfRangeError'</span><span style="color: #707183;">)</span>;
 <span style="color: #0000FF;">end</span>;
 /
 </pre>
 </div>
+<p>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+</p>
 </div>
 </div>
-
-<div id="outline-container-sec-12-5-3" class="outline-4">
-<h4 id="sec-12-5-3">打印异常信息</h4>
-<div class="outline-text-4" id="text-12-5-3">
+</div>
+<div id="outline-container-sec-12-6" class="outline-3">
+<h3 id="sec-12-6">动态SQL</h3>
+<div class="outline-text-3" id="text-12-6">
 <div class="org-src-container">
 
 <pre class="src src-sql"><span style="color: #0000FF;">declare</span>
-  a <span style="color: #0000FF;">number</span>;
-  c varchar2<span style="color: #707183;">(</span>88<span style="color: #707183;">)</span>;
+  sqls varchar2<span style="color: #707183;">(</span>40<span style="color: #707183;">)</span>;
 <span style="color: #0000FF;">begin</span>
-  a := 10/0;
-<span style="color: #0000FF;">exception</span>
-  <span style="color: #0000FF;">when</span> others <span style="color: #0000FF;">then</span>
-    c := sqlerrm;
-    dbms_output.put_line<span style="color: #707183;">(</span>c<span style="color: #707183;">)</span>;
+  sqls := <span style="color: #008000;">'drop table vi2'</span>;
+  <span style="color: #0000FF;">execute</span> <span style="color: #0000FF;">immediate</span> sqls;
 <span style="color: #0000FF;">end</span>;
+/
 </pre>
-</div>
 </div>
 </div>
 </div>
@@ -3595,7 +3751,7 @@ WHILE &#26465;&#20214; LOOP
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-09-28 周三 08:38</p>
+<p class="date">Created: 2016-09-29 周四 05:42</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
