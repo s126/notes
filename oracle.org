@@ -2283,3 +2283,14 @@ end;
   
 
 #+END_SRC
+** ¶¯Ì¬SQL
+#+BEGIN_SRC sql
+declare
+  sqls varchar2(40);
+begin
+  sqls := 'drop table vi2';
+  execute immediate sqls;
+end;
+/
+
+#+END_SRC
