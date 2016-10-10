@@ -4,15 +4,50 @@
 
 
 * 框架
-框架是一个半成品。它提供了一些 api 或者实用方法给我们直接调用。
+框架是一个半成品。它提供了一些接口、类、方法，我们可以直接调用。
+
 所以使用框架，相当于在别人开发了一半的项目上继续开发。
+
 因此，框架有以下优势：
 1. 能提高我们的开发效率。
-2. 能提高代码的健壮性。比如，jquery的跨浏览器问题。
-3. 简化开发，能够让我们把主要的精力放在业务方面。
+2. 能大幅度减少我们的代码量。
+3. 能提高代码的健壮性。比如，jquery的跨浏览器问题。
+
 
 * 简介
-https://struts.apache.org/
 
-下载地址:
-http://120.198.248.23/cache/mirrors.cnnic.cn/apache/struts/2.3.30/struts-2.3.30-all.zip?ich_args2=32-10134407055887_2619f0059ca59cae168956a803841fb7_10001002_9c88632ad7c4f9d3903b518939a83798_9e8963827d6c69d6931793461c6487c1
+Struts2 是一个流行的 MVC 框架。
+
+官方网站：https://struts.apache.org/
+
+
+导入 struts-blank 项目有两种方式： maven 方式和一般方式。下面介绍一般的方式：
+1. 在 eclipse 中，选择新建一个 dynamic web project，例如名字为 ls02.
+2. 将 src/apps/blank/src/main/java 下的文件复制到 workspace/ls02/src 文件夹下。
+3. 将 src/apps/blank/src/main/resources 下的文件复制到 workspace/ls02/src 文件夹下。
+4. 将 src/apps/blank/src/main/webapp 下的文件复制到 workspace/ls02/WebContent 文件夹下。
+5. 将相关的 jar 包放到 workspace/ls02/WebContent/WEB-INF/lib 文件夹下。
+
+需要的jar包有以下：
+- asm-3.3.jar
+- asm-commons-3.3.jar
+- asm-tree-3.3.jar
+- commons-fileupload-1.3.2.jar
+- commons-io-2.2.jar
+- commons-lang3-3.2.jar
+- hamcrest-core-1.3.jar
+- javassist-3.11.0.GA.jar
+- javax.servlet-api-3.1.0.jar
+- javax.servlet.jsp-api-2.3.1.jar
+- jstl-1.2.jar
+- junit-4.12.jar
+- log4j-1.2.17.jar
+- ognl-3.0.19.jar
+- ojdbc7.jar
+- struts2-core-2.3.30.jar
+- struts2-json-plugin-2.3.30.jar
+- xwork-core-2.3.30.jar
+
+
+
+
