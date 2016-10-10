@@ -49,5 +49,21 @@ Struts2 是一个流行的 MVC 框架。
 - xwork-core-2.3.30.jar
 
 
+** namespace
+
+http://loaclhost:8080/blanker/listAll.action  "/"
+
+http://loaclhost:8080/blanker/test/HelloWorld  "/test"
+http://loaclhost:8080/blanker/test/Girl
+
+http://loaclhost:8080/blanker/person/listAll.action  "/person"
+http://loaclhost:8080/blanker/person/addNew.action
+http://loaclhost:8080/blanker/person/delte.action
+
+http://localhost:8088/blanker/index.action
+http://localhsot:8080/blanker/index.action
+
+http://localhost:8088/blanker/example/HelloWorld.action
+
 
 
