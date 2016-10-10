@@ -1,6 +1,17 @@
 #+TITLE: 常用工具
 
 
+* Emacs 常用命令
+1. 保存
+   Ctrl-x Ctrl-s
+
+2. 生成 html
+   Ctrl-C Ctrl-e h h
+
+3. 复制
+   Alt-W
+
+
 * 版本控制工具之 GIT
 
 Git 是一个版本控制工具，它能实现团队中的代码协作开发，在代码同步和管理方面功能强大、理念先进。
@@ -116,13 +127,32 @@ git push origin master                             # 本地的 master 分支有�
 #+END_SRC
 
 
-* Emacs 常用命令
-1. 保存
-   Ctrl-x Ctrl-s
+* 依赖管理工具之 Maven
+以下是在 eclipse 中创建一个 maven 项目的步骤。
 
-2. 生成 html
-   Ctrl-C Ctrl-e h h
+1. 新建 Maven 项目: File -> New -> Maven Project
+2. 选择 maven-archetype-webapp 类型
+3. 填写相应的名称等，完成创建。
+4. 添加相关依赖，即修改 pom.xml，增加:
+   #+BEGIN_SRC xml
+   <dependency>
+     <groupId>junit</groupId>
+     <artifactId>junit</artifactId>
+     <version>4.12</version>
+     <scope>test</scope>
+   </dependency>
 
-3. 复制
-   Alt-W
+   <dependency>
+     <groupId>org.apache.struts</groupId>
+     <artifactId>struts2-core</artifactId>
+     <version>2.3.30</version>
+   </dependency>
 
+   <dependency>
+     <groupId>log4j</groupId>
+     <artifactId>log4j</artifactId>
+     <version>1.2.17</version>
+   </dependency>
+   #+END_SRC
+
+5. 将项目添加到 tomcat，运行起来。
