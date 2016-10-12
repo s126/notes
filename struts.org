@@ -1,4 +1,4 @@
-#+TITLE: Struts2
+#+TITLEE: Struts2
 
 
 
@@ -67,3 +67,148 @@ http://localhost:8088/blanker/example/HelloWorld.action
 
 
 
+
+http://localhost:8088/blanker/
+
+/example  # namespace
+HelloWorld.action  # action
+
+
+http://localhost/blanker/emp/listAll.action
+
+
+http://localhost:8088/blanker/emp/emp_listAll.action
+namespace: /emp
+action: emp_listAll
+
+
+http://localhost:8088/blanker/emp/emp_killbill.action
+* 示例，注册登录
+** 业务分析
+我们需要以下四个请求：、
+1. 第一个请求：
+
+   显示登录的页面。  login.jsp
+
+2. 第二个请求：
+   点击登录之后，要完成登录的操作。
+   welcome.jsp
+   fail.jsp
+
+3. 第三个请求：
+   显示注册的页面。
+   regist.jsp
+
+4. 第四个请求：
+   点击“注册”按钮之后，完成注册的操作。
+   login.jsp
+   regerror.jsp
+
+** 实现步骤：
+1. 建立动态web项目。
+  
+   打开 eclipse，选择 File -> New -> Dynamic Web Project(快捷键为Ctrl-N)。
+
+   注意，工程名字尽量简洁，尽量用小写字母和_的组合。
+
+   注意，在创建的工程的时候，将创建 web.xml 的选项勾上。
+   因为在 servlet3 版本中，可以不需要 web.xml 的情况下运行 web 工程，但是我们要使用 struts2，必须要在 web.xml 中进行若干的配置。
+
+2. 将相关的 jar 包，复制到 工程目录/WebContent/WEB-INF/lib 文件夹下面。
+
+   注意，一定不要缺少某些关键包，否则可能会报错。
+
+   注意，如果出现一些莫名其妙的问题，包括像报 ClassNotFound 的异常，这时候，首先要检查是否有 jar 包的缺失。
+
+3. 配置 web.xml，将所有的请求交给 struts 进行处理。
+
+   即在 web.xml 中添加以下内容：
+   #+BEGIN_SRC xml
+   <filter>
+       <filter-name>struts</filter-name>
+       <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+   </filter>
+   <filter-mapping>
+       <filter-name>struts</filter-name>
+       <url-pattern>/*</url-pattern>
+   </filter-mapping>
+   #+END_SRC
+
+   注意： filter-name 是可以随意定义的，不过哦上下两个节点需要对应，不要写错。
+
+   注意： 要确保 filter-class 的值写正确，这是一个确切存在的过滤器类。可以通过查看 struts2-core.jar 的源码去确定。
+
+   注意： 在 elipse 左边的 Web App Libraries 下面，找到 struts2-core.jar，打开节点，直到 StrutsPrepareAndExecuteFilter，然后右键点击，选择 Copy Qualified Name，这样就把这个过滤器的完整路径复制下来了。然后就可以在 web.xml 中进行粘贴了。
+
+   注意： 如果创建完工程之后，发现没有 web.xml，那么你需要自己创建或者从其他地方拷贝一个 web.xml 过来。但是注意，一定不要讲文件放错位置（WebContent/WEB-INF/web.xml）。而且，要注意 xml 中头部务必要写正确， xml 的格式也不能出现问题。
+   
+   注意： 过滤器 org.apache.struts2.dispatcher.FilterDispatcher 现在已经不建议使用。
+
+   注意： url-pattern 的写法，不要错了。
+
+4. 配置 struts.xml。
+
+   这是 struts 的配置中心，所有的 struts 属性配置和请求映射，都在这个文件夹中进行action设置。
+
+   需要将这个文件放在 classpath 的根目录下面。我们可以理解，我们需要在 工程目录/src 文件夹下面创建这个文件。
+
+   如果我们创建的工程能够运行起来不报错，但是我们的 action 请求返回404错误的话，首先需要检查我们的请求有没有写错，如果没有写错，那么，就要检查是不是我们的 struts.xml 放错了位置或写错了名字。
+
+   如果我们的工程能够运行，但是在请求的时候，返回一些比如 result 没有正确映射等错误，那么，我们就需要检查是不是在 struts.xml 中配置错了东西。
+
+   struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因为，这个文件的格式，尤其是头部：
+   #+BEGIN_SRC xml
+   <?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE struts PUBLIC
+   	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+   	"http://struts.apache.org/dtds/struts-2.3.dtd">
+   
+   <struts>
+      <package></package>
+   </struts>
+
+   #+END_SRC
+   头部的 dtd 文件可以在 struts2-core.jar 的根目录之下找到。里面可以拷贝到 DOCTYPE 的定义。
+
+4. 开始配置相应的 pacakge 以及相应的 action。
+
+   写 action 首先要定义请求所属的 package。我们自定义的 package 要继承 struts-default 包。
+   这个 package 是定义在 struts-default.xml 中的，可以在 struts2-core.jar 包中找到。
+
+   struts-default.xml 中定义了常用的一些返回类型，一些拦截器跟配置了一些常见的 struts 常量。
+
+   注意：要有模块化的概念，为业务创建相关的 package 和 namespace。这样便于管理维护，也便于功能的扩展。
+
+   注意，一个请求对应一个 action。刚开始不建议立刻用通配符。
+
+   action 必须要有的属性是 name，这个定义了这个 action 的唯一标识。 class如果不指定的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
+
+   action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
+
+
+5. 实现相应的 jsp
+
+   一些比较敏感的，尤其是涉及权限的东西，我们最好放在 WEB-INF 目录下面，因为按照 j2ee 的规范， WEB-INF 目录下的内容，不能够由外部直接访问，所以能够最大限度保证安全。
+
+   那我们也要养成一种习惯，把主要的业务操作方面的 jsp 放在 WEB-INF 下面，一些其他的通用的不重要的资源可以放在 WEB-INF 外面。
+
+
+
+6. 实现相应的 action
+   
+   需要注意，必须要养成良好的编程习惯。习惯成自然，不要让不好的习惯带给我们一些莫名其妙的损失。
+
+   下面是一些基本的规范：
+   首先，我们写类跟接口之前，必须要定义一个相对完整的包。尤其忌讳把所有的东西都放在 classpath 的跟路径之下。
+   再次，包的名字要有相应的意义，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
+   然后，包的名字，务必要用小写字母。
+   最后，类或接口的名字，务必务必要用大写字母开头，而且要写成驼峰格式。
+   里面的方法也要写成驼峰形式。
+   格式要对齐，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
+   等号等操作符的前面和后面，要带有空格，便于阅读。
+
+
+
+
+
+   
