@@ -1,7 +1,7 @@
 #+TITLEE: Struts2
 
 
-
+E:\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\hello\org\apache\jsp\WEB_002dINF\login
 
 * 框架
 框架是一个半成品。它提供了一些接口、类、方法，我们可以直接调用。
@@ -83,7 +83,7 @@ action: emp_listAll
 
 
 http://localhost:8088/blanker/emp/emp_killbill.action
-* 示例，注册登录
+* 示例
 ** 业务分析
 我们需要以下四个请求：、
 1. 第一个请求：
@@ -185,6 +185,22 @@ http://localhost:8088/blanker/emp/emp_killbill.action
 
    action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
 
+   action 下面可以定义一到多个异常处理节点，用来捕获本次请求出现的指定异常。
+   : <exception-mapping result="fail" exception="java.lang.Exception"></exception-mapping>
+   如果请求的过程中，出现异常，那么 struts 首先判断当前 action 节点下面有没有配置相关的 exception-mapping 节点，如果有并且异常匹配，那么页面会转到本异常处理节点指定的页面。
+   如果 action 节点下面没有配置相关的 exception-mapping，那么 struts 会到当前包下面搜索，有没有配置 global-exception-mapping 节点。如果有配置，那么，就会根据所匹配的异常处理，进行返回结果。
+   如果 action 节点下面没有配置，而且包下面没有配置，那么，就不会有相应的异常处理。服务器会把一个 404 等相关的错误页面直接打印给用户。（这样首先不美观，不专业，其次，非常不安全。）
+
+   异常处理，可以在当前 action 节点下面配置。相应的，可以在 package 下面配置全局的异常处理。
+   : <global-exception-mappings>
+	 :   <exception-mapping result="fail" exception="java.lang.Exception"></exception-mapping>
+	 : </global-exception-mappings>
+   返回结果，即 result，同样，我们需要在当前 action 下面配置。相应，可以在 package 下面配置全局的结果返回。
+   : <global-results>
+	 : 	<result name="fail">/WEB-INF/login/login.jsp</result>
+	 : </global-results>
+
+
 
 5. 实现相应的 jsp
 
@@ -207,8 +223,45 @@ http://localhost:8088/blanker/emp/emp_killbill.action
    格式要对齐，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
    等号等操作符的前面和后面，要带有空格，便于阅读。
 
+** Result
+如果不指定名字，那么默认的名字就是 success, 如果不指定 type，默认的 type 就是 dispatcher。我们常用的就是一下几个。
+*** dispatcher/redirect
+转发或者重定向，一般用于 jsp
+#+BEGIN_SRC xml
+<result type="redirect" name="fail">/WEB-INF/jsp/login/fail.jsp</result>
+#+END_SRC
+
+如果 result 不指定类型的话，那么默认为 dispatcher.
+
+*** chain/redirectAction
+转发或者重定向 xxx.action，用于一个新的 struts 请求。
+
+如果要转发到另外一个包下的连接的话：
+#+BEGIN_SRC xml
+<result name="success" type="chain">
+	<param name="namespace">/emp</param>
+	<param name="actionName">listAll</param>
+</result>
+#+END_SRC
+
+如果要重定向到另外一个包下面的请求的话，有下面两种写法：
+#+BEGIN_SRC xml
+<!-- 下面两种写法是等效的 -->
+<result type="redirectAction">
+	<param name="namespace">/emp</param>
+	<param name="actionName">listAll</param>
+</result>
+
+<result type="redirect">/emp/listAll.html</result>
+#+END_SRC
+
+*** stream
+是用来处理 struts 中文件的上传和下载的。
+
+
 
 
 
 
    
+
