@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Struts2</title>
-<!-- 2016-10-11 周二 11:01 -->
+<title>struts</title>
+<!-- 2016-10-17 周一 00:39 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -10,27 +10,66 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Struts2</h1>
+<h1 class="title">struts</h1>
 <nav id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">框架</a></li>
-<li><a href="#sec-2">简介</a>
+<li><a href="#sec-1">Preclue</a></li>
+<li><a href="#sec-2">框架</a></li>
+<li><a href="#sec-3">简介</a></li>
+<li><a href="#sec-4">示例（注册登录）</a>
 <ul>
-<li><a href="#sec-2-1">namespace</a></li>
+<li><a href="#sec-4-1">业务分析</a></li>
+<li><a href="#sec-4-2">实现步骤：</a></li>
 </ul>
 </li>
+<li><a href="#sec-5">Package</a></li>
+<li><a href="#sec-6">Action</a></li>
+<li><a href="#sec-7">Result</a>
+<ul>
+<li><a href="#sec-7-1">dispatcher/redirect</a></li>
+<li><a href="#sec-7-2">chain/redirectAction</a></li>
+<li><a href="#sec-7-3">stream</a></li>
+</ul>
+</li>
+<li><a href="#sec-8">流程</a></li>
+<li><a href="#sec-9">拦截器</a>
+<ul>
+<li><a href="#sec-9-1">原理</a></li>
+<li><a href="#sec-9-2">定义</a></li>
+<li><a href="#sec-9-3">示例</a></li>
+</ul>
+</li>
+<li><a href="#sec-10">自动封装(Autowired)</a></li>
+<li><a href="#sec-11">值栈</a></li>
+<li><a href="#sec-12">标签库</a></li>
+<li><a href="#sec-13">验证</a></li>
+<li><a href="#sec-14">类型转换</a></li>
+<li><a href="#sec-15">国际化</a></li>
+<li><a href="#sec-16">文件的上传下载</a></li>
+<li><a href="#sec-17">防止重复提交</a></li>
+<li><a href="#sec-18">ajax</a></li>
 </ul>
 </div>
 </nav>
 
 
-
-
 <section id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">框架</h2>
+<h2 id="sec-1">Preclue</h2>
 <div class="outline-text-2" id="text-1">
+<p>
+Tomcat 编译 jsp 到 java 文件的保存目录：
+</p>
+<pre class="example">
+E:\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\hello\org\apache\jsp\WEB_002dINF\login
+</pre>
+</div>
+</section>
+
+<section id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">框架</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 框架是一个半成品。它提供了一些接口、类、方法，我们可以直接调用。
 </p>
@@ -54,9 +93,9 @@
 </section>
 
 
-<section id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">简介</h2>
-<div class="outline-text-2" id="text-2">
+<section id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">简介</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 Struts2 是一个流行的 MVC 框架。
 </p>
@@ -124,70 +163,570 @@ Struts2 是一个流行的 MVC 框架。
 </li>
 </ul>
 </div>
+</section>
 
-
-<div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1">namespace</h3>
-<div class="outline-text-3" id="text-2-1">
+<section id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">示例（注册登录）</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">业务分析</h3>
+<div class="outline-text-3" id="text-4-1">
 <p>
-<a href="http://loaclhost:8080/blanker/listAll.action">http://loaclhost:8080/blanker/listAll.action</a>  "/"
+我们需要以下四个请求：、
 </p>
+<ol class="org-ol">
+<li>第一个请求：<br >
+   显示登录的页面。  login.jsp
+</li>
 
-<p>
-<a href="http://loaclhost:8080/blanker/test/HelloWorld">http://loaclhost:8080/blanker/test/HelloWorld</a>  "/test"
-<a href="http://loaclhost:8080/blanker/test/Girl">http://loaclhost:8080/blanker/test/Girl</a>
-</p>
+<li>第二个请求：<br >
+   点击登录之后，要完成登录的操作。
+welcome.jsp
+fail.jsp
+</li>
 
-<p>
-<a href="http://loaclhost:8080/blanker/person/listAll.action">http://loaclhost:8080/blanker/person/listAll.action</a>  "/person"
-<a href="http://loaclhost:8080/blanker/person/addNew.action">http://loaclhost:8080/blanker/person/addNew.action</a>
-<a href="http://loaclhost:8080/blanker/person/delte.action">http://loaclhost:8080/blanker/person/delte.action</a>
-</p>
+<li>第三个请求：<br >
+   显示注册的页面。
+regist.jsp
+</li>
 
-<p>
-<a href="http://localhost:8088/blanker/index.action">http://localhost:8088/blanker/index.action</a>
-<a href="http://localhsot:8080/blanker/index.action">http://localhsot:8080/blanker/index.action</a>
-</p>
-
-<p>
-<a href="http://localhost:8088/blanker/example/HelloWorld.action">http://localhost:8088/blanker/example/HelloWorld.action</a>
-</p>
-
-
-
-
-<p>
-<a href="http://localhost:8088/blanker/">http://localhost:8088/blanker/</a>
-</p>
-
-<p>
-/example  # namespace
-HelloWorld.action  # action
-</p>
-
-
-<p>
-<a href="http://localhost/blanker/emp/listAll.action">http://localhost/blanker/emp/listAll.action</a>
-</p>
-
-
-<p>
-<a href="http://localhost:8088/blanker/emp/emp_listAll.action">http://localhost:8088/blanker/emp/emp_listAll.action</a>
-namespace: /emp
-action: emp_listAll
-</p>
-
-
-<p>
-<a href="http://localhost:8088/blanker/emp/emp_killbill.action">http://localhost:8088/blanker/emp/emp_killbill.action</a></p>
+<li>第四个请求：<br >
+   点击“注册”按钮之后，完成注册的操作。
+login.jsp
+regerror.jsp
+</li>
+</ol>
 </div>
 </div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2">实现步骤：</h3>
+<div class="outline-text-3" id="text-4-2">
+<ol class="org-ol">
+<li><b>建立动态web项目。</b>
+
+<p>
+打开 eclipse，选择 File -&gt; New -&gt; Dynamic Web Project(快捷键为Ctrl-N)。
+</p>
+
+<p>
+注意，工程名字尽量简洁，尽量用小写字母和_的组合。
+</p>
+
+<p>
+注意，在创建的工程的时候，将创建 web.xml 的选项勾上。
+因为在 servlet3 版本中，可以不需要 web.xml 的情况下运行 web 工程，但是我们要使用 struts2，必须要在 web.xml 中进行若干的配置。
+</p>
+</li>
+
+<li><b>将相关的 jar 包，复制到 工程目录/WebContent/WEB-INF/lib 文件夹下面。</b>
+
+<p>
+注意，一定不要缺少某些关键包，否则可能会报错。
+</p>
+
+<p>
+注意，如果出现一些莫名其妙的问题，包括像报 ClassNotFound 的异常，这时候，首先要检查是否有 jar 包的缺失。
+</p>
+</li>
+
+<li><b>配置 web.xml，将所有的请求交给 struts 进行处理。</b>
+
+<p>
+即在 web.xml 中添加以下内容：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">filter</span>&gt;
+    &lt;<span style="color: #0000ff;">filter-name</span>&gt;struts&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
+    &lt;<span style="color: #0000ff;">filter-class</span>&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/<span style="color: #0000ff;">filter-class</span>&gt;
+&lt;/<span style="color: #0000ff;">filter</span>&gt;
+&lt;<span style="color: #0000ff;">filter-mapping</span>&gt;
+    &lt;<span style="color: #0000ff;">filter-name</span>&gt;struts&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
+    &lt;<span style="color: #0000ff;">url-pattern</span>&gt;/*&lt;/<span style="color: #0000ff;">url-pattern</span>&gt;
+&lt;/<span style="color: #0000ff;">filter-mapping</span>&gt;
+</pre>
+</div>
+
+<p>
+注意： filter-name 是可以随意定义的，不过上下两个节点要填写一致，不要搞错。
+</p>
+
+<p>
+注意： 要确保 filter-class 的值写正确，这是一个确切存在的过滤器类。可以通过查看 struts2-core.jar 的源码去确定。
+</p>
+
+<p>
+注意： 在 elipse 左边的 Web App Libraries 下面，找到 struts2-core.jar，打开节点，直到 StrutsPrepareAndExecuteFilter，然后右键点击，选择 Copy Qualified Name，这样就把这个过滤器的完整路径复制下来了。然后就可以在 web.xml 中进行粘贴了。
+</p>
+
+<p>
+注意： 如果创建完工程之后，发现没有 web.xml，那么你需要自己创建或者从其他地方拷贝一个 web.xml 过来。但是注意，一定不要讲文件放错位置（WebContent/WEB-INF/web.xml）。而且，要注意 xml 中头部务必要写正确， xml 的格式也不能出现问题。
+</p>
+
+<p>
+注意： 以前的老旧版本中，使用的是过滤器 org.apache.struts2.dispatcher.FilterDispatcher。但现在已经被抛弃，不要使用，而是用 StrutsPrepareAndExecuteFilte代替。
+</p>
+</li>
+
+<li><b>创建文件 struts.xml，配置所有模块和请求，即配置相应的 package 和 action。</b>
+
+<p>
+这是 struts 的配置中心，所有的 struts 属性配置和请求映射，都在这个文件夹中进行action设置。
+</p>
+
+<p>
+需要将这个文件放在 classpath 的根目录下面。我们可以理解，我们需要在 工程目录/src 文件夹下面创建这个文件。
+</p>
+
+<p>
+如果我们创建的工程能够运行起来不报错，但是我们的 action 请求返回404错误的话，首先需要检查我们的请求有没有写错，如果没有写错，那么，就要检查是不是我们的 struts.xml 放错了位置或写错了名字。
+</p>
+
+<p>
+如果我们的工程能够运行，但是在请求的时候，返回一些比如 result 没有正确映射等错误，那么，我们就需要检查是不是在 struts.xml 中配置错了东西。
+</p>
+
+<p>
+struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因为，这个文件的格式，尤其是头部：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span> ?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> struts <span style="color: #a020f0;">PUBLIC</span>
+ <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Apache Software Foundation//DTD Struts Configuration 2.3//EN</span><span style="color: #8b2252;">"</span>
+ <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://struts.apache.org/dtds/struts-2.3.dtd</span><span style="color: #8b2252;">"</span>&gt;
+
+&lt;<span style="color: #0000ff;">struts</span>&gt;
+   &lt;<span style="color: #0000ff;">package</span>&gt;&lt;/<span style="color: #0000ff;">package</span>&gt;
+&lt;/<span style="color: #0000ff;">struts</span>&gt;
+</pre>
+</div>
+<p>
+头部的 dtd 文件可以在 struts2-core.jar 的根目录之下找到。里面可以拷贝到 DOCTYPE 的定义。
+</p>
+
+<p>
+注意， <b>一个请求对应一个 action</b> 。这个概念务必要理解。另外，一个业务模块定义在一个 package 中，这个也要掌握。
+</p>
+
+<p>
+我们可以使用通配符来简化 action 配置。但务必不要滥用通配符，尤其刚开始的时候不建议过多使用通配符。
+</p>
+</li>
+
+<li><b>实现相应的 jsp</b>
+
+<p>
+一些比较敏感的，尤其是涉及权限的东西，我们最好放在 WEB-INF 目录下面，因为按照 j2ee 的规范， WEB-INF 目录下的内容，不能够由外部直接访问，所以能够最大限度保证安全。
+</p>
+
+<p>
+那我们也要养成一种习惯，把主要的业务操作方面的 jsp 放在 WEB-INF 下面，一些其他的通用的不重要的资源可以放在 WEB-INF 外面。
+</p>
+</li>
+
+<li><b>实现相应的 action</b>
+
+<p>
+Action 中的每个执行业务的方法，只有一个要求，不携带参数并返回 String 类型。而一个 action 就是一个普通的 java 对象。不过为了方便，绝大多数时候我们要为我们自己定义的 Action 继承 ActionSupport 类。
+</p>
+
+<p>
+需要注意，必须要养成良好的编程习惯。习惯成自然，不要让不好的习惯带给我们一些莫名其妙的损失。
+</p>
+
+<p>
+下面是一些基本的规范：
+</p>
+<ul class="org-ul">
+<li>我们写类跟接口之前，必须要定义一个相对完整的包。尤其忌讳把所有的东西都放在 classpath 的跟路径之下。
+</li>
+<li>包的名字要有相应的意义，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
+</li>
+<li>包的名字，务必要用小写字母。
+</li>
+<li>类或接口的名字，务必务必要用大写字母开头，而且要写成驼峰格式。
+</li>
+<li>里面的方法也要写成驼峰形式。
+</li>
+<li>格式要对齐，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
+</li>
+<li>等号等操作符的前面和后面，要带有空格，便于阅读。
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</section>
+
+<section id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Package</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+在 struts.xml 中首先需要定义 package，package 我们可以理解为一个业务模块。
+</p>
+
+<p>
+一个系统有多个功能，即有多个业务模块，表现在 struts.xml 中就是有多个 package。一个业务模块需要请求很多页面，相应一个 package 包含多个 action.
+</p>
+
+<p>
+注意：必须要有模块化的概念，为业务创建相关的 package 和 namespace，这样便于管理维护，也便于功能的扩展。
+</p>
+
+<p>
+定义 package 需要给予一个名字，还可以设置命名空间（默认为 / ）和父包。
+</p>
+
+<p>
+我们自定义的 package 最好继承 struts-default 包，它定义在 struts-default.xml 中（可以展开 struts2-core.jar 看到）。这个 package 内置了一些 result 类型，一些拦截器，并配置了一些常见的 struts 常量。我们可以直接使用。
+</p>
+
+<p>
+Package 主要由 action 构成，除此之外，还可以声明拦截器，配置包范围的异常处理，定义包范围的 result。
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Action</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+action 必须要有的属性是 name，这个定义了这个 action 的唯一标识。 class如果不指定的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
+</p>
+
+<p>
+action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
+</p>
+
+<p>
+action 下面可以定义一到多个异常处理节点，用来捕获本次请求出现的指定异常。
+</p>
+<pre class="example">
+&lt;exception-mapping result="fail" exception="java.lang.Exception"&gt;&lt;/exception-mapping&gt;
+</pre>
+
+<p>
+如果请求的过程中，出现异常，那么 struts 首先判断当前 action 节点下面有没有配置相关的 exception-mapping 节点，如果有并且异常匹配，那么页面会转到本异常处理节点指定的页面。
+</p>
+
+<p>
+如果 action 节点下面没有配置相关的 exception-mapping，那么 struts 会到当前包下面搜索，有没有配置 global-exception-mapping 节点。如果有配置，那么，就会根据所匹配的异常处理，进行返回结果。
+</p>
+
+<p>
+如果 action 节点下面没有配置，而且包下面没有配置，那么，就不会有相应的异常处理。服务器会把一个 404 等相关的错误页面直接打印给用户。（这样首先不美观，不专业，其次，非常不安全。）
+</p>
+
+<p>
+异常处理，可以在当前 action 节点下面配置。相应的，可以在 package 下面配置全局的异常处理。
+</p>
+<pre class="example">
+&lt;global-exception-mappings&gt;
+  &lt;exception-mapping result="fail" exception="java.lang.Exception"&gt;&lt;/exception-mapping&gt;
+&lt;/global-exception-mappings&gt;
+</pre>
+
+<p>
+返回结果，即 result，同样，我们需要在当前 action 下面配置。相应，可以在 package 下面配置全局的结果返回。
+</p>
+<pre class="example">
+&lt;global-results&gt;
+  &lt;result name="fail"&gt;/WEB-INF/login/login.jsp&lt;/result&gt;
+&lt;/global-results&gt;
+</pre>
+
+
+<p>
+Action 类的典型示例如下，很简单：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #228b22;">Class</span> <span style="color: #0000ff;">LoginAction</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>;
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span>;
+
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">execute</span> <span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#21517;&#23383;&#26159;:"</span> + name + <span style="color: #8b2252;">"    &#24180;&#40836;&#20026;:"</span> + age<span style="color: #909183;">)</span>;
+        <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"success"</span>;
+    <span style="color: #7388d6;">}</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">setter...</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">setter...</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">Result</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+如果不指定名字，那么默认的名字就是 success, 如果不指定 type，默认的 type 就是 dispatcher。我们常用的就是一下几个。
+</p>
+</div>
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1">dispatcher/redirect</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+转发或者重定向，一般用于 jsp
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fail</span><span style="color: #8b2252;">"</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+</pre>
+</div>
+
+<p>
+如果 result 不指定类型的话，那么默认为 dispatcher.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2">chain/redirectAction</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+转发或者重定向 xxx.action，用于一个新的 struts 请求。
+</p>
+
+<p>
+如果要转发到另外一个包下的连接的话：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">success</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">chain</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
+&lt;/<span style="color: #0000ff;">result</span>&gt;
+</pre>
+</div>
+
+<p>
+如果要重定向到另外一个包下面的请求的话，有下面两种写法：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#20004;&#31181;&#20889;&#27861;&#26159;&#31561;&#25928;&#30340; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirectAction</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
+&lt;/<span style="color: #0000ff;">result</span>&gt;
+
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span>&gt;/emp/listAll.html&lt;/<span style="color: #0000ff;">result</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3">stream</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+是用来处理 struts 中文件的上传和下载的。
+</p>
+</div>
+</div>
+</section>
+
+
+
+
+
+
+
+
+<section id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">流程</h2>
+<div class="outline-text-2" id="text-8">
+<ol class="org-ol">
+<li>请求发送给 StrutsPrepareAndExecuteFilter
+</li>
+<li>StrutsPrepareAndExecuteFilter 询问 ActionMapper：请求是不是一个 Action(是的话返回非空的 ActionMapping)
+</li>
+<li>如果请求是一个 Action，则把请求交给 ActionProxy 对象处理。
+</li>
+<li>ActionProxy 中，通过 ConfigurationManager 加载配置文件，得到处理请求的 Action 类和方法。
+</li>
+<li>ActionProxy 创建一个 ActionInvocation 实例并初始化。
+</li>
+<li>ActionInvocation 负责调用 Action，在调用的前后，需要执行 Interceptor 链。在调用完 Action 后要执行 result 的结果。
+</li>
+<li>把结果发送到客户端。
+</li>
+</ol>
+</div>
+</section>
+
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">拦截器</h2>
+<div class="outline-text-2" id="text-9">
+</div><div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1">原理</h3>
+</div>
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2">定义</h3>
+</div>
+<div id="outline-container-sec-9-3" class="outline-3">
+<h3 id="sec-9-3">示例</h3>
+</div>
+</section>
+<section id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">自动封装(Autowired)</h2>
+</section>
+
+<section id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">值栈</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+EL(Expression Language) 是为了分离页面跟代码，避免JSP中糅杂太多&lt;% %&gt;而出现的。<br >
+</p>
+
+<p>
+它有如下好处：
+</p>
+<ul class="org-ul">
+<li>避免复杂的java代码，使页面简单整洁
+</li>
+<li>支持运算符，自由强大高效
+</li>
+<li>有简单的逻辑控制，易于阅读和维护
+</li>
+</ul>
+
+<p>
+Struts2 支持的 EL 语言有：
+</p>
+<ol class="org-ol">
+<li>OGNL (Object-Graph Navigation Language) // Struts 默认
+</li>
+<li>JSTL (JSP Standard Tag Library)                 // JSP2.0集成
+</li>
+<li>Groovy
+</li>
+<li>Velocity，只是一个简单的模板匹配引擎啦
+</li>
+</ol>
+
+<p>
+Expression, Root, Context. getValue. setValue.
+</p>
+
+
+<p>
+autowire: scalar，list，map，object
+</p>
+
+<p>
+display: &lt;s:debug /&gt;
+</p>
+
+<p>
+param: devMode.
+</p>
+
+
+<p>
+request 等
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">标签库</h2>
+</section>
+<section id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">验证</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+调用的 xwork 中的验证配置
+</p>
+<ol class="org-ol">
+<li>声明式验证
+<pre class="example">
+ActionName[-Alias]-validation.xml
+</pre>
+</li>
+<li>编程式验证
+<pre class="example">
+@Override public void validate () {}
+</pre>
+</li>
+</ol>
+</div>
+</section>
+
+
+
+<section id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">类型转换</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+struts 会自动进行类型转换。但一些复杂的对象，自动转换会满足不了我们的需求，这时候需要自定义类型转换器
+</p>
+<ol class="org-ol">
+<li>创建转换器。必须要实现 ognl.TypeConverter 接口。实际上继承 StrutsTypeConverter 即可。
+</li>
+<li>基于字段，model/ModelClassName-conversion.properties。基于类型，src/xwork-conversion.properties
+<pre class="example">
+java.util.Date=你定义的类型转换器
+</pre>
+</li>
+</ol>
+</div>
+</section>
+
+
+<section id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">国际化</h2>
+</section>
+<section id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16">文件的上传下载</h2>
+</section>
+<section id="outline-container-sec-17" class="outline-2">
+<h2 id="sec-17">防止重复提交</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+三种情况：
+</p>
+<ol class="org-ol">
+<li>多次点击
+</li>
+<li>回退，再提交
+</li>
+<li>转发时 F5 刷新
+</li>
+</ol>
+
+<p>
+解决方案： token 拦截器/ tokenSession 拦截器
+</p>
+<ol class="org-ol">
+<li>在配置文件中添加 token 拦截器，它不包含在默认拦截器栈中。
+</li>
+<li>添加标签 &lt;s:token /&gt;，会在页面生成一个隐藏域并在session赋值，两个一致。
+</li>
+<li>若使用 token 拦截器，需要配置一个 token.valid 的 result，因为它要跳往错误页面
+</li>
+<li>tokenSession 则不用配置 result。页面不会动。tokenSession 拦截器不会执行后续拦截器。
+</li>
+</ol>
+</div>
+</section>
+
+<section id="outline-container-sec-18" class="outline-2">
+<h2 id="sec-18">ajax</h2>
 </section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-10-11 周二 11:01</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="date">Created: 2016-10-17 周一 00:39</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
 </body>

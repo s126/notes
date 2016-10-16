@@ -1,7 +1,10 @@
 #+TITLEE: Struts2
 
 
-E:\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\hello\org\apache\jsp\WEB_002dINF\login
+* Preclue
+
+Tomcat 编译 jsp 到 java 文件的保存目录：
+: E:\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\hello\org\apache\jsp\WEB_002dINF\login
 
 * 框架
 框架是一个半成品。它提供了一些接口、类、方法，我们可以直接调用。
@@ -48,64 +51,28 @@ Struts2 是一个流行的 MVC 框架。
 - struts2-json-plugin-2.3.30.jar
 - xwork-core-2.3.30.jar
 
-
-** namespace
-
-http://loaclhost:8080/blanker/listAll.action  "/"
-
-http://loaclhost:8080/blanker/test/HelloWorld  "/test"
-http://loaclhost:8080/blanker/test/Girl
-
-http://loaclhost:8080/blanker/person/listAll.action  "/person"
-http://loaclhost:8080/blanker/person/addNew.action
-http://loaclhost:8080/blanker/person/delte.action
-
-http://localhost:8088/blanker/index.action
-http://localhsot:8080/blanker/index.action
-
-http://localhost:8088/blanker/example/HelloWorld.action
-
-
-
-
-http://localhost:8088/blanker/
-
-/example  # namespace
-HelloWorld.action  # action
-
-
-http://localhost/blanker/emp/listAll.action
-
-
-http://localhost:8088/blanker/emp/emp_listAll.action
-namespace: /emp
-action: emp_listAll
-
-
-http://localhost:8088/blanker/emp/emp_killbill.action
-* 示例
+* 示例（注册登录）
 ** 业务分析
 我们需要以下四个请求：、
-1. 第一个请求：
-
+1. 第一个请求：\\
    显示登录的页面。  login.jsp
 
-2. 第二个请求：
+2. 第二个请求：\\
    点击登录之后，要完成登录的操作。
    welcome.jsp
    fail.jsp
 
-3. 第三个请求：
+3. 第三个请求：\\
    显示注册的页面。
    regist.jsp
 
-4. 第四个请求：
+4. 第四个请求：\\
    点击“注册”按钮之后，完成注册的操作。
    login.jsp
    regerror.jsp
 
 ** 实现步骤：
-1. 建立动态web项目。
+1. *建立动态web项目。*
   
    打开 eclipse，选择 File -> New -> Dynamic Web Project(快捷键为Ctrl-N)。
 
@@ -114,13 +81,13 @@ http://localhost:8088/blanker/emp/emp_killbill.action
    注意，在创建的工程的时候，将创建 web.xml 的选项勾上。
    因为在 servlet3 版本中，可以不需要 web.xml 的情况下运行 web 工程，但是我们要使用 struts2，必须要在 web.xml 中进行若干的配置。
 
-2. 将相关的 jar 包，复制到 工程目录/WebContent/WEB-INF/lib 文件夹下面。
+2. *将相关的 jar 包，复制到 工程目录/WebContent/WEB-INF/lib 文件夹下面。*
 
    注意，一定不要缺少某些关键包，否则可能会报错。
 
    注意，如果出现一些莫名其妙的问题，包括像报 ClassNotFound 的异常，这时候，首先要检查是否有 jar 包的缺失。
 
-3. 配置 web.xml，将所有的请求交给 struts 进行处理。
+3. *配置 web.xml，将所有的请求交给 struts 进行处理。*
 
    即在 web.xml 中添加以下内容：
    #+BEGIN_SRC xml
@@ -134,7 +101,7 @@ http://localhost:8088/blanker/emp/emp_killbill.action
    </filter-mapping>
    #+END_SRC
 
-   注意： filter-name 是可以随意定义的，不过哦上下两个节点需要对应，不要写错。
+   注意： filter-name 是可以随意定义的，不过上下两个节点要填写一致，不要搞错。
 
    注意： 要确保 filter-class 的值写正确，这是一个确切存在的过滤器类。可以通过查看 struts2-core.jar 的源码去确定。
 
@@ -142,11 +109,9 @@ http://localhost:8088/blanker/emp/emp_killbill.action
 
    注意： 如果创建完工程之后，发现没有 web.xml，那么你需要自己创建或者从其他地方拷贝一个 web.xml 过来。但是注意，一定不要讲文件放错位置（WebContent/WEB-INF/web.xml）。而且，要注意 xml 中头部务必要写正确， xml 的格式也不能出现问题。
    
-   注意： 过滤器 org.apache.struts2.dispatcher.FilterDispatcher 现在已经不建议使用。
+   注意： 以前的老旧版本中，使用的是过滤器 org.apache.struts2.dispatcher.FilterDispatcher。但现在已经被抛弃，不要使用，而是用 StrutsPrepareAndExecuteFilte代替。
 
-   注意： url-pattern 的写法，不要错了。
-
-4. 配置 struts.xml。
+4. *创建文件 struts.xml，配置所有模块和请求，即配置相应的 package 和 action。*
 
    这是 struts 的配置中心，所有的 struts 属性配置和请求映射，都在这个文件夹中进行action设置。
 
@@ -170,62 +135,92 @@ http://localhost:8088/blanker/emp/emp_killbill.action
    #+END_SRC
    头部的 dtd 文件可以在 struts2-core.jar 的根目录之下找到。里面可以拷贝到 DOCTYPE 的定义。
 
-4. 开始配置相应的 pacakge 以及相应的 action。
+   注意， *一个请求对应一个 action* 。这个概念务必要理解。另外，一个业务模块定义在一个 package 中，这个也要掌握。
 
-   写 action 首先要定义请求所属的 package。我们自定义的 package 要继承 struts-default 包。
-   这个 package 是定义在 struts-default.xml 中的，可以在 struts2-core.jar 包中找到。
+   我们可以使用通配符来简化 action 配置。但务必不要滥用通配符，尤其刚开始的时候不建议过多使用通配符。
 
-   struts-default.xml 中定义了常用的一些返回类型，一些拦截器跟配置了一些常见的 struts 常量。
-
-   注意：要有模块化的概念，为业务创建相关的 package 和 namespace。这样便于管理维护，也便于功能的扩展。
-
-   注意，一个请求对应一个 action。刚开始不建议立刻用通配符。
-
-   action 必须要有的属性是 name，这个定义了这个 action 的唯一标识。 class如果不指定的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
-
-   action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
-
-   action 下面可以定义一到多个异常处理节点，用来捕获本次请求出现的指定异常。
-   : <exception-mapping result="fail" exception="java.lang.Exception"></exception-mapping>
-   如果请求的过程中，出现异常，那么 struts 首先判断当前 action 节点下面有没有配置相关的 exception-mapping 节点，如果有并且异常匹配，那么页面会转到本异常处理节点指定的页面。
-   如果 action 节点下面没有配置相关的 exception-mapping，那么 struts 会到当前包下面搜索，有没有配置 global-exception-mapping 节点。如果有配置，那么，就会根据所匹配的异常处理，进行返回结果。
-   如果 action 节点下面没有配置，而且包下面没有配置，那么，就不会有相应的异常处理。服务器会把一个 404 等相关的错误页面直接打印给用户。（这样首先不美观，不专业，其次，非常不安全。）
-
-   异常处理，可以在当前 action 节点下面配置。相应的，可以在 package 下面配置全局的异常处理。
-   : <global-exception-mappings>
-	 :   <exception-mapping result="fail" exception="java.lang.Exception"></exception-mapping>
-	 : </global-exception-mappings>
-   返回结果，即 result，同样，我们需要在当前 action 下面配置。相应，可以在 package 下面配置全局的结果返回。
-   : <global-results>
-	 : 	<result name="fail">/WEB-INF/login/login.jsp</result>
-	 : </global-results>
-
-
-
-5. 实现相应的 jsp
+5. *实现相应的 jsp*
 
    一些比较敏感的，尤其是涉及权限的东西，我们最好放在 WEB-INF 目录下面，因为按照 j2ee 的规范， WEB-INF 目录下的内容，不能够由外部直接访问，所以能够最大限度保证安全。
 
    那我们也要养成一种习惯，把主要的业务操作方面的 jsp 放在 WEB-INF 下面，一些其他的通用的不重要的资源可以放在 WEB-INF 外面。
 
-
-
-6. 实现相应的 action
+6. *实现相应的 action*
    
+   Action 中的每个执行业务的方法，只有一个要求，不携带参数并返回 String 类型。而一个 action 就是一个普通的 java 对象。不过为了方便，绝大多数时候我们要为我们自己定义的 Action 继承 ActionSupport 类。
+
    需要注意，必须要养成良好的编程习惯。习惯成自然，不要让不好的习惯带给我们一些莫名其妙的损失。
 
    下面是一些基本的规范：
-   首先，我们写类跟接口之前，必须要定义一个相对完整的包。尤其忌讳把所有的东西都放在 classpath 的跟路径之下。
-   再次，包的名字要有相应的意义，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
-   然后，包的名字，务必要用小写字母。
-   最后，类或接口的名字，务必务必要用大写字母开头，而且要写成驼峰格式。
-   里面的方法也要写成驼峰形式。
-   格式要对齐，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
-   等号等操作符的前面和后面，要带有空格，便于阅读。
+   - 我们写类跟接口之前，必须要定义一个相对完整的包。尤其忌讳把所有的东西都放在 classpath 的跟路径之下。
+   - 包的名字要有相应的意义，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
+   - 包的名字，务必要用小写字母。
+   - 类或接口的名字，务必务必要用大写字母开头，而且要写成驼峰格式。
+   - 里面的方法也要写成驼峰形式。
+   - 格式要对齐，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
+   - 等号等操作符的前面和后面，要带有空格，便于阅读。
 
-** Result
+* Package
+
+在 struts.xml 中首先需要定义 package，package 我们可以理解为一个业务模块。
+
+一个系统有多个功能，即有多个业务模块，表现在 struts.xml 中就是有多个 package。一个业务模块需要请求很多页面，相应一个 package 包含多个 action.
+
+注意：必须要有模块化的概念，为业务创建相关的 package 和 namespace，这样便于管理维护，也便于功能的扩展。
+
+定义 package 需要给予一个名字，还可以设置命名空间（默认为 / ）和父包。
+
+我们自定义的 package 最好继承 struts-default 包，它定义在 struts-default.xml 中（可以展开 struts2-core.jar 看到）。这个 package 内置了一些 result 类型，一些拦截器，并配置了一些常见的 struts 常量。我们可以直接使用。
+
+Package 主要由 action 构成，除此之外，还可以声明拦截器，配置包范围的异常处理，定义包范围的 result。
+
+* Action
+action 必须要有的属性是 name，这个定义了这个 action 的唯一标识。 class如果不指定的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
+
+action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
+
+action 下面可以定义一到多个异常处理节点，用来捕获本次请求出现的指定异常。
+: <exception-mapping result="fail" exception="java.lang.Exception"></exception-mapping>
+
+如果请求的过程中，出现异常，那么 struts 首先判断当前 action 节点下面有没有配置相关的 exception-mapping 节点，如果有并且异常匹配，那么页面会转到本异常处理节点指定的页面。
+
+如果 action 节点下面没有配置相关的 exception-mapping，那么 struts 会到当前包下面搜索，有没有配置 global-exception-mapping 节点。如果有配置，那么，就会根据所匹配的异常处理，进行返回结果。
+
+如果 action 节点下面没有配置，而且包下面没有配置，那么，就不会有相应的异常处理。服务器会把一个 404 等相关的错误页面直接打印给用户。（这样首先不美观，不专业，其次，非常不安全。）
+
+异常处理，可以在当前 action 节点下面配置。相应的，可以在 package 下面配置全局的异常处理。
+: <global-exception-mappings>
+:   <exception-mapping result="fail" exception="java.lang.Exception"></exception-mapping>
+: </global-exception-mappings>
+
+返回结果，即 result，同样，我们需要在当前 action 下面配置。相应，可以在 package 下面配置全局的结果返回。
+: <global-results>
+: 	<result name="fail">/WEB-INF/login/login.jsp</result>
+: </global-results>
+
+
+Action 类的典型示例如下，很简单：
+
+#+BEGIN_SRC java
+public Class LoginAction () {
+    private String name;
+    private int age;
+    
+    public String execute () {
+        System.out.println("名字是:" + name + "    年龄为:" + age);
+        return "success";
+    }
+
+    // setter...
+    // setter...
+}
+
+#+END_SRC
+
+
+* Result
 如果不指定名字，那么默认的名字就是 success, 如果不指定 type，默认的 type 就是 dispatcher。我们常用的就是一下几个。
-*** dispatcher/redirect
+** dispatcher/redirect
 转发或者重定向，一般用于 jsp
 #+BEGIN_SRC xml
 <result type="redirect" name="fail">/WEB-INF/jsp/login/fail.jsp</result>
@@ -233,7 +228,7 @@ http://localhost:8088/blanker/emp/emp_killbill.action
 
 如果 result 不指定类型的话，那么默认为 dispatcher.
 
-*** chain/redirectAction
+** chain/redirectAction
 转发或者重定向 xxx.action，用于一个新的 struts 请求。
 
 如果要转发到另外一个包下的连接的话：
@@ -255,7 +250,7 @@ http://localhost:8088/blanker/emp/emp_killbill.action
 <result type="redirect">/emp/listAll.html</result>
 #+END_SRC
 
-*** stream
+** stream
 是用来处理 struts 中文件的上传和下载的。
 
 
@@ -265,3 +260,76 @@ http://localhost:8088/blanker/emp/emp_killbill.action
 
    
 
+* 流程
+1. 请求发送给 StrutsPrepareAndExecuteFilter
+2. StrutsPrepareAndExecuteFilter 询问 ActionMapper：请求是不是一个 Action(是的话返回非空的 ActionMapping)
+3. 如果请求是一个 Action，则把请求交给 ActionProxy 对象处理。
+4. ActionProxy 中，通过 ConfigurationManager 加载配置文件，得到处理请求的 Action 类和方法。
+5. ActionProxy 创建一个 ActionInvocation 实例并初始化。
+6. ActionInvocation 负责调用 Action，在调用的前后，需要执行 Interceptor 链。在调用完 Action 后要执行 result 的结果。
+7. 把结果发送到客户端。
+
+* 拦截器
+** 原理
+** 定义
+** 示例
+* 自动封装(Autowired)
+
+* 值栈
+EL(Expression Language) 是为了分离页面跟代码，避免JSP中糅杂太多<% %>而出现的。\\
+
+它有如下好处：
+- 避免复杂的java代码，使页面简单整洁
+- 支持运算符，自由强大高效
+- 有简单的逻辑控制，易于阅读和维护
+
+Struts2 支持的 EL 语言有：
+1. OGNL (Object-Graph Navigation Language) // Struts 默认
+2. JSTL (JSP Standard Tag Library)                 // JSP2.0集成
+3. Groovy
+4. Velocity，只是一个简单的模板匹配引擎啦
+
+Expression, Root, Context. getValue. setValue.
+
+
+autowire: scalar，list，map，object
+
+display: <s:debug />
+
+param: devMode.
+
+
+request 等
+
+* 标签库
+* 验证
+调用的 xwork 中的验证配置
+1. 声明式验证
+   : ActionName[-Alias]-validation.xml
+2. 编程式验证
+   : @Override public void validate () {}
+
+
+
+* 类型转换
+struts 会自动进行类型转换。但一些复杂的对象，自动转换会满足不了我们的需求，这时候需要自定义类型转换器
+1. 创建转换器。必须要实现 ognl.TypeConverter 接口。实际上继承 StrutsTypeConverter 即可。
+2. 基于字段，model/ModelClassName-conversion.properties。基于类型，src/xwork-conversion.properties
+    : java.util.Date=你定义的类型转换器
+
+
+* 国际化
+* 文件的上传下载
+* 防止重复提交
+三种情况：
+1. 多次点击
+2. 回退，再提交
+2. 转发时 F5 刷新
+
+解决方案： token 拦截器/ tokenSession 拦截器
+1. 在配置文件中添加 token 拦截器，它不包含在默认拦截器栈中。
+2. 添加标签 <s:token />，会在页面生成一个隐藏域并在session赋值，两个一致。
+3. 若使用 token 拦截器，需要配置一个 token.valid 的 result，因为它要跳往错误页面
+4. tokenSession 则不用配置 result。页面不会动。tokenSession 拦截器不会执行后续拦截器。
+
+* ajax
