@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>struts</title>
-<!-- 2016-10-17 周一 00:39 -->
+<!-- 2016-10-17 周一 08:03 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -42,7 +42,12 @@
 </ul>
 </li>
 <li><a href="#sec-10">自动封装(Autowired)</a></li>
-<li><a href="#sec-11">值栈</a></li>
+<li><a href="#sec-11">值栈</a>
+<ul>
+<li><a href="#sec-11-1">在 jsp 中获取值栈的值</a></li>
+<li><a href="#sec-11-2">在 action 类中，获取 session 等对象的方法</a></li>
+</ul>
+</li>
 <li><a href="#sec-12">标签库</a></li>
 <li><a href="#sec-13">验证</a></li>
 <li><a href="#sec-14">类型转换</a></li>
@@ -237,14 +242,14 @@ regerror.jsp
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">filter</span>&gt;
-    &lt;<span style="color: #0000ff;">filter-name</span>&gt;struts&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
-    &lt;<span style="color: #0000ff;">filter-class</span>&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/<span style="color: #0000ff;">filter-class</span>&gt;
-&lt;/<span style="color: #0000ff;">filter</span>&gt;
-&lt;<span style="color: #0000ff;">filter-mapping</span>&gt;
-    &lt;<span style="color: #0000ff;">filter-name</span>&gt;struts&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
-    &lt;<span style="color: #0000ff;">url-pattern</span>&gt;/*&lt;/<span style="color: #0000ff;">url-pattern</span>&gt;
-&lt;/<span style="color: #0000ff;">filter-mapping</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">filter</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">filter-name</span>&gt;struts&lt;/<span style="color: #000088; background-color: #DEDEDE;">filter-name</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">filter-class</span>&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/<span style="color: #000088; background-color: #DEDEDE;">filter-class</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">filter</span>&gt;
+&lt;<span style="color: #000088; background-color: #DEDEDE;">filter-mapping</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">filter-name</span>&gt;struts&lt;/<span style="color: #000088; background-color: #DEDEDE;">filter-name</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">url-pattern</span>&gt;/*&lt;/<span style="color: #000088; background-color: #DEDEDE;">url-pattern</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">filter-mapping</span>&gt;
 </pre>
 </div>
 
@@ -292,14 +297,14 @@ struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span> ?&gt;
-&lt;!<span style="color: #a020f0;">DOCTYPE</span> struts <span style="color: #a020f0;">PUBLIC</span>
- <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Apache Software Foundation//DTD Struts Configuration 2.3//EN</span><span style="color: #8b2252;">"</span>
- <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://struts.apache.org/dtds/struts-2.3.dtd</span><span style="color: #8b2252;">"</span>&gt;
+<pre class="src src-xml">&lt;?<span style="color: #0000FF;">xml</span> <span style="color: #BA36A5;">version</span>=<span style="color: #008000;">"</span><span style="color: #008000;">1.0</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">encoding</span>=<span style="color: #008000;">"</span><span style="color: #008000;">UTF-8</span><span style="color: #008000;">"</span> ?&gt;
+&lt;!<span style="color: #0000FF;">DOCTYPE</span> struts <span style="color: #0000FF;">PUBLIC</span>
+ <span style="color: #036A07;">"</span><span style="color: #036A07;">-//Apache Software Foundation//DTD Struts Configuration 2.3//EN</span><span style="color: #036A07;">"</span>
+ <span style="color: #036A07;">"</span><span style="color: #036A07;">http://struts.apache.org/dtds/struts-2.3.dtd</span><span style="color: #036A07;">"</span>&gt;
 
-&lt;<span style="color: #0000ff;">struts</span>&gt;
-   &lt;<span style="color: #0000ff;">package</span>&gt;&lt;/<span style="color: #0000ff;">package</span>&gt;
-&lt;/<span style="color: #0000ff;">struts</span>&gt;
+&lt;<span style="color: #000088; background-color: #DEDEDE;">struts</span>&gt;
+   &lt;<span style="color: #000088; background-color: #DEDEDE;">package</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">package</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">struts</span>&gt;
 </pre>
 </div>
 <p>
@@ -445,17 +450,17 @@ Action 类的典型示例如下，很简单：
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #228b22;">Class</span> <span style="color: #0000ff;">LoginAction</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
-    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>;
-    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span>;
+<pre class="src src-java"><span style="color: #0000FF;">public</span> <span style="color: #6434A3;">Class</span> <span style="color: #006699;">LoginAction</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    <span style="color: #0000FF;">private</span> <span style="color: #6434A3;">String</span> <span style="color: #BA36A5;">name</span>;
+    <span style="color: #0000FF;">private</span> <span style="color: #6434A3;">int</span> <span style="color: #BA36A5;">age</span>;
 
-    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">execute</span> <span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
-        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#21517;&#23383;&#26159;:"</span> + name + <span style="color: #8b2252;">"    &#24180;&#40836;&#20026;:"</span> + age<span style="color: #909183;">)</span>;
-        <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"success"</span>;
-    <span style="color: #7388d6;">}</span>
+    <span style="color: #0000FF;">public</span> <span style="color: #6434A3;">String</span> <span style="color: #BA36A5;">execute</span> <span style="color: #7388D6;">()</span> <span style="color: #7388D6;">{</span>
+        System.out.println<span style="color: #909183;">(</span><span style="color: #008000;">"&#21517;&#23383;&#26159;:"</span> + name + <span style="color: #008000;">"    &#24180;&#40836;&#20026;:"</span> + age<span style="color: #909183;">)</span>;
+        <span style="color: #0000FF;">return</span> <span style="color: #008000;">"success"</span>;
+    <span style="color: #7388D6;">}</span>
 
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">setter...</span>
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">setter...</span>
+    <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">setter...</span>
+    <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">setter...</span>
 <span style="color: #707183;">}</span>
 </pre>
 </div>
@@ -478,7 +483,7 @@ Action 类的典型示例如下，很简单：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fail</span><span style="color: #8b2252;">"</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">result</span> <span style="color: #BA36A5;">type</span>=<span style="color: #008000;">"</span><span style="color: #008000;">redirect</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">fail</span><span style="color: #008000;">"</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #000088; background-color: #DEDEDE;">result</span>&gt;
 </pre>
 </div>
 
@@ -500,10 +505,10 @@ Action 类的典型示例如下，很简单：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">success</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">chain</span><span style="color: #8b2252;">"</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
-&lt;/<span style="color: #0000ff;">result</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">result</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">success</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">type</span>=<span style="color: #008000;">"</span><span style="color: #008000;">chain</span><span style="color: #008000;">"</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">param</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">namespace</span><span style="color: #008000;">"</span>&gt;/emp&lt;/<span style="color: #000088; background-color: #DEDEDE;">param</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">param</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">actionName</span><span style="color: #008000;">"</span>&gt;listAll&lt;/<span style="color: #000088; background-color: #DEDEDE;">param</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">result</span>&gt;
 </pre>
 </div>
 
@@ -512,13 +517,13 @@ Action 类的典型示例如下，很简单：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#20004;&#31181;&#20889;&#27861;&#26159;&#31561;&#25928;&#30340; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirectAction</span><span style="color: #8b2252;">"</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
-&lt;/<span style="color: #0000ff;">result</span>&gt;
+<pre class="src src-xml"><span style="color: #8D8D84;">&lt;!--</span><span style="color: #8D8D84; font-style: italic;"> &#19979;&#38754;&#20004;&#31181;&#20889;&#27861;&#26159;&#31561;&#25928;&#30340; </span><span style="color: #8D8D84;">--&gt;</span>
+&lt;<span style="color: #000088; background-color: #DEDEDE;">result</span> <span style="color: #BA36A5;">type</span>=<span style="color: #008000;">"</span><span style="color: #008000;">redirectAction</span><span style="color: #008000;">"</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">param</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">namespace</span><span style="color: #008000;">"</span>&gt;/emp&lt;/<span style="color: #000088; background-color: #DEDEDE;">param</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">param</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">actionName</span><span style="color: #008000;">"</span>&gt;listAll&lt;/<span style="color: #000088; background-color: #DEDEDE;">param</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">result</span>&gt;
 
-&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span>&gt;/emp/listAll.html&lt;/<span style="color: #0000ff;">result</span>&gt;
+&lt;<span style="color: #000088; background-color: #DEDEDE;">result</span> <span style="color: #BA36A5;">type</span>=<span style="color: #008000;">"</span><span style="color: #008000;">redirect</span><span style="color: #008000;">"</span>&gt;/emp/listAll.html&lt;/<span style="color: #000088; background-color: #DEDEDE;">result</span>&gt;
 </pre>
 </div>
 </div>
@@ -579,7 +584,6 @@ Action 类的典型示例如下，很简单：
 <section id="outline-container-sec-10" class="outline-2">
 <h2 id="sec-10">自动封装(Autowired)</h2>
 </section>
-
 <section id="outline-container-sec-11" class="outline-2">
 <h2 id="sec-11">值栈</h2>
 <div class="outline-text-2" id="text-11">
@@ -619,23 +623,126 @@ Expression, Root, Context. getValue. setValue.
 
 
 <p>
-autowire: scalar，list，map，object
+值栈是 struts 进行数据传递的中心，它是 struts 运行过程中创建的一个对象。本质上它是保存在 request 对象上的一个 attribute.
 </p>
 
 <p>
-display: &lt;s:debug /&gt;
+在 Struts 中，值栈（ValueStack）分为两个逻辑部分
+</p>
+<ol class="org-ol">
+<li>对象栈
+
+<p>
+它其实是 Map 栈中的一个值。是作为一个默认的存在。本质上它是一个 ArrayList， Struts 在接受到一个请求的时候，会把创建的 Action 对象保存到这个 ArrayList 中。
+</p>
+</li>
+
+<li>Map栈
+
+<p>
+本质上就是一个 Map，它是对 ActionContent 的引用。Struts 把一些常用的映射关系（比如，session,application,parameters等）保存到了这个对象中。
 </p>
 
 <p>
-param: devMode.
+Map 栈的大致结构如下:
 </p>
+</li>
+</ol>
 
 
 <p>
-request 等
+在 jsp 页面中，如果打开了 devMove 模式，那么可以通过 &lt;s:debug /&gt; 查看整个值栈中保存的数据。
 </p>
 </div>
+
+
+<div id="outline-container-sec-11-1" class="outline-3">
+<h3 id="sec-11-1">在 jsp 中获取值栈的值</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+首先，可以使用 &lt;s:property /&gt; 标签，通过在 value 属性里面的 ognl 表达式，就可以取到值栈中对应的值了。
+</p>
+
+<p>
+ognl 表达式的语法规则为：
+</p>
+<pre class="example">
+#key.a.b.c
+</pre>
+
+<p>
+当然，如果我们要获取的值，是属于 OgnlContext 的 Root 对象，那么，前面的 #key 可以去掉。
+</p>
+
+<p>
+因此，如果我们在 Action 里面定义了变量（比如，price），并赋予了值，那么，到 jsp 页面中，我们就可以直接用下面语句取出它的值：
+</p>
+<pre class="example">
+&lt;s:property value="price" /&gt;
+</pre>
+
+<p>
+如果，我们要显示的值，是一个集合，比如，list，那么我们可以用 &lt;s:iterator /&gt; 标签循环取出它里面的值。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java">&lt;s:iterator var=<span style="color: #008000;">"j"</span> value=<span style="color: #008000;">"emps"</span>&gt;
+  &lt;tr&gt;
+    &lt;td&gt;$<span style="color: #707183;">{</span>name<span style="color: #707183;">}</span>&lt;/td&gt;
+    &lt;td&gt;&lt;s:property value=<span style="color: #008000;">"job"</span>/&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;s:property value=<span style="color: #008000;">"#j.sal"</span>/&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;a href=<span style="color: #008000;">"delete.html?ename=${name}"</span>&gt;<span style="color: #6434A3;">&#21024;&#38500;</span><span style="color: #707183;">&lt;</span>/a<span style="color: #707183;">&gt;</span>&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/s:iterator&gt;
+</pre>
+</div>
+
+
+<p>
+注意，因为 struts 中对 request 对象进行了封装，并且重载了它的 getAttribute 方法，使得可以通过 getAttribute 方法直接从值栈对象中获取值。
+所以，如果我们在 jsp 页面中，使用el表达式，可以达到跟使用 &lt;s:property /&gt; 标签同样的效果。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-11-2" class="outline-3">
+<h3 id="sec-11-2">在 action 类中，获取 session 等对象的方法</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+在 action 中，向 session 中加入值，有如下几张方法：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#31532;&#19968;&#31181;&#65292;&#20174; ServletActionContext&#25552;&#20379;&#30340;&#38745;&#24577;&#26041;&#27861;&#33719;&#21462;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#27604;&#22914;&#65292;ServletActionContext.getRequest() &#24471;&#21040;&#30340;&#26159;&#19968;&#20010;&#21407;&#29983;&#30340; HttpServletRequest &#23545;&#35937;&#12290;&#24471;&#21040;&#21518;&#25105;&#20204;&#21487;&#20197;&#25353;&#29031;&#20197;&#21069;&#20889; servlet &#26102;&#20505;&#30340;&#20889;&#27861;&#22788;&#29702;&#36825;&#20010;&#23545;&#35937;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25152;&#20197;&#65292;&#22914;&#26524;&#24819;&#24471;&#21040;&#22238;&#35805;&#23545;&#35937;&#30340;&#35805;&#65292;&#37027;&#20040;&#22914;&#19979;&#20195;&#30721;&#65306;</span>
+<span style="color: #6434A3;">HttpSession</span> <span style="color: #BA36A5;">s1</span> = ServletActionContext.getRequest<span style="color: #707183;">()</span>.getSession<span style="color: #707183;">()</span>;
+s1.setAttribute<span style="color: #707183;">(</span><span style="color: #008000;">"flag1"</span>, <span style="color: #008000;">"red"</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">struts &#25552;&#20379;&#20102;&#21478;&#22806;&#19968;&#31181;&#23553;&#35013;&#65292;&#21363;&#25226; session,request &#31561;&#24403;&#20570; Map &#23545;&#35937;&#26469;&#22788;&#29702;&#65292;&#36798;&#21040;&#31616;&#21270;&#25105;&#20204;&#25805;&#20316;&#30340;&#30446;&#30340;&#12290;</span>
+<span style="color: #6434A3;">Map</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">String</span>, <span style="color: #6434A3;">Object</span><span style="color: #707183;">&gt;</span> <span style="color: #BA36A5;">s2</span> = ActionContext.getContext<span style="color: #707183;">()</span>.getSession<span style="color: #707183;">()</span>;
+s2.put<span style="color: #707183;">(</span><span style="color: #008000;">"flag2"</span>, <span style="color: #008000;">"green"</span><span style="color: #707183;">)</span>;
+
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36890;&#36807;&#23454;&#29616; SessionAware &#25509;&#21475;&#65292;&#23450;&#20041;&#20840;&#23616;&#30340; session &#23545;&#35937;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#39318;&#20808;&#35201;&#23450;&#20041;&#20840;&#23616;&#30340; Map&lt;String, Object&gt; s3 = null; &#28982;&#21518;&#23454;&#29616; SessionAware &#25509;&#21475;&#12290;</span>
+s3.put<span style="color: #707183;">(</span><span style="color: #008000;">"flag3"</span>, <span style="color: #008000;">"yellow"</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+<p>
+在 jsp 页面中，这样使用session中的值。
+</p>
+<pre class="example">
+&lt;s:property value="#session.flag" /&gt;
+</pre>
+</div>
+</div>
 </section>
+
+
+
+
 
 <section id="outline-container-sec-12" class="outline-2">
 <h2 id="sec-12">标签库</h2>
@@ -725,8 +832,8 @@ java.util.Date=你定义的类型转换器
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-10-17 周一 00:39</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="date">Created: 2016-10-17 周一 08:03</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
 </body>
