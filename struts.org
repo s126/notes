@@ -107,21 +107,21 @@ Struts2 是一个流行的 MVC 框架。
 
    注意： 在 elipse 左边的 Web App Libraries 下面，找到 struts2-core.jar，打开节点，直到 StrutsPrepareAndExecuteFilter，然后右键点击，选择 Copy Qualified Name，这样就把这个过滤器的完整路径复制下来了。然后就可以在 web.xml 中进行粘贴了。
 
-   注意： 如果创建完工程之后，发现没有 web.xml，那么你需要自己创建或者从其他地方拷贝一个 web.xml 过来。但是注意，一定不要讲文件放错位置（WebContent/WEB-INF/web.xml）。而且，要注意 xml 中头部务必要写正确， xml 的格式也不能出现问题。
+   注意： 如果创建完工程之后，发现没有 web.xml，那么你需要自己创建或者从其他地方拷贝一个 web.xml 过来。但是一定不要放错位置（WebContent/WEB-INF/web.xml）。而且 xml 头部务必要写正确，格式也不能出现问题。
    
-   注意： 以前的老旧版本中，使用的是过滤器 org.apache.struts2.dispatcher.FilterDispatcher。但现在已经被抛弃，不要使用，而是用 StrutsPrepareAndExecuteFilte代替。
+   注意： 以前的老旧 struts 版本中，使用的是过滤器 org.apache.struts2.dispatcher.FilterDispatcher。但现在已经被抛弃，不要使用，而是用 StrutsPrepareAndExecuteFilte 代替。同时，ActionContextClearUp 拦截器现在也被弃用。
 
 4. *创建文件 struts.xml，配置所有模块和请求，即配置相应的 package 和 action。*
 
    这是 struts 的配置中心，所有的 struts 属性配置和请求映射，都在这个文件夹中进行action设置。
 
-   需要将这个文件放在 classpath 的根目录下面。我们可以理解，我们需要在 工程目录/src 文件夹下面创建这个文件。
+   需要将这个文件放在 classpath 的根目录下面，即，src 目录下面。
 
    如果我们创建的工程能够运行起来不报错，但是我们的 action 请求返回404错误的话，首先需要检查我们的请求有没有写错，如果没有写错，那么，就要检查是不是我们的 struts.xml 放错了位置或写错了名字。
 
    如果我们的工程能够运行，但是在请求的时候，返回一些比如 result 没有正确映射等错误，那么，我们就需要检查是不是在 struts.xml 中配置错了东西。
 
-   struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因为，这个文件的格式，尤其是头部：
+   struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因为，这个文件的格式，尤其是头部千万不能错误：
    #+BEGIN_SRC xml
    <?xml version="1.0" encoding="UTF-8" ?>
    <!DOCTYPE struts PUBLIC
@@ -139,26 +139,42 @@ Struts2 是一个流行的 MVC 框架。
 
    我们可以使用通配符来简化 action 配置。但务必不要滥用通配符，尤其刚开始的时候不建议过多使用通配符。
 
-5. *实现相应的 jsp*
+5. *实现相应的 action*
 
-   一些比较敏感的，尤其是涉及权限的东西，我们最好放在 WEB-INF 目录下面，因为按照 j2ee 的规范， WEB-INF 目录下的内容，不能够由外部直接访问，所以能够最大限度保证安全。
+   Action 类，是用来进行业务处理的类。它是一个 pojo (Plain Ordinary Java Object)，即一个普通的 java 类。它里面定义的方法如下格式:
+   #+BEGIN_SRC java
+   // 没有入参，返回 String 类型。返回值表示的是要返回给用户的页面，即 result
+   public String execute () {
+	   System.out.println("这里是进行业务逻辑处理的地方。");
+     return "success";
+   }
+   #+END_SRC
+    
+   为了方便，绝大多数时候我们要为我们自己定义的 Action 继承 ActionSupport 类。ActionSupport 实现了一些接口，包含了一些有用的方法，可以简化我们的开发。
 
-   那我们也要养成一种习惯，把主要的业务操作方面的 jsp 放在 WEB-INF 下面，一些其他的通用的不重要的资源可以放在 WEB-INF 外面。
+6. *实现相应的 jsp*
 
-6. *实现相应的 action*
-   
-   Action 中的每个执行业务的方法，只有一个要求，不携带参数并返回 String 类型。而一个 action 就是一个普通的 java 对象。不过为了方便，绝大多数时候我们要为我们自己定义的 Action 继承 ActionSupport 类。
+   一些比较敏感的，尤其是涉及权限的东西，我们最好放在 WEB-INF 目录下面，因为按照 j2ee 的规范，WEB-INF 目录下的内容，不能够由外部直接访问，所以能够最大限度保证安全。
 
-   需要注意，必须要养成良好的编程习惯。习惯成自然，不要让不好的习惯带给我们一些莫名其妙的损失。
+   以后在开发我们的业务系统的时候，避免直接访问 jsp 页面，养成习惯。
 
-   下面是一些基本的规范：
-   - 我们写类跟接口之前，必须要定义一个相对完整的包。尤其忌讳把所有的东西都放在 classpath 的跟路径之下。
-   - 包的名字要有相应的意义，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
-   - 包的名字，务必要用小写字母。
-   - 类或接口的名字，务必务必要用大写字母开头，而且要写成驼峰格式。
-   - 里面的方法也要写成驼峰形式。
-   - 格式要对齐，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
-   - 等号等操作符的前面和后面，要带有空格，便于阅读。
+   另外，要养成把主要的业务操作方面的 jsp 放在 WEB-INF 下面的习惯。
+
+7. *温馨提示*
+
+   要养成良好的编程习惯 !!!
+
+   习惯成自然，不要让不好的习惯带给我们一些莫名其妙的损失。这不是小事，要认真对待。下面是一些基本的规范：
+
+   - 要把类跟接口放在我们 *自定义的包* 内，尤其忌讳把所有的东西都放在 classpath 的根路径之下。
+   - 不要乱起名，名字要有相应的 *意义* ，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
+   - 包的名字，务必要用 *小写字母* 。
+   - 类或接口的名字，务必务必要用 *大写字母开头* ，而且要写成 *驼峰格式* 。
+   - 方法的名字，要用 *小写字母开头* ,但也要写成驼峰形式。
+   - *格式要对齐* ，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
+   - 等号等操作符的前面和后面， *要带有空格* ，便于阅读！！！ 这个，多看一下一些标准代码，自己体会。
+   - 习惯的养成非一日之功，坏的习惯是这样的，好的习惯也是这样的。所以，希望不要偷懒，从 *日常* 开始慢慢规范自己。
+
 
 * Package
 
@@ -175,7 +191,7 @@ Struts2 是一个流行的 MVC 框架。
 Package 主要由 action 构成，除此之外，还可以声明拦截器，配置包范围的异常处理，定义包范围的 result。
 
 * Action
-action 必须要有的属性是 name，这个定义了这个 action 的唯一标识。 class如果不指定的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
+action 必须要有的属性是 name，它是 action 的唯一标识。 如果不指定 class 的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
 
 action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
 
@@ -219,14 +235,15 @@ public Class LoginAction () {
 
 
 * Result
-如果不指定名字，那么默认的名字就是 success, 如果不指定 type，默认的 type 就是 dispatcher。我们常用的就是一下几个。
+如果不指定 name，那么默认的 name 是 success, 如果不指定 type，默认的 type 就是 dispatcher。我们常用的就是以下几个。
 ** dispatcher/redirect
 转发或者重定向，一般用于 jsp
 #+BEGIN_SRC xml
+<result name="success">
+  <location>/WEB-INF/jsp/login/fail.jsp</location>
+</result>
 <result type="redirect" name="fail">/WEB-INF/jsp/login/fail.jsp</result>
 #+END_SRC
-
-如果 result 不指定类型的话，那么默认为 dispatcher.
 
 ** chain/redirectAction
 转发或者重定向 xxx.action，用于一个新的 struts 请求。
@@ -269,24 +286,6 @@ public Class LoginAction () {
 6. ActionInvocation 负责调用 Action，在调用的前后，需要执行 Interceptor 链。在调用完 Action 后要执行 result 的结果。
 7. 把结果发送到客户端。
 
-* 拦截器
-所有实现了 Interceptor 接口的类，都叫拦截器。
-在 Struts 中，是利用拦截器进行功能实现的，比如值的自动封装，类型的转换，值栈的维护，验证，国际化等方面。
-每一个拦截器都实现用来完成单一的功能。多个拦截器，按照顺序放在一个列表中，按照顺序执行，可以达到完成一系列功能的目的。
-这多个的拦截器放在一起，又称为拦截器栈（栈是一种非常基本的数据结构，它遵守先进后出的原则。简单理解，它是有顺序的一个列表）。
-
-比如，在 struts 中，对值进行自动封装的拦截器叫 ParameterFilterInterceptor；对异常处理的拦截器叫 ExceptionMappingInterceptor，其他所有功能，在 struts 中都有相应的拦截器实现。
-
-所以，在一个请求发起，经 struts 进行处理，程序流程在到达 action 相关的处理方法之前，会按照配置经过多个拦截器，从而实现一定的功能，比如，值的封装:
-: 拦截器a -> 拦截器 B -> 拦截器 C -> 拦截器 D ... -> Action.Method -> 后续的一些处理，包括返回显示页面等。
-
-在 struts.xml 中，需要为每个 action 设置拦截器，用来实现完整功能。
-当然，如果我们不对 action 设置 interceptor-ref 节点，即不设置拦截器，那么如果我们的包继承了 struts-default，那么任何一个包内的 action，会默认使用 defaultStack 拦截器。它其实是一个拦截器栈，即是一系列的拦截器的一个列表。
-
-** 原理
-** 定义
-** 示例
-* 自动封装(Autowired)
 * 值栈
 EL(Expression Language) 是为了分离页面跟代码，避免JSP中糅杂太多<% %>而出现的。\\
 
@@ -372,19 +371,236 @@ s3.put("flag3", "yellow");
 : <s:property value="#session.flag" />
 
 
+* 拦截器
+实现了 Interceptor 接口的类，叫拦截器。
 
+在 Struts 中，是利用拦截器进行功能实现的，比如值的自动封装，类型的转换，值栈的维护，验证，国际化等方面。
+
+每一个拦截器都实现用来完成单一的功能。多个拦截器，按照顺序放在一个列表中，按照顺序执行，可以达到完成一系列功能的目的。
+这多个的拦截器放在一起，像一根链条一样，称为拦截器栈（栈是一种非常基本的数据结构，它遵守先进后出的原则。简单理解，它是有顺序的一个链表）。
+
+比如，在 struts 中，对值进行自动封装的拦截器叫 ParameterFilterInterceptor；对异常处理的拦截器叫 ExceptionMappingInterceptor；FileUploadInterceptor 负责处理文件的上传等。其他功能，在 struts 中都有相应的拦截器实现。
+
+所以一个请求在到达 Action 对象前会经过一系列的拦截器。
+: 拦截器a -> 拦截器 B -> 拦截器 C -> 拦截器 D ... -> Action.Method -> 后续的一些处理，包括返回显示页面等。
+
+在 struts.xml 中，可以通过 interceptor-ref 为每个 action 设置相应的拦截器链。如果我们不去设置，那么如果我们继承了 struts-default， action 会默认使用 defaultStack 拦截器栈。
+
+defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个拦截器都是 struts 内置的。我们可以通过在 struts-default.xml 中查看详情。
+
+配置拦截器的方式为，在 action 下面，增加 interceptor-ref 节点：
+#+BEGIN_SRC xml
+<action name="xxx" class="yyy.ZzzAction" method="xxx">
+    <result>/aaa.jsp</result>
+    <interceptor-ref name="A拦截器" />
+    <interceptor-ref name="B拦截器" />
+</action>
+#+END_SRC
+
+在 struts 处理请求的过程中，会分析你的配置，把你为 action 配置的所有拦截器引用按照先后顺序整理成一个新的链表。然后按照顺序去执行。
+
+当然，你也可以在 package 里面声明新的拦截器和拦截器栈。上面的代码可以改写，并改进为：
+#+BEGIN_SRC xml
+<!-- 拦截器的声明 -->
+<interceptors>
+    <!-- 下面声明是我们自己实现的两个拦截器 -->
+    <interceptor name="A拦截器" class="xxx.AI" />
+    <interceptor name="B拦截器" class="xxx.BI" />
+
+    <!-- 这里定义的是一个拦截器栈，就是把一系列的拦截器放在一起起个名字，方便在 action 中使用 -->
+    <!-- 注意， interceptor-ref 的先后顺序不同，效果是不一样的。 -->
+    <interceptor-stack name="我的拦截器">
+        <interceptor-ref name="A拦截器" />
+        <interceptor-ref name="B拦截器" />
+        <!-- 在使用自定义拦截器的时候，一定要注意，如果不写下面的一部，将会用我们自己的拦截器把 struts 自己的拦截器给覆盖掉。这样会导致struts完成不了一些事情。 -->
+        <!-- 所以，在我们声明的这个拦截器栈中，把 defaultStack 放在里面 -->
+        <interceptor-ref name="defaultStack" />
+    </interceptor-stack>
+</interceptors>
+
+<!-- 在 action 中使用我们声明的拦截器 -->
+<action name="xxx" class="yyy.ZzzAction" method="xxx">
+    <result>/aaa.jsp</result>
+    <interceptor-ref name="我的拦截器" />
+</action>
+
+#+END_SRC
+
+
+可以参考我们的示例工程，加断点调试，看一下整个拦截器的运行流程。
+
+当然，如果我们想自定义拦截器。我们只需要写一个类，实现 Interceptor 接口即可。为了方便，也可以直接继承 AbstractInterceptor 类，这样，我们只需要重写 intercept 方法就可以了。
+
+
+栗子：
+
+第一步，实现我们自己的拦截器。
+#+BEGIN_SRC java
+/**
+ * 这是一个简单的用来判断登录的拦截器栗子。
+ */
+public class VertifyInterceptor extends AbstractInterceptor {
+
+  // 日志系统，你们也需要稍微了解一下。
+	Log logger = LogFactory.getLog(VertifyInterceptor.class);
+
+	@Override
+	public String intercept(ActionInvocation invocation) throws Exception {
+
+    // 获取 action 的名字
+		String actionName = invocation.getProxy().getActionName();
+
+		// 这只是一个小栗子，通过这样设置，我们可以让这些请求不进行下面的验证。
+		Set<String> excludes = new HashSet<>();
+		excludes.add("login");
+		excludes.add("index");
+		if (excludes.contains(actionName)) {
+      // 如果请求在我们的白名单中，将不执行之后的判断逻辑。
+			return invocation.invoke();
+		}
+
+
+    // 下面开始进行相关验证。
+		HttpSession session = ServletActionContext.getRequest().getSession();
+		
+		// 未登录检测。如果session为空，或者 session 没有保存相关状态，则判断，这个人没有登录。那么让他去登录页面。
+		if (session == null || session.getAttribute(Globals.USER_KEY) == null) {
+      // 记录或打印日志
+			logger.info(ServletActionContext.getRequest().getRequestURI() + "   尚未登录，返回首页");
+      // 如果直接返回一个字符的话，那么下一步将直接进入这里指定的 index 页面，而不会执行到 action 里面去。
+			return "loginPage";
+		}
+
+		// 权限控制，一个简单栗子。防止绕过验证，直接进入管理员的页面。
+    // 如果请求的 namespace 是 /admin，但 session 里保存的用户类型不是 1，那么我们可以判断，这是非管理员要访问我们的管理员页面。所以毫无疑问，要禁止他的操作。
+		if (invocation.getProxy().getNamespace().equalsIgnoreCase("/admin") && ((User) session.getAttribute(Globals.USER_KEY)).getUsertypeid() != 1) {
+			logger.info(ServletActionContext.getRequest().getRequestURI() + "   不具备相应权限，返回登录");
+      // 将 session　设置为无效
+			session.invalidate();
+      // 返回相关警告页面，或者跳转到登录页面
+			return "errorPage";
+		}
+
+    // 默认情况下，进行运行。
+		return invocation.invoke();
+	}
+}
+#+END_SRC
+
+第二步，在 struts.xml 中配置我们自定义的拦截器
+#+BEGIN_SRC xml
+<interceptors>
+    <interceptor name="vertify" class="xxx.interceptor.VertifyInterceptor" />
+
+    <interceptor-stack name="myVertifyStack">
+        <interceptor-ref name="vertify" />              <!-- 注意，把我们的验证放在第一个位置，那么如果验证失败，将不执行下面的拦截器，会节约一些资源。 -->
+        <interceptor-ref name="defaultStack" />
+    </interceptor-stack>
+</interceptors>
+
+<!-- 在 action 中使用我们声明的拦截器 -->
+<action name="listAll" class="xxx.action.EmpAction" method="listAll">
+    <result>/aaa.jsp</result>
+    <interceptor-ref name="myVertifyStack" />
+</action>
+
+<!--
+
+当前，除了像上面一样，给每个 action 添加 interceptor-ref，我们也可以通过一下语句，为整个包下的 action 设置默认的 interceptor，如下：
+
+<default-interceptor-ref name="myVertifyStack" />
+
+-->
+
+#+END_SRC
+
+就这么简单。
+
+* 验证
+
+验证是由 ValidationInterceptor 拦截器实现的。胆大的可以考虑研究下其实现。
+
+验证分为两种:
+1. 声明式验证，需要在action类的包下面创建一个验证使用的 xml 文件，里面定义我们要验证的内容。
+2. 编程式验证，为 Action 类实现 Valdatable 接口，然后，实现 validate 方法。
+
+** 声明式验证
+比如，要为 LoginAction 做验证，需要在相同目录下面新建一个 LoginAction-validation.xml，内容类似下面：
+
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0//EN" "http://struts.apache.org/dtds/xwork-validator-1.0.dtd">
+<validators>
+    <!-- 验证我们的字段 -->
+    <field name="username">
+        <field-validator type="requiredstring">
+            <param name="trim">true</param>
+            <message>请填写您的用户名</message>
+        </field-validator>
+    </field>
+    <field name="password">
+        <field-validator type="requiredstring">
+            <param name="trim">true</param>
+            <message>请填写您的密码</message>
+        </field-validator>
+    </field>
+</validators>
+#+END_SRC
+
+内建的验证有 15 中，可以参加文档。例：
+1. required
+2. requiredstring
+3. stringlength
+4. email
+5. url
+6. regex
+7. int
+8. conversion
+9. expression/fieldexpression
+
+例如，要验证数字范围:
+#+BEGIN_SRC xml
+<!-- 字段验证，IntRange验证器 -->
+<field-validator type="int">
+  <param name="min">20</param>
+  <param name="min">20</param>
+  <message key="error.int" />
+</field-validator>
+#+END_SRC
+
+如果要验证两次输入的密码是否不一致
+#+BEGIN_SRC xml
+<!-- 测试非字段验证 -->
+<validator type="expression">
+  <param name="expression"><![CDATA[password1=password2]]></param>
+  <message> 两次输入的密码不一致，请重试。 </message>
+</validator>
+#+END_SRC
+
+
+** 编程式验证
+首先， Action 要实现 Validateable 接口。当然，ActionSupport 类是实现了这个接口的，所以如果我们也可以直接继承 ActionSupport 类。
+
+其次，我们需要实现 validate() 方法。如果针对特定方法进行验证，我们需要实现相关的 validateMethodName() 方法。下面是一个栗子，对登录进行验证。要求
+1. 用户名不为空
+2. 密码不为空
+
+#+BEGIN_SRC java
+/**
+ * 验证登录输入
+ */
+public void validateLogin() {
+	if (username == null || username.isEmpty())
+		addFieldError("username", "请填写用户名");
+	if (password == null || password.isEmpty())
+		addFieldError("password", "请填写密码");
+}
+#+END_SRC
+
+最后，我们要为 action 写一个名字为 input 的 result。即如果验证失败后，显示哪个页面。如果不写 input，会抛出异常。
 
 
 * 标签库
-* 验证
-调用的 xwork 中的验证配置
-1. 声明式验证
-   : ActionName[-Alias]-validation.xml
-2. 编程式验证
-   : @Override public void validate () {}
-
-
-
 * 类型转换
 struts 会自动进行类型转换。但一些复杂的对象，自动转换会满足不了我们的需求，这时候需要自定义类型转换器
 1. 创建转换器。必须要实现 ognl.TypeConverter 接口。实际上继承 StrutsTypeConverter 即可。

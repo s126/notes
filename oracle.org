@@ -1,4 +1,4 @@
-2#+TITLE: Oracle11g
+#+TITLE: Oracle11g
 
 
 * Oracle 的体系结构
