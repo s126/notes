@@ -442,48 +442,48 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 public class VertifyInterceptor extends AbstractInterceptor {
 
   // 日志系统，你们也需要稍微了解一下。
-	Log logger = LogFactory.getLog(VertifyInterceptor.class);
+  Log logger = LogFactory.getLog(VertifyInterceptor.class);
 
-	@Override
-	public String intercept(ActionInvocation invocation) throws Exception {
+  @Override
+  public String intercept(ActionInvocation invocation) throws Exception {
 
     // 获取 action 的名字
-		String actionName = invocation.getProxy().getActionName();
+    String actionName = invocation.getProxy().getActionName();
 
-		// 这只是一个小栗子，通过这样设置，我们可以让这些请求不进行下面的验证。
-		Set<String> excludes = new HashSet<>();
-		excludes.add("login");
-		excludes.add("index");
-		if (excludes.contains(actionName)) {
+    // 这只是一个小栗子，通过这样设置，我们可以让这些请求不进行下面的验证。
+    Set<String> excludes = new HashSet<>();
+    excludes.add("login");
+    excludes.add("index");
+    if (excludes.contains(actionName)) {
       // 如果请求在我们的白名单中，将不执行之后的判断逻辑。
-			return invocation.invoke();
-		}
+      return invocation.invoke();
+    }
 
 
     // 下面开始进行相关验证。
-		HttpSession session = ServletActionContext.getRequest().getSession();
-		
-		// 未登录检测。如果session为空，或者 session 没有保存相关状态，则判断，这个人没有登录。那么让他去登录页面。
-		if (session == null || session.getAttribute(Globals.USER_KEY) == null) {
+    HttpSession session = ServletActionContext.getRequest().getSession();
+    
+    // 未登录检测。如果session为空，或者 session 没有保存相关状态，则判断，这个人没有登录。那么让他去登录页面。
+    if (session == null || session.getAttribute(Globals.USER_KEY) == null) {
       // 记录或打印日志
-			logger.info(ServletActionContext.getRequest().getRequestURI() + "   尚未登录，返回首页");
+      logger.info(ServletActionContext.getRequest().getRequestURI() + "   尚未登录，返回首页");
       // 如果直接返回一个字符的话，那么下一步将直接进入这里指定的 index 页面，而不会执行到 action 里面去。
-			return "loginPage";
-		}
+      return "loginPage";
+    }
 
-		// 权限控制，一个简单栗子。防止绕过验证，直接进入管理员的页面。
+    // 权限控制，一个简单栗子。防止绕过验证，直接进入管理员的页面。
     // 如果请求的 namespace 是 /admin，但 session 里保存的用户类型不是 1，那么我们可以判断，这是非管理员要访问我们的管理员页面。所以毫无疑问，要禁止他的操作。
-		if (invocation.getProxy().getNamespace().equalsIgnoreCase("/admin") && ((User) session.getAttribute(Globals.USER_KEY)).getUsertypeid() != 1) {
-			logger.info(ServletActionContext.getRequest().getRequestURI() + "   不具备相应权限，返回登录");
+    if (invocation.getProxy().getNamespace().equalsIgnoreCase("/admin") && ((User) session.getAttribute(Globals.USER_KEY)).getUsertypeid() != 1) {
+      logger.info(ServletActionContext.getRequest().getRequestURI() + "   不具备相应权限，返回登录");
       // 将 session　设置为无效
-			session.invalidate();
+      session.invalidate();
       // 返回相关警告页面，或者跳转到登录页面
-			return "errorPage";
-		}
+      return "errorPage";
+    }
 
     // 默认情况下，进行运行。
-		return invocation.invoke();
-	}
+    return invocation.invoke();
+  }
 }
 #+END_SRC
 
@@ -590,10 +590,10 @@ public class VertifyInterceptor extends AbstractInterceptor {
  * 验证登录输入
  */
 public void validateLogin() {
-	if (username == null || username.isEmpty())
-		addFieldError("username", "请填写用户名");
-	if (password == null || password.isEmpty())
-		addFieldError("password", "请填写密码");
+  if (username == null || username.isEmpty())
+     addFieldError("username", "请填写用户名");
+  if (password == null || password.isEmpty())
+     addFieldError("password", "请填写密码");
 }
 #+END_SRC
 
