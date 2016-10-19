@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>struts</title>
-<!-- 2016-10-18 周二 17:54 -->
+<!-- 2016-10-19 周三 08:45 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -295,10 +295,10 @@ struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #8b2252;">version=</span><span style="color: #8b2252;">"1.0"</span><span style="color: #8b2252;"> encoding=</span><span style="color: #8b2252;">"UTF-8"</span><span style="color: #8b2252;"> </span>?&gt;
-&lt;!DOCTYPE struts PUBLIC
- <span style="color: #8b2252;">"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"</span>
- <span style="color: #8b2252;">"http://struts.apache.org/dtds/struts-2.3.dtd"</span>&gt;
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span> ?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> struts <span style="color: #a020f0;">PUBLIC</span>
+ <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Apache Software Foundation//DTD Struts Configuration 2.3//EN</span><span style="color: #8b2252;">"</span>
+ <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://struts.apache.org/dtds/struts-2.3.dtd</span><span style="color: #8b2252;">"</span>&gt;
 
 &lt;<span style="color: #0000ff;">struts</span>&gt;
    &lt;<span style="color: #0000ff;">package</span>&gt;&lt;/<span style="color: #0000ff;">package</span>&gt;
@@ -476,7 +476,7 @@ Action 类的典型示例如下，很简单：
     <span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>;
     <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span>;
 
-    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">execute</span> <span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">execute</span> <span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
         System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#21517;&#23383;&#26159;:"</span> + name + <span style="color: #8b2252;">"    &#24180;&#40836;&#20026;:"</span> + age<span style="color: #909183;">)</span>;
         <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"success"</span>;
     <span style="color: #7388d6;">}</span>
@@ -505,10 +505,10 @@ Action 类的典型示例如下，很简单：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"success"</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">success</span><span style="color: #8b2252;">"</span>&gt;
   &lt;<span style="color: #0000ff;">location</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">location</span>&gt;
 &lt;/<span style="color: #0000ff;">result</span>&gt;
-&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"redirect"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"fail"</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fail</span><span style="color: #8b2252;">"</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
 </pre>
 </div>
 </div>
@@ -526,9 +526,9 @@ Action 类的典型示例如下，很简单：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"success"</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"chain"</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"namespace"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"actionName"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">success</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">chain</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
 &lt;/<span style="color: #0000ff;">result</span>&gt;
 </pre>
 </div>
@@ -538,13 +538,13 @@ Action 类的典型示例如下，很简单：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#19979;&#38754;&#20004;&#31181;&#20889;&#27861;&#26159;&#31561;&#25928;&#30340; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"redirectAction"</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"namespace"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"actionName"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#20004;&#31181;&#20889;&#27861;&#26159;&#31561;&#25928;&#30340; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirectAction</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
 &lt;/<span style="color: #0000ff;">result</span>&gt;
 
-&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"redirect"</span>&gt;/emp/listAll.html&lt;/<span style="color: #0000ff;">result</span>&gt;
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span>&gt;/emp/listAll.html&lt;/<span style="color: #0000ff;">result</span>&gt;
 </pre>
 </div>
 </div>
@@ -692,11 +692,11 @@ ognl 表达式的语法规则为：
 <div class="org-src-container">
 
 <pre class="src src-java">&lt;s:iterator var=<span style="color: #8b2252;">"j"</span> value=<span style="color: #8b2252;">"emps"</span>&gt;
-  <span style="color: #707183;">&lt;</span><span style="color: #228b22;">tr</span><span style="color: #707183;">&gt;</span>
-    <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>$<span style="color: #707183;">{</span>name<span style="color: #707183;">}</span>&lt;/td&gt;
-    <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>&lt;s:property value=<span style="color: #8b2252;">"job"</span>/&gt;&lt;/td&gt;
-    <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>&lt;s:property value=<span style="color: #8b2252;">"#j.sal"</span>/&gt;&lt;/td&gt;
-    <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>&lt;a href=<span style="color: #8b2252;">"delete.html?ename=${name}"</span>&gt;&#21024;&#38500;&lt;/a&gt;&lt;/td&gt;
+  &lt;tr&gt;
+    &lt;td&gt;$<span style="color: #707183;">{</span>name<span style="color: #707183;">}</span>&lt;/td&gt;
+    &lt;td&gt;&lt;s:property value=<span style="color: #8b2252;">"job"</span>/&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;s:property value=<span style="color: #8b2252;">"#j.sal"</span>/&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;a href=<span style="color: #8b2252;">"delete.html?ename=${name}"</span>&gt;<span style="color: #228b22;">&#21024;&#38500;</span><span style="color: #707183;">&lt;</span>/a<span style="color: #707183;">&gt;</span>&lt;/td&gt;
   &lt;/tr&gt;
 &lt;/s:iterator&gt;
 </pre>
@@ -786,10 +786,10 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"xxx"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"yyy.ZzzAction"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"xxx"</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">yyy.ZzzAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span>&gt;
     &lt;<span style="color: #0000ff;">result</span>&gt;/aaa.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
-    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"A&#25318;&#25130;&#22120;"</span> /&gt;
-    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"B&#25318;&#25130;&#22120;"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">A&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">B&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
 &lt;/<span style="color: #0000ff;">action</span>&gt;
 </pre>
 </div>
@@ -803,28 +803,38 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#25318;&#25130;&#22120;&#30340;&#22768;&#26126; </span><span style="color: #b22222;">--&gt;</span>
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25318;&#25130;&#22120;&#30340;&#22768;&#26126; </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #0000ff;">interceptors</span>&gt;
-    <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#19979;&#38754;&#22768;&#26126;&#26159;&#25105;&#20204;&#33258;&#24049;&#23454;&#29616;&#30340;&#20004;&#20010;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
-    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"A&#25318;&#25130;&#22120;"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"xxx.AI"</span> /&gt;
-    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"B&#25318;&#25130;&#22120;"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"xxx.BI"</span> /&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#22768;&#26126;&#26159;&#25105;&#20204;&#33258;&#24049;&#23454;&#29616;&#30340;&#20004;&#20010;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">A&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.AI</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">B&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.BI</span><span style="color: #8b2252;">"</span> /&gt;
 
-    <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#36825;&#37324;&#23450;&#20041;&#30340;&#26159;&#19968;&#20010;&#25318;&#25130;&#22120;&#26632;&#65292;&#23601;&#26159;&#25226;&#19968;&#31995;&#21015;&#30340;&#25318;&#25130;&#22120;&#25918;&#22312;&#19968;&#36215;&#36215;&#20010;&#21517;&#23383;&#65292;&#26041;&#20415;&#22312; action &#20013;&#20351;&#29992; </span><span style="color: #b22222;">--&gt;</span>
-    <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#27880;&#24847;&#65292; interceptor-ref &#30340;&#20808;&#21518;&#39034;&#24207;&#19981;&#21516;&#65292;&#25928;&#26524;&#26159;&#19981;&#19968;&#26679;&#30340;&#12290; </span><span style="color: #b22222;">--&gt;</span>
-    &lt;<span style="color: #0000ff;">interceptor-stack</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"&#25105;&#30340;&#25318;&#25130;&#22120;"</span>&gt;
-        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"A&#25318;&#25130;&#22120;"</span> /&gt;
-        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"B&#25318;&#25130;&#22120;"</span> /&gt;
-        <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#22312;&#20351;&#29992;&#33258;&#23450;&#20041;&#25318;&#25130;&#22120;&#30340;&#26102;&#20505;&#65292;&#19968;&#23450;&#35201;&#27880;&#24847;&#65292;&#22914;&#26524;&#19981;&#20889;&#19979;&#38754;&#30340;&#19968;&#37096;&#65292;&#23558;&#20250;&#29992;&#25105;&#20204;&#33258;&#24049;&#30340;&#25318;&#25130;&#22120;&#25226; struts &#33258;&#24049;&#30340;&#25318;&#25130;&#22120;&#32473;&#35206;&#30422;&#25481;&#12290;&#36825;&#26679;&#20250;&#23548;&#33268;struts&#23436;&#25104;&#19981;&#20102;&#19968;&#20123;&#20107;&#24773;&#12290; </span><span style="color: #b22222;">--&gt;</span>
-        <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#25152;&#20197;&#65292;&#22312;&#25105;&#20204;&#22768;&#26126;&#30340;&#36825;&#20010;&#25318;&#25130;&#22120;&#26632;&#20013;&#65292;&#25226; defaultStack &#25918;&#22312;&#37324;&#38754; </span><span style="color: #b22222;">--&gt;</span>
-        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"defaultStack"</span> /&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36825;&#37324;&#23450;&#20041;&#30340;&#26159;&#19968;&#20010;&#25318;&#25130;&#22120;&#26632;&#65292;&#23601;&#26159;&#25226;&#19968;&#31995;&#21015;&#30340;&#25318;&#25130;&#22120;&#25918;&#22312;&#19968;&#36215;&#36215;&#20010;&#21517;&#23383;&#65292;&#26041;&#20415;&#22312; action &#20013;&#20351;&#29992; </span><span style="color: #b22222;">--&gt;</span>
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292; interceptor-ref &#30340;&#20808;&#21518;&#39034;&#24207;&#19981;&#21516;&#65292;&#25928;&#26524;&#26159;&#19981;&#19968;&#26679;&#30340;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">interceptor-stack</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#25105;&#30340;&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">A&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">B&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+        <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#20351;&#29992;&#33258;&#23450;&#20041;&#25318;&#25130;&#22120;&#30340;&#26102;&#20505;&#65292;&#19968;&#23450;&#35201;&#27880;&#24847;&#65292;&#22914;&#26524;&#19981;&#20889;&#19979;&#38754;&#30340;&#19968;&#37096;&#65292;&#23558;&#20250;&#29992;&#25105;&#20204;&#33258;&#24049;&#30340;&#25318;&#25130;&#22120;&#25226; struts &#33258;&#24049;&#30340;&#25318;&#25130;&#22120;&#32473;&#35206;&#30422;&#25481;&#12290;&#36825;&#26679;&#20250;&#23548;&#33268;struts&#23436;&#25104;&#19981;&#20102;&#19968;&#20123;&#20107;&#24773;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+        <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25152;&#20197;&#65292;&#22312;&#25105;&#20204;&#22768;&#26126;&#30340;&#36825;&#20010;&#25318;&#25130;&#22120;&#26632;&#20013;&#65292;&#25226; defaultStack &#25918;&#22312;&#37324;&#38754; </span><span style="color: #b22222;">--&gt;</span>
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">defaultStack</span><span style="color: #8b2252;">"</span> /&gt;
     &lt;/<span style="color: #0000ff;">interceptor-stack</span>&gt;
 &lt;/<span style="color: #0000ff;">interceptors</span>&gt;
 
-<span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#22312; action &#20013;&#20351;&#29992;&#25105;&#20204;&#22768;&#26126;&#30340;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"xxx"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"yyy.ZzzAction"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"xxx"</span>&gt;
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312; action &#20013;&#20351;&#29992;&#25105;&#20204;&#22768;&#26126;&#30340;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">yyy.ZzzAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span>&gt;
     &lt;<span style="color: #0000ff;">result</span>&gt;/aaa.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
-    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"&#25105;&#30340;&#25318;&#25130;&#22120;"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#25105;&#30340;&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
 &lt;/<span style="color: #0000ff;">action</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19978;&#38754;&#30340;&#19968;&#27573;&#65292;&#36319;&#19979;&#38754;&#30340;&#23450;&#20041;&#26159;&#30456;&#21516;&#30340;&#25928;&#26524; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span>
+<span style="color: #b22222;">&lt;action name="xxx" class="yyy.ZzzAction" method="xxx"&gt;</span>
+<span style="color: #b22222;">    &lt;result&gt;/aaa.jsp&lt;/result&gt;</span>
+<span style="color: #b22222;">    &lt;interceptor-ref name="A&#25318;&#25130;&#22120;" /&gt;</span>
+<span style="color: #b22222;">    &lt;interceptor-ref name="B&#25318;&#25130;&#22120;" /&gt;</span>
+<span style="color: #b22222;">    &lt;interceptor-ref name="defaultStack" /&gt;</span>
+<span style="color: #b22222;">&lt;/action&gt;</span>
+<span style="color: #b22222;">--&gt;</span>
 </pre>
 </div>
 
@@ -905,18 +915,18 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #0000ff;">interceptors</span>&gt;
-    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"vertify"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"xxx.interceptor.VertifyInterceptor"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">vertify</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.interceptor.VertifyInterceptor</span><span style="color: #8b2252;">"</span> /&gt;
 
-    &lt;<span style="color: #0000ff;">interceptor-stack</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"myVertifyStack"</span>&gt;
-        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"vertify"</span> /&gt;              <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#25226;&#25105;&#20204;&#30340;&#39564;&#35777;&#25918;&#22312;&#31532;&#19968;&#20010;&#20301;&#32622;&#65292;&#37027;&#20040;&#22914;&#26524;&#39564;&#35777;&#22833;&#36133;&#65292;&#23558;&#19981;&#25191;&#34892;&#19979;&#38754;&#30340;&#25318;&#25130;&#22120;&#65292;&#20250;&#33410;&#32422;&#19968;&#20123;&#36164;&#28304;&#12290; </span><span style="color: #b22222;">--&gt;</span>
-        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"defaultStack"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor-stack</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myVertifyStack</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">vertify</span><span style="color: #8b2252;">"</span> /&gt;              <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292;&#25226;&#25105;&#20204;&#30340;&#39564;&#35777;&#25918;&#22312;&#31532;&#19968;&#20010;&#20301;&#32622;&#65292;&#37027;&#20040;&#22914;&#26524;&#39564;&#35777;&#22833;&#36133;&#65292;&#23558;&#19981;&#25191;&#34892;&#19979;&#38754;&#30340;&#25318;&#25130;&#22120;&#65292;&#20250;&#33410;&#32422;&#19968;&#20123;&#36164;&#28304;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">defaultStack</span><span style="color: #8b2252;">"</span> /&gt;
     &lt;/<span style="color: #0000ff;">interceptor-stack</span>&gt;
 &lt;/<span style="color: #0000ff;">interceptors</span>&gt;
 
-<span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#22312; action &#20013;&#20351;&#29992;&#25105;&#20204;&#22768;&#26126;&#30340;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"listAll"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"xxx.action.EmpAction"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"listAll"</span>&gt;
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312; action &#20013;&#20351;&#29992;&#25105;&#20204;&#22768;&#26126;&#30340;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">listAll</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.action.EmpAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">listAll</span><span style="color: #8b2252;">"</span>&gt;
     &lt;<span style="color: #0000ff;">result</span>&gt;/aaa.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
-    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"myVertifyStack"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myVertifyStack</span><span style="color: #8b2252;">"</span> /&gt;
 &lt;/<span style="color: #0000ff;">action</span>&gt;
 
 <span style="color: #b22222;">&lt;!--</span>
@@ -948,7 +958,7 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 <ol class="org-ol">
 <li>声明式验证，需要在action类的包下面创建一个验证使用的 xml 文件，里面定义我们要验证的内容。
 </li>
-<li>编程式验证，为 Action 类实现 Valdatable 接口，然后，实现 validate 方法。
+<li>编程式验证，为 Action 类实现 Validateable 接口，然后，实现 validate 方法。
 </li>
 </ol>
 </div>
@@ -962,19 +972,19 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #8b2252;">version=</span><span style="color: #8b2252;">"1.0"</span><span style="color: #8b2252;"> encoding=</span><span style="color: #8b2252;">"UTF-8"</span>?&gt;
-&lt;!DOCTYPE validators PUBLIC <span style="color: #8b2252;">"-//Apache Struts//XWork Validator 1.0//EN"</span> <span style="color: #8b2252;">"http://struts.apache.org/dtds/xwork-validator-1.0.dtd"</span>&gt;
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span>?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> validators <span style="color: #a020f0;">PUBLIC</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Apache Struts//XWork Validator 1.0//EN</span><span style="color: #8b2252;">"</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://struts.apache.org/dtds/xwork-validator-1.0.dtd</span><span style="color: #8b2252;">"</span>&gt;
 &lt;<span style="color: #0000ff;">validators</span>&gt;
-    <span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#39564;&#35777;&#25105;&#20204;&#30340;&#23383;&#27573; </span><span style="color: #b22222;">--&gt;</span>
-    &lt;<span style="color: #0000ff;">field</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"username"</span>&gt;
-        &lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"requiredstring"</span>&gt;
-            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"trim"</span>&gt;true&lt;/<span style="color: #0000ff;">param</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#39564;&#35777;&#25105;&#20204;&#30340;&#23383;&#27573; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">field</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">username</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">requiredstring</span><span style="color: #8b2252;">"</span>&gt;
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">trim</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">param</span>&gt;
             &lt;<span style="color: #0000ff;">message</span>&gt;&#35831;&#22635;&#20889;&#24744;&#30340;&#29992;&#25143;&#21517;&lt;/<span style="color: #0000ff;">message</span>&gt;
         &lt;/<span style="color: #0000ff;">field-validator</span>&gt;
     &lt;/<span style="color: #0000ff;">field</span>&gt;
-    &lt;<span style="color: #0000ff;">field</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"password"</span>&gt;
-        &lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"requiredstring"</span>&gt;
-            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"trim"</span>&gt;true&lt;/<span style="color: #0000ff;">param</span>&gt;
+    &lt;<span style="color: #0000ff;">field</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">requiredstring</span><span style="color: #8b2252;">"</span>&gt;
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">trim</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">param</span>&gt;
             &lt;<span style="color: #0000ff;">message</span>&gt;&#35831;&#22635;&#20889;&#24744;&#30340;&#23494;&#30721;&lt;/<span style="color: #0000ff;">message</span>&gt;
         &lt;/<span style="color: #0000ff;">field-validator</span>&gt;
     &lt;/<span style="color: #0000ff;">field</span>&gt;
@@ -1011,11 +1021,11 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#23383;&#27573;&#39564;&#35777;&#65292;IntRange&#39564;&#35777;&#22120; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"int"</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"min"</span>&gt;20&lt;/<span style="color: #0000ff;">param</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"min"</span>&gt;20&lt;/<span style="color: #0000ff;">param</span>&gt;
-  &lt;<span style="color: #0000ff;">message</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"error.int"</span> /&gt;
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23383;&#27573;&#39564;&#35777;&#65292;IntRange&#39564;&#35777;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">int</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">min</span><span style="color: #8b2252;">"</span>&gt;20&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">min</span><span style="color: #8b2252;">"</span>&gt;20&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">message</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">error.int</span><span style="color: #8b2252;">"</span> /&gt;
 &lt;/<span style="color: #0000ff;">field-validator</span>&gt;
 </pre>
 </div>
@@ -1025,9 +1035,9 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">&#27979;&#35797;&#38750;&#23383;&#27573;&#39564;&#35777; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"expression"</span>&gt;
-  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"expression"</span>&gt;&lt;![<span style="color: #483d8b;">CDATA</span>[password1=password2]]&gt;&lt;/<span style="color: #0000ff;">param</span>&gt;
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27979;&#35797;&#38750;&#23383;&#27573;&#39564;&#35777; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">expression</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">expression</span><span style="color: #8b2252;">"</span>&gt;&lt;![<span style="color: #483d8b;">CDATA</span>[password1=password2]]&gt;&lt;/<span style="color: #0000ff;">param</span>&gt;
   &lt;<span style="color: #0000ff;">message</span>&gt; &#20004;&#27425;&#36755;&#20837;&#30340;&#23494;&#30721;&#19981;&#19968;&#33268;&#65292;&#35831;&#37325;&#35797;&#12290; &lt;/<span style="color: #0000ff;">message</span>&gt;
 &lt;/<span style="color: #0000ff;">validator</span>&gt;
 </pre>
@@ -1140,8 +1150,8 @@ java.util.Date=你定义的类型转换器
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-10-18 周二 17:54</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="date">Created: 2016-10-19 周三 08:45</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
 </body>

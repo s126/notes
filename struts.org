@@ -424,6 +424,16 @@ defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个�
     <interceptor-ref name="我的拦截器" />
 </action>
 
+<!-- 上面的一段，跟下面的定义是相同的效果 -->
+<!--
+<action name="xxx" class="yyy.ZzzAction" method="xxx">
+    <result>/aaa.jsp</result>
+		<interceptor-ref name="A拦截器" />
+		<interceptor-ref name="B拦截器" />
+		<interceptor-ref name="defaultStack" />
+</action>
+-->
+
 #+END_SRC
 
 
@@ -522,7 +532,7 @@ public class VertifyInterceptor extends AbstractInterceptor {
 
 验证分为两种:
 1. 声明式验证，需要在action类的包下面创建一个验证使用的 xml 文件，里面定义我们要验证的内容。
-2. 编程式验证，为 Action 类实现 Valdatable 接口，然后，实现 validate 方法。
+2. 编程式验证，为 Action 类实现 Validateable 接口，然后，实现 validate 方法。
 
 ** 声明式验证
 比如，要为 LoginAction 做验证，需要在相同目录下面新建一个 LoginAction-validation.xml，内容类似下面：
