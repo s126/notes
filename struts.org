@@ -610,6 +610,29 @@ public void validateLogin() {
 最后，我们要为 action 写一个名字为 input 的 result。即如果验证失败后，显示哪个页面。如果不写 input，会抛出异常。
 
 
+
+** 示例：在注册页面增加一个生日字段
+1. 在 account 数据库中，增加一个生日字段:
+	 : alter table account add (birthday date);
+
+2. 修改我们的 bean/Account.java，增加上面的生日字段
+   : private Date birthday;
+   : // getter setter 方法
+
+3. 需要在 dao/LoginDao.java 的 addAccount 方法中，把相应的插入语句增加一个 birthday 字段。
+
+4. 修改我们的 login/register.jsp，增加一个生日字段：
+   : <s:textfield label="生日" type="date" name="acc.birthday"/>
+   
+   经过以上几步，我们的功能修改完毕。
+
+5. 增加相关验证。
+
+   可以直接在 Action 里面写 validate 方法，这是所谓的编程式验证。
+
+   也可以，在 LoginAction.java 的包下面，创建一个文件，名字为 LoginAction-validation.xml 或者 LoginAction-register-validation.xml，在里面声明我们的验证逻辑。
+
+
 * 标签库
 * 类型转换
 struts 会自动进行类型转换。但一些复杂的对象，自动转换会满足不了我们的需求，这时候需要自定义类型转换器
