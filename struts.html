@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>struts</title>
-<!-- 2016-10-20 周四 17:25 -->
+<!-- 2016-10-20 周四 17:28 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -1305,6 +1305,7 @@ jsp 中这么写：
 </div>
 
 
+
 <div id="outline-container-sec-17-3" class="outline-3">
 <h3 id="sec-17-3">struts-json.jar 插件</h3>
 <div class="outline-text-3" id="text-17-3">
@@ -1350,16 +1351,24 @@ jsp 中这么写：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-js">&lt;script&gt;$.post<span style="color: #707183;">(</span><span style="color: #8b2252;">"/xxx/ajaxTest3.action"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #a020f0;">function</span> <span style="color: #7388d6;">(</span><span style="color: #a0522d;">result</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span> alert<span style="color: #909183;">(</span>result<span style="color: #909183;">)</span>; <span style="color: #7388d6;">}</span><span style="color: #707183;">)</span>;&lt;/script&gt;
+<pre class="src src-js"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#20174;&#36825;&#20010;&#25554;&#20214;&#24471;&#21040;&#30340; result &#26159;&#19968;&#20010;&#26684;&#24335;&#33391;&#22909;&#30340; json &#23383;&#31526;&#20018;&#12290;&#24456;&#26041;&#20415;&#12290;</span>
+&lt;script&gt;$.post<span style="color: #707183;">(</span><span style="color: #8b2252;">"/xxx/ajaxTest3.action"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #a020f0;">function</span> <span style="color: #7388d6;">(</span><span style="color: #a0522d;">result</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span> alert<span style="color: #909183;">(</span>result<span style="color: #909183;">)</span>; <span style="color: #7388d6;">}</span><span style="color: #707183;">)</span>;&lt;/script&gt;
 </pre>
 </div>
+
+
+
+
+<p>
+另，这些示例代码应该写在 try/catch 中。时刻注意异常处理。
+</p>
 </div>
 </div>
 </section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-10-20 周四 17:25</p>
+<p class="date">Created: 2016-10-20 周四 17:28</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

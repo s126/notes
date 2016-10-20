@@ -731,6 +731,7 @@ jsp 中这么写：
 #+END_SRC
 
 
+
 ** struts-json.jar 插件
 首先，要把这个插件放到 lib 包下面。
 
@@ -762,6 +763,11 @@ struts.xml 中这么写：
 
 jsp 中这么写：
 #+BEGIN_SRC js
+// 注意，从这个插件得到的 result 是一个格式良好的 json 字符串。很方便。
 <script>$.post("/xxx/ajaxTest3.action", null, function (result) { alert(result); });</script>
 #+END_SRC
 
+
+
+
+另，这些示例代码应该写在 try/catch 中。时刻注意异常处理。
