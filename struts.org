@@ -300,10 +300,9 @@ Struts2 支持的 EL 语言有：
 3. Groovy
 4. Velocity，只是一个简单的模板匹配引擎啦
 
-Expression, Root, Context. getValue. setValue.
-
 
 值栈是 struts 进行数据传递的中心，它是 struts 运行过程中创建的一个对象。本质上它是保存在 request 对象上的一个 attribute.
+
 
 在 Struts 中，值栈（ValueStack）分为两个逻辑部分
 1. 对象栈
@@ -656,3 +655,113 @@ struts 会自动进行类型转换。但一些复杂的对象，自动转换会�
 4. tokenSession 则不用配置 result。页面不会动。tokenSession 拦截器不会执行后续拦截器。
 
 * ajax
+在 struts2 中使用 ajax 有很多方法，主要以下三种：
+
+** 获取 response，利用 servlet 原生方式
+
+Action 中这么写：
+#+BEGIN_SRC java
+public String ajaxTest () throws IOException {
+    // 获取 response，设置返回类型、编码，得到输出流对象。
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
+    // 主要业务逻辑，获取要返回的相应字符串
+    String result = "hello, world.";
+
+    // 输出结果
+    out.write(result);
+    out.flush();
+
+    // 注意，返回值是 null
+    return null;
+}
+
+#+END_SRC
+
+struts.xml 中这么写：
+#+BEGIN_SRC xml
+<package name="ajax" extends="struts-default">
+    <action name="ajaxTest" class="xxx.AjaxAction" method="ajaxTest"></action>
+</package>
+#+END_SRC
+
+
+jsp 中这么写：
+#+BEGIN_SRC js
+<script>$.post("/xxx/ajaxTest.action", null, function (result) { alert(result); });</script>
+#+END_SRC
+
+
+** 利用 stream 返回类型
+Action 中这么写：
+#+BEGIN_SRC java
+private InputStream inputStream;
+// getter 方法
+
+public String ajaxTest2 () {
+    String result = "这是通过业务获取的字符串";
+    inputStream = new ByteArrayInputStream(result.getBytes("UTF-8"));
+    
+    // 返回成功页面
+    return SUCCESS;
+}
+
+#+END_SRC
+
+
+struts.xml 中这么写：
+#+BEGIN_SRC xml
+<package name="ajax2" extends="struts-default">
+    <action name="ajaxTest2" class="xxx.AjaxAction" method="ajaxTest2">
+        <result type="stream">
+            <param name="contentType">text/html; charset=UTF-8</param>
+            <!-- inputName 默认值就是 inputStream -->
+            <param name="inputName">inputStream</param>
+        </result>
+    </action>
+</package>
+#+END_SRC
+
+
+jsp 中这么写：
+#+BEGIN_SRC js
+<script>$.post("/xxx/ajaxTest2.action", null, function (result) { alert(result); });</script>
+#+END_SRC
+
+
+** struts-json.jar 插件
+首先，要把这个插件放到 lib 包下面。
+
+其次，action 这么写：
+#+BEGIN_SRC java
+private String result;
+// getter.setter
+
+public String ajaxTest3 () {
+    result = "这是通过业务获取的string.";
+    return "success";
+}
+
+#+END_SRC
+
+struts.xml 中这么写：
+#+BEGIN_SRC xml
+<!-- 注意，要继承 json-default 包 -->
+<package name="ajax3" extends="json-default">
+    <action name="ajaxTest3" class="xxx.AjaxAction" method="ajaxTest3">
+        <result type="json">
+            <param name="root">result</param>
+            <!-- 还有其他一些参数，可以看文档 -->
+        </result>
+    </action>
+</package>
+#+END_SRC
+
+
+jsp 中这么写：
+#+BEGIN_SRC js
+<script>$.post("/xxx/ajaxTest3.action", null, function (result) { alert(result); });</script>
+#+END_SRC
+
