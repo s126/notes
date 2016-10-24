@@ -641,6 +641,47 @@ struts 会自动进行类型转换。但一些复杂的对象，自动转换会�
 
 
 * 国际化
+
+就像：
+: <s:textfield label="xxx" />
+这个 "xxx"按照原样输出
+: <s:property value="yyy" />
+这个 "yyy"，是从值栈中获取叫 yyy 的变量的数据。
+: <s:text name="zzz" />
+这个 "zzz" 表示从系统的资源文件(xxx.properties)去寻找。
+
+
+所以，使用资源文件的途径如下：
+: <s:text />
+: <s:i18n />
+: 每个标签里的 key 属性，基本都代表的是资源属性
+: 验证文件中， <message key=""> 也是用来从资源文件获取数据的
+: Action 中的 getText() 方法也是用来寻找资源文件的。
+
+
+struts 是怎么判断你在哪个区域的。它是依次按照下面顺序进行判断的:
+1. getParameters("request_locale") 如果它的值不为空，那么，这个值就成为了判断你地域的一个标准。这是一个最优先的值。
+2. session.getAttribute("request_locale") 如果它的值不为空，则利用之
+3. 如果以上都没有取到的话，那么从系统中获取。java.util.Locale 类有相关的方法，可以从系统中获取区域
+   #+BEGIN_SRC java
+   public static void main(String[] args) {
+	     System.out.println(Locale.getDefault());
+   }
+   #+END_SRC
+
+
+资源文件可以放在很多地方，每个资源文件都有自己的应用范围。
+通过什么顺序去找相应的资源文件的(EmpAction为例）？按照以下顺序查找：
+1. 查找当前包之下，有没有同名的资源文件，比如 EmpAction.properties
+2. 如果上面的没有找到，那么会去找当前包下面的 package.properties 文件，从里面加载需要的变量
+3. 如果上面都没有，就会去寻找全局的资源文件，默认是 struts.properties 文件，我们可以在 struts.xml 中区配置我们默认文件的名字:
+   : <constant name="struts.custom.i18n.resources" value="i18n" />
+   然后，就会去寻找 i18n_区域.properties。
+
+
+
+
+
 * 文件的上传下载
 * 防止重复提交
 三种情况：
