@@ -660,8 +660,8 @@ struts 会自动进行类型转换。但一些复杂的对象，自动转换会�
 
 
 struts 是怎么判断你在哪个区域的。它是依次按照下面顺序进行判断的:
-1. getParameters("request_locale") 如果它的值不为空，那么，这个值就成为了判断你地域的一个标准。这是一个最优先的值。
-2. session.getAttribute("request_locale") 如果它的值不为空，则利用之
+1. getParameter("request_locale") 如果它的值不为空，那么，这个值就成为了判断你地域的一个标准。这是一个最优先的值。
+2. session.getAttribute("WW_TRANS_I18N") 如果它的值不为空，则利用之
 3. 如果以上都没有取到的话，那么从系统中获取。java.util.Locale 类有相关的方法，可以从系统中获取区域
    #+BEGIN_SRC java
    public static void main(String[] args) {
@@ -677,6 +677,7 @@ struts 是怎么判断你在哪个区域的。它是依次按照下面顺序进�
 3. 如果上面都没有，就会去寻找全局的资源文件，默认是 struts.properties 文件，我们可以在 struts.xml 中区配置我们默认文件的名字:
    : <constant name="struts.custom.i18n.resources" value="i18n" />
    然后，就会去寻找 i18n_区域.properties。
+4. 如果都找不到，那么将 key 的值作为 value 输出
 
 
 
