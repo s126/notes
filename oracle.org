@@ -2523,6 +2523,20 @@ Oracle 对语句进行解析后，找到7788记录的数据块，并找到一个可用的undo块，将sal列的
 自己找一下相关资料
 
 
+** 被锁定的对象，解锁的方法
+只能杀掉锁定对象的 session，查看锁定对象的语句：
+#+BEGIN_SRC sql
+SELECT c.sid, c.serial#, a.object_id, a.session_id, b.object_name, c.*
+  FROM v$locked_object a, dba_objects b, v$session c
+ WHERE a.object_id = b.object_id
+   AND a.SESSION_ID = c.sid(+);
+#+END_SRC
+杀掉 Session 的语句:
+#+BEGIN_SRC sql
+alter system kill session 'sid, serial#';
+alter system kill session '2,33';
+#+END_SRC
+
 * 导入导出
 这里只是简单栗子，更多选项请查阅资料
 #+BEGIN_SRC sh
