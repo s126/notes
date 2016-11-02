@@ -2,3 +2,100 @@
 
 
 
+* 基本知识
+ORM:
+: Object-Relationship Mapping
+对象，跟数据库，有着某种对应关系
+| 类             | 表的结构(MetaData) |
+| 实例化的对象   | 每一条数据         |
+| 对象的每个属性 | 数据的每个字段     |
+
+面向对象的封装，让我们在编程的过程中用更自然的思维处理问题，
+所以在操作数据库的时候，需要把数据库里的数据跟我们创建的对象关联起来。
+我们可以手动写代码实现这个过程。
+也可以通过一些 ORM 框架去实现。Hibernate 就是其中一种非常优秀的框架。
+
+* 起步
+使用 Hibernate 的步骤:
+
+1. 建立 Web 工程
+2. 将需要用到的 jar 包，拷贝到 lib 包的下面。一定不要放错位置。也不要缺少关键包。也尽量不要有包的冲突。
+3. 创建 hibernate 的配置文件 hibernate.cfg.xml，指定数据库信息、打印sql语句策略等
+   #+BEGIN_SRC xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE hibernate-configuration PUBLIC
+   	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+   	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+   
+   <hibernate-configuration>
+     <session-factory>
+        <!-- 配置数据库的基本信息 -->
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:orcl</property>
+        <property name="hibernate.connection.username">vip</property>
+        <property name="hibernate.connection.password">vip</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        
+        <!-- 配置 SQL 语句显示或者 DDL 生成的策略 -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- 配置一系列的 Mapping 文件。分为 xml/annotation 等方式 -->        
+        <mapping resource="hibernate/helloworld/Book.hbm.xml" />
+        <mapping class="hibernate.helloworld.Book" />
+
+     </session-factory>
+   </hibernate-configuration>
+   #+END_SRC
+4. 创建实体类 Book.java
+	 #+BEGIN_QUOTE
+	 注意，要写成 JavaBean 的规范格式。字段用 private 限制，并为每个字段写 getter/setter 方法(property accessor)。
+
+   还要注意，一个实体类，要跟数据库做映射的话，有一个字段是必须的，就是主键，在 hibernate 中，用 @Id 来表示。
+
+   还要注意，一个实体类，必须要有一个无参构造器。如果我们在里面写了带参数的构造器，那一定不要忘记，增加一个默认的无参构造器。
+   #+END_QUOTE
+
+5. 创建数据库跟实体类的映射。有两种方式：XML方式、Annotation方式
+   1) 创建相关的xml映射文件 Book.hbm.xml
+      #+BEGIN_SRC xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE hibernate-mapping PUBLIC 
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+           
+      <hibernate-mapping>
+	      <!-- 配置实体类的映射 -->
+      	<class name="hibernate.helloworld.Book" table="t_book">
+      		<id name="bookno">
+      			<generator class="native"></generator>
+      		</id>
+      		
+      		<property name="name"></property>
+      		<property name="price"></property>
+      	</class>
+
+	      <!-- 在这里，可以添加其他的实体类映射 -->
+
+      </hibernate-mapping>
+
+      #+END_SRC
+
+   2) 在实体类上加相关的注解
+      | @Entity 注解         | 用来标识类是一个与数据库关联的实体类。这个注解作用在类上面。                                                                        |
+      | @Id 注解             | 让hibernate把当前属性解析为一个主键                                                                                                 |
+      | @Basic 注解          | 用来表示，让 hibernate 把当前属性解析为一个表的普通字段。要注意，如果有些java基本类型，没有任何注解的话，默认是带有 @Basic 注解的。 |
+      | @Table 注解          | 用来自定义生成表的详细信息的。作用在类上面。                                                                                        |
+      | @Column 注解         | 用来自定义生成字段的相信信息的。                                                                                                    |
+      | @GeneratedValue 注解 | 用来自定义主键的自动生成策略                                                                                                        |
+      | @Transient 注解      | 用来将指定属性排除掉，不进行持久化                                                                                                  |
+     
+6. 在 hibernate.cfg.xml 中添加映射，开始连接
+   1) 创建 sessionFactory
+   2) 创建 session
+   3) 创建 Transaction
+   4) 通过 Query 等进行查询；通过 save/delete 等进行增删。
+   5) 提交事务，关闭 session，关闭 SessionFactory。
+
+
