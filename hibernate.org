@@ -83,19 +83,144 @@ ORM:
       #+END_SRC
 
    2) 在实体类上加相关的注解
-      | @Entity 注解         | 用来标识类是一个与数据库关联的实体类。这个注解作用在类上面。                                                                        |
-      | @Id 注解             | 让hibernate把当前属性解析为一个主键                                                                                                 |
-      | @Basic 注解          | 用来表示，让 hibernate 把当前属性解析为一个表的普通字段。要注意，如果有些java基本类型，没有任何注解的话，默认是带有 @Basic 注解的。 |
-      | @Table 注解          | 用来自定义生成表的详细信息的。作用在类上面。                                                                                        |
-      | @Column 注解         | 用来自定义生成字段的相信信息的。                                                                                                    |
-      | @GeneratedValue 注解 | 用来自定义主键的自动生成策略                                                                                                        |
-      | @Transient 注解      | 用来将指定属性排除掉，不进行持久化                                                                                                  |
+      | @Entity 注解         | 用来标识类是一个与数据库关联的实体类。这个注解作用在类上面。                                                                                                                    |
+      | @Id 注解             | 让hibernate把当前属性解析为一个主键                                                                                                                                             |
+      | @Basic 注解          | 用来表示，让 hibernate 把当前属性解析为一个表的普通字段。要注意，如果有些java基本类型，没有任何注解的话，默认是带有 @Basic 注解的。                                             |
+      | @Table 注解          | 用来自定义生成表的详细信息的。作用在类上面。必须要联合 @Entity 注解一起使用。                                                                                                   |
+      | @Column 注解         | 用来自定义生成字段的详细信息的。可选的，配合 @Id 或 @Basic 一起使用。                                                                                                                       |
+      | @GeneratedValue 注解 | 用来自定义主键的自动生成策略，如果不带任何参数，那么默认的策略是 AUTO，即让 Hibernate 自动选择生成主键值的方法。这个注解要跟 @Id 一起配合使用。一般情况下，这个也是不可或缺的。 |
+      | @Transient 注解      | 用来将指定属性排除掉，不进行持久化                                                                                                                                              |
      
 6. 在 hibernate.cfg.xml 中添加映射，开始连接
    1) 创建 sessionFactory
+      : 他就是一个大内总管，负责初始化 hibernate，并携带所有的配置信息，而且要负责我们跟数据库打交道的一切杂务。
+			#+BEGIN_SRC java
+      // 加载配置文件
+   		Configuration config = new Configuration().configure( "/hibernate/helloworld/hello.cfg.xml");
+      // 初始化所有需要的服务
+   		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
+
+			// 在完成 sessionFactory 的创建之前，可以通过 config.addXXX 的方式，动态添加实体类的映射信息
+	  	config.addAnnotatedClass(Author.class);
+  		config.addResource("hibernate/helloworld/Book.hbm.xml");
+
+      // 创建 sessionFactory 对象
+  		SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
+			#+END_SRC
+
    2) 创建 session
    3) 创建 Transaction
    4) 通过 Query 等进行查询；通过 save/delete 等进行增删。
    5) 提交事务，关闭 session，关闭 SessionFactory。
 
 
+* Java 提高
+
+
+** 日期与时间
+*** Date 类
+这是 java 最开始就有的类，用来处理时间。
+#+BEGIN_SRC java
+// 获取当前时间
+Date now = new Date();
+// 打印时间，显式格式为 Thu Nov 03 16:31:56 CST 2016
+System.out.println(now);
+// 获取时间中的年、月、日等
+System.out.println(now.getYear()); // 注意，这样得到的是一个减去了 1990 的年份。
+// 得到从 1970 年到现在经过的毫秒数
+System.out.println(now.getTime());
+// 所以得到两个时间相差多少一般这样表示
+long duration = date1.getTime() - date2.getTime();
+
+// 得到指定日期的时间
+Date time1 = new Date(12212221);
+Date time2 = new Date("19900202");
+Date time3 = new Date(1990, 1, 14);  // 注意，月份从0开始计算。1这条语句表示 1990年2月14日
+// 通过 SimpleDateFormat 的形式得到指定格式的日期
+Date time4 = new SimpleDateFormat("yyyyMMdd").parse("20050205");
+
+#+END_SRC
+
+*** Calendar 类
+
+后来由于 Date 类在处理国际化方面的一些局限，现在推荐用 Calendar 类代替 Date 类。
+#+BEGIN_SRC java
+// 获取当前时间
+Calendar c = Calendar.getInstance();
+// 通过 getTime 获得 Date 对象。通过下面语句，打印当前时间
+System.out.println(c.getTime());
+// 通过下面语句，获取年月日等
+System.out.println(c.get(Calendar.YEAR));
+
+// 通过下面语句，初始化一个具体时间
+c.set(1999, 2, 4);
+// 或者通过时间类型得到
+c.setTime(new Date());
+// 或者，通过直接实例化一个 Calendar 的实现类：
+Calendar cc = new GregorianCalendar(1998,3,11);
+// 下面语句得到 1970 年来的 long 值
+System.out.println(cc.getTimeInMillis);
+
+#+END_SRC
+
+
+*** 其它
+
+通过以上代码看以看到，通过 calendar.setTime()/getTime() 方法可以实现 Date/Calendar 对象的转换。
+
+另外，为了方便， System 下面有个静态方法，也可以获取 1970 年到现在过了多少毫秒，返回时 long 值：、
+: System.currentTimeMillis();
+这个非常常用。
+
+
+
+** getter 代码，实现更好的封装
+
+#+BEGIN_SRC java
+@Test
+public void testGetterDate() throws Exception {
+	Author author = new Author();
+	author.setName("张三");
+	author.setBirth(new SimpleDateFormat("yyyy-MM-dd").parse("1993-04-14"));
+	
+	System.out.println("用户创建成功。");
+	
+	// 接下来获取年龄，有如下方式：
+
+	// 第一种写法：
+	System.out.println("1. 年龄：" + (new Date().getYear() - author.getBirth().getYear()));
+
+	// 第二种方法，创建一个静态方法，通过调用，获取年龄：
+	System.out.println("2. 年龄：" + BirthUtil.calAge(author.getBirth()));
+
+	// 第三种，在 author 类中，增加年龄字段。因为年龄也是人的一个属性。
+	// 这样能更好的体现面向对象的思想：封装。
+	// 因为年龄跟生日有关系，所以不需要显式赋值，如果想获取，那么通过下面的方式：
+	System.out.println("3. 年龄：" + author.getAge());
+}
+
+
+// 在 getter 方法中，可以写一些具体的逻辑。
+// 这里通过生日的字段，计算年龄。当调用这个 getter 方法的时候，才开始计算。
+// 而年龄这个值，不需要保存到数据库中。所以上面需要增加一个 @Transient 注解，将其排出在外。
+// 这种处理方式，是非常常见的。尤其在 getter/setter 方法中，添加自己的逻辑，有时候，会使代码变得便捷。
+class Author {
+  private int age;
+  // ... others
+  public int getAge() {
+		return age == 0 ? BirthUtil.calAge(birth) : age;
+  }
+}
+
+
+// 根据生日计算年龄的静态方法
+class BirthUtil {
+	public static int calAge(Date birth) {
+  	Calendar cal = Calendar.getInstance();
+  	int now = cal.get(Calendar.YEAR);
+  	cal.setTime(birth);
+  	return now - cal.get(Calendar.YEAR);
+	}
+}
+
+#+END_SRC
