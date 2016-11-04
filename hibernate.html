@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Hibernate ORM</title>
-<!-- 2016-11-03 周四 08:51 -->
+<!-- 2016-11-04 周五 07:02 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -17,16 +17,20 @@
 <ul>
 <li><a href="#sec-1">基本知识</a></li>
 <li><a href="#sec-2">起步</a></li>
-<li><a href="#sec-3">Java 提高</a>
+<li><a href="#sec-3">Load/Get</a></li>
+<li><a href="#sec-4">session.flush()</a></li>
+<li><a href="#sec-5">session.refresh()</a></li>
+<li><a href="#sec-6">session.clear()</a></li>
+<li><a href="#sec-7">Java 提高</a>
 <ul>
-<li><a href="#sec-3-1">日期与时间</a>
+<li><a href="#sec-7-1">日期与时间</a>
 <ul>
-<li><a href="#sec-3-1-1">Date 类</a></li>
-<li><a href="#sec-3-1-2">Calendar 类</a></li>
-<li><a href="#sec-3-1-3">其它</a></li>
+<li><a href="#sec-7-1-1">Date 类</a></li>
+<li><a href="#sec-7-1-2">Calendar 类</a></li>
+<li><a href="#sec-7-1-3">其它</a></li>
 </ul>
 </li>
-<li><a href="#sec-3-2">getter 代码，实现更好的封装</a></li>
+<li><a href="#sec-7-2">getter 代码，实现更好的封装</a></li>
 </ul>
 </li>
 </ul>
@@ -257,15 +261,113 @@ config.addResource<span style="color: #707183;">(</span><span style="color: #008
 </section>
 
 
+
 <section id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Java 提高</h2>
+<h2 id="sec-3">Load/Get</h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-sec-3-1" class="outline-3">
-<h3 id="sec-3-1">日期与时间</h3>
-<div class="outline-text-3" id="text-3-1">
-</div><div id="outline-container-sec-3-1-1" class="outline-4">
-<h4 id="sec-3-1-1">Date 类</h4>
-<div class="outline-text-4" id="text-3-1-1">
+<p>
+get 跟 load 的区别如下：
+</p>
+<ol class="org-ol">
+<li>如果查询的数据不存在的话，get 会返回 null；load 会抛出异常。
+</li>
+<li>get 是立即从数据库中检索数据； load 是懒加载，即只有当要使用对象的时刻，才进行加载，懒加载是通过代理实现的。
+</li>
+</ol>
+</div>
+</section>
+
+
+<section id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">session.flush()</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+是让 hibernate 立即执行 sql 语句，但是并不提交，同时更新session缓存。{即同步 session 里的缓存到数据库（插入，更新，删除等）。}
+</p>
+
+<pre class="example">
+只有在调用了 session.flush() 之后，session缓存里的数据，才会被发送到数据库，进行真正的数据库持久化操作。
+</pre>
+
+<p>
+以下几种清空可以调用 flush:
+</p>
+<ol class="org-ol">
+<li>我们可以在代码中显式调用。在调用的时候，会向数据库中发送操作指令。
+<pre class="example">
+session.flush();
+</pre>
+</li>
+
+<li>我们在调用 commit 的时候，也会隐式调用 flush 方法。
+<pre class="example">
+session.commit();
+</pre>
+<p>
+commit() 方法，其实就是简单调用了 session.flush() 和 conn.commit()。所以数据会被同步到数据库，而且，事务会提交。
+</p>
+</li>
+
+<li>在执行查询的时候，会隐式调用 flush 方法.
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #D0372D;">@Test</span>
+<span style="color: #0000FF;">public</span> <span style="color: #6434A3;">void</span> <span style="color: #006699;">testFlush</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#26356;&#26032;&#32531;&#23384;</span>
+   <span style="color: #6434A3;">Author</span> <span style="color: #BA36A5;">author</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Author</span><span style="color: #7388D6;">()</span>;
+   author.setName<span style="color: #7388D6;">(</span><span style="color: #008000;">"struts...."</span><span style="color: #7388D6;">)</span>;
+   author.setBirth<span style="color: #7388D6;">(</span><span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #909183;">()</span><span style="color: #7388D6;">)</span>;
+
+   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25968;&#25454;&#21482;&#26159;&#23384;&#22312;&#20110; session &#30340;&#32531;&#23384;&#20013;</span>
+   session.save<span style="color: #7388D6;">(</span>author<span style="color: #7388D6;">)</span>;
+
+   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#20174;&#25968;&#25454;&#24211;&#20013;&#36827;&#34892; query &#26597;&#35810;&#30340;&#26102;&#20505;&#65292;&#20250;&#35302;&#21457; flush &#35821;&#21477;&#12290;     </span>
+   <span style="color: #6434A3;">Query</span> <span style="color: #BA36A5;">query</span> = session.createQuery<span style="color: #7388D6;">(</span><span style="color: #008000;">"from Author"</span><span style="color: #7388D6;">)</span>;
+   System.out.println<span style="color: #7388D6;">(</span>query.list<span style="color: #909183;">()</span>.size<span style="color: #909183;">()</span><span style="color: #7388D6;">)</span>;
+
+   System.out.println<span style="color: #7388D6;">(</span><span style="color: #008000;">"ssss"</span><span style="color: #7388D6;">)</span>;
+ <span style="color: #707183;">}</span>
+</pre>
+</div>
+</li>
+</ol>
+</div>
+</section>
+
+
+<section id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">session.refresh()</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+在查询的时候，从数据库中更新数据。
+</p>
+
+<p>
+所以 refresh 会触发一次查询操作，保证取到的是跟数据库中一致的数据。
+</p>
+</div>
+</section>
+
+
+<section id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">session.clear()</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+清空整个的 session 缓存内容。
+</p>
+</div>
+</section>
+
+
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">Java 提高</h2>
+<div class="outline-text-2" id="text-7">
+</div><div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1">日期与时间</h3>
+<div class="outline-text-3" id="text-7-1">
+</div><div id="outline-container-sec-7-1-1" class="outline-4">
+<h4 id="sec-7-1-1">Date 类</h4>
+<div class="outline-text-4" id="text-7-1-1">
 <p>
 这是 java 最开始就有的类，用来处理时间。
 </p>
@@ -293,9 +395,9 @@ System.out.println<span style="color: #707183;">(</span>now.getTime<span style="
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-2" class="outline-4">
-<h4 id="sec-3-1-2">Calendar 类</h4>
-<div class="outline-text-4" id="text-3-1-2">
+<div id="outline-container-sec-7-1-2" class="outline-4">
+<h4 id="sec-7-1-2">Calendar 类</h4>
+<div class="outline-text-4" id="text-7-1-2">
 <p>
 后来由于 Date 类在处理国际化方面的一些局限，现在推荐用 Calendar 类代替 Date 类。
 </p>
@@ -322,9 +424,9 @@ System.out.println<span style="color: #707183;">(</span>cc.getTimeInMillis<span 
 </div>
 
 
-<div id="outline-container-sec-3-1-3" class="outline-4">
-<h4 id="sec-3-1-3">其它</h4>
-<div class="outline-text-4" id="text-3-1-3">
+<div id="outline-container-sec-7-1-3" class="outline-4">
+<h4 id="sec-7-1-3">其它</h4>
+<div class="outline-text-4" id="text-7-1-3">
 <p>
 通过以上代码看以看到，通过 calendar.setTime()/getTime() 方法可以实现 Date/Calendar 对象的转换。
 </p>
@@ -344,9 +446,9 @@ System.currentTimeMillis();
 
 
 
-<div id="outline-container-sec-3-2" class="outline-3">
-<h3 id="sec-3-2">getter 代码，实现更好的封装</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2">getter 代码，实现更好的封装</h3>
+<div class="outline-text-3" id="text-7-2">
 <div class="org-src-container">
 
 <pre class="src src-java"><span style="color: #D0372D;">@Test</span>
@@ -402,7 +504,7 @@ System.currentTimeMillis();
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-11-03 周四 08:51</p>
+<p class="date">Created: 2016-11-04 周五 07:02</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

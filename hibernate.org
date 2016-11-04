@@ -114,6 +114,67 @@ ORM:
    5) 提交事务，关闭 session，关闭 SessionFactory。
 
 
+
+* Load/Get
+get 跟 load 的区别如下：
+1. 如果查询的数据不存在的话，get 会返回 null；load 会抛出异常。
+2. get 是立即从数据库中检索数据； load 是懒加载，即只有当要使用对象的时刻，才进行加载，懒加载是通过代理实现的。
+
+
+* session.flush()
+
+是让 hibernate 立即执行 sql 语句，但是并不提交，同时更新session缓存。{即同步 session 里的缓存到数据库（插入，更新，删除等）。}
+
+: 只有在调用了 session.flush() 之后，session缓存里的数据，才会被发送到数据库，进行真正的数据库持久化操作。
+
+以下几种清空可以调用 flush:
+1. 我们可以在代码中显式调用。在调用的时候，会向数据库中发送操作指令。
+   : session.flush();
+
+2. 我们在调用 commit 的时候，也会隐式调用 flush 方法。
+   : session.commit();
+   commit() 方法，其实就是简单调用了 session.flush() 和 conn.commit()。所以数据会被同步到数据库，而且，事务会提交。
+
+3. 在执行查询的时候，会隐式调用 flush 方法.
+   #+BEGIN_SRC java
+   @Test
+   public void testFlush() {
+  		// 更新缓存
+  		Author author = new Author();
+  		author.setName("struts....");
+  		author.setBirth(new Date());
+  		
+  		// 数据只是存在于 session 的缓存中
+  		session.save(author);
+
+      // 从数据库中进行 query 查询的时候，会触发 flush 语句。  		
+  		Query query = session.createQuery("from Author");
+  		System.out.println(query.list().size());
+  		
+  		System.out.println("ssss");
+  	}
+   #+END_SRC
+
+
+* session.refresh()
+
+在查询的时候，从数据库中更新数据。
+
+所以 refresh 会触发一次查询操作，保证取到的是跟数据库中一致的数据。
+
+
+* session.clear()
+
+清空整个的 session 缓存内容。
+
+
+* Roll
+6. query 对象, hql
+3. Many to one 关系。包括配置，使用
+9. One to Many 关系。包括配置，使用
+
+
+
 * Java 提高
 
 
