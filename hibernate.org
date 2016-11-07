@@ -175,6 +175,8 @@ get 跟 load 的区别如下：
 
 
 
+
+* 改写 hello，增加 hibernate 支持
 * Java 提高
 
 
