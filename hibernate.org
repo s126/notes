@@ -168,10 +168,50 @@ get 跟 load 的区别如下：
 清空整个的 session 缓存内容。
 
 
+* ManyToOne
+如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
+那么就不能简单用 @Basic 注解或者 <property /> 标签去定义这个属性跟数据库中表的字段之间的映射关系。
+#+BEGIN_SRC java
+// 例如，一本书，肯定有一个作者，而 author 属性不是一个简单类型，而是一个对象的引用。
+// 书跟作者是一个一对一的关系，也就是一本书，只有一个作者
+class Book {
+  private Author author;
+}
+#+END_SRC
+在这种情况之下，我们需要用 @ManyToOne 注解 或者用 <many-to-one /> 标签去定义这个属性跟表字段之间的映射。
+
+many-to-one，这个标签的作用是为所在的列，添加一个外键约束。如果不显式指定 column 名字的话，那么默认生成的名字是 属性名_索引的主键名
+
+
+* Cascade
+级联。
+在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
+
+否则，会出现以下异常
+: org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: hibernate.assoc.many2one.Author
+
+解决方案有以下两种：
+1. 在保存对象前，对所有引用到的对象先执行持久化操作。
+2. 在实体类中，为这些引用到的对象，设置合适的级联属性。这样的话，hibernate 会在保存对象的时候，自动将引用到的还没有持久化的对象进行持久化。
+
+级联可以通过注解的形式进行配置，也可以通过 XML 的形式进行配置。
+: @ManyToOne(cascade=CascadeType.PERSIST)
+: <many-to-one cascade="save-update" />
+
+大抵有如下几种：
+: none：在保存，删除或修改当前对象时，不对其附属对象（关联对象）进行级联操作，它是默认值。 
+: save-update：在保存，更新当前对象时，级联保存，更新附属对象（临时对象、游离对象）。 
+: delete：在删除当前对象时，级联删除附属对象。 
+: all：所有情况下均进行级联操作，即包含 save-update 和 delete 操作
+
+* Fetch
+注解配置，有两种 FetchType.EAGER/FetchType.Lazy.
+
 * Roll
 6. query 对象, hql
 3. Many to one 关系。包括配置，使用
 9. One to Many 关系。包括配置，使用
+
 
 
 
