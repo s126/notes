@@ -180,7 +180,42 @@ class Book {
 #+END_SRC
 在这种情况之下，我们需要用 @ManyToOne 注解 或者用 <many-to-one /> 标签去定义这个属性跟表字段之间的映射。
 
+
 many-to-one，这个标签的作用是为所在的列，添加一个外键约束。如果不显式指定 column 名字的话，那么默认生成的名字是 属性名_索引的主键名
+
+many-to-one 标签内可以设置 lazy=(false|proxy|no-proxy), fetch=(select|join)。
+
+lazy 通过设置为 false 或其他，定义是否要进行懒加载。如果设置为 false，不会启用懒加载，否则，则会启用懒加载。
+懒加载是通过创建代理对象的形式去实现的，所以需要用到字节码编译的技术。
+lazy=proxy，那么当设置为懒加载的属性被调用的时候，才会触发查询操作。
+lazy=no-proxy，那么当被调用的时候，未必会去查询，只有当调用的语句中使用到数据库里存的数据的时候，才会真正的去数据库查询。
+所以，它是加强版的懒加载。lazy=no-proxy需要额外的字节码增强的设置，否则会跟 proxy 一致。
+
+fetch 设置立即加载组织成的查询语句的策略，如果设置为 join，那么会组织成一条 left-join 语句，
+如果是 select，那么会组织成若干条独立的查询语句，会查询多次。
+
+
+
+
+* OneToMany
+xml 中的配置如下：
+#+BEGIN_SRC xml
+<set name="books" cascade="save-update" lazy="extra" fetch="select">
+	<key column="authorid"></key>
+	<one-to-many class="Book" />
+</set>
+#+END_SRC
+
+lazy 有下面几个选项： false/true/extra。默认是 true。
+- 如果设置为 false，那么立即加载，加载的方式是多条 select 语句。
+- 如果设置为 true，会启用懒加载。只有在调用 books 的任何方法时，才会去初始化列表，从而触发从数据库中查询图书列表的请求。
+- 如果设置为 extra，也会启用懒加载，但是是更加智能化的懒加载。这时候，如果去调用 books.size() 或 books.contains() 等方法时，并不会真正的初始化图书列表。这样能尽可能节省资源。
+
+
+fetch 有以下几个选项：
+- 如果设置了 select，那么，查询的是多条 select 语句。这是默认值。
+- 如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
+- 如果设置了 subselect ....
 
 
 * Cascade
@@ -204,8 +239,11 @@ many-to-one，这个标签的作用是为所在的列，添加一个外键约束
 : delete：在删除当前对象时，级联删除附属对象。 
 : all：所有情况下均进行级联操作，即包含 save-update 和 delete 操作
 
+
+在我们的开发环境中，设置好 cascade 会让我们的代码更整洁，测试更方便。但是，在工业环境中，不建议使用任何 cascade 设置。
+
 * Fetch
-注解配置，有两种 FetchType.EAGER/FetchType.Lazy.
+注解配置，有两种 FetchType.EAGER/FetchType.Lazy，分别对应立即加载和惰性加载。
 
 * Roll
 6. query 对象, hql
