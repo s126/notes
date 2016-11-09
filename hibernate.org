@@ -218,6 +218,22 @@ fetch 有以下几个选项：
 - 如果设置了 subselect ....
 
 
+注解的形式如下:
+#+BEGIN_SRC java
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+@Fetch(FetchMode.JOIN)
+@JoinColumn(name="authorid")
+private Set<Book> books = new HashSet<Book>();
+#+END_SRC
+
+必须要注明 @JoinColumn，否则，会生成中间表来存储关联关系。 @JoinColumn 是用来订制生成的外键字段的。
+
+通过 cascade 可以设置级联属性；通过 fetch 可以设置是否采用懒加载；通过 @Fetch 注解可以指定查询语句的形式。
+
+注解的形式在某种意义上跟 xml 形式是对应的。
+
+
+* One.Many.双向
 * Cascade
 级联。
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。

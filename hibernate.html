@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Hibernate ORM</title>
-<!-- 2016-11-04 周五 07:02 -->
+<!-- 2016-11-09 周三 09:22 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -21,16 +21,23 @@
 <li><a href="#sec-4">session.flush()</a></li>
 <li><a href="#sec-5">session.refresh()</a></li>
 <li><a href="#sec-6">session.clear()</a></li>
-<li><a href="#sec-7">Java 提高</a>
+<li><a href="#sec-7">ManyToOne</a></li>
+<li><a href="#sec-8">OneToMany</a></li>
+<li><a href="#sec-9">One.Many.双向</a></li>
+<li><a href="#sec-10">Cascade</a></li>
+<li><a href="#sec-11">Fetch</a></li>
+<li><a href="#sec-12">Roll</a></li>
+<li><a href="#sec-13">改写 hello，增加 hibernate 支持</a></li>
+<li><a href="#sec-14">Java 提高</a>
 <ul>
-<li><a href="#sec-7-1">日期与时间</a>
+<li><a href="#sec-14-1">日期与时间</a>
 <ul>
-<li><a href="#sec-7-1-1">Date 类</a></li>
-<li><a href="#sec-7-1-2">Calendar 类</a></li>
-<li><a href="#sec-7-1-3">其它</a></li>
+<li><a href="#sec-14-1-1">Date 类</a></li>
+<li><a href="#sec-14-1-2">Calendar 类</a></li>
+<li><a href="#sec-14-1-3">其它</a></li>
 </ul>
 </li>
-<li><a href="#sec-7-2">getter 代码，实现更好的封装</a></li>
+<li><a href="#sec-14-2">getter 代码，实现更好的封装</a></li>
 </ul>
 </li>
 </ul>
@@ -360,14 +367,212 @@ commit() 方法，其实就是简单调用了 session.flush() 和 conn.commit()�
 
 
 <section id="outline-container-sec-7" class="outline-2">
-<h2 id="sec-7">Java 提高</h2>
+<h2 id="sec-7">ManyToOne</h2>
 <div class="outline-text-2" id="text-7">
-</div><div id="outline-container-sec-7-1" class="outline-3">
-<h3 id="sec-7-1">日期与时间</h3>
-<div class="outline-text-3" id="text-7-1">
-</div><div id="outline-container-sec-7-1-1" class="outline-4">
-<h4 id="sec-7-1-1">Date 类</h4>
-<div class="outline-text-4" id="text-7-1-1">
+<p>
+如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
+那么就不能简单用 @Basic 注解或者 &lt;property /&gt; 标签去定义这个属性跟数据库中表的字段之间的映射关系。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#20363;&#22914;&#65292;&#19968;&#26412;&#20070;&#65292;&#32943;&#23450;&#26377;&#19968;&#20010;&#20316;&#32773;&#65292;&#32780; author &#23646;&#24615;&#19981;&#26159;&#19968;&#20010;&#31616;&#21333;&#31867;&#22411;&#65292;&#32780;&#26159;&#19968;&#20010;&#23545;&#35937;&#30340;&#24341;&#29992;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#20070;&#36319;&#20316;&#32773;&#26159;&#19968;&#20010;&#19968;&#23545;&#19968;&#30340;&#20851;&#31995;&#65292;&#20063;&#23601;&#26159;&#19968;&#26412;&#20070;&#65292;&#21482;&#26377;&#19968;&#20010;&#20316;&#32773;</span>
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">Book</span> <span style="color: #707183;">{</span>
+  <span style="color: #0000FF;">private</span> <span style="color: #6434A3;">Author</span> <span style="color: #BA36A5;">author</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+<p>
+在这种情况之下，我们需要用 @ManyToOne 注解 或者用 &lt;many-to-one /&gt; 标签去定义这个属性跟表字段之间的映射。
+</p>
+
+
+<p>
+many-to-one，这个标签的作用是为所在的列，添加一个外键约束。如果不显式指定 column 名字的话，那么默认生成的名字是 属性名_索引的主键名
+</p>
+
+<p>
+many-to-one 标签内可以设置 lazy=(false|proxy|no-proxy), fetch=(select|join)。
+</p>
+
+<p>
+lazy 通过设置为 false 或其他，定义是否要进行懒加载。如果设置为 false，不会启用懒加载，否则，则会启用懒加载。
+懒加载是通过创建代理对象的形式去实现的，所以需要用到字节码编译的技术。
+lazy=proxy，那么当设置为懒加载的属性被调用的时候，才会触发查询操作。
+lazy=no-proxy，那么当被调用的时候，未必会去查询，只有当调用的语句中使用到数据库里存的数据的时候，才会真正的去数据库查询。
+所以，它是加强版的懒加载。lazy=no-proxy需要额外的字节码增强的设置，否则会跟 proxy 一致。
+</p>
+
+<p>
+fetch 设置立即加载组织成的查询语句的策略，如果设置为 join，那么会组织成一条 left-join 语句，
+如果是 select，那么会组织成若干条独立的查询语句，会查询多次。
+</p>
+</div>
+</section>
+
+
+
+
+<section id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">OneToMany</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+xml 中的配置如下：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">set</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">books</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">cascade</span>=<span style="color: #008000;">"</span><span style="color: #008000;">save-update</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">lazy</span>=<span style="color: #008000;">"</span><span style="color: #008000;">extra</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">fetch</span>=<span style="color: #008000;">"</span><span style="color: #008000;">select</span><span style="color: #008000;">"</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">key</span> <span style="color: #BA36A5;">column</span>=<span style="color: #008000;">"</span><span style="color: #008000;">authorid</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">key</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">one-to-many</span> <span style="color: #BA36A5;">class</span>=<span style="color: #008000;">"</span><span style="color: #008000;">Book</span><span style="color: #008000;">"</span> /&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">set</span>&gt;
+</pre>
+</div>
+
+<p>
+lazy 有下面几个选项： false/true/extra。默认是 true。
+</p>
+<ul class="org-ul">
+<li>如果设置为 false，那么立即加载，加载的方式是多条 select 语句。
+</li>
+<li>如果设置为 true，会启用懒加载。只有在调用 books 的任何方法时，才会去初始化列表，从而触发从数据库中查询图书列表的请求。
+</li>
+<li>如果设置为 extra，也会启用懒加载，但是是更加智能化的懒加载。这时候，如果去调用 books.size() 或 books.contains() 等方法时，并不会真正的初始化图书列表。这样能尽可能节省资源。
+</li>
+</ul>
+
+
+<p>
+fetch 有以下几个选项：
+</p>
+<ul class="org-ul">
+<li>如果设置了 select，那么，查询的是多条 select 语句。这是默认值。
+</li>
+<li>如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
+</li>
+<li>如果设置了 subselect &#x2026;.
+</li>
+</ul>
+
+
+<p>
+注解的形式如下:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #D0372D;">@OneToMany</span><span style="color: #707183;">(</span>cascade=<span style="color: #D0372D;">CascadeType</span>.ALL, fetch=<span style="color: #D0372D;">FetchType</span>.LAZY<span style="color: #707183;">)</span>
+<span style="color: #D0372D;">@Fetch</span><span style="color: #707183;">(</span><span style="color: #D0372D;">FetchMode</span>.<span style="color: #6434A3;">JOIN</span><span style="color: #707183;">)</span>
+<span style="color: #D0372D;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #008000;">"authorid"</span><span style="color: #707183;">)</span>
+<span style="color: #0000FF;">private</span> <span style="color: #6434A3;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #BA36A5;">books</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">Book</span><span style="color: #707183;">&gt;()</span>;
+</pre>
+</div>
+
+<p>
+必须要注明 @JoinColumn，否则，会生成中间表来存储关联关系。 @JoinColumn 是用来订制生成的外键字段的。
+</p>
+
+<p>
+通过 cascade 可以设置级联属性；通过 fetch 可以设置是否采用懒加载；通过 @Fetch 注解可以指定查询语句的形式。
+</p>
+
+<p>
+注解的形式在某种意义上跟 xml 形式是对应的。
+</p>
+</div>
+</section>
+
+
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">One.Many.双向</h2>
+</section>
+<section id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">Cascade</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+级联。
+在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
+</p>
+
+<p>
+否则，会出现以下异常
+</p>
+<pre class="example">
+org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: hibernate.assoc.many2one.Author
+</pre>
+
+<p>
+解决方案有以下两种：
+</p>
+<ol class="org-ol">
+<li>在保存对象前，对所有引用到的对象先执行持久化操作。
+</li>
+<li>在实体类中，为这些引用到的对象，设置合适的级联属性。这样的话，hibernate 会在保存对象的时候，自动将引用到的还没有持久化的对象进行持久化。
+</li>
+</ol>
+
+<p>
+级联可以通过注解的形式进行配置，也可以通过 XML 的形式进行配置。
+</p>
+<pre class="example">
+@ManyToOne(cascade=CascadeType.PERSIST)
+&lt;many-to-one cascade="save-update" /&gt;
+</pre>
+
+<p>
+大抵有如下几种：
+</p>
+<pre class="example">
+none：在保存，删除或修改当前对象时，不对其附属对象（关联对象）进行级联操作，它是默认值。 
+save-update：在保存，更新当前对象时，级联保存，更新附属对象（临时对象、游离对象）。 
+delete：在删除当前对象时，级联删除附属对象。 
+all：所有情况下均进行级联操作，即包含 save-update 和 delete 操作
+</pre>
+
+
+<p>
+在我们的开发环境中，设置好 cascade 会让我们的代码更整洁，测试更方便。但是，在工业环境中，不建议使用任何 cascade 设置。
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">Fetch</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+注解配置，有两种 FetchType.EAGER/FetchType.Lazy，分别对应立即加载和惰性加载。
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">Roll</h2>
+<div class="outline-text-2" id="text-12">
+<ol class="org-ol">
+<li>query 对象, hql
+</li>
+<li>Many to one 关系。包括配置，使用
+</li>
+<li>One to Many 关系。包括配置，使用
+</li>
+</ol>
+</div>
+</section>
+
+
+
+
+
+<section id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">改写 hello，增加 hibernate 支持</h2>
+</section>
+<section id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">Java 提高</h2>
+<div class="outline-text-2" id="text-14">
+</div><div id="outline-container-sec-14-1" class="outline-3">
+<h3 id="sec-14-1">日期与时间</h3>
+<div class="outline-text-3" id="text-14-1">
+</div><div id="outline-container-sec-14-1-1" class="outline-4">
+<h4 id="sec-14-1-1">Date 类</h4>
+<div class="outline-text-4" id="text-14-1-1">
 <p>
 这是 java 最开始就有的类，用来处理时间。
 </p>
@@ -395,9 +600,9 @@ System.out.println<span style="color: #707183;">(</span>now.getTime<span style="
 </div>
 </div>
 
-<div id="outline-container-sec-7-1-2" class="outline-4">
-<h4 id="sec-7-1-2">Calendar 类</h4>
-<div class="outline-text-4" id="text-7-1-2">
+<div id="outline-container-sec-14-1-2" class="outline-4">
+<h4 id="sec-14-1-2">Calendar 类</h4>
+<div class="outline-text-4" id="text-14-1-2">
 <p>
 后来由于 Date 类在处理国际化方面的一些局限，现在推荐用 Calendar 类代替 Date 类。
 </p>
@@ -424,9 +629,9 @@ System.out.println<span style="color: #707183;">(</span>cc.getTimeInMillis<span 
 </div>
 
 
-<div id="outline-container-sec-7-1-3" class="outline-4">
-<h4 id="sec-7-1-3">其它</h4>
-<div class="outline-text-4" id="text-7-1-3">
+<div id="outline-container-sec-14-1-3" class="outline-4">
+<h4 id="sec-14-1-3">其它</h4>
+<div class="outline-text-4" id="text-14-1-3">
 <p>
 通过以上代码看以看到，通过 calendar.setTime()/getTime() 方法可以实现 Date/Calendar 对象的转换。
 </p>
@@ -446,9 +651,9 @@ System.currentTimeMillis();
 
 
 
-<div id="outline-container-sec-7-2" class="outline-3">
-<h3 id="sec-7-2">getter 代码，实现更好的封装</h3>
-<div class="outline-text-3" id="text-7-2">
+<div id="outline-container-sec-14-2" class="outline-3">
+<h3 id="sec-14-2">getter 代码，实现更好的封装</h3>
+<div class="outline-text-3" id="text-14-2">
 <div class="org-src-container">
 
 <pre class="src src-java"><span style="color: #D0372D;">@Test</span>
@@ -504,7 +709,7 @@ System.currentTimeMillis();
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-11-04 周五 07:02</p>
+<p class="date">Created: 2016-11-09 周三 09:22</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
