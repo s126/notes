@@ -168,6 +168,22 @@ get 跟 load 的区别如下：
 清空整个的 session 缓存内容。
 
 
+* Assoc
+因为，在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
+
+但是，在我们的java中，存在的是多个类，类之间是通过互相引用的形式进行沟通。（即一个类中，包含另一个类的引用）。
+
+ORM 的主要是，用面向对象的思维去操作数据库。所以，我们在操作java中的对象，或者修改java中对象之间的关系的时候，ORM 框架能够把我们对对象的修改转换为数据库中表的修改。
+
+所以，我们需要在 java 中设置类之间的相互关系，那么，ORM 框架（hibernate）才能够正确的进行这种转换。
+
+即，hibernate 会根据我们设置的 ManyToOne 等设置，生成正确的表跟表之间的关联。还能够在我们增删改查的时候，根据我们的设置，生成正确的 sql 语句。
+
+所以，不管通过xml还是annotation的形式，你要告诉 hibernate 类之间的关系，他才能在你调用类似 session.save(对象) 的方法时，生成正确的语句并插入数据库。
+
+目前为止，先模仿，后理解。练习越多，越明白。只看不练，空把式。
+
+
 * ManyToOne
 如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
 那么就不能简单用 @Basic 注解或者 <property /> 标签去定义这个属性跟数据库中表的字段之间的映射关系。
@@ -234,6 +250,48 @@ private Set<Book> books = new HashSet<Book>();
 
 
 * One.Many.双向
+** 在 xml 中配置
+#+BEGIN_SRC xml
+<set name="books" inverse="true">
+	<key column="authorid"></key>
+	<one-to-many class="Book" />
+</set>
+
+<many-to-one name="author" column="authorid" class="Author"></many-to-one>
+#+END_SRC
+
+首先，必须要保证 上面的 column 跟下面的 column 要一致，否则，会在创建表的时候，生成重复的字段，产生不必要的问题。
+
+其次，要在 set 上面配置 inverse="true"，否则，会在生成语句的时候，产生很多很多的冗余。在一对多双向关系中，一般情况下，要在多的一边设置 inverse。
+
+ps：如果设置了 inverse=true，那么会将另一边设为主端，负责关系的维护。
+也就是说，当执行 session.save(author) 的时候，不去维护 authorid 的信息；而当执行 session.save(book) 的时候，才去维护 authorid 的信息。
+这样，多的一方维护关系，从而减轻了维护成本，提高了效率。（想想习大大跟我们的例子）。
+
+还要注意，在保存的时候，要先保存 1 的一方，否则，会产生很多不必要的 update 语句，从而影响效率。
+
+
+** 通过注解的方式进行配置
+在双边分别这样配置：
+#+BEGIN_SRC java
+// @JoinColumn(name="authorid") 这个不需要去写，因为 mappedBy 会默认触发外键操作
+@OneToMany(mappedBy="author")   // author 对应的是 book 里面的 author 属性
+private Set<Book> books = new HashSet<Book>();
+
+
+@ManyToOne
+@JoinColumn(name="authorid")
+private Author author;
+#+END_SRC
+
+首先，上边跟下边的 JoinColumn 值的名字，需要一致
+
+其次，要在 @OneToMany 里面设置 mappedBy 属性，将双方关系的控制权交给另外一边。
+
+最后，保存的时候，注意顺序，要先保存 1 的一边。
+
+
+
 * Cascade
 级联。
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
