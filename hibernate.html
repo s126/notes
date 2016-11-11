@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Hibernate ORM</title>
-<!-- 2016-11-10 周四 03:29 -->
+<!-- 2016-11-10 周四 06:39 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -21,29 +21,33 @@
 <li><a href="#sec-4">session.flush()</a></li>
 <li><a href="#sec-5">session.refresh()</a></li>
 <li><a href="#sec-6">session.clear()</a></li>
-<li><a href="#sec-7">Assoc</a></li>
-<li><a href="#sec-8">ManyToOne</a></li>
-<li><a href="#sec-9">OneToMany</a></li>
-<li><a href="#sec-10">One.Many.双向</a>
+<li><a href="#sec-7">ManyToOne</a></li>
+<li><a href="#sec-8">OneToMany</a>
 <ul>
-<li><a href="#sec-10-1">在 xml 中配置</a></li>
-<li><a href="#sec-10-2">通过注解的方式进行配置</a></li>
+<li><a href="#sec-8-1">xml 中的配置</a></li>
+<li><a href="#sec-8-2">注解的形式</a></li>
 </ul>
 </li>
-<li><a href="#sec-11">Cascade</a></li>
-<li><a href="#sec-12">Fetch</a></li>
-<li><a href="#sec-13">Roll</a></li>
-<li><a href="#sec-14">改写 hello，增加 hibernate 支持</a></li>
-<li><a href="#sec-15">Java 提高</a>
+<li><a href="#sec-9">One.Many.双向</a>
 <ul>
-<li><a href="#sec-15-1">日期与时间</a>
-<ul>
-<li><a href="#sec-15-1-1">Date 类</a></li>
-<li><a href="#sec-15-1-2">Calendar 类</a></li>
-<li><a href="#sec-15-1-3">其它</a></li>
+<li><a href="#sec-9-1">在 xml 中配置</a></li>
+<li><a href="#sec-9-2">通过注解的方式进行配置</a></li>
 </ul>
 </li>
-<li><a href="#sec-15-2">getter 代码，实现更好的封装</a></li>
+<li><a href="#sec-10">Cascade</a></li>
+<li><a href="#sec-11">Fetch</a></li>
+<li><a href="#sec-12">Roll</a></li>
+<li><a href="#sec-13">改写 hello，增加 hibernate 支持</a></li>
+<li><a href="#sec-14">Java 提高</a>
+<ul>
+<li><a href="#sec-14-1">日期与时间</a>
+<ul>
+<li><a href="#sec-14-1-1">Date 类</a></li>
+<li><a href="#sec-14-1-2">Calendar 类</a></li>
+<li><a href="#sec-14-1-3">其它</a></li>
+</ul>
+</li>
+<li><a href="#sec-14-2">getter 代码，实现更好的封装</a></li>
 </ul>
 </li>
 </ul>
@@ -368,14 +372,10 @@ commit() 方法，其实就是简单调用了 session.flush() 和 conn.commit()�
 <p>
 清空整个的 session 缓存内容。
 </p>
-</div>
-</section>
 
 
-<section id="outline-container-sec-7" class="outline-2">
-<h2 id="sec-7">Assoc</h2>
-<div class="outline-text-2" id="text-7">
 <p>
+h* Assoc
 因为，在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
 </p>
 
@@ -406,9 +406,9 @@ ORM 的主要是，用面向对象的思维去操作数据库。所以，我们�
 </section>
 
 
-<section id="outline-container-sec-8" class="outline-2">
-<h2 id="sec-8">ManyToOne</h2>
-<div class="outline-text-2" id="text-8">
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">ManyToOne</h2>
+<div class="outline-text-2" id="text-7">
 <p>
 如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
 那么就不能简单用 @Basic 注解或者 &lt;property /&gt; 标签去定义这个属性跟数据库中表的字段之间的映射关系。
@@ -453,12 +453,12 @@ fetch 设置立即加载组织成的查询语句的策略，如果设置为 join
 
 
 
-<section id="outline-container-sec-9" class="outline-2">
-<h2 id="sec-9">OneToMany</h2>
-<div class="outline-text-2" id="text-9">
-<p>
-xml 中的配置如下：
-</p>
+<section id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">OneToMany</h2>
+<div class="outline-text-2" id="text-8">
+</div><div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1">xml 中的配置</h3>
+<div class="outline-text-3" id="text-8-1">
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">set</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">books</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">cascade</span>=<span style="color: #008000;">"</span><span style="color: #008000;">save-update</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">lazy</span>=<span style="color: #008000;">"</span><span style="color: #008000;">extra</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">fetch</span>=<span style="color: #008000;">"</span><span style="color: #008000;">select</span><span style="color: #008000;">"</span>&gt;
@@ -490,13 +490,32 @@ fetch 有以下几个选项：
 <li>如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
 </li>
 <li>如果设置了 subselect &#x2026;.
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#26597;&#35810;&#21040;&#22810;&#26465;&#25968;&#25454;&#65292;&#27599;&#26465;&#25968;&#25454;&#20013;&#37117;&#21547;&#26377;&#19968;&#20010;&#19968;&#23545;&#22810;&#30340;&#20851;&#32852;&#25968;&#25454;&#65292;&#37027;&#20040;&#21021;&#22987;&#21270;&#36825;&#20123;&#20851;&#32852;&#25968;&#25454;&#26102;&#65306;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#35774;&#32622;&#20026; select&#65292;&#37027;&#20040;&#20998;&#21035;&#21457;&#36865;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> book books0_ <span style="color: #0000FF;">where</span> books0_.authorid = 4;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> book books0_ <span style="color: #0000FF;">where</span> books0_.authorid = 1;
+<span style="color: #8D8D84; font-style: italic;">-- &#21487;&#33021;&#36824;&#26377;&#24456;&#22810;&#24456;&#22810;&#26465;</span>
+
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#35774;&#32622;&#20026; subselect&#65292;&#32452;&#32455;&#25104;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;&#20250;&#26356;&#21152;&#33410;&#30465;&#36164;&#28304;&#12290;</span>
+<span style="color: #0000FF;">select</span> *
+  <span style="color: #0000FF;">from</span> book books0_
+ <span style="color: #0000FF;">where</span> books0_.authorid <span style="color: #0000FF;">in</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> author0_.aid <span style="color: #0000FF;">from</span> author author0_<span style="color: #707183;">)</span>;
+</pre>
+</div>
 </li>
 </ul>
+</div>
+</div>
 
 
-<p>
-注解的形式如下:
-</p>
+
+
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2">注解的形式</h3>
+<div class="outline-text-3" id="text-8-2">
 <div class="org-src-container">
 
 <pre class="src src-java"><span style="color: #D0372D;">@OneToMany</span><span style="color: #707183;">(</span>cascade=<span style="color: #D0372D;">CascadeType</span>.ALL, fetch=<span style="color: #D0372D;">FetchType</span>.LAZY<span style="color: #707183;">)</span>
@@ -518,15 +537,16 @@ fetch 有以下几个选项：
 注解的形式在某种意义上跟 xml 形式是对应的。
 </p>
 </div>
+</div>
 </section>
 
 
-<section id="outline-container-sec-10" class="outline-2">
-<h2 id="sec-10">One.Many.双向</h2>
-<div class="outline-text-2" id="text-10">
-</div><div id="outline-container-sec-10-1" class="outline-3">
-<h3 id="sec-10-1">在 xml 中配置</h3>
-<div class="outline-text-3" id="text-10-1">
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">One.Many.双向</h2>
+<div class="outline-text-2" id="text-9">
+</div><div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1">在 xml 中配置</h3>
+<div class="outline-text-3" id="text-9-1">
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">set</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">books</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">inverse</span>=<span style="color: #008000;">"</span><span style="color: #008000;">true</span><span style="color: #008000;">"</span>&gt;
@@ -559,9 +579,9 @@ ps：如果设置了 inverse=true，那么会将另一边设为主端，负责�
 </div>
 
 
-<div id="outline-container-sec-10-2" class="outline-3">
-<h3 id="sec-10-2">通过注解的方式进行配置</h3>
-<div class="outline-text-3" id="text-10-2">
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2">通过注解的方式进行配置</h3>
+<div class="outline-text-3" id="text-9-2">
 <p>
 在双边分别这样配置：
 </p>
@@ -595,9 +615,9 @@ ps：如果设置了 inverse=true，那么会将另一边设为主端，负责�
 
 
 
-<section id="outline-container-sec-11" class="outline-2">
-<h2 id="sec-11">Cascade</h2>
-<div class="outline-text-2" id="text-11">
+<section id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">Cascade</h2>
+<div class="outline-text-2" id="text-10">
 <p>
 级联。
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
@@ -645,18 +665,18 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </div>
 </section>
 
-<section id="outline-container-sec-12" class="outline-2">
-<h2 id="sec-12">Fetch</h2>
-<div class="outline-text-2" id="text-12">
+<section id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">Fetch</h2>
+<div class="outline-text-2" id="text-11">
 <p>
 注解配置，有两种 FetchType.EAGER/FetchType.Lazy，分别对应立即加载和惰性加载。
 </p>
 </div>
 </section>
 
-<section id="outline-container-sec-13" class="outline-2">
-<h2 id="sec-13">Roll</h2>
-<div class="outline-text-2" id="text-13">
+<section id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">Roll</h2>
+<div class="outline-text-2" id="text-12">
 <ol class="org-ol">
 <li>query 对象, hql
 </li>
@@ -672,18 +692,18 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 
 
 
-<section id="outline-container-sec-14" class="outline-2">
-<h2 id="sec-14">改写 hello，增加 hibernate 支持</h2>
+<section id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">改写 hello，增加 hibernate 支持</h2>
 </section>
-<section id="outline-container-sec-15" class="outline-2">
-<h2 id="sec-15">Java 提高</h2>
-<div class="outline-text-2" id="text-15">
-</div><div id="outline-container-sec-15-1" class="outline-3">
-<h3 id="sec-15-1">日期与时间</h3>
-<div class="outline-text-3" id="text-15-1">
-</div><div id="outline-container-sec-15-1-1" class="outline-4">
-<h4 id="sec-15-1-1">Date 类</h4>
-<div class="outline-text-4" id="text-15-1-1">
+<section id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">Java 提高</h2>
+<div class="outline-text-2" id="text-14">
+</div><div id="outline-container-sec-14-1" class="outline-3">
+<h3 id="sec-14-1">日期与时间</h3>
+<div class="outline-text-3" id="text-14-1">
+</div><div id="outline-container-sec-14-1-1" class="outline-4">
+<h4 id="sec-14-1-1">Date 类</h4>
+<div class="outline-text-4" id="text-14-1-1">
 <p>
 这是 java 最开始就有的类，用来处理时间。
 </p>
@@ -711,9 +731,9 @@ System.out.println<span style="color: #707183;">(</span>now.getTime<span style="
 </div>
 </div>
 
-<div id="outline-container-sec-15-1-2" class="outline-4">
-<h4 id="sec-15-1-2">Calendar 类</h4>
-<div class="outline-text-4" id="text-15-1-2">
+<div id="outline-container-sec-14-1-2" class="outline-4">
+<h4 id="sec-14-1-2">Calendar 类</h4>
+<div class="outline-text-4" id="text-14-1-2">
 <p>
 后来由于 Date 类在处理国际化方面的一些局限，现在推荐用 Calendar 类代替 Date 类。
 </p>
@@ -740,9 +760,9 @@ System.out.println<span style="color: #707183;">(</span>cc.getTimeInMillis<span 
 </div>
 
 
-<div id="outline-container-sec-15-1-3" class="outline-4">
-<h4 id="sec-15-1-3">其它</h4>
-<div class="outline-text-4" id="text-15-1-3">
+<div id="outline-container-sec-14-1-3" class="outline-4">
+<h4 id="sec-14-1-3">其它</h4>
+<div class="outline-text-4" id="text-14-1-3">
 <p>
 通过以上代码看以看到，通过 calendar.setTime()/getTime() 方法可以实现 Date/Calendar 对象的转换。
 </p>
@@ -762,9 +782,9 @@ System.currentTimeMillis();
 
 
 
-<div id="outline-container-sec-15-2" class="outline-3">
-<h3 id="sec-15-2">getter 代码，实现更好的封装</h3>
-<div class="outline-text-3" id="text-15-2">
+<div id="outline-container-sec-14-2" class="outline-3">
+<h3 id="sec-14-2">getter 代码，实现更好的封装</h3>
+<div class="outline-text-3" id="text-14-2">
 <div class="org-src-container">
 
 <pre class="src src-java"><span style="color: #D0372D;">@Test</span>
@@ -820,7 +840,7 @@ System.currentTimeMillis();
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-11-10 周四 03:29</p>
+<p class="date">Created: 2016-11-10 周四 06:39</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

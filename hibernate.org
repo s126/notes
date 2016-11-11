@@ -168,7 +168,7 @@ get 跟 load 的区别如下：
 清空整个的 session 缓存内容。
 
 
-* Assoc
+h* Assoc
 因为，在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
 
 但是，在我们的java中，存在的是多个类，类之间是通过互相引用的形式进行沟通。（即一个类中，包含另一个类的引用）。
@@ -214,7 +214,7 @@ fetch 设置立即加载组织成的查询语句的策略，如果设置为 join
 
 
 * OneToMany
-xml 中的配置如下：
+** xml 中的配置
 #+BEGIN_SRC xml
 <set name="books" cascade="save-update" lazy="extra" fetch="select">
 	<key column="authorid"></key>
@@ -232,9 +232,24 @@ fetch 有以下几个选项：
 - 如果设置了 select，那么，查询的是多条 select 语句。这是默认值。
 - 如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
 - 如果设置了 subselect ....
+  #+BEGIN_SRC sql
+  -- 如果查询到多条数据，每条数据中都含有一个一对多的关联数据，那么初始化这些关联数据时：
+  
+  -- 如果设置为 select，那么分别发送一条语句去查询。
+  select * from book books0_ where books0_.authorid = 4;
+  select * from book books0_ where books0_.authorid = 1;
+  -- 可能还有很多很多条
+  
+  -- 如果设置为 subselect，组织成一条语句去查询。会更加节省资源。
+  select *
+    from book books0_
+   where books0_.authorid in (select author0_.aid from author author0_);
+  #+END_SRC
 
 
-注解的形式如下:
+
+
+** 注解的形式
 #+BEGIN_SRC java
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 @Fetch(FetchMode.JOIN)
