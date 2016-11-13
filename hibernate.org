@@ -121,7 +121,8 @@ get 跟 load 的区别如下：
 2. get 是立即从数据库中检索数据； load 是懒加载，即只有当要使用对象的时刻，才进行加载，懒加载是通过代理实现的。
 
 
-* session.flush()
+* Session 操作
+** session.flush()
 
 是让 hibernate 立即执行 sql 语句，但是并不提交，同时更新session缓存。{即同步 session 里的缓存到数据库（插入，更新，删除等）。}
 
@@ -156,19 +157,20 @@ get 跟 load 的区别如下：
    #+END_SRC
 
 
-* session.refresh()
+** session.refresh()
 
 在查询的时候，从数据库中更新数据。
 
 所以 refresh 会触发一次查询操作，保证取到的是跟数据库中一致的数据。
 
 
-* session.clear()
+** session.clear()
 
 清空整个的 session 缓存内容。
 
 
-h* Assoc
+* 关联映射
+
 因为，在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
 
 但是，在我们的java中，存在的是多个类，类之间是通过互相引用的形式进行沟通。（即一个类中，包含另一个类的引用）。
@@ -184,7 +186,7 @@ ORM 的主要是，用面向对象的思维去操作数据库。所以，我们�
 目前为止，先模仿，后理解。练习越多，越明白。只看不练，空把式。
 
 
-* ManyToOne
+** ManyToOne
 如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
 那么就不能简单用 @Basic 注解或者 <property /> 标签去定义这个属性跟数据库中表的字段之间的映射关系。
 #+BEGIN_SRC java
@@ -213,8 +215,8 @@ fetch 设置立即加载组织成的查询语句的策略，如果设置为 join
 
 
 
-* OneToMany
-** xml 中的配置
+** OneToMany
+*** xml 中的配置
 #+BEGIN_SRC xml
 <set name="books" cascade="save-update" lazy="extra" fetch="select">
 	<key column="authorid"></key>
@@ -249,7 +251,7 @@ fetch 有以下几个选项：
 
 
 
-** 注解的形式
+*** 注解的形式
 #+BEGIN_SRC java
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 @Fetch(FetchMode.JOIN)
@@ -264,8 +266,8 @@ private Set<Book> books = new HashSet<Book>();
 注解的形式在某种意义上跟 xml 形式是对应的。
 
 
-* One.Many.双向
-** 在 xml 中配置
+** OneToMany.BothWay
+*** 在 xml 中配置
 #+BEGIN_SRC xml
 <set name="books" inverse="true">
 	<key column="authorid"></key>
@@ -286,7 +288,7 @@ ps：如果设置了 inverse=true，那么会将另一边设为主端，负责�
 还要注意，在保存的时候，要先保存 1 的一方，否则，会产生很多不必要的 update 语句，从而影响效率。
 
 
-** 通过注解的方式进行配置
+*** 通过注解的方式进行配置
 在双边分别这样配置：
 #+BEGIN_SRC java
 // @JoinColumn(name="authorid") 这个不需要去写，因为 mappedBy 会默认触发外键操作
@@ -307,8 +309,11 @@ private Author author;
 
 
 
-* Cascade
-级联。
+** ManyToMany
+** OneToOne
+** Em
+* 级联（Cascade）
+
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
 
 否则，会出现以下异常
@@ -331,19 +336,96 @@ private Author author;
 
 在我们的开发环境中，设置好 cascade 会让我们的代码更整洁，测试更方便。但是，在工业环境中，不建议使用任何 cascade 设置。
 
-* Fetch
-注解配置，有两种 FetchType.EAGER/FetchType.Lazy，分别对应立即加载和惰性加载。
+* 懒加载
+可以通过 fetch 属性 配置懒加载，FetchType.EAGER 指定非懒加载，FetchType.Lazy 指定使用懒加载。
 
-* Roll
-6. query 对象, hql
-3. Many to one 关系。包括配置，使用
-9. One to Many 关系。包括配置，使用
+可以通过 @Fetch 注解配置懒加载策略。
+
+* 检索策略
+
+把握的原则是：
+1. 不浪费内存
+2. 更高的效率。(如尽量少的sql语句)
+
+类级别的检索策略：
+- 分为立即检索 和 延迟检索
+- 类级别检索策略可以通过<class>的 lazy 属性进行控制
+- class 的 lazy 仅对 load() 方法有效
+- 延迟检索返回的是代理对象。所以注意不要发生懒加载异常。
+- class 的 batch-size，全局批量模式
+
+<set>元素的检索策略：
+- lazy，决定集合被初始化的时机，true/false/extra
+- Hibernate.initialize() 调用代码显式初始化
+- fetch，"select"."subselect"/"join"，决定查询的形式/时机
+- 若把 fetch 设置为 subselect，会通过子查询的方式来初始化所有set集合。
+  子查询作为 where 的 in 条件出现。此时 lazy有效，batch-size失效。
+- 若把 fetch 设置为 join，迫切使用左连接，lazy会失效。
+- hql 查询会忽略 fetch=join 的取值
+- batch-size，设定批量查询数量，减少select次数，提高检索性能
+- 在查询时，对集合中的元素进行排序。 order by 中使用的是表的字段名，
+
+<many-to-one>的检索策略:
+- lazy 取值 proxy/no-proxy/false
+
+* 检索方式
+** HQL
+- 基本用法
+- 分页查询
+- 投影查询
+- NamedQuery
+- 内外连接
+** QBC
+** SQLQuery
+- 基本语法
+- 增加条件（addScalar）
+- 返回结果（addEntity）
+* 继承
+开发的时候用的不是特别多。所以心态：了解。
+
+在父类中指明继承策略
+1. @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+   : DiscriminatorColumn(name="xxx")
+   : DiscriminatorValue(value="e")
+2. @Inheritance(strategy=InheritanceType.JOINED)
+   : @Entity
+   : @PrimaryKeyJoinColumn(name="xxx")
+   : class Dog extents Animal { ... }
+3. @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+   : 每个实现一个表的模式
 
 
+** subclass
+- 只有一张表，查询快速
+- 使用了区别列
+- 子类独有列不能添非空约束
+- 继承层次深则冗余字段很多
 
+** joined-class
+- 查询父类记录，做一个左连接查询
+- 查询子记录，做一个内联接查询
+- 查询效率略低
+- 没有冗余的字段
 
+** union-subclass
+- 每个实现类都有一个独立的表
+- 查子类不错，查父类需要union
+- 但存在冗余字段
+- 若更新父表的字段，效率较低
 
-* 改写 hello，增加 hibernate 支持
+* 二级缓存
+1. 加入 hibernate-ehcache.jar 及关联包
+2. 创建/复制 ehcachexml 到类路径
+3. 配置 hibernate.cfg.xml
+   : <property name="cache.user_second_level_cache">true</property>
+   : <property name="cache.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+4. 配置要被缓存的类
+   - 在 hibernate.cfg.xml 中配置
+     : <class-cache usage="read-only" class="ccc.hibernate.cache.Employee"/>
+   - 在 .hbm.xml 中添加
+     : <cache usage="read-only"/>
+   - 在类或集合上添加
+     : @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 * Java 提高
 
 
@@ -454,3 +536,15 @@ class BirthUtil {
 }
 
 #+END_SRC
+
+* 改写 hello，增加 hibernate 支持
+* Roll
+6. query 对象, hql
+3. Many to one 关系。包括配置，使用
+9. One to Many 关系。包括配置，使用
+
+
+
+
+
+
