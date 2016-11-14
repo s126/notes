@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Hibernate ORM</title>
-<!-- 2016-11-14 周一 07:50 -->
+<!-- 2016-11-14 周一 03:26 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -41,8 +41,13 @@
 </ul>
 </li>
 <li><a href="#sec-5-4">ManyToMany</a></li>
-<li><a href="#sec-5-5">OneToOne</a></li>
-<li><a href="#sec-5-6">Em</a></li>
+<li><a href="#sec-5-5">OneToOne</a>
+<ul>
+<li><a href="#sec-5-5-1">PK assoc</a></li>
+<li><a href="#sec-5-5-2">FK assoc</a></li>
+</ul>
+</li>
+<li><a href="#sec-5-6">Embedded(Component)</a></li>
 </ul>
 </li>
 <li><a href="#sec-6">级联（Cascade）</a></li>
@@ -63,20 +68,21 @@
 </ul>
 </li>
 <li><a href="#sec-11">二级缓存</a></li>
-<li><a href="#sec-12">Java 提高</a>
+<li><a href="#sec-12">乐观锁、悲观锁</a></li>
+<li><a href="#sec-13">Java 提高</a>
 <ul>
-<li><a href="#sec-12-1">日期与时间</a>
+<li><a href="#sec-13-1">日期与时间</a>
 <ul>
-<li><a href="#sec-12-1-1">Date 类</a></li>
-<li><a href="#sec-12-1-2">Calendar 类</a></li>
-<li><a href="#sec-12-1-3">其它</a></li>
+<li><a href="#sec-13-1-1">Date 类</a></li>
+<li><a href="#sec-13-1-2">Calendar 类</a></li>
+<li><a href="#sec-13-1-3">其它</a></li>
 </ul>
 </li>
-<li><a href="#sec-12-2">getter 代码，实现更好的封装</a></li>
+<li><a href="#sec-13-2">getter 代码，实现更好的封装</a></li>
 </ul>
 </li>
-<li><a href="#sec-13">改写 hello，增加 hibernate 支持</a></li>
-<li><a href="#sec-14">Roll</a></li>
+<li><a href="#sec-14">改写 hello，增加 hibernate 支持</a></li>
+<li><a href="#sec-15">Roll</a></li>
 </ul>
 </div>
 </nav>
@@ -145,31 +151,31 @@ Object-Relationship Mapping
 <li>创建 hibernate 的配置文件 hibernate.cfg.xml，指定数据库信息、打印sql语句策略等
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span>?&gt;
-&lt;!<span style="color: #a020f0;">DOCTYPE</span> hibernate-configuration <span style="color: #a020f0;">PUBLIC</span>
- <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Hibernate/Hibernate Configuration DTD 3.0//EN</span><span style="color: #8b2252;">"</span>
- <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd</span><span style="color: #8b2252;">"</span>&gt;
+<pre class="src src-xml">&lt;?<span style="color: #0000FF;">xml</span> <span style="color: #BA36A5;">version</span>=<span style="color: #008000;">"</span><span style="color: #008000;">1.0</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">encoding</span>=<span style="color: #008000;">"</span><span style="color: #008000;">UTF-8</span><span style="color: #008000;">"</span>?&gt;
+&lt;!<span style="color: #0000FF;">DOCTYPE</span> hibernate-configuration <span style="color: #0000FF;">PUBLIC</span>
+ <span style="color: #036A07;">"</span><span style="color: #036A07;">-//Hibernate/Hibernate Configuration DTD 3.0//EN</span><span style="color: #036A07;">"</span>
+ <span style="color: #036A07;">"</span><span style="color: #036A07;">http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd</span><span style="color: #036A07;">"</span>&gt;
 
-&lt;<span style="color: #0000ff;">hibernate-configuration</span>&gt;
-  &lt;<span style="color: #0000ff;">session-factory</span>&gt;
-     <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#25968;&#25454;&#24211;&#30340;&#22522;&#26412;&#20449;&#24687; </span><span style="color: #b22222;">--&gt;</span>
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.connection.driver_class</span><span style="color: #8b2252;">"</span>&gt;oracle.jdbc.driver.OracleDriver&lt;/<span style="color: #0000ff;">property</span>&gt;
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.connection.url</span><span style="color: #8b2252;">"</span>&gt;jdbc:oracle:thin:@localhost:1521:orcl&lt;/<span style="color: #0000ff;">property</span>&gt;
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.connection.username</span><span style="color: #8b2252;">"</span>&gt;vip&lt;/<span style="color: #0000ff;">property</span>&gt;
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.connection.password</span><span style="color: #8b2252;">"</span>&gt;vip&lt;/<span style="color: #0000ff;">property</span>&gt;
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.dialect</span><span style="color: #8b2252;">"</span>&gt;org.hibernate.dialect.Oracle10gDialect&lt;/<span style="color: #0000ff;">property</span>&gt;
+&lt;<span style="color: #000088; background-color: #DEDEDE;">hibernate-configuration</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">session-factory</span>&gt;
+     <span style="color: #8D8D84;">&lt;!--</span><span style="color: #8D8D84; font-style: italic;"> &#37197;&#32622;&#25968;&#25454;&#24211;&#30340;&#22522;&#26412;&#20449;&#24687; </span><span style="color: #8D8D84;">--&gt;</span>
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.connection.driver_class</span><span style="color: #008000;">"</span>&gt;oracle.jdbc.driver.OracleDriver&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.connection.url</span><span style="color: #008000;">"</span>&gt;jdbc:oracle:thin:@localhost:1521:orcl&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.connection.username</span><span style="color: #008000;">"</span>&gt;vip&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.connection.password</span><span style="color: #008000;">"</span>&gt;vip&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.dialect</span><span style="color: #008000;">"</span>&gt;org.hibernate.dialect.Oracle10gDialect&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
 
-     <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622; SQL &#35821;&#21477;&#26174;&#31034;&#25110;&#32773; DDL &#29983;&#25104;&#30340;&#31574;&#30053; </span><span style="color: #b22222;">--&gt;</span>
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.show_sql</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">property</span>&gt;
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.format_sql</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">property</span>&gt;
-     &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.hbm2ddl.auto</span><span style="color: #8b2252;">"</span>&gt;create&lt;/<span style="color: #0000ff;">property</span>&gt;
+     <span style="color: #8D8D84;">&lt;!--</span><span style="color: #8D8D84; font-style: italic;"> &#37197;&#32622; SQL &#35821;&#21477;&#26174;&#31034;&#25110;&#32773; DDL &#29983;&#25104;&#30340;&#31574;&#30053; </span><span style="color: #8D8D84;">--&gt;</span>
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.show_sql</span><span style="color: #008000;">"</span>&gt;true&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.format_sql</span><span style="color: #008000;">"</span>&gt;true&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.hbm2ddl.auto</span><span style="color: #008000;">"</span>&gt;create&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
 
-     <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#19968;&#31995;&#21015;&#30340; Mapping &#25991;&#20214;&#12290;&#20998;&#20026; xml/annotation &#31561;&#26041;&#24335; </span><span style="color: #b22222;">--&gt;</span>        
-     &lt;<span style="color: #0000ff;">mapping</span> <span style="color: #a0522d;">resource</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate/helloworld/Book.hbm.xml</span><span style="color: #8b2252;">"</span> /&gt;
-     &lt;<span style="color: #0000ff;">mapping</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.helloworld.Book</span><span style="color: #8b2252;">"</span> /&gt;
+     <span style="color: #8D8D84;">&lt;!--</span><span style="color: #8D8D84; font-style: italic;"> &#37197;&#32622;&#19968;&#31995;&#21015;&#30340; Mapping &#25991;&#20214;&#12290;&#20998;&#20026; xml/annotation &#31561;&#26041;&#24335; </span><span style="color: #8D8D84;">--&gt;</span>        
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">mapping</span> <span style="color: #BA36A5;">resource</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate/helloworld/Book.hbm.xml</span><span style="color: #008000;">"</span> /&gt;
+     &lt;<span style="color: #000088; background-color: #DEDEDE;">mapping</span> <span style="color: #BA36A5;">class</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.helloworld.Book</span><span style="color: #008000;">"</span> /&gt;
 
-  &lt;/<span style="color: #0000ff;">session-factory</span>&gt;
-&lt;/<span style="color: #0000ff;">hibernate-configuration</span>&gt;
+  &lt;/<span style="color: #000088; background-color: #DEDEDE;">session-factory</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">hibernate-configuration</span>&gt;
 </pre>
 </div>
 </li>
@@ -194,25 +200,25 @@ Object-Relationship Mapping
 <li>创建相关的xml映射文件 Book.hbm.xml
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span>?&gt;
-&lt;!<span style="color: #a020f0;">DOCTYPE</span> hibernate-mapping <span style="color: #a020f0;">PUBLIC</span> 
-    <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Hibernate/Hibernate Mapping DTD 3.0//EN</span><span style="color: #8b2252;">"</span>
-    <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd</span><span style="color: #8b2252;">"</span>&gt;
+<pre class="src src-xml">&lt;?<span style="color: #0000FF;">xml</span> <span style="color: #BA36A5;">version</span>=<span style="color: #008000;">"</span><span style="color: #008000;">1.0</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">encoding</span>=<span style="color: #008000;">"</span><span style="color: #008000;">UTF-8</span><span style="color: #008000;">"</span>?&gt;
+&lt;!<span style="color: #0000FF;">DOCTYPE</span> hibernate-mapping <span style="color: #0000FF;">PUBLIC</span> 
+    <span style="color: #036A07;">"</span><span style="color: #036A07;">-//Hibernate/Hibernate Mapping DTD 3.0//EN</span><span style="color: #036A07;">"</span>
+    <span style="color: #036A07;">"</span><span style="color: #036A07;">http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd</span><span style="color: #036A07;">"</span>&gt;
 
-&lt;<span style="color: #0000ff;">hibernate-mapping</span>&gt;
-  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#23454;&#20307;&#31867;&#30340;&#26144;&#23556; </span><span style="color: #b22222;">--&gt;</span>
-  &lt;<span style="color: #0000ff;">class</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.helloworld.Book</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">table</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">t_book</span><span style="color: #8b2252;">"</span>&gt;
-    &lt;<span style="color: #0000ff;">id</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">bookno</span><span style="color: #8b2252;">"</span>&gt;
-      &lt;<span style="color: #0000ff;">generator</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">native</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">generator</span>&gt;
-    &lt;/<span style="color: #0000ff;">id</span>&gt;
+&lt;<span style="color: #000088; background-color: #DEDEDE;">hibernate-mapping</span>&gt;
+  <span style="color: #8D8D84;">&lt;!--</span><span style="color: #8D8D84; font-style: italic;"> &#37197;&#32622;&#23454;&#20307;&#31867;&#30340;&#26144;&#23556; </span><span style="color: #8D8D84;">--&gt;</span>
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">class</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">hibernate.helloworld.Book</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">table</span>=<span style="color: #008000;">"</span><span style="color: #008000;">t_book</span><span style="color: #008000;">"</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">id</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">bookno</span><span style="color: #008000;">"</span>&gt;
+      &lt;<span style="color: #000088; background-color: #DEDEDE;">generator</span> <span style="color: #BA36A5;">class</span>=<span style="color: #008000;">"</span><span style="color: #008000;">native</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">generator</span>&gt;
+    &lt;/<span style="color: #000088; background-color: #DEDEDE;">id</span>&gt;
 
-    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">name</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">property</span>&gt;
-    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">price</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">property</span>&gt;
-  &lt;/<span style="color: #0000ff;">class</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">name</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+    &lt;<span style="color: #000088; background-color: #DEDEDE;">property</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">price</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">property</span>&gt;
+  &lt;/<span style="color: #000088; background-color: #DEDEDE;">class</span>&gt;
 
-  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#36825;&#37324;&#65292;&#21487;&#20197;&#28155;&#21152;&#20854;&#20182;&#30340;&#23454;&#20307;&#31867;&#26144;&#23556; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #8D8D84;">&lt;!--</span><span style="color: #8D8D84; font-style: italic;"> &#22312;&#36825;&#37324;&#65292;&#21487;&#20197;&#28155;&#21152;&#20854;&#20182;&#30340;&#23454;&#20307;&#31867;&#26144;&#23556; </span><span style="color: #8D8D84;">--&gt;</span>
 
-&lt;/<span style="color: #0000ff;">hibernate-mapping</span>&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">hibernate-mapping</span>&gt;
 </pre>
 </div>
 </li>
@@ -275,17 +281,17 @@ Object-Relationship Mapping
 </pre>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#21152;&#36733;&#37197;&#32622;&#25991;&#20214;</span>
-<span style="color: #228b22;">Configuration</span> <span style="color: #a0522d;">config</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Configuration</span><span style="color: #707183;">()</span>.configure<span style="color: #707183;">(</span> <span style="color: #8b2252;">"/hibernate/helloworld/hello.cfg.xml"</span><span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#22987;&#21270;&#25152;&#26377;&#38656;&#35201;&#30340;&#26381;&#21153;</span>
-<span style="color: #228b22;">ServiceRegistry</span> <span style="color: #a0522d;">serviceRegistry</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">StandardServiceRegistryBuilder</span><span style="color: #707183;">()</span>.applySettings<span style="color: #707183;">(</span>config.getProperties<span style="color: #7388d6;">()</span><span style="color: #707183;">)</span>.build<span style="color: #707183;">()</span>;
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#21152;&#36733;&#37197;&#32622;&#25991;&#20214;</span>
+<span style="color: #6434A3;">Configuration</span> <span style="color: #BA36A5;">config</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Configuration</span><span style="color: #707183;">()</span>.configure<span style="color: #707183;">(</span> <span style="color: #008000;">"/hibernate/helloworld/hello.cfg.xml"</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#21021;&#22987;&#21270;&#25152;&#26377;&#38656;&#35201;&#30340;&#26381;&#21153;</span>
+<span style="color: #6434A3;">ServiceRegistry</span> <span style="color: #BA36A5;">serviceRegistry</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">StandardServiceRegistryBuilder</span><span style="color: #707183;">()</span>.applySettings<span style="color: #707183;">(</span>config.getProperties<span style="color: #7388D6;">()</span><span style="color: #707183;">)</span>.build<span style="color: #707183;">()</span>;
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22312;&#23436;&#25104; sessionFactory &#30340;&#21019;&#24314;&#20043;&#21069;&#65292;&#21487;&#20197;&#36890;&#36807; config.addXXX &#30340;&#26041;&#24335;&#65292;&#21160;&#24577;&#28155;&#21152;&#23454;&#20307;&#31867;&#30340;&#26144;&#23556;&#20449;&#24687;</span>
-config.addAnnotatedClass<span style="color: #707183;">(</span>Author.<span style="color: #a020f0;">class</span><span style="color: #707183;">)</span>;
-config.addResource<span style="color: #707183;">(</span><span style="color: #8b2252;">"hibernate/helloworld/Book.hbm.xml"</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#22312;&#23436;&#25104; sessionFactory &#30340;&#21019;&#24314;&#20043;&#21069;&#65292;&#21487;&#20197;&#36890;&#36807; config.addXXX &#30340;&#26041;&#24335;&#65292;&#21160;&#24577;&#28155;&#21152;&#23454;&#20307;&#31867;&#30340;&#26144;&#23556;&#20449;&#24687;</span>
+config.addAnnotatedClass<span style="color: #707183;">(</span>Author.<span style="color: #0000FF;">class</span><span style="color: #707183;">)</span>;
+config.addResource<span style="color: #707183;">(</span><span style="color: #008000;">"hibernate/helloworld/Book.hbm.xml"</span><span style="color: #707183;">)</span>;
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#21019;&#24314; sessionFactory &#23545;&#35937;</span>
-<span style="color: #228b22;">SessionFactory</span> <span style="color: #a0522d;">sessionFactory</span> = config.buildSessionFactory<span style="color: #707183;">(</span>serviceRegistry<span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#21019;&#24314; sessionFactory &#23545;&#35937;</span>
+<span style="color: #6434A3;">SessionFactory</span> <span style="color: #BA36A5;">sessionFactory</span> = config.buildSessionFactory<span style="color: #707183;">(</span>serviceRegistry<span style="color: #707183;">)</span>;
 </pre>
 </div>
 </li>
@@ -358,21 +364,21 @@ commit() 方法，其实就是简单调用了 session.flush() 和 conn.commit()�
 <li>在执行查询的时候，会隐式调用 flush 方法.
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #008b8b;">@Test</span>
-<span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">testFlush</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
-   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26356;&#26032;&#32531;&#23384;</span>
-   <span style="color: #228b22;">Author</span> <span style="color: #a0522d;">author</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Author</span><span style="color: #7388d6;">()</span>;
-   author.setName<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"struts...."</span><span style="color: #7388d6;">)</span>;
-   author.setBirth<span style="color: #7388d6;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>;
+<pre class="src src-java"><span style="color: #D0372D;">@Test</span>
+<span style="color: #0000FF;">public</span> <span style="color: #6434A3;">void</span> <span style="color: #006699;">testFlush</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#26356;&#26032;&#32531;&#23384;</span>
+   <span style="color: #6434A3;">Author</span> <span style="color: #BA36A5;">author</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Author</span><span style="color: #7388D6;">()</span>;
+   author.setName<span style="color: #7388D6;">(</span><span style="color: #008000;">"struts...."</span><span style="color: #7388D6;">)</span>;
+   author.setBirth<span style="color: #7388D6;">(</span><span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #909183;">()</span><span style="color: #7388D6;">)</span>;
 
-   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25968;&#25454;&#21482;&#26159;&#23384;&#22312;&#20110; session &#30340;&#32531;&#23384;&#20013;</span>
-   session.save<span style="color: #7388d6;">(</span>author<span style="color: #7388d6;">)</span>;
+   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25968;&#25454;&#21482;&#26159;&#23384;&#22312;&#20110; session &#30340;&#32531;&#23384;&#20013;</span>
+   session.save<span style="color: #7388D6;">(</span>author<span style="color: #7388D6;">)</span>;
 
-   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20174;&#25968;&#25454;&#24211;&#20013;&#36827;&#34892; query &#26597;&#35810;&#30340;&#26102;&#20505;&#65292;&#20250;&#35302;&#21457; flush &#35821;&#21477;&#12290;     </span>
-   <span style="color: #228b22;">Query</span> <span style="color: #a0522d;">query</span> = session.createQuery<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"from Author"</span><span style="color: #7388d6;">)</span>;
-   System.out.println<span style="color: #7388d6;">(</span>query.list<span style="color: #909183;">()</span>.size<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>;
+   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#20174;&#25968;&#25454;&#24211;&#20013;&#36827;&#34892; query &#26597;&#35810;&#30340;&#26102;&#20505;&#65292;&#20250;&#35302;&#21457; flush &#35821;&#21477;&#12290;     </span>
+   <span style="color: #6434A3;">Query</span> <span style="color: #BA36A5;">query</span> = session.createQuery<span style="color: #7388D6;">(</span><span style="color: #008000;">"from Author"</span><span style="color: #7388D6;">)</span>;
+   System.out.println<span style="color: #7388D6;">(</span>query.list<span style="color: #909183;">()</span>.size<span style="color: #909183;">()</span><span style="color: #7388D6;">)</span>;
 
-   System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"ssss"</span><span style="color: #7388d6;">)</span>;
+   System.out.println<span style="color: #7388D6;">(</span><span style="color: #008000;">"ssss"</span><span style="color: #7388D6;">)</span>;
  <span style="color: #707183;">}</span>
 </pre>
 </div>
@@ -449,10 +455,10 @@ ORM 的主要是，用面向对象的思维去操作数据库。所以，我们�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#20363;&#22914;&#65292;&#19968;&#26412;&#20070;&#65292;&#32943;&#23450;&#26377;&#19968;&#20010;&#20316;&#32773;&#65292;&#32780; author &#23646;&#24615;&#19981;&#26159;&#19968;&#20010;&#31616;&#21333;&#31867;&#22411;&#65292;&#32780;&#26159;&#19968;&#20010;&#23545;&#35937;&#30340;&#24341;&#29992;&#12290;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#20070;&#36319;&#20316;&#32773;&#26159;&#19968;&#20010;&#19968;&#23545;&#19968;&#30340;&#20851;&#31995;&#65292;&#20063;&#23601;&#26159;&#19968;&#26412;&#20070;&#65292;&#21482;&#26377;&#19968;&#20010;&#20316;&#32773;</span>
-<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Book</span> <span style="color: #707183;">{</span>
-  <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Author</span> <span style="color: #a0522d;">author</span>;
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#20363;&#22914;&#65292;&#19968;&#26412;&#20070;&#65292;&#32943;&#23450;&#26377;&#19968;&#20010;&#20316;&#32773;&#65292;&#32780; author &#23646;&#24615;&#19981;&#26159;&#19968;&#20010;&#31616;&#21333;&#31867;&#22411;&#65292;&#32780;&#26159;&#19968;&#20010;&#23545;&#35937;&#30340;&#24341;&#29992;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#20070;&#36319;&#20316;&#32773;&#26159;&#19968;&#20010;&#19968;&#23545;&#19968;&#30340;&#20851;&#31995;&#65292;&#20063;&#23601;&#26159;&#19968;&#26412;&#20070;&#65292;&#21482;&#26377;&#19968;&#20010;&#20316;&#32773;</span>
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">Book</span> <span style="color: #707183;">{</span>
+  <span style="color: #0000FF;">private</span> <span style="color: #6434A3;">Author</span> <span style="color: #BA36A5;">author</span>;
 <span style="color: #707183;">}</span>
 </pre>
 </div>
@@ -495,10 +501,10 @@ fetch 设置立即加载组织成的查询语句的策略，如果设置为 join
 <div class="outline-text-4" id="text-5-2-1">
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">set</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">books</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">cascade</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">save-update</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">lazy</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">extra</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">fetch</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">select</span><span style="color: #8b2252;">"</span>&gt;
-  &lt;<span style="color: #0000ff;">key</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">authorid</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">key</span>&gt;
-  &lt;<span style="color: #0000ff;">one-to-many</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Book</span><span style="color: #8b2252;">"</span> /&gt;
-&lt;/<span style="color: #0000ff;">set</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">set</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">books</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">cascade</span>=<span style="color: #008000;">"</span><span style="color: #008000;">save-update</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">lazy</span>=<span style="color: #008000;">"</span><span style="color: #008000;">extra</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">fetch</span>=<span style="color: #008000;">"</span><span style="color: #008000;">select</span><span style="color: #008000;">"</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">key</span> <span style="color: #BA36A5;">column</span>=<span style="color: #008000;">"</span><span style="color: #008000;">authorid</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">key</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">one-to-many</span> <span style="color: #BA36A5;">class</span>=<span style="color: #008000;">"</span><span style="color: #008000;">Book</span><span style="color: #008000;">"</span> /&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">set</span>&gt;
 </pre>
 </div>
 
@@ -526,17 +532,17 @@ fetch 有以下几个选项：
 <li>如果设置了 subselect &#x2026;.
 <div class="org-src-container">
 
-<pre class="src src-sql"><span style="color: #b22222;">-- &#22914;&#26524;&#26597;&#35810;&#21040;&#22810;&#26465;&#25968;&#25454;&#65292;&#27599;&#26465;&#25968;&#25454;&#20013;&#37117;&#21547;&#26377;&#19968;&#20010;&#19968;&#23545;&#22810;&#30340;&#20851;&#32852;&#25968;&#25454;&#65292;&#37027;&#20040;&#21021;&#22987;&#21270;&#36825;&#20123;&#20851;&#32852;&#25968;&#25454;&#26102;&#65306;</span>
+<pre class="src src-sql"><span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#26597;&#35810;&#21040;&#22810;&#26465;&#25968;&#25454;&#65292;&#27599;&#26465;&#25968;&#25454;&#20013;&#37117;&#21547;&#26377;&#19968;&#20010;&#19968;&#23545;&#22810;&#30340;&#20851;&#32852;&#25968;&#25454;&#65292;&#37027;&#20040;&#21021;&#22987;&#21270;&#36825;&#20123;&#20851;&#32852;&#25968;&#25454;&#26102;&#65306;</span>
 
-<span style="color: #b22222;">-- &#22914;&#26524;&#35774;&#32622;&#20026; select&#65292;&#37027;&#20040;&#20998;&#21035;&#21457;&#36865;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;</span>
-<span style="color: #a020f0;">select</span> * <span style="color: #a020f0;">from</span> book books0_ <span style="color: #a020f0;">where</span> books0_.authorid = 4;
-<span style="color: #a020f0;">select</span> * <span style="color: #a020f0;">from</span> book books0_ <span style="color: #a020f0;">where</span> books0_.authorid = 1;
-<span style="color: #b22222;">-- &#21487;&#33021;&#36824;&#26377;&#24456;&#22810;&#24456;&#22810;&#26465;</span>
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#35774;&#32622;&#20026; select&#65292;&#37027;&#20040;&#20998;&#21035;&#21457;&#36865;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;</span>
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> book books0_ <span style="color: #0000FF;">where</span> books0_.authorid = 4;
+<span style="color: #0000FF;">select</span> * <span style="color: #0000FF;">from</span> book books0_ <span style="color: #0000FF;">where</span> books0_.authorid = 1;
+<span style="color: #8D8D84; font-style: italic;">-- &#21487;&#33021;&#36824;&#26377;&#24456;&#22810;&#24456;&#22810;&#26465;</span>
 
-<span style="color: #b22222;">-- &#22914;&#26524;&#35774;&#32622;&#20026; subselect&#65292;&#32452;&#32455;&#25104;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;&#20250;&#26356;&#21152;&#33410;&#30465;&#36164;&#28304;&#12290;</span>
-<span style="color: #a020f0;">select</span> *
-  <span style="color: #a020f0;">from</span> book books0_
- <span style="color: #a020f0;">where</span> books0_.authorid <span style="color: #a020f0;">in</span> <span style="color: #707183;">(</span><span style="color: #a020f0;">select</span> author0_.aid <span style="color: #a020f0;">from</span> author author0_<span style="color: #707183;">)</span>;
+<span style="color: #8D8D84; font-style: italic;">-- &#22914;&#26524;&#35774;&#32622;&#20026; subselect&#65292;&#32452;&#32455;&#25104;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;&#20250;&#26356;&#21152;&#33410;&#30465;&#36164;&#28304;&#12290;</span>
+<span style="color: #0000FF;">select</span> *
+  <span style="color: #0000FF;">from</span> book books0_
+ <span style="color: #0000FF;">where</span> books0_.authorid <span style="color: #0000FF;">in</span> <span style="color: #707183;">(</span><span style="color: #0000FF;">select</span> author0_.aid <span style="color: #0000FF;">from</span> author author0_<span style="color: #707183;">)</span>;
 </pre>
 </div>
 </li>
@@ -552,10 +558,10 @@ fetch 有以下几个选项：
 <div class="outline-text-4" id="text-5-2-2">
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #008b8b;">@OneToMany</span><span style="color: #707183;">(</span>cascade=<span style="color: #008b8b;">CascadeType</span>.ALL, fetch=<span style="color: #008b8b;">FetchType</span>.LAZY<span style="color: #707183;">)</span>
-<span style="color: #008b8b;">@Fetch</span><span style="color: #707183;">(</span><span style="color: #008b8b;">FetchMode</span>.<span style="color: #228b22;">JOIN</span><span style="color: #707183;">)</span>
-<span style="color: #008b8b;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #8b2252;">"authorid"</span><span style="color: #707183;">)</span>
-<span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #a0522d;">books</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;()</span>;
+<pre class="src src-java"><span style="color: #D0372D;">@OneToMany</span><span style="color: #707183;">(</span>cascade=<span style="color: #D0372D;">CascadeType</span>.ALL, fetch=<span style="color: #D0372D;">FetchType</span>.LAZY<span style="color: #707183;">)</span>
+<span style="color: #D0372D;">@Fetch</span><span style="color: #707183;">(</span><span style="color: #D0372D;">FetchMode</span>.<span style="color: #6434A3;">JOIN</span><span style="color: #707183;">)</span>
+<span style="color: #D0372D;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #008000;">"authorid"</span><span style="color: #707183;">)</span>
+<span style="color: #0000FF;">private</span> <span style="color: #6434A3;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #BA36A5;">books</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">Book</span><span style="color: #707183;">&gt;()</span>;
 </pre>
 </div>
 
@@ -583,12 +589,12 @@ fetch 有以下几个选项：
 <div class="outline-text-4" id="text-5-3-1">
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">set</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">books</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">inverse</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span>&gt;
-  &lt;<span style="color: #0000ff;">key</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">authorid</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">key</span>&gt;
-  &lt;<span style="color: #0000ff;">one-to-many</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Book</span><span style="color: #8b2252;">"</span> /&gt;
-&lt;/<span style="color: #0000ff;">set</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #000088; background-color: #DEDEDE;">set</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">books</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">inverse</span>=<span style="color: #008000;">"</span><span style="color: #008000;">true</span><span style="color: #008000;">"</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">key</span> <span style="color: #BA36A5;">column</span>=<span style="color: #008000;">"</span><span style="color: #008000;">authorid</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">key</span>&gt;
+  &lt;<span style="color: #000088; background-color: #DEDEDE;">one-to-many</span> <span style="color: #BA36A5;">class</span>=<span style="color: #008000;">"</span><span style="color: #008000;">Book</span><span style="color: #008000;">"</span> /&gt;
+&lt;/<span style="color: #000088; background-color: #DEDEDE;">set</span>&gt;
 
-&lt;<span style="color: #0000ff;">many-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">author</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">authorid</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Author</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">many-to-one</span>&gt;
+&lt;<span style="color: #000088; background-color: #DEDEDE;">many-to-one</span> <span style="color: #BA36A5;">name</span>=<span style="color: #008000;">"</span><span style="color: #008000;">author</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">column</span>=<span style="color: #008000;">"</span><span style="color: #008000;">authorid</span><span style="color: #008000;">"</span> <span style="color: #BA36A5;">class</span>=<span style="color: #008000;">"</span><span style="color: #008000;">Author</span><span style="color: #008000;">"</span>&gt;&lt;/<span style="color: #000088; background-color: #DEDEDE;">many-to-one</span>&gt;
 </pre>
 </div>
 
@@ -621,14 +627,14 @@ ps：如果设置了 inverse=true，那么会将另一边设为主端，负责�
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">@JoinColumn(name="authorid") &#36825;&#20010;&#19981;&#38656;&#35201;&#21435;&#20889;&#65292;&#22240;&#20026; mappedBy &#20250;&#40664;&#35748;&#35302;&#21457;&#22806;&#38190;&#25805;&#20316;</span>
-<span style="color: #008b8b;">@OneToMany</span><span style="color: #707183;">(</span>mappedBy=<span style="color: #8b2252;">"author"</span><span style="color: #707183;">)</span>   <span style="color: #b22222;">// </span><span style="color: #b22222;">author &#23545;&#24212;&#30340;&#26159; book &#37324;&#38754;&#30340; author &#23646;&#24615;</span>
-<span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #a0522d;">books</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;()</span>;
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">@JoinColumn(name="authorid") &#36825;&#20010;&#19981;&#38656;&#35201;&#21435;&#20889;&#65292;&#22240;&#20026; mappedBy &#20250;&#40664;&#35748;&#35302;&#21457;&#22806;&#38190;&#25805;&#20316;</span>
+<span style="color: #D0372D;">@OneToMany</span><span style="color: #707183;">(</span>mappedBy=<span style="color: #008000;">"author"</span><span style="color: #707183;">)</span>   <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">author &#23545;&#24212;&#30340;&#26159; book &#37324;&#38754;&#30340; author &#23646;&#24615;</span>
+<span style="color: #0000FF;">private</span> <span style="color: #6434A3;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #BA36A5;">books</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #6434A3;">Book</span><span style="color: #707183;">&gt;()</span>;
 
 
-<span style="color: #008b8b;">@ManyToOne</span>
-<span style="color: #008b8b;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #8b2252;">"authorid"</span><span style="color: #707183;">)</span>
-<span style="color: #a020f0;">private</span> <span style="color: #228b22;">Author</span> <span style="color: #a0522d;">author</span>;
+<span style="color: #D0372D;">@ManyToOne</span>
+<span style="color: #D0372D;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #008000;">"authorid"</span><span style="color: #707183;">)</span>
+<span style="color: #0000FF;">private</span> <span style="color: #6434A3;">Author</span> <span style="color: #BA36A5;">author</span>;
 </pre>
 </div>
 
@@ -654,11 +660,70 @@ ps：如果设置了 inverse=true，那么会将另一边设为主端，负责�
 </div>
 <div id="outline-container-sec-5-5" class="outline-3">
 <h3 id="sec-5-5">OneToOne</h3>
+<div class="outline-text-3" id="text-5-5">
+</div><div id="outline-container-sec-5-5-1" class="outline-4">
+<h4 id="sec-5-5-1">PK assoc</h4>
+<div class="outline-text-4" id="text-5-5-1">
+<p>
+在其中一端，配置 One-To-One 节点：
+</p>
+<pre class="example">
+&lt;one-to-one name="school" class="hibernate.assoc.one2one.School"&gt;&lt;/one-to-one&gt;
+</pre>
+<p>
+在另一端，配置 One-To-One 节点，注意，要加上Constrained="true"，而且要配置主键的生成方式为 foreign.
+</p>
+<pre class="example">
+&lt;one-to-one name="master" class="hibernate.assoc.one2one.Master" constrained="true"&gt;&lt;/one-to-one&gt;
+&lt;id name="sid" type="int"&gt;
+    &lt;column name="SID" /&gt;
+    &lt;generator class="foreign"&gt;
+      &lt;param name="property"&gt;master&lt;/param&gt;
+    &lt;/generator&gt;
+&lt;/id&gt;
+</pre>
+
+<p>
+相应的注解形式为：
+roll(9);
+</p>
 </div>
+</div>
+
+<div id="outline-container-sec-5-5-2" class="outline-4">
+<h4 id="sec-5-5-2">FK assoc</h4>
+<div class="outline-text-4" id="text-5-5-2">
+<p>
+在其中一端，配置如下，通过 manytoone 和 unique 配合，产生一对一的结果。而且会生成相应外键：
+</p>
+<pre class="example">
+&lt;many-to-one name="school" class="School" unique="true"&gt;&lt;/many-to-one&gt;
+</pre>
+<p>
+在另一端：
+</p>
+<pre class="example">
+&lt;one-to-one name="master" class="Master" property-ref="school"&gt;&lt;/one-to-one&gt;
+</pre>
+
+<p>
+相应的注解形式为：
+roll(2);
+</p>
+</div>
+</div>
+</div>
+
 <div id="outline-container-sec-5-6" class="outline-3">
-<h3 id="sec-5-6">Em</h3>
+<h3 id="sec-5-6">Embedded(Component)</h3>
+<div class="outline-text-3" id="text-5-6">
+<p>
+嵌入
+</p>
+</div>
 </div>
 </section>
+
 <section id="outline-container-sec-6" class="outline-2">
 <h2 id="sec-6">级联（Cascade）</h2>
 <div class="outline-text-2" id="text-6">
@@ -758,18 +823,18 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </li>
 <li>Hibernate.initialize() 调用代码显式初始化
 </li>
-<li>fetch，"select"."subselect"/"join"，决定查询的形式/时机
+<li>fetch 的选项有："select"，"subselect"，"join"，它们决定查询的形式和时机
 </li>
-<li>若把 fetch 设置为 subselect，会通过子查询的方式来初始化所有set集合。
-子查询作为 where 的 in 条件出现。此时 lazy有效，batch-size失效。
+<li>若把 fetch 设置为 subselect，会通过子查询的方式来初始化所有 set 集合。
+子查询作为 where 的 in 条件出现。此时 lazy 有效，batch-size 失效。
 </li>
-<li>若把 fetch 设置为 join，迫切使用左连接，lazy会失效。
+<li>若把 fetch 设置为 join，迫切使用左连接，lazy 会失效。
 </li>
 <li>hql 查询会忽略 fetch=join 的取值
 </li>
-<li>batch-size，设定批量查询数量，减少select次数，提高检索性能
+<li>batch-size，设定批量查询数量，用于减少 select 次数、提高检索性能
 </li>
-<li>在查询时，对集合中的元素进行排序。 order by 中使用的是表的字段名，
+<li>order-by 在查询时对集合中的元素进行排序，使用的是表的字段名。会在 sql 语句中添加 order by 段。
 </li>
 </ul>
 
@@ -778,6 +843,14 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </p>
 <ul class="org-ul">
 <li>lazy 取值 proxy/no-proxy/false
+</li>
+</ul>
+
+<p>
+&lt;property /&gt; 的检索策略:
+</p>
+<ul class="org-ul">
+<li>lazy 取值 true/false
 </li>
 </ul>
 </div>
@@ -826,32 +899,7 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 <p>
 开发的时候用的不是特别多。所以心态：了解。
 </p>
-
-<p>
-在父类中指明继承策略
-</p>
-<ol class="org-ol">
-<li>@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-<pre class="example">
-DiscriminatorColumn(name="xxx")
-DiscriminatorValue(value="e")
-</pre>
-</li>
-<li>@Inheritance(strategy=InheritanceType.JOINED)
-<pre class="example">
-@Entity
-@PrimaryKeyJoinColumn(name="xxx")
-class Dog extents Animal { ... }
-</pre>
-</li>
-<li>@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-<pre class="example">
-每个实现一个表的模式
-</pre>
-</li>
-</ol>
 </div>
-
 
 <div id="outline-container-sec-10-1" class="outline-3">
 <h3 id="sec-10-1">subclass</h3>
@@ -865,9 +913,16 @@ class Dog extents Animal { ... }
 </li>
 <li>继承层次深则冗余字段很多
 </li>
+<li>@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+<pre class="example">
+DiscriminatorColumn(name="xxx")
+DiscriminatorValue(value="e")
+</pre>
+</li>
 </ul>
 </div>
 </div>
+
 
 <div id="outline-container-sec-10-2" class="outline-3">
 <h3 id="sec-10-2">joined-class</h3>
@@ -881,9 +936,17 @@ class Dog extents Animal { ... }
 </li>
 <li>没有冗余的字段
 </li>
+<li>@Inheritance(strategy=InheritanceType.JOINED)
+<pre class="example">
+@Entity
+@PrimaryKeyJoinColumn(name="xxx")
+class Dog extents Animal { ... }
+</pre>
+</li>
 </ul>
 </div>
 </div>
+
 
 <div id="outline-container-sec-10-3" class="outline-3">
 <h3 id="sec-10-3">union-subclass</h3>
@@ -896,6 +959,8 @@ class Dog extents Animal { ... }
 <li>但存在冗余字段
 </li>
 <li>若更新父表的字段，效率较低
+</li>
+<li>@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 </li>
 </ul>
 </div>
@@ -938,64 +1003,69 @@ class Dog extents Animal { ... }
 </ol>
 </div>
 </section>
+
+
 <section id="outline-container-sec-12" class="outline-2">
-<h2 id="sec-12">Java 提高</h2>
-<div class="outline-text-2" id="text-12">
-</div><div id="outline-container-sec-12-1" class="outline-3">
-<h3 id="sec-12-1">日期与时间</h3>
-<div class="outline-text-3" id="text-12-1">
-</div><div id="outline-container-sec-12-1-1" class="outline-4">
-<h4 id="sec-12-1-1">Date 类</h4>
-<div class="outline-text-4" id="text-12-1-1">
+<h2 id="sec-12">乐观锁、悲观锁</h2>
+</section>
+<section id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">Java 提高</h2>
+<div class="outline-text-2" id="text-13">
+</div><div id="outline-container-sec-13-1" class="outline-3">
+<h3 id="sec-13-1">日期与时间</h3>
+<div class="outline-text-3" id="text-13-1">
+</div><div id="outline-container-sec-13-1-1" class="outline-4">
+<h4 id="sec-13-1-1">Date 类</h4>
+<div class="outline-text-4" id="text-13-1-1">
 <p>
 这是 java 最开始就有的类，用来处理时间。
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#33719;&#21462;&#24403;&#21069;&#26102;&#38388;</span>
-<span style="color: #228b22;">Date</span> <span style="color: #a0522d;">now</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #707183;">()</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25171;&#21360;&#26102;&#38388;&#65292;&#26174;&#24335;&#26684;&#24335;&#20026; Thu Nov 03 16:31:56 CST 2016</span>
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#33719;&#21462;&#24403;&#21069;&#26102;&#38388;</span>
+<span style="color: #6434A3;">Date</span> <span style="color: #BA36A5;">now</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #707183;">()</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25171;&#21360;&#26102;&#38388;&#65292;&#26174;&#24335;&#26684;&#24335;&#20026; Thu Nov 03 16:31:56 CST 2016</span>
 System.out.println<span style="color: #707183;">(</span>now<span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#33719;&#21462;&#26102;&#38388;&#20013;&#30340;&#24180;&#12289;&#26376;&#12289;&#26085;&#31561;</span>
-System.out.println<span style="color: #707183;">(</span>now.getYear<span style="color: #7388d6;">()</span><span style="color: #707183;">)</span>; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#36825;&#26679;&#24471;&#21040;&#30340;&#26159;&#19968;&#20010;&#20943;&#21435;&#20102; 1990 &#30340;&#24180;&#20221;&#12290;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#24471;&#21040;&#20174; 1970 &#24180;&#21040;&#29616;&#22312;&#32463;&#36807;&#30340;&#27627;&#31186;&#25968;</span>
-System.out.println<span style="color: #707183;">(</span>now.getTime<span style="color: #7388d6;">()</span><span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25152;&#20197;&#24471;&#21040;&#20004;&#20010;&#26102;&#38388;&#30456;&#24046;&#22810;&#23569;&#19968;&#33324;&#36825;&#26679;&#34920;&#31034;</span>
-<span style="color: #228b22;">long</span> <span style="color: #a0522d;">duration</span> = date1.getTime<span style="color: #707183;">()</span> - date2.getTime<span style="color: #707183;">()</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#33719;&#21462;&#26102;&#38388;&#20013;&#30340;&#24180;&#12289;&#26376;&#12289;&#26085;&#31561;</span>
+System.out.println<span style="color: #707183;">(</span>now.getYear<span style="color: #7388D6;">()</span><span style="color: #707183;">)</span>; <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#27880;&#24847;&#65292;&#36825;&#26679;&#24471;&#21040;&#30340;&#26159;&#19968;&#20010;&#20943;&#21435;&#20102; 1990 &#30340;&#24180;&#20221;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#24471;&#21040;&#20174; 1970 &#24180;&#21040;&#29616;&#22312;&#32463;&#36807;&#30340;&#27627;&#31186;&#25968;</span>
+System.out.println<span style="color: #707183;">(</span>now.getTime<span style="color: #7388D6;">()</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25152;&#20197;&#24471;&#21040;&#20004;&#20010;&#26102;&#38388;&#30456;&#24046;&#22810;&#23569;&#19968;&#33324;&#36825;&#26679;&#34920;&#31034;</span>
+<span style="color: #6434A3;">long</span> <span style="color: #BA36A5;">duration</span> = date1.getTime<span style="color: #707183;">()</span> - date2.getTime<span style="color: #707183;">()</span>;
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#24471;&#21040;&#25351;&#23450;&#26085;&#26399;&#30340;&#26102;&#38388;</span>
-<span style="color: #228b22;">Date</span> <span style="color: #a0522d;">time1</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #707183;">(</span>12212221<span style="color: #707183;">)</span>;
-<span style="color: #228b22;">Date</span> <span style="color: #a0522d;">time2</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"19900202"</span><span style="color: #707183;">)</span>;
-<span style="color: #228b22;">Date</span> <span style="color: #a0522d;">time3</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #707183;">(</span>1990, 1, 14<span style="color: #707183;">)</span>;  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#26376;&#20221;&#20174;0&#24320;&#22987;&#35745;&#31639;&#12290;1&#36825;&#26465;&#35821;&#21477;&#34920;&#31034; 1990&#24180;2&#26376;14&#26085;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807; SimpleDateFormat &#30340;&#24418;&#24335;&#24471;&#21040;&#25351;&#23450;&#26684;&#24335;&#30340;&#26085;&#26399;</span>
-<span style="color: #228b22;">Date</span> <span style="color: #a0522d;">time4</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">SimpleDateFormat</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"yyyyMMdd"</span><span style="color: #707183;">)</span>.parse<span style="color: #707183;">(</span><span style="color: #8b2252;">"20050205"</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#24471;&#21040;&#25351;&#23450;&#26085;&#26399;&#30340;&#26102;&#38388;</span>
+<span style="color: #6434A3;">Date</span> <span style="color: #BA36A5;">time1</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #707183;">(</span>12212221<span style="color: #707183;">)</span>;
+<span style="color: #6434A3;">Date</span> <span style="color: #BA36A5;">time2</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #707183;">(</span><span style="color: #008000;">"19900202"</span><span style="color: #707183;">)</span>;
+<span style="color: #6434A3;">Date</span> <span style="color: #BA36A5;">time3</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #707183;">(</span>1990, 1, 14<span style="color: #707183;">)</span>;  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#27880;&#24847;&#65292;&#26376;&#20221;&#20174;0&#24320;&#22987;&#35745;&#31639;&#12290;1&#36825;&#26465;&#35821;&#21477;&#34920;&#31034; 1990&#24180;2&#26376;14&#26085;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36890;&#36807; SimpleDateFormat &#30340;&#24418;&#24335;&#24471;&#21040;&#25351;&#23450;&#26684;&#24335;&#30340;&#26085;&#26399;</span>
+<span style="color: #6434A3;">Date</span> <span style="color: #BA36A5;">time4</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">SimpleDateFormat</span><span style="color: #707183;">(</span><span style="color: #008000;">"yyyyMMdd"</span><span style="color: #707183;">)</span>.parse<span style="color: #707183;">(</span><span style="color: #008000;">"20050205"</span><span style="color: #707183;">)</span>;
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-12-1-2" class="outline-4">
-<h4 id="sec-12-1-2">Calendar 类</h4>
-<div class="outline-text-4" id="text-12-1-2">
+<div id="outline-container-sec-13-1-2" class="outline-4">
+<h4 id="sec-13-1-2">Calendar 类</h4>
+<div class="outline-text-4" id="text-13-1-2">
 <p>
 后来由于 Date 类在处理国际化方面的一些局限，现在推荐用 Calendar 类代替 Date 类。
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#33719;&#21462;&#24403;&#21069;&#26102;&#38388;</span>
-<span style="color: #228b22;">Calendar</span> <span style="color: #a0522d;">c</span> = Calendar.getInstance<span style="color: #707183;">()</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807; getTime &#33719;&#24471; Date &#23545;&#35937;&#12290;&#36890;&#36807;&#19979;&#38754;&#35821;&#21477;&#65292;&#25171;&#21360;&#24403;&#21069;&#26102;&#38388;</span>
-System.out.println<span style="color: #707183;">(</span>c.getTime<span style="color: #7388d6;">()</span><span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#19979;&#38754;&#35821;&#21477;&#65292;&#33719;&#21462;&#24180;&#26376;&#26085;&#31561;</span>
-System.out.println<span style="color: #707183;">(</span>c.get<span style="color: #7388d6;">(</span><span style="color: #008b8b;">Calendar</span>.YEAR<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>;
+<pre class="src src-java"><span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#33719;&#21462;&#24403;&#21069;&#26102;&#38388;</span>
+<span style="color: #6434A3;">Calendar</span> <span style="color: #BA36A5;">c</span> = Calendar.getInstance<span style="color: #707183;">()</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36890;&#36807; getTime &#33719;&#24471; Date &#23545;&#35937;&#12290;&#36890;&#36807;&#19979;&#38754;&#35821;&#21477;&#65292;&#25171;&#21360;&#24403;&#21069;&#26102;&#38388;</span>
+System.out.println<span style="color: #707183;">(</span>c.getTime<span style="color: #7388D6;">()</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36890;&#36807;&#19979;&#38754;&#35821;&#21477;&#65292;&#33719;&#21462;&#24180;&#26376;&#26085;&#31561;</span>
+System.out.println<span style="color: #707183;">(</span>c.get<span style="color: #7388D6;">(</span><span style="color: #D0372D;">Calendar</span>.YEAR<span style="color: #7388D6;">)</span><span style="color: #707183;">)</span>;
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#19979;&#38754;&#35821;&#21477;&#65292;&#21021;&#22987;&#21270;&#19968;&#20010;&#20855;&#20307;&#26102;&#38388;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36890;&#36807;&#19979;&#38754;&#35821;&#21477;&#65292;&#21021;&#22987;&#21270;&#19968;&#20010;&#20855;&#20307;&#26102;&#38388;</span>
 c.set<span style="color: #707183;">(</span>1999, 2, 4<span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25110;&#32773;&#36890;&#36807;&#26102;&#38388;&#31867;&#22411;&#24471;&#21040;</span>
-c.setTime<span style="color: #707183;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #7388d6;">()</span><span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25110;&#32773;&#65292;&#36890;&#36807;&#30452;&#25509;&#23454;&#20363;&#21270;&#19968;&#20010; Calendar &#30340;&#23454;&#29616;&#31867;&#65306;</span>
-<span style="color: #228b22;">Calendar</span> <span style="color: #a0522d;">cc</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">GregorianCalendar</span><span style="color: #707183;">(</span>1998,3,11<span style="color: #707183;">)</span>;
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#19979;&#38754;&#35821;&#21477;&#24471;&#21040; 1970 &#24180;&#26469;&#30340; long &#20540;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25110;&#32773;&#36890;&#36807;&#26102;&#38388;&#31867;&#22411;&#24471;&#21040;</span>
+c.setTime<span style="color: #707183;">(</span><span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #7388D6;">()</span><span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25110;&#32773;&#65292;&#36890;&#36807;&#30452;&#25509;&#23454;&#20363;&#21270;&#19968;&#20010; Calendar &#30340;&#23454;&#29616;&#31867;&#65306;</span>
+<span style="color: #6434A3;">Calendar</span> <span style="color: #BA36A5;">cc</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">GregorianCalendar</span><span style="color: #707183;">(</span>1998,3,11<span style="color: #707183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#19979;&#38754;&#35821;&#21477;&#24471;&#21040; 1970 &#24180;&#26469;&#30340; long &#20540;</span>
 System.out.println<span style="color: #707183;">(</span>cc.getTimeInMillis<span style="color: #707183;">)</span>;
 </pre>
 </div>
@@ -1003,9 +1073,9 @@ System.out.println<span style="color: #707183;">(</span>cc.getTimeInMillis<span 
 </div>
 
 
-<div id="outline-container-sec-12-1-3" class="outline-4">
-<h4 id="sec-12-1-3">其它</h4>
-<div class="outline-text-4" id="text-12-1-3">
+<div id="outline-container-sec-13-1-3" class="outline-4">
+<h4 id="sec-13-1-3">其它</h4>
+<div class="outline-text-4" id="text-13-1-3">
 <p>
 通过以上代码看以看到，通过 calendar.setTime()/getTime() 方法可以实现 Date/Calendar 对象的转换。
 </p>
@@ -1025,55 +1095,55 @@ System.currentTimeMillis();
 
 
 
-<div id="outline-container-sec-12-2" class="outline-3">
-<h3 id="sec-12-2">getter 代码，实现更好的封装</h3>
-<div class="outline-text-3" id="text-12-2">
+<div id="outline-container-sec-13-2" class="outline-3">
+<h3 id="sec-13-2">getter 代码，实现更好的封装</h3>
+<div class="outline-text-3" id="text-13-2">
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #008b8b;">@Test</span>
-<span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">testGetterDate</span><span style="color: #707183;">()</span> <span style="color: #a020f0;">throws</span> <span style="color: #228b22;">Exception</span> <span style="color: #707183;">{</span>
-  <span style="color: #228b22;">Author</span> <span style="color: #a0522d;">author</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Author</span><span style="color: #7388d6;">()</span>;
-  author.setName<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"&#24352;&#19977;"</span><span style="color: #7388d6;">)</span>;
-  author.setBirth<span style="color: #7388d6;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">SimpleDateFormat</span><span style="color: #909183;">(</span><span style="color: #8b2252;">"yyyy-MM-dd"</span><span style="color: #909183;">)</span>.parse<span style="color: #909183;">(</span><span style="color: #8b2252;">"1993-04-14"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+<pre class="src src-java"><span style="color: #D0372D;">@Test</span>
+<span style="color: #0000FF;">public</span> <span style="color: #6434A3;">void</span> <span style="color: #006699;">testGetterDate</span><span style="color: #707183;">()</span> <span style="color: #0000FF;">throws</span> <span style="color: #6434A3;">Exception</span> <span style="color: #707183;">{</span>
+  <span style="color: #6434A3;">Author</span> <span style="color: #BA36A5;">author</span> = <span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Author</span><span style="color: #7388D6;">()</span>;
+  author.setName<span style="color: #7388D6;">(</span><span style="color: #008000;">"&#24352;&#19977;"</span><span style="color: #7388D6;">)</span>;
+  author.setBirth<span style="color: #7388D6;">(</span><span style="color: #0000FF;">new</span> <span style="color: #6434A3;">SimpleDateFormat</span><span style="color: #909183;">(</span><span style="color: #008000;">"yyyy-MM-dd"</span><span style="color: #909183;">)</span>.parse<span style="color: #909183;">(</span><span style="color: #008000;">"1993-04-14"</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>;
 
-  System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"&#29992;&#25143;&#21019;&#24314;&#25104;&#21151;&#12290;"</span><span style="color: #7388d6;">)</span>;
+  System.out.println<span style="color: #7388D6;">(</span><span style="color: #008000;">"&#29992;&#25143;&#21019;&#24314;&#25104;&#21151;&#12290;"</span><span style="color: #7388D6;">)</span>;
 
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25509;&#19979;&#26469;&#33719;&#21462;&#24180;&#40836;&#65292;&#26377;&#22914;&#19979;&#26041;&#24335;&#65306;</span>
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#25509;&#19979;&#26469;&#33719;&#21462;&#24180;&#40836;&#65292;&#26377;&#22914;&#19979;&#26041;&#24335;&#65306;</span>
 
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#31532;&#19968;&#31181;&#20889;&#27861;&#65306;</span>
-  System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"1. &#24180;&#40836;&#65306;"</span> + <span style="color: #909183;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">Date</span><span style="color: #709870;">()</span>.getYear<span style="color: #709870;">()</span> - author.getBirth<span style="color: #709870;">()</span>.getYear<span style="color: #709870;">()</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#31532;&#19968;&#31181;&#20889;&#27861;&#65306;</span>
+  System.out.println<span style="color: #7388D6;">(</span><span style="color: #008000;">"1. &#24180;&#40836;&#65306;"</span> + <span style="color: #909183;">(</span><span style="color: #0000FF;">new</span> <span style="color: #6434A3;">Date</span><span style="color: #709870;">()</span>.getYear<span style="color: #709870;">()</span> - author.getBirth<span style="color: #709870;">()</span>.getYear<span style="color: #709870;">()</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>;
 
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#31532;&#20108;&#31181;&#26041;&#27861;&#65292;&#21019;&#24314;&#19968;&#20010;&#38745;&#24577;&#26041;&#27861;&#65292;&#36890;&#36807;&#35843;&#29992;&#65292;&#33719;&#21462;&#24180;&#40836;&#65306;</span>
-  System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"2. &#24180;&#40836;&#65306;"</span> + BirthUtil.calAge<span style="color: #909183;">(</span>author.getBirth<span style="color: #709870;">()</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#31532;&#20108;&#31181;&#26041;&#27861;&#65292;&#21019;&#24314;&#19968;&#20010;&#38745;&#24577;&#26041;&#27861;&#65292;&#36890;&#36807;&#35843;&#29992;&#65292;&#33719;&#21462;&#24180;&#40836;&#65306;</span>
+  System.out.println<span style="color: #7388D6;">(</span><span style="color: #008000;">"2. &#24180;&#40836;&#65306;"</span> + BirthUtil.calAge<span style="color: #909183;">(</span>author.getBirth<span style="color: #709870;">()</span><span style="color: #909183;">)</span><span style="color: #7388D6;">)</span>;
 
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#31532;&#19977;&#31181;&#65292;&#22312; author &#31867;&#20013;&#65292;&#22686;&#21152;&#24180;&#40836;&#23383;&#27573;&#12290;&#22240;&#20026;&#24180;&#40836;&#20063;&#26159;&#20154;&#30340;&#19968;&#20010;&#23646;&#24615;&#12290;</span>
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#26679;&#33021;&#26356;&#22909;&#30340;&#20307;&#29616;&#38754;&#21521;&#23545;&#35937;&#30340;&#24605;&#24819;&#65306;&#23553;&#35013;&#12290;</span>
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22240;&#20026;&#24180;&#40836;&#36319;&#29983;&#26085;&#26377;&#20851;&#31995;&#65292;&#25152;&#20197;&#19981;&#38656;&#35201;&#26174;&#24335;&#36171;&#20540;&#65292;&#22914;&#26524;&#24819;&#33719;&#21462;&#65292;&#37027;&#20040;&#36890;&#36807;&#19979;&#38754;&#30340;&#26041;&#24335;&#65306;</span>
-  System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"3. &#24180;&#40836;&#65306;"</span> + author.getAge<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>;
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#31532;&#19977;&#31181;&#65292;&#22312; author &#31867;&#20013;&#65292;&#22686;&#21152;&#24180;&#40836;&#23383;&#27573;&#12290;&#22240;&#20026;&#24180;&#40836;&#20063;&#26159;&#20154;&#30340;&#19968;&#20010;&#23646;&#24615;&#12290;</span>
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36825;&#26679;&#33021;&#26356;&#22909;&#30340;&#20307;&#29616;&#38754;&#21521;&#23545;&#35937;&#30340;&#24605;&#24819;&#65306;&#23553;&#35013;&#12290;</span>
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#22240;&#20026;&#24180;&#40836;&#36319;&#29983;&#26085;&#26377;&#20851;&#31995;&#65292;&#25152;&#20197;&#19981;&#38656;&#35201;&#26174;&#24335;&#36171;&#20540;&#65292;&#22914;&#26524;&#24819;&#33719;&#21462;&#65292;&#37027;&#20040;&#36890;&#36807;&#19979;&#38754;&#30340;&#26041;&#24335;&#65306;</span>
+  System.out.println<span style="color: #7388D6;">(</span><span style="color: #008000;">"3. &#24180;&#40836;&#65306;"</span> + author.getAge<span style="color: #909183;">()</span><span style="color: #7388D6;">)</span>;
 <span style="color: #707183;">}</span>
 
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22312; getter &#26041;&#27861;&#20013;&#65292;&#21487;&#20197;&#20889;&#19968;&#20123;&#20855;&#20307;&#30340;&#36923;&#36753;&#12290;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#37324;&#36890;&#36807;&#29983;&#26085;&#30340;&#23383;&#27573;&#65292;&#35745;&#31639;&#24180;&#40836;&#12290;&#24403;&#35843;&#29992;&#36825;&#20010; getter &#26041;&#27861;&#30340;&#26102;&#20505;&#65292;&#25165;&#24320;&#22987;&#35745;&#31639;&#12290;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#32780;&#24180;&#40836;&#36825;&#20010;&#20540;&#65292;&#19981;&#38656;&#35201;&#20445;&#23384;&#21040;&#25968;&#25454;&#24211;&#20013;&#12290;&#25152;&#20197;&#19978;&#38754;&#38656;&#35201;&#22686;&#21152;&#19968;&#20010; @Transient &#27880;&#35299;&#65292;&#23558;&#20854;&#25490;&#20986;&#22312;&#22806;&#12290;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#31181;&#22788;&#29702;&#26041;&#24335;&#65292;&#26159;&#38750;&#24120;&#24120;&#35265;&#30340;&#12290;&#23588;&#20854;&#22312; getter/setter &#26041;&#27861;&#20013;&#65292;&#28155;&#21152;&#33258;&#24049;&#30340;&#36923;&#36753;&#65292;&#26377;&#26102;&#20505;&#65292;&#20250;&#20351;&#20195;&#30721;&#21464;&#24471;&#20415;&#25463;&#12290;</span>
-<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Author</span> <span style="color: #707183;">{</span>
-  <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span>;
-  <span style="color: #b22222;">// </span><span style="color: #b22222;">... others</span>
-  <span style="color: #a020f0;">public</span> <span style="color: #228b22;">int</span> <span style="color: #0000ff;">getAge</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
-    <span style="color: #a020f0;">return</span> age == 0 ? BirthUtil.calAge<span style="color: #909183;">(</span>birth<span style="color: #909183;">)</span> : age;
-  <span style="color: #7388d6;">}</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#22312; getter &#26041;&#27861;&#20013;&#65292;&#21487;&#20197;&#20889;&#19968;&#20123;&#20855;&#20307;&#30340;&#36923;&#36753;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36825;&#37324;&#36890;&#36807;&#29983;&#26085;&#30340;&#23383;&#27573;&#65292;&#35745;&#31639;&#24180;&#40836;&#12290;&#24403;&#35843;&#29992;&#36825;&#20010; getter &#26041;&#27861;&#30340;&#26102;&#20505;&#65292;&#25165;&#24320;&#22987;&#35745;&#31639;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#32780;&#24180;&#40836;&#36825;&#20010;&#20540;&#65292;&#19981;&#38656;&#35201;&#20445;&#23384;&#21040;&#25968;&#25454;&#24211;&#20013;&#12290;&#25152;&#20197;&#19978;&#38754;&#38656;&#35201;&#22686;&#21152;&#19968;&#20010; @Transient &#27880;&#35299;&#65292;&#23558;&#20854;&#25490;&#20986;&#22312;&#22806;&#12290;</span>
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#36825;&#31181;&#22788;&#29702;&#26041;&#24335;&#65292;&#26159;&#38750;&#24120;&#24120;&#35265;&#30340;&#12290;&#23588;&#20854;&#22312; getter/setter &#26041;&#27861;&#20013;&#65292;&#28155;&#21152;&#33258;&#24049;&#30340;&#36923;&#36753;&#65292;&#26377;&#26102;&#20505;&#65292;&#20250;&#20351;&#20195;&#30721;&#21464;&#24471;&#20415;&#25463;&#12290;</span>
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">Author</span> <span style="color: #707183;">{</span>
+  <span style="color: #0000FF;">private</span> <span style="color: #6434A3;">int</span> <span style="color: #BA36A5;">age</span>;
+  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">... others</span>
+  <span style="color: #0000FF;">public</span> <span style="color: #6434A3;">int</span> <span style="color: #006699;">getAge</span><span style="color: #7388D6;">()</span> <span style="color: #7388D6;">{</span>
+    <span style="color: #0000FF;">return</span> age == 0 ? BirthUtil.calAge<span style="color: #909183;">(</span>birth<span style="color: #909183;">)</span> : age;
+  <span style="color: #7388D6;">}</span>
 <span style="color: #707183;">}</span>
 
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#26681;&#25454;&#29983;&#26085;&#35745;&#31639;&#24180;&#40836;&#30340;&#38745;&#24577;&#26041;&#27861;</span>
-<span style="color: #a020f0;">class</span> <span style="color: #228b22;">BirthUtil</span> <span style="color: #707183;">{</span>
-  <span style="color: #a020f0;">public</span> <span style="color: #a020f0;">static</span> <span style="color: #228b22;">int</span> <span style="color: #0000ff;">calAge</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">Date</span> <span style="color: #a0522d;">birth</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
-    <span style="color: #228b22;">Calendar</span> <span style="color: #a0522d;">cal</span> = Calendar.getInstance<span style="color: #909183;">()</span>;
-    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">now</span> = cal.get<span style="color: #909183;">(</span><span style="color: #008b8b;">Calendar</span>.YEAR<span style="color: #909183;">)</span>;
+<span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">&#26681;&#25454;&#29983;&#26085;&#35745;&#31639;&#24180;&#40836;&#30340;&#38745;&#24577;&#26041;&#27861;</span>
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">BirthUtil</span> <span style="color: #707183;">{</span>
+  <span style="color: #0000FF;">public</span> <span style="color: #0000FF;">static</span> <span style="color: #6434A3;">int</span> <span style="color: #006699;">calAge</span><span style="color: #7388D6;">(</span><span style="color: #6434A3;">Date</span> <span style="color: #BA36A5;">birth</span><span style="color: #7388D6;">)</span> <span style="color: #7388D6;">{</span>
+    <span style="color: #6434A3;">Calendar</span> <span style="color: #BA36A5;">cal</span> = Calendar.getInstance<span style="color: #909183;">()</span>;
+    <span style="color: #6434A3;">int</span> <span style="color: #BA36A5;">now</span> = cal.get<span style="color: #909183;">(</span><span style="color: #D0372D;">Calendar</span>.YEAR<span style="color: #909183;">)</span>;
     cal.setTime<span style="color: #909183;">(</span>birth<span style="color: #909183;">)</span>;
-    <span style="color: #a020f0;">return</span> now - cal.get<span style="color: #909183;">(</span><span style="color: #008b8b;">Calendar</span>.YEAR<span style="color: #909183;">)</span>;
-  <span style="color: #7388d6;">}</span>
+    <span style="color: #0000FF;">return</span> now - cal.get<span style="color: #909183;">(</span><span style="color: #D0372D;">Calendar</span>.YEAR<span style="color: #909183;">)</span>;
+  <span style="color: #7388D6;">}</span>
 <span style="color: #707183;">}</span>
 </pre>
 </div>
@@ -1081,12 +1151,12 @@ System.currentTimeMillis();
 </div>
 </section>
 
-<section id="outline-container-sec-13" class="outline-2">
-<h2 id="sec-13">改写 hello，增加 hibernate 支持</h2>
-</section>
 <section id="outline-container-sec-14" class="outline-2">
-<h2 id="sec-14">Roll</h2>
-<div class="outline-text-2" id="text-14">
+<h2 id="sec-14">改写 hello，增加 hibernate 支持</h2>
+</section>
+<section id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">Roll</h2>
+<div class="outline-text-2" id="text-15">
 <ol class="org-ol">
 <li>query 对象, hql
 </li>
@@ -1100,8 +1170,8 @@ System.currentTimeMillis();
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2016-11-14 周一 07:50</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="date">Created: 2016-11-14 周一 03:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
 </body>

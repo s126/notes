@@ -311,7 +311,33 @@ private Author author;
 
 ** ManyToMany
 ** OneToOne
-** Em
+*** PK assoc
+在其中一端，配置 One-To-One 节点：
+: <one-to-one name="school" class="hibernate.assoc.one2one.School"></one-to-one>
+在另一端，配置 One-To-One 节点，注意，要加上Constrained="true"，而且要配置主键的生成方式为 foreign.
+: <one-to-one name="master" class="hibernate.assoc.one2one.Master" constrained="true"></one-to-one>
+: <id name="sid" type="int">
+:     <column name="SID" />
+:     <generator class="foreign">
+:     	<param name="property">master</param>
+:     </generator>
+: </id>
+
+相应的注解形式为：
+roll(9);
+
+*** FK assoc
+在其中一端，配置如下，通过 manytoone 和 unique 配合，产生一对一的结果。而且会生成相应外键：
+: <many-to-one name="school" class="School" unique="true"></many-to-one>
+在另一端：
+: <one-to-one name="master" class="Master" property-ref="school"></one-to-one>
+
+相应的注解形式为：
+roll(2);
+
+** Embedded(Component)
+嵌入
+
 * 级联（Cascade）
 
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
@@ -357,16 +383,19 @@ private Author author;
 <set>元素的检索策略：
 - lazy，决定集合被初始化的时机，true/false/extra
 - Hibernate.initialize() 调用代码显式初始化
-- fetch，"select"."subselect"/"join"，决定查询的形式/时机
-- 若把 fetch 设置为 subselect，会通过子查询的方式来初始化所有set集合。
-  子查询作为 where 的 in 条件出现。此时 lazy有效，batch-size失效。
-- 若把 fetch 设置为 join，迫切使用左连接，lazy会失效。
+- fetch 的选项有："select"，"subselect"，"join"，它们决定查询的形式和时机
+- 若把 fetch 设置为 subselect，会通过子查询的方式来初始化所有 set 集合。
+  子查询作为 where 的 in 条件出现。此时 lazy 有效，batch-size 失效。
+- 若把 fetch 设置为 join，迫切使用左连接，lazy 会失效。
 - hql 查询会忽略 fetch=join 的取值
-- batch-size，设定批量查询数量，减少select次数，提高检索性能
-- 在查询时，对集合中的元素进行排序。 order by 中使用的是表的字段名，
+- batch-size，设定批量查询数量，用于减少 select 次数、提高检索性能
+- order-by 在查询时对集合中的元素进行排序，使用的是表的字段名。会在 sql 语句中添加 order by 段。
 
 <many-to-one>的检索策略:
 - lazy 取值 proxy/no-proxy/false
+
+<property /> 的检索策略:
+- lazy 取值 true/false
 
 * 检索方式
 ** HQL
@@ -383,35 +412,33 @@ private Author author;
 * 继承
 开发的时候用的不是特别多。所以心态：了解。
 
-在父类中指明继承策略
-1. @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-   : DiscriminatorColumn(name="xxx")
-   : DiscriminatorValue(value="e")
-2. @Inheritance(strategy=InheritanceType.JOINED)
-   : @Entity
-   : @PrimaryKeyJoinColumn(name="xxx")
-   : class Dog extents Animal { ... }
-3. @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-   : 每个实现一个表的模式
-
-
 ** subclass
 - 只有一张表，查询快速
 - 使用了区别列
 - 子类独有列不能添非空约束
 - 继承层次深则冗余字段很多
+- @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+  : DiscriminatorColumn(name="xxx")
+  : DiscriminatorValue(value="e")
+
 
 ** joined-class
 - 查询父类记录，做一个左连接查询
 - 查询子记录，做一个内联接查询
 - 查询效率略低
 - 没有冗余的字段
+- @Inheritance(strategy=InheritanceType.JOINED)
+  : @Entity
+  : @PrimaryKeyJoinColumn(name="xxx")
+  : class Dog extents Animal { ... }
+
 
 ** union-subclass
 - 每个实现类都有一个独立的表
 - 查子类不错，查父类需要union
 - 但存在冗余字段
 - 若更新父表的字段，效率较低
+- @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 
 * 二级缓存
 1. 加入 hibernate-ehcache.jar 及关联包
@@ -426,6 +453,9 @@ private Author author;
      : <cache usage="read-only"/>
    - 在类或集合上添加
      : @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+
+
+* 乐观锁、悲观锁
 * Java 提高
 
 
