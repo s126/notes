@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>struts</title>
+<!-- 2017-02-06 周一 09:35 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="imfine">
+<link rel="stylesheet" href="nnn.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">struts</h1>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Preclue</a></li>
+<li><a href="#sec-2">2. 框架</a></li>
+<li><a href="#sec-3">3. 简介</a></li>
+<li><a href="#sec-4">4. 示例（注册登录）</a>
+<ul>
+<li><a href="#sec-4-1">4.1. 业务分析</a></li>
+<li><a href="#sec-4-2">4.2. 实现步骤：</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5. Package</a></li>
+<li><a href="#sec-6">6. Action</a></li>
+<li><a href="#sec-7">7. Result</a>
+<ul>
+<li><a href="#sec-7-1">7.1. dispatcher/redirect</a></li>
+<li><a href="#sec-7-2">7.2. chain/redirectAction</a></li>
+<li><a href="#sec-7-3">7.3. stream</a></li>
+</ul>
+</li>
+<li><a href="#sec-8">8. 流程</a></li>
+<li><a href="#sec-9">9. 值栈</a>
+<ul>
+<li><a href="#sec-9-1">9.1. 在 jsp 中获取值栈的值</a></li>
+<li><a href="#sec-9-2">9.2. 在 action 类中，获取 session 等对象的方法</a></li>
+</ul>
+</li>
+<li><a href="#sec-10">10. 拦截器</a></li>
+<li><a href="#sec-11">11. 验证</a>
+<ul>
+<li><a href="#sec-11-1">11.1. 声明式验证</a></li>
+<li><a href="#sec-11-2">11.2. 编程式验证</a></li>
+<li><a href="#sec-11-3">11.3. 示例：在注册页面增加一个生日字段</a></li>
+</ul>
+</li>
+<li><a href="#sec-12">12. 标签库</a></li>
+<li><a href="#sec-13">13. 类型转换</a></li>
+<li><a href="#sec-14">14. 国际化</a></li>
+<li><a href="#sec-15">15. 文件的上传下载</a></li>
+<li><a href="#sec-16">16. 防止重复提交</a></li>
+<li><a href="#sec-17">17. ajax</a>
+<ul>
+<li><a href="#sec-17-1">17.1. 获取 response，利用 servlet 原生方式</a></li>
+<li><a href="#sec-17-2">17.2. 利用 stream 返回类型</a></li>
+<li><a href="#sec-17-3">17.3. struts-json.jar 插件</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+
+<section id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Preclue</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Tomcat 编译 jsp 到 java 文件的保存目录：
+</p>
+<pre class="example">
+E:\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\hello\org\apache\jsp\WEB_002dINF\login
+</pre>
+</div>
+</section>
+
+<section id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 框架</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+框架是一个半成品。它提供了一些接口、类、方法，我们可以直接调用。
+</p>
+
+<p>
+所以使用框架，相当于在别人开发了一半的项目上继续开发。
+</p>
+
+<p>
+因此，框架有以下优势：
+</p>
+<ol class="org-ol">
+<li>能提高我们的开发效率。
+</li>
+<li>能大幅度减少我们的代码量。
+</li>
+<li>能提高代码的健壮性。比如，jquery的跨浏览器问题。
+</li>
+</ol>
+</div>
+</section>
+
+
+<section id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 简介</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Struts2 是一个流行的 MVC 框架。
+</p>
+
+<p>
+官方网站：<a href="https://struts.apache.org/">https://struts.apache.org/</a>
+</p>
+
+
+<p>
+导入 struts-blank 项目有两种方式： maven 方式和一般方式。下面介绍一般的方式：
+</p>
+<ol class="org-ol">
+<li>在 eclipse 中，选择新建一个 dynamic web project，例如名字为 ls02.
+</li>
+<li>将 src/apps/blank/src/main/java 下的文件复制到 workspace/ls02/src 文件夹下。
+</li>
+<li>将 src/apps/blank/src/main/resources 下的文件复制到 workspace/ls02/src 文件夹下。
+</li>
+<li>将 src/apps/blank/src/main/webapp 下的文件复制到 workspace/ls02/WebContent 文件夹下。
+</li>
+<li>将相关的 jar 包放到 workspace/ls02/WebContent/WEB-INF/lib 文件夹下。
+</li>
+</ol>
+
+<p>
+需要的jar包有以下：
+</p>
+<ul class="org-ul">
+<li>asm-3.3.jar
+</li>
+<li>asm-commons-3.3.jar
+</li>
+<li>asm-tree-3.3.jar
+</li>
+<li>commons-fileupload-1.3.2.jar
+</li>
+<li>commons-io-2.2.jar
+</li>
+<li>commons-lang3-3.2.jar
+</li>
+<li>hamcrest-core-1.3.jar
+</li>
+<li>javassist-3.11.0.GA.jar
+</li>
+<li>javax.servlet-api-3.1.0.jar
+</li>
+<li>javax.servlet.jsp-api-2.3.1.jar
+</li>
+<li>jstl-1.2.jar
+</li>
+<li>junit-4.12.jar
+</li>
+<li>log4j-1.2.17.jar
+</li>
+<li>ognl-3.0.19.jar
+</li>
+<li>ojdbc7.jar
+</li>
+<li>struts2-core-2.3.30.jar
+</li>
+<li>struts2-json-plugin-2.3.30.jar
+</li>
+<li>xwork-core-2.3.30.jar
+</li>
+</ul>
+</div>
+</section>
+
+<section id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 示例（注册登录）</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> 业务分析</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+我们需要以下四个请求：、
+</p>
+<ol class="org-ol">
+<li>第一个请求：<br >
+   显示登录的页面。  login.jsp
+</li>
+
+<li>第二个请求：<br >
+   点击登录之后，要完成登录的操作。
+welcome.jsp
+fail.jsp
+</li>
+
+<li>第三个请求：<br >
+   显示注册的页面。
+regist.jsp
+</li>
+
+<li>第四个请求：<br >
+   点击“注册”按钮之后，完成注册的操作。
+login.jsp
+regerror.jsp
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> 实现步骤：</h3>
+<div class="outline-text-3" id="text-4-2">
+<ol class="org-ol">
+<li><b>建立动态web项目。</b>
+
+<p>
+打开 eclipse，选择 File -&gt; New -&gt; Dynamic Web Project(快捷键为Ctrl-N)。
+</p>
+
+<p>
+注意，工程名字尽量简洁，尽量用小写字母和_的组合。
+</p>
+
+<p>
+注意，在创建的工程的时候，将创建 web.xml 的选项勾上。
+因为在 servlet3 版本中，可以不需要 web.xml 的情况下运行 web 工程，但是我们要使用 struts2，必须要在 web.xml 中进行若干的配置。
+</p>
+</li>
+
+<li><b>将相关的 jar 包，复制到 工程目录/WebContent/WEB-INF/lib 文件夹下面。</b>
+
+<p>
+注意，一定不要缺少某些关键包，否则可能会报错。
+</p>
+
+<p>
+注意，如果出现一些莫名其妙的问题，包括像报 ClassNotFound 的异常，这时候，首先要检查是否有 jar 包的缺失。
+</p>
+</li>
+
+<li><b>配置 web.xml，将所有的请求交给 struts 进行处理。</b>
+
+<p>
+即在 web.xml 中添加以下内容：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">filter</span>&gt;
+    &lt;<span style="color: #0000ff;">filter-name</span>&gt;struts&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
+    &lt;<span style="color: #0000ff;">filter-class</span>&gt;org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter&lt;/<span style="color: #0000ff;">filter-class</span>&gt;
+&lt;/<span style="color: #0000ff;">filter</span>&gt;
+&lt;<span style="color: #0000ff;">filter-mapping</span>&gt;
+    &lt;<span style="color: #0000ff;">filter-name</span>&gt;struts&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
+    &lt;<span style="color: #0000ff;">url-pattern</span>&gt;/*&lt;/<span style="color: #0000ff;">url-pattern</span>&gt;
+&lt;/<span style="color: #0000ff;">filter-mapping</span>&gt;
+</pre>
+</div>
+
+<p>
+注意： filter-name 是可以随意定义的，不过上下两个节点要填写一致，不要搞错。
+</p>
+
+<p>
+注意： 要确保 filter-class 的值写正确，这是一个确切存在的过滤器类。可以通过查看 struts2-core.jar 的源码去确定。
+</p>
+
+<p>
+注意： 在 elipse 左边的 Web App Libraries 下面，找到 struts2-core.jar，打开节点，直到 StrutsPrepareAndExecuteFilter，然后右键点击，选择 Copy Qualified Name，这样就把这个过滤器的完整路径复制下来了。然后就可以在 web.xml 中进行粘贴了。
+</p>
+
+<p>
+注意： 如果创建完工程之后，发现没有 web.xml，那么你需要自己创建或者从其他地方拷贝一个 web.xml 过来。但是一定不要放错位置（WebContent/WEB-INF/web.xml）。而且 xml 头部务必要写正确，格式也不能出现问题。
+</p>
+
+<p>
+注意： 以前的老旧 struts 版本中，使用的是过滤器 org.apache.struts2.dispatcher.FilterDispatcher。但现在已经被抛弃，不要使用，而是用 StrutsPrepareAndExecuteFilte 代替。同时，ActionContextClearUp 拦截器现在也被弃用。
+</p>
+</li>
+
+<li><b>创建文件 struts.xml，配置所有模块和请求，即配置相应的 package 和 action。</b>
+
+<p>
+这是 struts 的配置中心，所有的 struts 属性配置和请求映射，都在这个文件夹中进行action设置。
+</p>
+
+<p>
+需要将这个文件放在 classpath 的根目录下面，即，src 目录下面。
+</p>
+
+<p>
+如果我们创建的工程能够运行起来不报错，但是我们的 action 请求返回404错误的话，首先需要检查我们的请求有没有写错，如果没有写错，那么，就要检查是不是我们的 struts.xml 放错了位置或写错了名字。
+</p>
+
+<p>
+如果我们的工程能够运行，但是在请求的时候，返回一些比如 result 没有正确映射等错误，那么，我们就需要检查是不是在 struts.xml 中配置错了东西。
+</p>
+
+<p>
+struts.xml，最好我们备份一份，在创建的时候，直接拷贝。因为，这个文件的格式，尤其是头部千万不能错误：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span> ?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> struts <span style="color: #a020f0;">PUBLIC</span>
+ <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Apache Software Foundation//DTD Struts Configuration 2.3//EN</span><span style="color: #8b2252;">"</span>
+ <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://struts.apache.org/dtds/struts-2.3.dtd</span><span style="color: #8b2252;">"</span>&gt;
+
+&lt;<span style="color: #0000ff;">struts</span>&gt;
+   &lt;<span style="color: #0000ff;">package</span>&gt;&lt;/<span style="color: #0000ff;">package</span>&gt;
+&lt;/<span style="color: #0000ff;">struts</span>&gt;
+</pre>
+</div>
+<p>
+头部的 dtd 文件可以在 struts2-core.jar 的根目录之下找到。里面可以拷贝到 DOCTYPE 的定义。
+</p>
+
+<p>
+注意， <b>一个请求对应一个 action</b> 。这个概念务必要理解。另外，一个业务模块定义在一个 package 中，这个也要掌握。
+</p>
+
+<p>
+我们可以使用通配符来简化 action 配置。但务必不要滥用通配符，尤其刚开始的时候不建议过多使用通配符。
+</p>
+</li>
+
+<li><b>实现相应的 action</b>
+
+<p>
+Action 类，是用来进行业务处理的类。它是一个 pojo (Plain Ordinary Java Object)，即一个普通的 java 类。它里面定义的方法如下格式:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#27809;&#26377;&#20837;&#21442;&#65292;&#36820;&#22238; String &#31867;&#22411;&#12290;&#36820;&#22238;&#20540;&#34920;&#31034;&#30340;&#26159;&#35201;&#36820;&#22238;&#32473;&#29992;&#25143;&#30340;&#39029;&#38754;&#65292;&#21363; result</span>
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">execute</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"&#36825;&#37324;&#26159;&#36827;&#34892;&#19994;&#21153;&#36923;&#36753;&#22788;&#29702;&#30340;&#22320;&#26041;&#12290;"</span><span style="color: #7388d6;">)</span>;
+  <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"success"</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+为了方便，绝大多数时候我们要为我们自己定义的 Action 继承 ActionSupport 类。ActionSupport 实现了一些接口，包含了一些有用的方法，可以简化我们的开发。
+</p>
+</li>
+
+<li><b>实现相应的 jsp</b>
+
+<p>
+一些比较敏感的，尤其是涉及权限的东西，我们最好放在 WEB-INF 目录下面，因为按照 j2ee 的规范，WEB-INF 目录下的内容，不能够由外部直接访问，所以能够最大限度保证安全。
+</p>
+
+<p>
+以后在开发我们的业务系统的时候，避免直接访问 jsp 页面，养成习惯。
+</p>
+
+<p>
+另外，要养成把主要的业务操作方面的 jsp 放在 WEB-INF 下面的习惯。
+</p>
+</li>
+
+<li><b>温馨提示</b>
+
+<p>
+要养成良好的编程习惯 !!!
+</p>
+
+<p>
+习惯成自然，不要让不好的习惯带给我们一些莫名其妙的损失。这不是小事，要认真对待。下面是一些基本的规范：
+</p>
+
+<ul class="org-ul">
+<li>要把类跟接口放在我们 <b>自定义的包</b> 内，尤其忌讳把所有的东西都放在 classpath 的根路径之下。
+</li>
+<li>不要乱起名，名字要有相应的 <b>意义</b> ，不同种类的类或接口要放在不同的包中，不要混乱地放在一起。
+</li>
+<li>包的名字，务必要用 <b>小写字母</b> 。
+</li>
+<li>类或接口的名字，务必务必要用 <b>大写字母开头</b> ，而且要写成 <b>驼峰格式</b> 。
+</li>
+<li>方法的名字，要用 <b>小写字母开头</b> ,但也要写成驼峰形式。
+</li>
+<li><b>格式要对齐</b> ，文件中要么都是用 tab，要么都使用空格，不建议混用，否则，可能在别人的电脑上，会出现代码对不齐的现象。
+</li>
+<li>等号等操作符的前面和后面， <b>要带有空格</b> ，便于阅读！！！ 这个，多看一下一些标准代码，自己体会。
+</li>
+<li>习惯的养成非一日之功，坏的习惯是这样的，好的习惯也是这样的。所以，希望不要偷懒，从 <b>日常</b> 开始慢慢规范自己。
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Package</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+在 struts.xml 中首先需要定义 package，package 我们可以理解为一个业务模块。
+</p>
+
+<p>
+一个系统有多个功能，即有多个业务模块，表现在 struts.xml 中就是有多个 package。一个业务模块需要请求很多页面，相应一个 package 包含多个 action.
+</p>
+
+<p>
+注意：必须要有模块化的概念，为业务创建相关的 package 和 namespace，这样便于管理维护，也便于功能的扩展。
+</p>
+
+<p>
+定义 package 需要给予一个名字，还可以设置命名空间（默认为 / ）和父包。
+</p>
+
+<p>
+我们自定义的 package 最好继承 struts-default 包，它定义在 struts-default.xml 中（可以展开 struts2-core.jar 看到）。这个 package 内置了一些 result 类型，一些拦截器，并配置了一些常见的 struts 常量。我们可以直接使用。
+</p>
+
+<p>
+Package 主要由 action 构成，除此之外，还可以声明拦截器，配置包范围的异常处理，定义包范围的 result。
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Action</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+action 必须要有的属性是 name，它是 action 的唯一标识。 如果不指定 class 的话，那么默认是 ActionSupport 类。 method 不指定的话，默认是 execute 方法。
+</p>
+
+<p>
+action 至少要有一个节点，就是 result。如果 result 不去指定 name 的话，那么它的默认名字就是 success.
+</p>
+
+<p>
+action 下面可以定义一到多个异常处理节点，用来捕获本次请求出现的指定异常。
+</p>
+<pre class="example">
+&lt;exception-mapping result="fail" exception="java.lang.Exception"&gt;&lt;/exception-mapping&gt;
+</pre>
+
+<p>
+如果请求的过程中，出现异常，那么 struts 首先判断当前 action 节点下面有没有配置相关的 exception-mapping 节点，如果有并且异常匹配，那么页面会转到本异常处理节点指定的页面。
+</p>
+
+<p>
+如果 action 节点下面没有配置相关的 exception-mapping，那么 struts 会到当前包下面搜索，有没有配置 global-exception-mapping 节点。如果有配置，那么，就会根据所匹配的异常处理，进行返回结果。
+</p>
+
+<p>
+如果 action 节点下面没有配置，而且包下面没有配置，那么，就不会有相应的异常处理。服务器会把一个 404 等相关的错误页面直接打印给用户。（这样首先不美观，不专业，其次，非常不安全。）
+</p>
+
+<p>
+异常处理，可以在当前 action 节点下面配置。相应的，可以在 package 下面配置全局的异常处理。
+</p>
+<pre class="example">
+&lt;global-exception-mappings&gt;
+  &lt;exception-mapping result="fail" exception="java.lang.Exception"&gt;&lt;/exception-mapping&gt;
+&lt;/global-exception-mappings&gt;
+</pre>
+
+<p>
+返回结果，即 result，同样，我们需要在当前 action 下面配置。相应，可以在 package 下面配置全局的结果返回。
+</p>
+<pre class="example">
+&lt;global-results&gt;
+    &lt;result name="fail"&gt;/WEB-INF/login/login.jsp&lt;/result&gt;
+&lt;/global-results&gt;
+</pre>
+
+
+<p>
+Action 类的典型示例如下，很简单：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #228b22;">Class</span> <span style="color: #0000ff;">LoginAction</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>;
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span>;
+
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">execute</span> <span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#21517;&#23383;&#26159;:"</span> + name + <span style="color: #8b2252;">"    &#24180;&#40836;&#20026;:"</span> + age<span style="color: #909183;">)</span>;
+        <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"success"</span>;
+    <span style="color: #7388d6;">}</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">setter...</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">setter...</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Result</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+如果不指定 name，那么默认的 name 是 success, 如果不指定 type，默认的 type 就是 dispatcher。我们常用的就是以下几个。
+</p>
+</div>
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> dispatcher/redirect</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+转发或者重定向，一般用于 jsp
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">success</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">location</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">location</span>&gt;
+&lt;/<span style="color: #0000ff;">result</span>&gt;
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fail</span><span style="color: #8b2252;">"</span>&gt;/WEB-INF/jsp/login/fail.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> chain/redirectAction</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+转发或者重定向 xxx.action，用于一个新的 struts 请求。
+</p>
+
+<p>
+如果要转发到另外一个包下的连接的话：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">success</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">chain</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
+    &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
+&lt;/<span style="color: #0000ff;">result</span>&gt;
+</pre>
+</div>
+
+<p>
+如果要重定向到另外一个包下面的请求的话，有下面两种写法：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#20004;&#31181;&#20889;&#27861;&#26159;&#31561;&#25928;&#30340; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirectAction</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">namespace</span><span style="color: #8b2252;">"</span>&gt;/emp&lt;/<span style="color: #0000ff;">param</span>&gt;
+    &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">actionName</span><span style="color: #8b2252;">"</span>&gt;listAll&lt;/<span style="color: #0000ff;">param</span>&gt;
+&lt;/<span style="color: #0000ff;">result</span>&gt;
+
+&lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">redirect</span><span style="color: #8b2252;">"</span>&gt;/emp/listAll.html&lt;/<span style="color: #0000ff;">result</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3"><span class="section-number-3">7.3</span> stream</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+是用来处理 struts 中文件的上传和下载的。
+</p>
+</div>
+</div>
+</section>
+
+
+
+
+
+
+
+
+<section id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> 流程</h2>
+<div class="outline-text-2" id="text-8">
+<ol class="org-ol">
+<li>请求发送给 StrutsPrepareAndExecuteFilter
+</li>
+<li>StrutsPrepareAndExecuteFilter 询问 ActionMapper：请求是不是一个 Action(是的话返回非空的 ActionMapping)
+</li>
+<li>如果请求是一个 Action，则把请求交给 ActionProxy 对象处理。
+</li>
+<li>ActionProxy 中，通过 ConfigurationManager 加载配置文件，得到处理请求的 Action 类和方法。
+</li>
+<li>ActionProxy 创建一个 ActionInvocation 实例并初始化。
+</li>
+<li>ActionInvocation 负责调用 Action，在调用的前后，需要执行 Interceptor 链。在调用完 Action 后要执行 result 的结果。
+</li>
+<li>把结果发送到客户端。
+</li>
+</ol>
+</div>
+</section>
+
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 值栈</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+EL(Expression Language) 是为了分离页面跟代码，避免JSP中糅杂太多&lt;% %&gt;而出现的。<br >
+</p>
+
+<p>
+它有如下好处：
+</p>
+<ul class="org-ul">
+<li>避免复杂的java代码，使页面简单整洁
+</li>
+<li>支持运算符，自由强大高效
+</li>
+<li>有简单的逻辑控制，易于阅读和维护
+</li>
+</ul>
+
+<p>
+Struts2 支持的 EL 语言有：
+</p>
+<ol class="org-ol">
+<li>OGNL (Object-Graph Navigation Language) // Struts 默认
+</li>
+<li>JSTL (JSP Standard Tag Library)                 // JSP2.0集成
+</li>
+<li>Groovy
+</li>
+<li>Velocity，只是一个简单的模板匹配引擎啦
+</li>
+</ol>
+
+
+<p>
+值栈是 struts 进行数据传递的中心，它是 struts 运行过程中创建的一个对象。本质上它是保存在 request 对象上的一个 attribute.
+</p>
+
+
+<p>
+在 Struts 中，值栈（ValueStack）分为两个逻辑部分
+</p>
+<ol class="org-ol">
+<li>对象栈
+
+<p>
+它其实是 Map 栈中的一个值。是作为一个默认的存在。本质上它是一个 ArrayList， Struts 在接受到一个请求的时候，会把创建的 Action 对象保存到这个 ArrayList 中。
+</p>
+</li>
+
+<li>Map栈
+
+<p>
+本质上就是一个 Map，它是对 ActionContent 的引用。Struts 把一些常用的映射关系（比如，session,application,parameters等）保存到了这个对象中。
+</p>
+
+<p>
+Map 栈的大致结构如下:
+</p>
+</li>
+</ol>
+
+
+<p>
+在 jsp 页面中，如果打开了 devMove 模式，那么可以通过 &lt;s:debug /&gt; 查看整个值栈中保存的数据。
+</p>
+</div>
+
+
+<div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> 在 jsp 中获取值栈的值</h3>
+<div class="outline-text-3" id="text-9-1">
+<p>
+首先，可以使用 &lt;s:property /&gt; 标签，通过在 value 属性里面的 ognl 表达式，就可以取到值栈中对应的值了。
+</p>
+
+<p>
+ognl 表达式的语法规则为：
+</p>
+<pre class="example">
+#key.a.b.c
+</pre>
+
+<p>
+当然，如果我们要获取的值，是属于 OgnlContext 的 Root 对象，那么，前面的 #key 可以去掉。
+</p>
+
+<p>
+因此，如果我们在 Action 里面定义了变量（比如，price），并赋予了值，那么，到 jsp 页面中，我们就可以直接用下面语句取出它的值：
+</p>
+<pre class="example">
+&lt;s:property value="price" /&gt;
+</pre>
+
+<p>
+如果，我们要显示的值，是一个集合，比如，list，那么我们可以用 &lt;s:iterator /&gt; 标签循环取出它里面的值。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java">&lt;s:iterator var=<span style="color: #8b2252;">"j"</span> value=<span style="color: #8b2252;">"emps"</span>&gt;
+    <span style="color: #707183;">&lt;</span><span style="color: #228b22;">tr</span><span style="color: #707183;">&gt;</span>
+        <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>$<span style="color: #707183;">{</span>name<span style="color: #707183;">}</span>&lt;/td&gt;
+        <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>&lt;s:property value=<span style="color: #8b2252;">"job"</span>/&gt;&lt;/td&gt;
+        <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>&lt;s:property value=<span style="color: #8b2252;">"#j.sal"</span>/&gt;&lt;/td&gt;
+        <span style="color: #707183;">&lt;</span><span style="color: #228b22;">td</span><span style="color: #707183;">&gt;</span>&lt;a href=<span style="color: #8b2252;">"delete.html?ename=${name}"</span>&gt;&#21024;&#38500;&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/s:iterator&gt;
+</pre>
+</div>
+
+
+<p>
+注意，因为 struts 中对 request 对象进行了封装，并且重载了它的 getAttribute 方法，使得可以通过 getAttribute 方法直接从值栈对象中获取值。
+所以，如果我们在 jsp 页面中，使用el表达式，可以达到跟使用 &lt;s:property /&gt; 标签同样的效果。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> 在 action 类中，获取 session 等对象的方法</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+在 action 中，向 session 中加入值，有如下几张方法：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#31532;&#19968;&#31181;&#65292;&#20174; ServletActionContext&#25552;&#20379;&#30340;&#38745;&#24577;&#26041;&#27861;&#33719;&#21462;&#12290;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#27604;&#22914;&#65292;ServletActionContext.getRequest() &#24471;&#21040;&#30340;&#26159;&#19968;&#20010;&#21407;&#29983;&#30340; HttpServletRequest &#23545;&#35937;&#12290;&#24471;&#21040;&#21518;&#25105;&#20204;&#21487;&#20197;&#25353;&#29031;&#20197;&#21069;&#20889; servlet &#26102;&#20505;&#30340;&#20889;&#27861;&#22788;&#29702;&#36825;&#20010;&#23545;&#35937;&#12290;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25152;&#20197;&#65292;&#22914;&#26524;&#24819;&#24471;&#21040;&#22238;&#35805;&#23545;&#35937;&#30340;&#35805;&#65292;&#37027;&#20040;&#22914;&#19979;&#20195;&#30721;&#65306;</span>
+<span style="color: #228b22;">HttpSession</span> <span style="color: #a0522d;">s1</span> = ServletActionContext.getRequest<span style="color: #707183;">()</span>.getSession<span style="color: #707183;">()</span>;
+s1.setAttribute<span style="color: #707183;">(</span><span style="color: #8b2252;">"flag1"</span>, <span style="color: #8b2252;">"red"</span><span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">struts &#25552;&#20379;&#20102;&#21478;&#22806;&#19968;&#31181;&#23553;&#35013;&#65292;&#21363;&#25226; session,request &#31561;&#24403;&#20570; Map &#23545;&#35937;&#26469;&#22788;&#29702;&#65292;&#36798;&#21040;&#31616;&#21270;&#25105;&#20204;&#25805;&#20316;&#30340;&#30446;&#30340;&#12290;</span>
+<span style="color: #228b22;">Map</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">String</span>, <span style="color: #228b22;">Object</span><span style="color: #707183;">&gt;</span> <span style="color: #a0522d;">s2</span> = ActionContext.getContext<span style="color: #707183;">()</span>.getSession<span style="color: #707183;">()</span>;
+s2.put<span style="color: #707183;">(</span><span style="color: #8b2252;">"flag2"</span>, <span style="color: #8b2252;">"green"</span><span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#23454;&#29616; SessionAware &#25509;&#21475;&#65292;&#23450;&#20041;&#20840;&#23616;&#30340; session &#23545;&#35937;&#12290;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#39318;&#20808;&#35201;&#23450;&#20041;&#20840;&#23616;&#30340; Map&lt;String, Object&gt; s3 = null; &#28982;&#21518;&#23454;&#29616; SessionAware &#25509;&#21475;&#12290;</span>
+s3.put<span style="color: #707183;">(</span><span style="color: #8b2252;">"flag3"</span>, <span style="color: #8b2252;">"yellow"</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+<p>
+在 jsp 页面中，这样使用session中的值。
+</p>
+<pre class="example">
+&lt;s:property value="#session.flag" /&gt;
+</pre>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> 拦截器</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+实现了 Interceptor 接口的类，叫拦截器。
+</p>
+
+<p>
+在 Struts 中，是利用拦截器进行功能实现的，比如值的自动封装，类型的转换，值栈的维护，验证，国际化等方面。
+</p>
+
+<p>
+每一个拦截器都实现用来完成单一的功能。多个拦截器，按照顺序放在一个列表中，按照顺序执行，可以达到完成一系列功能的目的。
+这多个的拦截器放在一起，像一根链条一样，称为拦截器栈（栈是一种非常基本的数据结构，它遵守先进后出的原则。简单理解，它是有顺序的一个链表）。
+</p>
+
+<p>
+比如，在 struts 中，对值进行自动封装的拦截器叫 ParameterFilterInterceptor；对异常处理的拦截器叫 ExceptionMappingInterceptor；FileUploadInterceptor 负责处理文件的上传等。其他功能，在 struts 中都有相应的拦截器实现。
+</p>
+
+<p>
+所以一个请求在到达 Action 对象前会经过一系列的拦截器。
+</p>
+<pre class="example">
+拦截器a -&gt; 拦截器 B -&gt; 拦截器 C -&gt; 拦截器 D ... -&gt; Action.Method -&gt; 后续的一些处理，包括返回显示页面等。
+</pre>
+
+<p>
+在 struts.xml 中，可以通过 interceptor-ref 为每个 action 设置相应的拦截器链。如果我们不去设置，那么如果我们继承了 struts-default， action 会默认使用 defaultStack 拦截器栈。
+</p>
+
+<p>
+defaultStack 拦截器栈定义了一组有序的拦截器，它包含的每个拦截器都是 struts 内置的。我们可以通过在 struts-default.xml 中查看详情。
+</p>
+
+<p>
+配置拦截器的方式为，在 action 下面，增加 interceptor-ref 节点：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">yyy.ZzzAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">result</span>&gt;/aaa.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">A&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">B&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">action</span>&gt;
+</pre>
+</div>
+
+<p>
+在 struts 处理请求的过程中，会分析你的配置，把你为 action 配置的所有拦截器引用按照先后顺序整理成一个新的链表。然后按照顺序去执行。
+</p>
+
+<p>
+当然，你也可以在 package 里面声明新的拦截器和拦截器栈。上面的代码可以改写，并改进为：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25318;&#25130;&#22120;&#30340;&#22768;&#26126; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">interceptors</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#22768;&#26126;&#26159;&#25105;&#20204;&#33258;&#24049;&#23454;&#29616;&#30340;&#20004;&#20010;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">A&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.AI</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">B&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.BI</span><span style="color: #8b2252;">"</span> /&gt;
+
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36825;&#37324;&#23450;&#20041;&#30340;&#26159;&#19968;&#20010;&#25318;&#25130;&#22120;&#26632;&#65292;&#23601;&#26159;&#25226;&#19968;&#31995;&#21015;&#30340;&#25318;&#25130;&#22120;&#25918;&#22312;&#19968;&#36215;&#36215;&#20010;&#21517;&#23383;&#65292;&#26041;&#20415;&#22312; action &#20013;&#20351;&#29992; </span><span style="color: #b22222;">--&gt;</span>
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292; interceptor-ref &#30340;&#20808;&#21518;&#39034;&#24207;&#19981;&#21516;&#65292;&#25928;&#26524;&#26159;&#19981;&#19968;&#26679;&#30340;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">interceptor-stack</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#25105;&#30340;&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">A&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">B&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+        <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#20351;&#29992;&#33258;&#23450;&#20041;&#25318;&#25130;&#22120;&#30340;&#26102;&#20505;&#65292;&#19968;&#23450;&#35201;&#27880;&#24847;&#65292;&#22914;&#26524;&#19981;&#20889;&#19979;&#38754;&#30340;&#19968;&#37096;&#65292;&#23558;&#20250;&#29992;&#25105;&#20204;&#33258;&#24049;&#30340;&#25318;&#25130;&#22120;&#25226; struts &#33258;&#24049;&#30340;&#25318;&#25130;&#22120;&#32473;&#35206;&#30422;&#25481;&#12290;&#36825;&#26679;&#20250;&#23548;&#33268;struts&#23436;&#25104;&#19981;&#20102;&#19968;&#20123;&#20107;&#24773;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+        <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25152;&#20197;&#65292;&#22312;&#25105;&#20204;&#22768;&#26126;&#30340;&#36825;&#20010;&#25318;&#25130;&#22120;&#26632;&#20013;&#65292;&#25226; defaultStack &#25918;&#22312;&#37324;&#38754; </span><span style="color: #b22222;">--&gt;</span>
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">defaultStack</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;/<span style="color: #0000ff;">interceptor-stack</span>&gt;
+&lt;/<span style="color: #0000ff;">interceptors</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312; action &#20013;&#20351;&#29992;&#25105;&#20204;&#22768;&#26126;&#30340;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">yyy.ZzzAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">result</span>&gt;/aaa.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#25105;&#30340;&#25318;&#25130;&#22120;</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">action</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19978;&#38754;&#30340;&#19968;&#27573;&#65292;&#36319;&#19979;&#38754;&#30340;&#23450;&#20041;&#26159;&#30456;&#21516;&#30340;&#25928;&#26524; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span>
+<span style="color: #b22222;">&lt;action name="xxx" class="yyy.ZzzAction" method="xxx"&gt;</span>
+<span style="color: #b22222;">    &lt;result&gt;/aaa.jsp&lt;/result&gt;</span>
+<span style="color: #b22222;">        &lt;interceptor-ref name="A&#25318;&#25130;&#22120;" /&gt;</span>
+<span style="color: #b22222;">        &lt;interceptor-ref name="B&#25318;&#25130;&#22120;" /&gt;</span>
+<span style="color: #b22222;">        &lt;interceptor-ref name="defaultStack" /&gt;</span>
+<span style="color: #b22222;">&lt;/action&gt;</span>
+<span style="color: #b22222;">--&gt;</span>
+</pre>
+</div>
+
+
+<p>
+可以参考我们的示例工程，加断点调试，看一下整个拦截器的运行流程。
+</p>
+
+<p>
+当然，如果我们想自定义拦截器。我们只需要写一个类，实现 Interceptor 接口即可。为了方便，也可以直接继承 AbstractInterceptor 类，这样，我们只需要重写 intercept 方法就可以了。
+</p>
+
+
+<p>
+栗子：
+</p>
+
+<p>
+第一步，实现我们自己的拦截器。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #8b2252;">/**</span>
+<span style="color: #8b2252;"> * &#36825;&#26159;&#19968;&#20010;&#31616;&#21333;&#30340;&#29992;&#26469;&#21028;&#26029;&#30331;&#24405;&#30340;&#25318;&#25130;&#22120;&#26647;&#23376;&#12290;</span>
+<span style="color: #8b2252;"> */</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">VertifyInterceptor</span> <span style="color: #a020f0;">extends</span> <span style="color: #228b22;">AbstractInterceptor</span> <span style="color: #707183;">{</span>
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26085;&#24535;&#31995;&#32479;&#65292;&#20320;&#20204;&#20063;&#38656;&#35201;&#31245;&#24494;&#20102;&#35299;&#19968;&#19979;&#12290;</span>
+  <span style="color: #228b22;">Log</span> <span style="color: #a0522d;">logger</span> = LogFactory.getLog<span style="color: #7388d6;">(</span>VertifyInterceptor.<span style="color: #a020f0;">class</span><span style="color: #7388d6;">)</span>;
+
+  <span style="color: #008b8b;">@Override</span>
+  <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">intercept</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">ActionInvocation</span> <span style="color: #a0522d;">invocation</span><span style="color: #7388d6;">)</span> <span style="color: #a020f0;">throws</span> <span style="color: #228b22;">Exception</span> <span style="color: #7388d6;">{</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#33719;&#21462; action &#30340;&#21517;&#23383;</span>
+    <span style="color: #228b22;">String</span> <span style="color: #a0522d;">actionName</span> = invocation.getProxy<span style="color: #909183;">()</span>.getActionName<span style="color: #909183;">()</span>;
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#21482;&#26159;&#19968;&#20010;&#23567;&#26647;&#23376;&#65292;&#36890;&#36807;&#36825;&#26679;&#35774;&#32622;&#65292;&#25105;&#20204;&#21487;&#20197;&#35753;&#36825;&#20123;&#35831;&#27714;&#19981;&#36827;&#34892;&#19979;&#38754;&#30340;&#39564;&#35777;&#12290;</span>
+    <span style="color: #228b22;">Set</span><span style="color: #909183;">&lt;</span><span style="color: #228b22;">String</span><span style="color: #909183;">&gt;</span> <span style="color: #a0522d;">excludes</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #909183;">&lt;&gt;()</span>;
+    excludes.add<span style="color: #909183;">(</span><span style="color: #8b2252;">"login"</span><span style="color: #909183;">)</span>;
+    excludes.add<span style="color: #909183;">(</span><span style="color: #8b2252;">"index"</span><span style="color: #909183;">)</span>;
+    <span style="color: #a020f0;">if</span> <span style="color: #909183;">(</span>excludes.contains<span style="color: #709870;">(</span>actionName<span style="color: #709870;">)</span><span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+      <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#35831;&#27714;&#22312;&#25105;&#20204;&#30340;&#30333;&#21517;&#21333;&#20013;&#65292;&#23558;&#19981;&#25191;&#34892;&#20043;&#21518;&#30340;&#21028;&#26029;&#36923;&#36753;&#12290;</span>
+      <span style="color: #a020f0;">return</span> invocation.invoke<span style="color: #709870;">()</span>;
+    <span style="color: #909183;">}</span>
+
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#19979;&#38754;&#24320;&#22987;&#36827;&#34892;&#30456;&#20851;&#39564;&#35777;&#12290;</span>
+    <span style="color: #228b22;">HttpSession</span> <span style="color: #a0522d;">session</span> = ServletActionContext.getRequest<span style="color: #909183;">()</span>.getSession<span style="color: #909183;">()</span>;
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26410;&#30331;&#24405;&#26816;&#27979;&#12290;&#22914;&#26524;session&#20026;&#31354;&#65292;&#25110;&#32773; session &#27809;&#26377;&#20445;&#23384;&#30456;&#20851;&#29366;&#24577;&#65292;&#21017;&#21028;&#26029;&#65292;&#36825;&#20010;&#20154;&#27809;&#26377;&#30331;&#24405;&#12290;&#37027;&#20040;&#35753;&#20182;&#21435;&#30331;&#24405;&#39029;&#38754;&#12290;</span>
+    <span style="color: #a020f0;">if</span> <span style="color: #909183;">(</span>session == <span style="color: #008b8b;">null</span> || session.getAttribute<span style="color: #709870;">(</span><span style="color: #008b8b;">Globals</span>.USER_KEY<span style="color: #709870;">)</span> == <span style="color: #008b8b;">null</span><span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+      <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35760;&#24405;&#25110;&#25171;&#21360;&#26085;&#24535;</span>
+      logger.info<span style="color: #709870;">(</span>ServletActionContext.getRequest<span style="color: #907373;">()</span>.getRequestURI<span style="color: #907373;">()</span> + <span style="color: #8b2252;">"   &#23578;&#26410;&#30331;&#24405;&#65292;&#36820;&#22238;&#39318;&#39029;"</span><span style="color: #709870;">)</span>;
+      <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#30452;&#25509;&#36820;&#22238;&#19968;&#20010;&#23383;&#31526;&#30340;&#35805;&#65292;&#37027;&#20040;&#19979;&#19968;&#27493;&#23558;&#30452;&#25509;&#36827;&#20837;&#36825;&#37324;&#25351;&#23450;&#30340; index &#39029;&#38754;&#65292;&#32780;&#19981;&#20250;&#25191;&#34892;&#21040; action &#37324;&#38754;&#21435;&#12290;</span>
+      <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"loginPage"</span>;
+    <span style="color: #909183;">}</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26435;&#38480;&#25511;&#21046;&#65292;&#19968;&#20010;&#31616;&#21333;&#26647;&#23376;&#12290;&#38450;&#27490;&#32469;&#36807;&#39564;&#35777;&#65292;&#30452;&#25509;&#36827;&#20837;&#31649;&#29702;&#21592;&#30340;&#39029;&#38754;&#12290;</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#35831;&#27714;&#30340; namespace &#26159; /admin&#65292;&#20294; session &#37324;&#20445;&#23384;&#30340;&#29992;&#25143;&#31867;&#22411;&#19981;&#26159; 1&#65292;&#37027;&#20040;&#25105;&#20204;&#21487;&#20197;&#21028;&#26029;&#65292;&#36825;&#26159;&#38750;&#31649;&#29702;&#21592;&#35201;&#35775;&#38382;&#25105;&#20204;&#30340;&#31649;&#29702;&#21592;&#39029;&#38754;&#12290;&#25152;&#20197;&#27627;&#26080;&#30097;&#38382;&#65292;&#35201;&#31105;&#27490;&#20182;&#30340;&#25805;&#20316;&#12290;</span>
+    <span style="color: #a020f0;">if</span> <span style="color: #909183;">(</span>invocation.getProxy<span style="color: #709870;">()</span>.getNamespace<span style="color: #709870;">()</span>.equalsIgnoreCase<span style="color: #709870;">(</span><span style="color: #8b2252;">"/admin"</span><span style="color: #709870;">)</span> &amp;&amp; <span style="color: #709870;">(</span><span style="color: #907373;">(</span><span style="color: #228b22;">User</span><span style="color: #907373;">)</span> session.getAttribute<span style="color: #907373;">(</span><span style="color: #008b8b;">Globals</span>.USER_KEY<span style="color: #907373;">)</span><span style="color: #709870;">)</span>.getUsertypeid<span style="color: #709870;">()</span> != 1<span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+      logger.info<span style="color: #709870;">(</span>ServletActionContext.getRequest<span style="color: #907373;">()</span>.getRequestURI<span style="color: #907373;">()</span> + <span style="color: #8b2252;">"   &#19981;&#20855;&#22791;&#30456;&#24212;&#26435;&#38480;&#65292;&#36820;&#22238;&#30331;&#24405;"</span><span style="color: #709870;">)</span>;
+      <span style="color: #b22222;">// </span><span style="color: #b22222;">&#23558; session&#12288;&#35774;&#32622;&#20026;&#26080;&#25928;</span>
+      session.invalidate<span style="color: #709870;">()</span>;
+      <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36820;&#22238;&#30456;&#20851;&#35686;&#21578;&#39029;&#38754;&#65292;&#25110;&#32773;&#36339;&#36716;&#21040;&#30331;&#24405;&#39029;&#38754;</span>
+      <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"errorPage"</span>;
+    <span style="color: #909183;">}</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#40664;&#35748;&#24773;&#20917;&#19979;&#65292;&#36827;&#34892;&#36816;&#34892;&#12290;</span>
+    <span style="color: #a020f0;">return</span> invocation.invoke<span style="color: #909183;">()</span>;
+  <span style="color: #7388d6;">}</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+第二步，在 struts.xml 中配置我们自定义的拦截器
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">interceptors</span>&gt;
+    &lt;<span style="color: #0000ff;">interceptor</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">vertify</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.interceptor.VertifyInterceptor</span><span style="color: #8b2252;">"</span> /&gt;
+
+    &lt;<span style="color: #0000ff;">interceptor-stack</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myVertifyStack</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">vertify</span><span style="color: #8b2252;">"</span> /&gt;              <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292;&#25226;&#25105;&#20204;&#30340;&#39564;&#35777;&#25918;&#22312;&#31532;&#19968;&#20010;&#20301;&#32622;&#65292;&#37027;&#20040;&#22914;&#26524;&#39564;&#35777;&#22833;&#36133;&#65292;&#23558;&#19981;&#25191;&#34892;&#19979;&#38754;&#30340;&#25318;&#25130;&#22120;&#65292;&#20250;&#33410;&#32422;&#19968;&#20123;&#36164;&#28304;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+        &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">defaultStack</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;/<span style="color: #0000ff;">interceptor-stack</span>&gt;
+&lt;/<span style="color: #0000ff;">interceptors</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312; action &#20013;&#20351;&#29992;&#25105;&#20204;&#22768;&#26126;&#30340;&#25318;&#25130;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">listAll</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.action.EmpAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">listAll</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">result</span>&gt;/aaa.jsp&lt;/<span style="color: #0000ff;">result</span>&gt;
+    &lt;<span style="color: #0000ff;">interceptor-ref</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myVertifyStack</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">action</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span>
+
+<span style="color: #b22222;">&#24403;&#21069;&#65292;&#38500;&#20102;&#20687;&#19978;&#38754;&#19968;&#26679;&#65292;&#32473;&#27599;&#20010; action &#28155;&#21152; interceptor-ref&#65292;&#25105;&#20204;&#20063;&#21487;&#20197;&#36890;&#36807;&#19968;&#19979;&#35821;&#21477;&#65292;&#20026;&#25972;&#20010;&#21253;&#19979;&#30340; action &#35774;&#32622;&#40664;&#35748;&#30340; interceptor&#65292;&#22914;&#19979;&#65306;</span>
+
+<span style="color: #b22222;">&lt;default-interceptor-ref name="myVertifyStack" /&gt;</span>
+
+<span style="color: #b22222;">--&gt;</span>
+</pre>
+</div>
+
+<p>
+就这么简单。
+</p>
+</div>
+</section>
+
+<section id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> 验证</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+验证是由 ValidationInterceptor 拦截器实现的。胆大的可以考虑研究下其实现。
+</p>
+
+<p>
+验证分为两种:
+</p>
+<ol class="org-ol">
+<li>声明式验证，需要在action类的包下面创建一个验证使用的 xml 文件，里面定义我们要验证的内容。
+</li>
+<li>编程式验证，为 Action 类实现 Validateable 接口，然后，实现 validate 方法。
+</li>
+</ol>
+</div>
+
+<div id="outline-container-sec-11-1" class="outline-3">
+<h3 id="sec-11-1"><span class="section-number-3">11.1</span> 声明式验证</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+比如，要为 LoginAction 做验证，需要在相同目录下面新建一个 LoginAction-validation.xml，内容类似下面：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span>?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> validators <span style="color: #a020f0;">PUBLIC</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//Apache Struts//XWork Validator 1.0//EN</span><span style="color: #8b2252;">"</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://struts.apache.org/dtds/xwork-validator-1.0.dtd</span><span style="color: #8b2252;">"</span>&gt;
+&lt;<span style="color: #0000ff;">validators</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#39564;&#35777;&#25105;&#20204;&#30340;&#23383;&#27573; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">field</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">username</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">requiredstring</span><span style="color: #8b2252;">"</span>&gt;
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">trim</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">param</span>&gt;
+            &lt;<span style="color: #0000ff;">message</span>&gt;&#35831;&#22635;&#20889;&#24744;&#30340;&#29992;&#25143;&#21517;&lt;/<span style="color: #0000ff;">message</span>&gt;
+        &lt;/<span style="color: #0000ff;">field-validator</span>&gt;
+    &lt;/<span style="color: #0000ff;">field</span>&gt;
+    &lt;<span style="color: #0000ff;">field</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">requiredstring</span><span style="color: #8b2252;">"</span>&gt;
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">trim</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">param</span>&gt;
+            &lt;<span style="color: #0000ff;">message</span>&gt;&#35831;&#22635;&#20889;&#24744;&#30340;&#23494;&#30721;&lt;/<span style="color: #0000ff;">message</span>&gt;
+        &lt;/<span style="color: #0000ff;">field-validator</span>&gt;
+    &lt;/<span style="color: #0000ff;">field</span>&gt;
+&lt;/<span style="color: #0000ff;">validators</span>&gt;
+</pre>
+</div>
+
+<p>
+内建的验证有 15 中，可以参加文档。例：
+</p>
+<ol class="org-ol">
+<li>required
+</li>
+<li>requiredstring
+</li>
+<li>stringlength
+</li>
+<li>email
+</li>
+<li>url
+</li>
+<li>regex
+</li>
+<li>int
+</li>
+<li>conversion
+</li>
+<li>expression/fieldexpression
+</li>
+</ol>
+
+<p>
+例如，要验证数字范围:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23383;&#27573;&#39564;&#35777;&#65292;IntRange&#39564;&#35777;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">field-validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">int</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">min</span><span style="color: #8b2252;">"</span>&gt;20&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">min</span><span style="color: #8b2252;">"</span>&gt;20&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">message</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">error.int</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">field-validator</span>&gt;
+</pre>
+</div>
+
+<p>
+如果要验证两次输入的密码是否不一致
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27979;&#35797;&#38750;&#23383;&#27573;&#39564;&#35777; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">validator</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">expression</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">expression</span><span style="color: #8b2252;">"</span>&gt;&lt;![<span style="color: #483d8b;">CDATA</span>[password1=password2]]&gt;&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;<span style="color: #0000ff;">message</span>&gt; &#20004;&#27425;&#36755;&#20837;&#30340;&#23494;&#30721;&#19981;&#19968;&#33268;&#65292;&#35831;&#37325;&#35797;&#12290; &lt;/<span style="color: #0000ff;">message</span>&gt;
+&lt;/<span style="color: #0000ff;">validator</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-11-2" class="outline-3">
+<h3 id="sec-11-2"><span class="section-number-3">11.2</span> 编程式验证</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+首先， Action 要实现 Validateable 接口。当然，ActionSupport 类是实现了这个接口的，所以如果我们也可以直接继承 ActionSupport 类。
+</p>
+
+<p>
+其次，我们需要实现 validate() 方法。如果针对特定方法进行验证，我们需要实现相关的 validateMethodName() 方法。下面是一个栗子，对登录进行验证。要求
+</p>
+<ol class="org-ol">
+<li>用户名不为空
+</li>
+<li>密码不为空
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #8b2252;">/**</span>
+<span style="color: #8b2252;"> * &#39564;&#35777;&#30331;&#24405;&#36755;&#20837;</span>
+<span style="color: #8b2252;"> */</span>
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">validateLogin</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+  <span style="color: #a020f0;">if</span> <span style="color: #7388d6;">(</span>username == <span style="color: #008b8b;">null</span> || username.isEmpty<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>
+     addFieldError<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"username"</span>, <span style="color: #8b2252;">"&#35831;&#22635;&#20889;&#29992;&#25143;&#21517;"</span><span style="color: #7388d6;">)</span>;
+  <span style="color: #a020f0;">if</span> <span style="color: #7388d6;">(</span>password == <span style="color: #008b8b;">null</span> || password.isEmpty<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>
+     addFieldError<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"password"</span>, <span style="color: #8b2252;">"&#35831;&#22635;&#20889;&#23494;&#30721;"</span><span style="color: #7388d6;">)</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+最后，我们要为 action 写一个名字为 input 的 result。即如果验证失败后，显示哪个页面。如果不写 input，会抛出异常。
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-11-3" class="outline-3">
+<h3 id="sec-11-3"><span class="section-number-3">11.3</span> 示例：在注册页面增加一个生日字段</h3>
+<div class="outline-text-3" id="text-11-3">
+<ol class="org-ol">
+<li>在 account 数据库中，增加一个生日字段:
+<pre class="example">
+alter table account add (birthday date);
+</pre>
+</li>
+
+<li>修改我们的 bean/Account.java，增加上面的生日字段
+<pre class="example">
+private Date birthday;
+// getter setter 方法
+</pre>
+</li>
+
+<li>需要在 dao/LoginDao.java 的 addAccount 方法中，把相应的插入语句增加一个 birthday 字段。
+</li>
+
+<li>修改我们的 login/register.jsp，增加一个生日字段：
+<pre class="example">
+&lt;s:textfield label="生日" type="date" name="acc.birthday"/&gt;
+</pre>
+
+<p>
+经过以上几步，我们的功能修改完毕。
+</p>
+</li>
+
+<li>增加相关验证。
+
+<p>
+可以直接在 Action 里面写 validate 方法，这是所谓的编程式验证。
+</p>
+
+<p>
+也可以，在 LoginAction.java 的包下面，创建一个文件，名字为 LoginAction-validation.xml 或者 LoginAction-register-validation.xml，在里面声明我们的验证逻辑。
+</p>
+</li>
+</ol>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> 标签库</h2>
+</section>
+<section id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> 类型转换</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+struts 会自动进行类型转换。但一些复杂的对象，自动转换会满足不了我们的需求，这时候需要自定义类型转换器
+</p>
+<ol class="org-ol">
+<li>创建转换器。必须要实现 ognl.TypeConverter 接口。实际上继承 StrutsTypeConverter 即可。
+</li>
+<li>基于字段，model/ModelClassName-conversion.properties。基于类型，src/xwork-conversion.properties
+<pre class="example">
+java.util.Date=你定义的类型转换器
+</pre>
+</li>
+</ol>
+</div>
+</section>
+
+
+<section id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> 国际化</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+就像：
+</p>
+<pre class="example">
+&lt;s:textfield label="xxx" /&gt;
+</pre>
+<p>
+这个 "xxx"按照原样输出
+</p>
+<pre class="example">
+&lt;s:property value="yyy" /&gt;
+</pre>
+<p>
+这个 "yyy"，是从值栈中获取叫 yyy 的变量的数据。
+</p>
+<pre class="example">
+&lt;s:text name="zzz" /&gt;
+</pre>
+<p>
+这个 "zzz" 表示从系统的资源文件(xxx.properties)去寻找。
+</p>
+
+
+<p>
+所以，使用资源文件的途径如下：
+</p>
+<pre class="example">
+&lt;s:text /&gt;
+&lt;s:i18n /&gt;
+每个标签里的 key 属性，基本都代表的是资源属性
+验证文件中， &lt;message key=""&gt; 也是用来从资源文件获取数据的
+Action 中的 getText() 方法也是用来寻找资源文件的。
+</pre>
+
+
+<p>
+struts 是怎么判断你在哪个区域的。它是依次按照下面顺序进行判断的:
+</p>
+<ol class="org-ol">
+<li>getParameter("request_locale") 如果它的值不为空，那么，这个值就成为了判断你地域的一个标准。这是一个最优先的值。
+</li>
+<li>session.getAttribute("WW_TRANS_I18N") 如果它的值不为空，则利用之
+</li>
+<li>如果以上都没有取到的话，那么从系统中获取。java.util.Locale 类有相关的方法，可以从系统中获取区域
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">static</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">main</span><span style="color: #707183;">(</span><span style="color: #228b22;">String</span><span style="color: #7388d6;">[]</span> <span style="color: #a0522d;">args</span><span style="color: #707183;">)</span> <span style="color: #707183;">{</span>
+      System.out.println<span style="color: #7388d6;">(</span>Locale.getDefault<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</li>
+</ol>
+
+
+<p>
+资源文件可以放在很多地方，每个资源文件都有自己的应用范围。
+通过什么顺序去找相应的资源文件的(EmpAction为例）？按照以下顺序查找：
+</p>
+<ol class="org-ol">
+<li>查找当前包之下，有没有同名的资源文件，比如 EmpAction.properties
+</li>
+<li>如果上面的没有找到，那么会去找当前包下面的 package.properties 文件，从里面加载需要的变量
+</li>
+<li>如果上面都没有，就会去寻找全局的资源文件，默认是 struts.properties 文件，我们可以在 struts.xml 中区配置我们默认文件的名字:
+<pre class="example">
+&lt;constant name="struts.custom.i18n.resources" value="i18n" /&gt;
+</pre>
+<p>
+然后，就会去寻找 i18n_区域.properties。
+</p>
+</li>
+<li>如果都找不到，那么将 key 的值作为 value 输出
+</li>
+</ol>
+</div>
+</section>
+
+
+
+
+
+<section id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> 文件的上传下载</h2>
+</section>
+<section id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16"><span class="section-number-2">16</span> 防止重复提交</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+三种情况：
+</p>
+<ol class="org-ol">
+<li>多次点击
+</li>
+<li>回退，再提交
+</li>
+<li>转发时 F5 刷新
+</li>
+</ol>
+
+<p>
+解决方案： token 拦截器/ tokenSession 拦截器
+</p>
+<ol class="org-ol">
+<li>在配置文件中添加 token 拦截器，它不包含在默认拦截器栈中。
+</li>
+<li>添加标签 &lt;s:token /&gt;，会在页面生成一个隐藏域并在session赋值，两个一致。
+</li>
+<li>若使用 token 拦截器，需要配置一个 token.valid 的 result，因为它要跳往错误页面
+</li>
+<li>tokenSession 则不用配置 result。页面不会动。tokenSession 拦截器不会执行后续拦截器。
+</li>
+</ol>
+</div>
+</section>
+
+<section id="outline-container-sec-17" class="outline-2">
+<h2 id="sec-17"><span class="section-number-2">17</span> ajax</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+在 struts2 中使用 ajax 有很多方法，主要以下三种：
+</p>
+</div>
+
+<div id="outline-container-sec-17-1" class="outline-3">
+<h3 id="sec-17-1"><span class="section-number-3">17.1</span> 获取 response，利用 servlet 原生方式</h3>
+<div class="outline-text-3" id="text-17-1">
+<p>
+Action 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">ajaxTest</span> <span style="color: #707183;">()</span> <span style="color: #a020f0;">throws</span> <span style="color: #228b22;">IOException</span> <span style="color: #707183;">{</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#33719;&#21462; response&#65292;&#35774;&#32622;&#36820;&#22238;&#31867;&#22411;&#12289;&#32534;&#30721;&#65292;&#24471;&#21040;&#36755;&#20986;&#27969;&#23545;&#35937;&#12290;</span>
+    <span style="color: #228b22;">HttpServletResponse</span> <span style="color: #a0522d;">response</span> = ServletActionContext.getResponse<span style="color: #7388d6;">()</span>;
+    response.setContentType<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"text/html; charset=UTF-8"</span><span style="color: #7388d6;">)</span>;
+    <span style="color: #228b22;">PrintWriter</span> <span style="color: #a0522d;">out</span> = response.getWriter<span style="color: #7388d6;">()</span>;
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20027;&#35201;&#19994;&#21153;&#36923;&#36753;&#65292;&#33719;&#21462;&#35201;&#36820;&#22238;&#30340;&#30456;&#24212;&#23383;&#31526;&#20018;</span>
+    <span style="color: #228b22;">String</span> <span style="color: #a0522d;">result</span> = <span style="color: #8b2252;">"hello, world."</span>;
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36755;&#20986;&#32467;&#26524;</span>
+    out.write<span style="color: #7388d6;">(</span>result<span style="color: #7388d6;">)</span>;
+    out.flush<span style="color: #7388d6;">()</span>;
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#36820;&#22238;&#20540;&#26159; null</span>
+    <span style="color: #a020f0;">return</span> <span style="color: #008b8b;">null</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+struts.xml 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">package</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajax</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">extends</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">struts-default</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajaxTest</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.AjaxAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajaxTest</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">action</span>&gt;
+&lt;/<span style="color: #0000ff;">package</span>&gt;
+</pre>
+</div>
+
+
+<p>
+jsp 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-js">&lt;script&gt;$.post<span style="color: #707183;">(</span><span style="color: #8b2252;">"/xxx/ajaxTest.action"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #a020f0;">function</span> <span style="color: #7388d6;">(</span><span style="color: #a0522d;">result</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span> alert<span style="color: #909183;">(</span>result<span style="color: #909183;">)</span>; <span style="color: #7388d6;">}</span><span style="color: #707183;">)</span>;&lt;/script&gt;
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-17-2" class="outline-3">
+<h3 id="sec-17-2"><span class="section-number-3">17.2</span> 利用 stream 返回类型</h3>
+<div class="outline-text-3" id="text-17-2">
+<p>
+Action 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">private</span> <span style="color: #228b22;">InputStream</span> <span style="color: #a0522d;">inputStream</span>;
+<span style="color: #b22222;">// </span><span style="color: #b22222;">getter &#26041;&#27861;</span>
+
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">ajaxTest2</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    <span style="color: #228b22;">String</span> <span style="color: #a0522d;">result</span> = <span style="color: #8b2252;">"&#36825;&#26159;&#36890;&#36807;&#19994;&#21153;&#33719;&#21462;&#30340;&#23383;&#31526;&#20018;"</span>;
+    inputStream = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">ByteArrayInputStream</span><span style="color: #7388d6;">(</span>result.getBytes<span style="color: #909183;">(</span><span style="color: #8b2252;">"UTF-8"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36820;&#22238;&#25104;&#21151;&#39029;&#38754;</span>
+    <span style="color: #a020f0;">return</span> SUCCESS;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+
+<p>
+struts.xml 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">package</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajax2</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">extends</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">struts-default</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajaxTest2</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.AjaxAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajaxTest2</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">stream</span><span style="color: #8b2252;">"</span>&gt;
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">contentType</span><span style="color: #8b2252;">"</span>&gt;text/html; charset=UTF-8&lt;/<span style="color: #0000ff;">param</span>&gt;
+            <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> inputName &#40664;&#35748;&#20540;&#23601;&#26159; inputStream </span><span style="color: #b22222;">--&gt;</span>
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">inputName</span><span style="color: #8b2252;">"</span>&gt;inputStream&lt;/<span style="color: #0000ff;">param</span>&gt;
+        &lt;/<span style="color: #0000ff;">result</span>&gt;
+    &lt;/<span style="color: #0000ff;">action</span>&gt;
+&lt;/<span style="color: #0000ff;">package</span>&gt;
+</pre>
+</div>
+
+
+<p>
+jsp 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-js">&lt;script&gt;$.post<span style="color: #707183;">(</span><span style="color: #8b2252;">"/xxx/ajaxTest2.action"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #a020f0;">function</span> <span style="color: #7388d6;">(</span><span style="color: #a0522d;">result</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span> alert<span style="color: #909183;">(</span>result<span style="color: #909183;">)</span>; <span style="color: #7388d6;">}</span><span style="color: #707183;">)</span>;&lt;/script&gt;
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-17-3" class="outline-3">
+<h3 id="sec-17-3"><span class="section-number-3">17.3</span> struts-json.jar 插件</h3>
+<div class="outline-text-3" id="text-17-3">
+<p>
+首先，要把这个插件放到 lib 包下面。
+</p>
+
+<p>
+其次，action 这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">result</span>;
+<span style="color: #b22222;">// </span><span style="color: #b22222;">getter.setter</span>
+
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">ajaxTest3</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    result = <span style="color: #8b2252;">"&#36825;&#26159;&#36890;&#36807;&#19994;&#21153;&#33719;&#21462;&#30340;string."</span>;
+    <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"success"</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+struts.xml 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292;&#35201;&#32487;&#25215; json-default &#21253; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">package</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajax3</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">extends</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">json-default</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">action</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajaxTest3</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">xxx.AjaxAction</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ajaxTest3</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">result</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">json</span><span style="color: #8b2252;">"</span>&gt;
+            &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">root</span><span style="color: #8b2252;">"</span>&gt;result&lt;/<span style="color: #0000ff;">param</span>&gt;
+            <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36824;&#26377;&#20854;&#20182;&#19968;&#20123;&#21442;&#25968;&#65292;&#21487;&#20197;&#30475;&#25991;&#26723; </span><span style="color: #b22222;">--&gt;</span>
+        &lt;/<span style="color: #0000ff;">result</span>&gt;
+    &lt;/<span style="color: #0000ff;">action</span>&gt;
+&lt;/<span style="color: #0000ff;">package</span>&gt;
+</pre>
+</div>
+
+
+<p>
+jsp 中这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-js"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#20174;&#36825;&#20010;&#25554;&#20214;&#24471;&#21040;&#30340; result &#26159;&#19968;&#20010;&#26684;&#24335;&#33391;&#22909;&#30340; json &#23383;&#31526;&#20018;&#12290;&#24456;&#26041;&#20415;&#12290;</span>
+&lt;script&gt;$.post<span style="color: #707183;">(</span><span style="color: #8b2252;">"/xxx/ajaxTest3.action"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #a020f0;">function</span> <span style="color: #7388d6;">(</span><span style="color: #a0522d;">result</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span> alert<span style="color: #909183;">(</span>result<span style="color: #909183;">)</span>; <span style="color: #7388d6;">}</span><span style="color: #707183;">)</span>;&lt;/script&gt;
+</pre>
+</div>
+
+
+
+
+<p>
+另，这些示例代码应该写在 try/catch 中。时刻注意异常处理。
+</p>
+</div>
+</div>
+</section>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: imfine</p>
+<p class="date">Created: 2017-02-06 周一 09:35</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation">Go ahead, never stop.</p>
+</div>
+</body>
+</html>

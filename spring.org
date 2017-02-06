@@ -1,0 +1,158 @@
+#+TITLE: Spring
+
+
+
+* Spring
+
+* Spring MVC
+
+** 基本步骤
+
+第一步，创建 Gradle 项目，在 build.gradle 增加相关依赖
+#+BEGIN_SRC java
+  apply plugin: 'java'
+  apply plugin: 'war'
+
+  // 指定 Java 版本
+  sourceCompatibility = 1.7
+
+  // 配置下载 jar 包的地址
+  repositories {
+    jcenter()
+  }
+
+  // 配置需要的 jar 包依赖
+  dependencies {
+
+    // 定义两个局部变量
+    // 这里代表我们需要的 hibernate 和 spring 的版本
+    def hibernateVersion = "5.1.0.Final"
+    def springVersion = "4.3.5.RELEASE"
+
+    // 在 test 中需要用到的 jar 包
+    testCompile (
+      "junit:junit:4.12"
+    )
+
+    // 指明 Tomcat 上已经自带的 jar 包，这样发布的时候才不会重复
+    providedCompile (
+      "javax:javaee-web-api:7.0",
+    )
+
+    // 配置我们项目需要用到的所有 jar 包，即 compile 环节需要的 jar 包
+    compile (
+
+      // 本地的 OJDBC 包加入进来
+      files("E:/SSH/lib_hibernate/ojdbc7.jar"),
+
+      // 用来管理数据源的知名 jar 包
+      "c3p0:c3p0:0.9.1.2",
+
+      // jsp 中 jstl 标签的支持 jar 包
+      "javax.servlet:jstl:1.2",
+
+      // log4j 日志支持的 jar 包
+      "log4j:log4j:1.2.17",
+
+      // 配置 hibernate
+      "org.hibernate:hibernate-core:$hibernateVersion",
+
+      // 配置 spring
+      "org.springframework:spring-web:$springVersion",
+      "org.springframework:spring-orm:$springVersion",
+      "org.springframework:spring-webmvc:$springVersion",
+      "com.fasterxml.jackson.core:jackson-databind:2.5.1"
+    )
+  }
+
+
+  // 为编译器配置编码，防止某些情况下编译出现乱码的情况
+  // 相应的，我们所有的代码应该保存成 UTF-8 格式
+  tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+  }
+
+
+  // 自定义任务，将工程所需要的 jar 包拷贝到项目下的 lib 文件夹下
+  // 需要手动执行这个 task 才会有效果。这是为了方便导出 jar 包
+  task copyJars(type: Copy) {
+    // 指明我们导出的是 compile 和 test 所依赖的 jar 包
+    from configurations.compile, configurations.testCompile
+    // 指明导出到 "lib" 文件夹下
+    into "lib"
+  }
+#+END_SRC
+
+第二步，配置 web.xml，加入 spring 和 mvc 支持
+#+BEGIN_SRC xml
+  <!-- 配置 spring 的 root application context (parent) -->
+  <!-- 在 spring mvc 中，这个配置是可选的 -->
+  <!-- 在这个 IOC 容器里，主要配置一些全局的东西 -->
+  <!-- 比如 dao/service 的依赖，声明式事务之类 -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoadListener</listener-class>
+  </listener>
+  <!-- 配置路径，默认是 "WEB-INF/applicationContext.xml" -->
+  <context-param>
+    <param-name>contextConfigPath</param-name>
+    <param-value>classpath:spring-root.xml</param-value>
+  </context-param>
+
+
+  <!-- 配置 SpringMVC 的 DispatcherServlet  context (child) -->
+  <!-- 这个必须要配置，它的父容器是 上面的那个 -->
+  <servlet>
+    <servlet-name>miniblog</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- 指定配置文件路径，可选 -->
+    <!-- 默认文件是 "WEB-INF/miniblog-dispatcher.xml" -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-miniblog.xml</param-value>
+    </init-param>
+    <!-- 可以指定 tomcat 启动的时候，自动初始化 DispatcherServlet -->
+    <!-- 如果没有这个配置，会在第一次访问的时候才会去创建 -->
+    <load-on-start>1</load-on-start>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>miniblog</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+#+END_SRC
+
+第三步，配置 spring 的 context 文件，如 spring-miniblog.xml
+#+BEGIN_SRC xml
+  <!-- mvc 版本的 context:annotation-driven -->
+  <!-- 针对 mvc 增加了一些其他支持，需要开启 -->
+  <mvc:annotation-driven />
+
+  <!-- 配置扫描发现所有具有 @Controller 注解的类，加载到容器 -->
+  <context:component-scan base-package="app.controller" />
+
+  <!-- 配置视图解析器，将 Controller 返回的字符串组织成全路径 -->
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/view/" />
+    <property name="suffix" value=".jsp" />
+  </bean>
+
+  <!-- 配置静态资源的访问映射 -->
+  <!-- 比如访问 http://localhost/js/jquery.js，mvc 将会去寻找 /assets/javascript/jquery.js -->
+  <mvc:resource mapping="/js/**"  location="/assets/javascript" />
+  <mvc:resource mapping="/css/**" location="/assets/stylesheet" />
+
+#+END_SRC
+
+第四步，建立 Controller，进行测试
+#+BEGIN_SRC java
+  @Controller
+  @RequestMapping("/users")
+  class UserController {
+
+      @RequestMapping("/{name}")
+      public String show(@PathVariable String name, Model model) {
+          model.add("name", name);
+          return "show";
+      }
+  }
+#+END_SRC

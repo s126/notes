@@ -1,56 +1,55 @@
 #+TITLE: Oracle11g
 
+* Oracle çš„ä½“ç³»ç»“æ„
+æ•°æ®åº“æ˜¯ä¸€ä¸ªä»¥æŸç§æœ‰ç»„ç»‡çš„æ–¹å¼å­˜å‚¨çš„æ•°æ®é›†åˆã€‚
+å®ƒæœ¬è´¨ä¸Šæ˜¯ç”¨è®¡ç®—æœºå­˜å‚¨è®°å½•çš„ç³»ç»Ÿï¼Œæ˜¯ä½äºç”¨æˆ·å’Œç³»ç»Ÿä¹‹é—´çš„ä¸€å±‚ç®¡ç†è½¯ä»¶ã€‚
+Oracle æ•°æ®åº“æ˜¯ç›®å‰æœ€æµè¡Œã€æœ€å¼ºå¤§çš„é¢å‘å¯¹è±¡çš„å…³ç³»å‹æ•°æ®åº“(ORDBMS)ã€‚
 
-* Oracle µÄÌåÏµ½á¹¹
-Êı¾İ¿âÊÇÒ»¸öÒÔÄ³ÖÖÓĞ×éÖ¯µÄ·½Ê½´æ´¢µÄÊı¾İ¼¯ºÏ¡£
-Ëü±¾ÖÊÉÏÊÇÓÃ¼ÆËã»ú´æ´¢¼ÇÂ¼µÄÏµÍ³£¬ÊÇÎ»ÓÚÓÃ»§ºÍÏµÍ³Ö®¼äµÄÒ»²ã¹ÜÀíÈí¼ş¡£
-Oracle Êı¾İ¿âÊÇÄ¿Ç°×îÁ÷ĞĞ¡¢×îÇ¿´óµÄÃæÏò¶ÔÏóµÄ¹ØÏµĞÍÊı¾İ¿â(ORDBMS)¡£
 
+Oracle æ˜¯åŸºäºè¯·æ±‚å“åº”çš„æ–¹å¼ï¼Œåˆ†ä¸ºæœåŠ¡ç«¯å’Œå®¢æˆ·ç«¯ã€‚
 
-Oracle ÊÇ»ùÓÚÇëÇóÏìÓ¦µÄ·½Ê½£¬·ÖÎª·şÎñ¶ËºÍ¿Í»§¶Ë¡£
+** æœåŠ¡ç«¯
+Oracle æ˜¯ç”±å®ä¾‹å’Œæ•°æ®åº“ä¸¤éƒ¨åˆ†ç»„æˆçš„ã€‚
 
-** ·şÎñ¶Ë
-Oracle ÊÇÓÉÊµÀıºÍÊı¾İ¿âÁ½²¿·Ö×é³ÉµÄ¡£
+*** å®ä¾‹ (INSTANCE)
+åˆç§°ä¸ºoracleæ•°æ®åº“å¼•æ“ï¼Œç”±ç”±å†…å­˜å³SGA(System Global Area,ç³»ç»Ÿå…¨å±€åŒº)å’Œåå°å¤„ç†è¿›ç¨‹ç»„æˆã€‚
 
-*** ÊµÀı (INSTANCE)
-ÓÖ³ÆÎªoracleÊı¾İ¿âÒıÇæ£¬ÓÉÓÉÄÚ´æ¼´SGA(System Global Area,ÏµÍ³È«¾ÖÇø)ºÍºóÌ¨´¦Àí½ø³Ì×é³É¡£
+*** æ•°æ®åº“ (DATABASE)
+ä¿å­˜åœ¨è®¡ç®—æœºä¸Šçš„æ•°æ®æ–‡ä»¶ç­‰ã€‚å¯ä»¥ä»ç‰©ç†ç‰©ä»¶æˆ–é€»è¾‘ç»„ä»¶çš„è§’åº¦çœ‹å¾…ã€‚
 
-*** Êı¾İ¿â (DATABASE)
-±£´æÔÚ¼ÆËã»úÉÏµÄÊı¾İÎÄ¼şµÈ¡£¿ÉÒÔ´ÓÎïÀíÎï¼ş»òÂß¼­×é¼şµÄ½Ç¶È¿´´ı¡£
-
-**** ÎïÀí×é¼ş
-1. ¿ØÖÆÎÄ¼ş (Control File)
+**** ç‰©ç†ç»„ä»¶
+1. æ§åˆ¶æ–‡ä»¶ (Control File)
   : select * from v$controlfile;
-  ¼ÇÂ¼Êı¾İ¿âµÄÎïÀí½á¹¹ºÍÆäËû¿ØÖÆĞÅÏ¢£¬ÈçÊı¾İ¿âÃû³Æ£¬Êı¾İÎÄ¼ş¡¢ÈÕÖ¾ÎÄ¼şÃû³ÆºÍÎ»ÖÃµÈ¡£¶à¸±±¾±£Ö¤°²È«¡£
+  è®°å½•æ•°æ®åº“çš„ç‰©ç†ç»“æ„å’Œå…¶ä»–æ§åˆ¶ä¿¡æ¯ï¼Œå¦‚æ•°æ®åº“åç§°ï¼Œæ•°æ®æ–‡ä»¶ã€æ—¥å¿—æ–‡ä»¶åç§°å’Œä½ç½®ç­‰ã€‚å¤šå‰¯æœ¬ä¿è¯å®‰å…¨ã€‚
   
-2. Êı¾İÎÄ¼ş (Data File)
+2. æ•°æ®æ–‡ä»¶ (Data File)
   : select name,status,enabled from v$datafile;
     
-3. ÈÕÖ¾ÎÄ¼ş (Áª»úÈÕÖ¾ÎÄ¼ş/¹éµµÈÕÖ¾ÎÄ¼ş)
-  : select * from v$log;   -- ²é¿´ÈÕÖ¾
+3. æ—¥å¿—æ–‡ä»¶ (è”æœºæ—¥å¿—æ–‡ä»¶/å½’æ¡£æ—¥å¿—æ–‡ä»¶)
+  : select * from v$log;   -- æŸ¥çœ‹æ—¥å¿—
   
-  ±£´æÓÃ»§µÄËùÓĞ²Ù×÷¡£Ò»¸öÊı¾İ¿âÖÁÉÙÓĞÁ½¸öÈÕÖ¾×é£¬ÂÖÁ÷Ğ´Èë¡£\\
-  Ã¿¸öÈÕÖ¾×éÖÁÉÙÓĞÒ»¸öÈÕÖ¾³ÉÔ±£¬³ÉÔ±Ö®¼äÊÇ¾µÏñ¹ØÏµ£¬ÕâÊÇÎªÁË±£»¤Êı¾İ¡£\\
-  Áª»úÈÕÖ¾×éµÄ½»»»¹ı³Ì½ĞÇĞ»»¡£µ±Ò»¸ö×éĞ´Íê»á×Ô¶¯ÇĞ»»ÏÂÒ»×é£¬Ò²¿ÉÒÔÊÖ¶¯ÇĞ»»£º
-  : alter system switch logfile   -- ÇĞ»»ÈÕÖ¾ÎÄ¼ş
+  ä¿å­˜ç”¨æˆ·çš„æ‰€æœ‰æ“ä½œã€‚ä¸€ä¸ªæ•°æ®åº“è‡³å°‘æœ‰ä¸¤ä¸ªæ—¥å¿—ç»„ï¼Œè½®æµå†™å…¥ã€‚\\
+  æ¯ä¸ªæ—¥å¿—ç»„è‡³å°‘æœ‰ä¸€ä¸ªæ—¥å¿—æˆå‘˜ï¼Œæˆå‘˜ä¹‹é—´æ˜¯é•œåƒå…³ç³»ï¼Œè¿™æ˜¯ä¸ºäº†ä¿æŠ¤æ•°æ®ã€‚\\
+  è”æœºæ—¥å¿—ç»„çš„äº¤æ¢è¿‡ç¨‹å«åˆ‡æ¢ã€‚å½“ä¸€ä¸ªç»„å†™å®Œä¼šè‡ªåŠ¨åˆ‡æ¢ä¸‹ä¸€ç»„ï¼Œä¹Ÿå¯ä»¥æ‰‹åŠ¨åˆ‡æ¢ï¼š
+  : alter system switch logfile   -- åˆ‡æ¢æ—¥å¿—æ–‡ä»¶
 
-  Èç¹û´ò¿ª¹éµµÄ£Ê½£¬ÇĞ»»ÈÕÖ¾µÄÊ±ºò»á²úÉú¹éµµÎÄ¼ş¡£´ò¿ª¹éµµÄ£Ê½ÃüÁî:
+  å¦‚æœæ‰“å¼€å½’æ¡£æ¨¡å¼ï¼Œåˆ‡æ¢æ—¥å¿—çš„æ—¶å€™ä¼šäº§ç”Ÿå½’æ¡£æ–‡ä»¶ã€‚æ‰“å¼€å½’æ¡£æ¨¡å¼å‘½ä»¤:
   : alter database archivelog
 
-4. ³õÊ¼»¯²ÎÊıÎÄ¼ş (Parameter File)
+4. åˆå§‹åŒ–å‚æ•°æ–‡ä»¶ (Parameter File)
    : $ORA_HOME/admin/<SID>/pfile/init.ora.xxx
-   ¼ÇÂ¼ÁËÊı¾İ¿âÆô¶¯ÔËĞĞµÄÒ»ÏµÁĞ²ÎÊı£¬ÄÚ´æ¡¢¿ØÖÆÎÄ¼şµÈ
+   è®°å½•äº†æ•°æ®åº“å¯åŠ¨è¿è¡Œçš„ä¸€ç³»åˆ—å‚æ•°ï¼Œå†…å­˜ã€æ§åˆ¶æ–‡ä»¶ç­‰
 
-**** Âß¼­×é¼ş
-1. ±í¿Õ¼ä (tablespace)
+**** é€»è¾‘ç»„ä»¶
+1. è¡¨ç©ºé—´ (tablespace)
    : select * from v$tablespace;
-   - *×î»ù±¾µÄÂß¼­½á¹¹* £¬ÊÇÊı¾İ¿â»Ö¸´µÄ×îĞ¡µ¥Î», ÈİÄÉ×ÅĞí¶àÊı¾İ¿âÊµÌå, Èç±í¡¢ÊÓÍ¼¡¢Ë÷Òı¡¢¾Û´Ø¡¢»ØÍË¶ÎºÍÁÙÊ±¶ÎµÈ¡£
-   - Ä¬ÈÏ´´½¨µÄ±í¿Õ¼äÓĞ SYSTEM/SYSAUX/TEMP/UNDO/USERS
-   - ±í¿Õ¼ä¸úÊı¾İÎÄ¼şÊÇ 1vN µÄ¹ØÏµ¡£Ò»¸ö±í¿Õ¼äÖÁÉÙĞèÒªÒ»¸öÏàÓ¦µÄÊı¾İÎÄ¼ş
-   - ÔÚÊµ¼ÊÉú²úÖĞ£¬²»½¨ÒéÓÃÄ¬ÈÏ±í¿Õ¼ä£¬Òª¸ù¾İÇé¿ö×Ô¼º´´½¨
-   - ´´½¨/É¾³ı±í¿Õ¼äµÄÓï·¨£º
+   - *æœ€åŸºæœ¬çš„é€»è¾‘ç»“æ„* ï¼Œæ˜¯æ•°æ®åº“æ¢å¤çš„æœ€å°å•ä½, å®¹çº³ç€è®¸å¤šæ•°æ®åº“å®ä½“, å¦‚è¡¨ã€è§†å›¾ã€ç´¢å¼•ã€èšç°‡ã€å›é€€æ®µå’Œä¸´æ—¶æ®µç­‰ã€‚
+   - é»˜è®¤åˆ›å»ºçš„è¡¨ç©ºé—´æœ‰ SYSTEM/SYSAUX/TEMP/UNDO/USERS
+   - è¡¨ç©ºé—´è·Ÿæ•°æ®æ–‡ä»¶æ˜¯ 1vN çš„å…³ç³»ã€‚ä¸€ä¸ªè¡¨ç©ºé—´è‡³å°‘éœ€è¦ä¸€ä¸ªç›¸åº”çš„æ•°æ®æ–‡ä»¶
+   - åœ¨å®é™…ç”Ÿäº§ä¸­ï¼Œä¸å»ºè®®ç”¨é»˜è®¤è¡¨ç©ºé—´ï¼Œè¦æ ¹æ®æƒ…å†µè‡ªå·±åˆ›å»º
+   - åˆ›å»º/åˆ é™¤è¡¨ç©ºé—´çš„è¯­æ³•ï¼š
      #+BEGIN_SRC sql
-     -- ±í¿Õ¼ä´´½¨
+     -- è¡¨ç©ºé—´åˆ›å»º
      create tablespace xxx
        logging
        datafile 'D:\xxx.dbf'
@@ -59,188 +58,188 @@ Oracle ÊÇÓÉÊµÀıºÍÊı¾İ¿âÁ½²¿·Ö×é³ÉµÄ¡£
        next 50m maxsize 20480m
        extent management local;
      
-     -- ´´½¨ÁÙÊ±±í¿Õ¼ä
+     -- åˆ›å»ºä¸´æ—¶è¡¨ç©ºé—´
      create temporary tablespace yyy
        tempfile 'D:\yyy.dbf';
      
-     -- É¾³ı
+     -- åˆ é™¤
      drop tablespace yyy;
      #+END_SRC
-   - Âß¼­ÉÏËµ£¬Ò»¸ö±í¿Õ¼äÊÇÓÉÒ»µ½¶à¸ö¶Î×é³ÉµÄ¡£
+   - é€»è¾‘ä¸Šè¯´ï¼Œä¸€ä¸ªè¡¨ç©ºé—´æ˜¯ç”±ä¸€åˆ°å¤šä¸ªæ®µç»„æˆçš„ã€‚
 
-2. ¶Î (Segment)
-   - ¶ÎÊÇ¶ÔÏóÔÚÊı¾İ¿âÖĞÕ¼ÓÃµÄ¿Õ¼ä
-   - Ã¿¸ö¶Î£¬¶ÔÓ¦µÄÊÇÃ¿¸ö¶ÔÏó£¬ÓĞ table/index/view µÈ
-   - °´ÕÕ´æ´¢¶ÔÏóÀàĞÍµÄ²»Í¬£¬·ÖÎªÊı¾İ¶Î¡¢Ë÷Òı¶Î¡¢»Ø¹ö¶ÎºÍÁÙÊ±¶Î
-   - Âß¼­ÉÏËµ£¬¶ÎÊÇÓÉÇø×é³ÉµÄ
+2. æ®µ (Segment)
+   - æ®µæ˜¯å¯¹è±¡åœ¨æ•°æ®åº“ä¸­å ç”¨çš„ç©ºé—´
+   - æ¯ä¸ªæ®µï¼Œå¯¹åº”çš„æ˜¯æ¯ä¸ªå¯¹è±¡ï¼Œæœ‰ table/index/view ç­‰
+   - æŒ‰ç…§å­˜å‚¨å¯¹è±¡ç±»å‹çš„ä¸åŒï¼Œåˆ†ä¸ºæ•°æ®æ®µã€ç´¢å¼•æ®µã€å›æ»šæ®µå’Œä¸´æ—¶æ®µ
+   - é€»è¾‘ä¸Šè¯´ï¼Œæ®µæ˜¯ç”±åŒºç»„æˆçš„
 
-3. Çø (Extend)
-   - ÓÉÁ¬ĞøµÄÊı¾İ¿é×é³É£¬ÓÉ Oracle ×Ô¶¯·ÖÅä¹ÜÀí
-   - µ±¶ÎÖĞµÄ¿Õ¼äÒÑÂúÊ±£¬»á×Ô¶¯À©Õ¹ĞÂÇø
+3. åŒº (Extend)
+   - ç”±è¿ç»­çš„æ•°æ®å—ç»„æˆï¼Œç”± Oracle è‡ªåŠ¨åˆ†é…ç®¡ç†
+   - å½“æ®µä¸­çš„ç©ºé—´å·²æ»¡æ—¶ï¼Œä¼šè‡ªåŠ¨æ‰©å±•æ–°åŒº
 
-4. ¿é (Block)
-   - Êı¾İ¿éÊÇOracle·şÎñÆ÷ËùÄÜ·ÖÅä¡¢¶ÁÈ¡»òĞ´ÈëµÄ×îĞ¡Âß¼­µ¥Î»¡£
-   - Oracle·şÎñÆ÷ÒÔÊı¾İ¿éÎªµ¥Î»¹ÜÀíÊı¾İÎÄ¼şµÄ´æ´¢¿Õ¼ä¡£ 
-   - Õı³£Çé¿öÏÂ£¬¿éµÄ´óĞ¡ÊÇ²Ù×÷ÏµÍ³¿éµÄÕûÊı±¶£¬³Æ×÷±ê×¼¿é¡£
-   - ¿ÉÒÔÍ¨¹ı²ÎÊı db_block_size ¿ØÖÆ£¬Ä¬ÈÏ 8k.
+4. å— (Block)
+   - æ•°æ®å—æ˜¯OracleæœåŠ¡å™¨æ‰€èƒ½åˆ†é…ã€è¯»å–æˆ–å†™å…¥çš„æœ€å°é€»è¾‘å•ä½ã€‚
+   - OracleæœåŠ¡å™¨ä»¥æ•°æ®å—ä¸ºå•ä½ç®¡ç†æ•°æ®æ–‡ä»¶çš„å­˜å‚¨ç©ºé—´ã€‚ 
+   - æ­£å¸¸æƒ…å†µä¸‹ï¼Œå—çš„å¤§å°æ˜¯æ“ä½œç³»ç»Ÿå—çš„æ•´æ•°å€ï¼Œç§°ä½œæ ‡å‡†å—ã€‚
+   - å¯ä»¥é€šè¿‡å‚æ•° db_block_size æ§åˆ¶ï¼Œé»˜è®¤ 8k.
 
-*** Æô¶¯¹ı³Ì
-: startup nomount        -- Ö»Æô¶¯ÁËÊµÀı (Instance)
-: alter database mount   -- Êı¾İ¿â¹ÒÔØ
-: alter database open    -- Êı¾İ¿â´ò¿ª
+*** å¯åŠ¨è¿‡ç¨‹
+: startup nomount        -- åªå¯åŠ¨äº†å®ä¾‹ (Instance)
+: alter database mount   -- æ•°æ®åº“æŒ‚è½½
+: alter database open    -- æ•°æ®åº“æ‰“å¼€
 
-: shutdown immediate     -- Á¢¿Ì¹Ø±Õ
+: shutdown immediate     -- ç«‹åˆ»å…³é—­
 
 
-** ¿Í»§¶Ë
+** å®¢æˆ·ç«¯
 *** sqlplus
-**** Á¬½ÓÓï·¨£º
-: sqlplus sys/southit as sysdba     -- ¹ÜÀíÔ±µÇÂ¼
-: sqlplus / as sysdba               -- ²Ù×÷ÏµÍ³ÈÏÖ¤
-: sqlplus scott/tiger               -- ÆÕÍ¨ÓÃ»§µÇÂ¼
-: sqlplus scott/tiger@remotedb      -- Á¬½ÓÔ¶³ÌÊı¾İ¿â
-: sqlplus /nolog                    -- Î´Á¬½Ó×´Ì¬£¬Ö®ºó¿ÉÒÔÓÃ conn user/pass Óï·¨µÇÂ¼
+**** è¿æ¥è¯­æ³•ï¼š
+: sqlplus sys/southit as sysdba     -- ç®¡ç†å‘˜ç™»å½•
+: sqlplus / as sysdba               -- æ“ä½œç³»ç»Ÿè®¤è¯
+: sqlplus scott/tiger               -- æ™®é€šç”¨æˆ·ç™»å½•
+: sqlplus scott/tiger@remotedb      -- è¿æ¥è¿œç¨‹æ•°æ®åº“
+: sqlplus /nolog                    -- æœªè¿æ¥çŠ¶æ€ï¼Œä¹‹åå¯ä»¥ç”¨ conn user/pass è¯­æ³•ç™»å½•
 
-**** ³£ÓÃÃüÁî (set/show)
+**** å¸¸ç”¨å‘½ä»¤ (set/show)
 : linesize/pagesize/header/autocommit/echo/pause/serveroutput/autotrace/timing...
 : column xxx format a22
-: show parameters [ÏµÍ³²ÎÊı]
+: show parameters [ç³»ç»Ÿå‚æ•°]
 
-**** ¿ìËÙ±à¼­Ö®ĞŞ¸Ä
-1. list ¶¨Î»µ½ĞèÒªĞŞ¸ÄµÄĞĞ
-2. Í¨¹ı change È¥×öÌæ»»
+**** å¿«é€Ÿç¼–è¾‘ä¹‹ä¿®æ”¹
+1. list å®šä½åˆ°éœ€è¦ä¿®æ”¹çš„è¡Œ
+2. é€šè¿‡ change å»åšæ›¿æ¢
    : change /table_names/table_name
-3. Í¨¹ılist ÃüÁî£¬²é¿´ĞŞ¸ÄÍêµÄÓï¾ä 
-4. Í¨¹ıµ÷ÓÃ run ÃüÁî£¬ÔËĞĞÄ¿Ç°»º´æÇø´æÔÚµÄÓï¾ä¡£
+3. é€šè¿‡list å‘½ä»¤ï¼ŒæŸ¥çœ‹ä¿®æ”¹å®Œçš„è¯­å¥ 
+4. é€šè¿‡è°ƒç”¨ run å‘½ä»¤ï¼Œè¿è¡Œç›®å‰ç¼“å­˜åŒºå­˜åœ¨çš„è¯­å¥ã€‚
 
-**** ¿ìËÙ±à¼­Ö®×·¼Óµ¥´Ê
-1. list ¶¨Î»µ½ĞèÒªĞŞ¸ÄµÄĞĞ
-2. Í¨¹ı append È¥×·¼Ó×Ö¶Î
+**** å¿«é€Ÿç¼–è¾‘ä¹‹è¿½åŠ å•è¯
+1. list å®šä½åˆ°éœ€è¦ä¿®æ”¹çš„è¡Œ
+2. é€šè¿‡ append å»è¿½åŠ å­—æ®µ
    : append table_name
-3. Í¨¹ılist×ö¼ì²é
-4. Í¨¹ı run È¥Ö´ĞĞÃüÁî¡£
+3. é€šè¿‡liståšæ£€æŸ¥
+4. é€šè¿‡ run å»æ‰§è¡Œå‘½ä»¤ã€‚
 
-**** ¿ìËÙ±à¼­Ö®É¾³ı
-1. list ¶¨Î»µ½ĞèÒªĞŞ¸ÄµÄĞĞ
+**** å¿«é€Ÿç¼–è¾‘ä¹‹åˆ é™¤
+1. list å®šä½åˆ°éœ€è¦ä¿®æ”¹çš„è¡Œ
    : list 1
-2. Í¨¹ı del Ö±½ÓÉ¾³ı / Í¨¹ı change ÃüÁî£¬°Ñ±¾ĞĞÌæ»»Îª¿Õ¡£
-3. list ²é¿´½á¹û
-4. run ÔËĞĞÓï¾ä
+2. é€šè¿‡ del ç›´æ¥åˆ é™¤ / é€šè¿‡ change å‘½ä»¤ï¼ŒæŠŠæœ¬è¡Œæ›¿æ¢ä¸ºç©ºã€‚
+3. list æŸ¥çœ‹ç»“æœ
+4. run è¿è¡Œè¯­å¥
 
-**** ¿ìËÙ±à¼­Ö®Ìí¼ÓĞÂĞĞ
-1. list ¶¨Î»
-2. Í¨¹ı input ÊäÈëĞÂĞĞµÄÄÚÈİ
-3. list ²é¿´½á¹û
-4. run ÔËĞĞÃüÁî
+**** å¿«é€Ÿç¼–è¾‘ä¹‹æ·»åŠ æ–°è¡Œ
+1. list å®šä½
+2. é€šè¿‡ input è¾“å…¥æ–°è¡Œçš„å†…å®¹
+3. list æŸ¥çœ‹ç»“æœ
+4. run è¿è¡Œå‘½ä»¤
 
-**** ¿ìËÙ±à¼­Ö®ÆäËû
-: list last         -- ¶¨Î»µ½»º³åÇøÄÚÈİµÄ×îºóÒ»ĞĞ
-: save name         -- ±£´æµ±Ç°»º³åÇøµÄÄÚÈİµ½ .sql ÎÄ¼ş¡£Ä¬ÈÏÎªµ±Ç°Ä¿Â¼£¬¿ÉÒÔÌí¼ÓÏêÏ¸Â·¾¶
-: start name.sql    -- ¼ÓÔØ .sql ÎÄ¼ş²¢Ö´ĞĞ¡£¼òĞ´Îª @name
-: get name          -- ¼ÓÔØ .sql ÎÄ¼şµ«²»Ö´ĞĞ
-: run               -- Ö´ĞĞ»º³åÇøÄÚÈİ¡£¼òĞ´Îª /
-: edit              -- µ÷ÓÃÍâ²¿±à¼­Æ÷ĞŞ¸Ä»º³åÇøÄÚÈİ
-: clear buffer      -- Çå¿Õ»º´æÇø
-: clear screen      -- ÇåÆÁ
+**** å¿«é€Ÿç¼–è¾‘ä¹‹å…¶ä»–
+: list last         -- å®šä½åˆ°ç¼“å†²åŒºå†…å®¹çš„æœ€åä¸€è¡Œ
+: save name         -- ä¿å­˜å½“å‰ç¼“å†²åŒºçš„å†…å®¹åˆ° .sql æ–‡ä»¶ã€‚é»˜è®¤ä¸ºå½“å‰ç›®å½•ï¼Œå¯ä»¥æ·»åŠ è¯¦ç»†è·¯å¾„
+: start name.sql    -- åŠ è½½ .sql æ–‡ä»¶å¹¶æ‰§è¡Œã€‚ç®€å†™ä¸º @name
+: get name          -- åŠ è½½ .sql æ–‡ä»¶ä½†ä¸æ‰§è¡Œ
+: run               -- æ‰§è¡Œç¼“å†²åŒºå†…å®¹ã€‚ç®€å†™ä¸º /
+: edit              -- è°ƒç”¨å¤–éƒ¨ç¼–è¾‘å™¨ä¿®æ”¹ç¼“å†²åŒºå†…å®¹
+: clear buffer      -- æ¸…ç©ºç¼“å­˜åŒº
+: clear screen      -- æ¸…å±
 
 *** jdbc
-ÀûÓÃ java Á¬½Ó Oracle. ĞèÒª ojdbc.jar
+åˆ©ç”¨ java è¿æ¥ Oracle. éœ€è¦ ojdbc.jar
 
-*** ÆäËûµÄÍ¼ĞÎ»¯¹¤¾ß
-Toad / PLSQL Developer µÈ
+*** å…¶ä»–çš„å›¾å½¢åŒ–å·¥å…·
+Toad / PLSQL Developer ç­‰
 
 
-* Oracle ÍøÂçÅäÖÃ
-** ÅäÖÃÍ¾¾¶
-1. Ö±½ÓĞŞ¸Ä NETWORK/ADMIN ÏÂµÄÅäÖÃÎÄ¼ş
-2. Í¨¹ı Oracle µÄ Net Manager ¹¤¾ßÅäÖÃ
+* Oracle ç½‘ç»œé…ç½®
+** é…ç½®é€”å¾„
+1. ç›´æ¥ä¿®æ”¹ NETWORK/ADMIN ä¸‹çš„é…ç½®æ–‡ä»¶
+2. é€šè¿‡ Oracle çš„ Net Manager å·¥å…·é…ç½®
 
-** ·şÎñ¶Ë (NETWORK/ADMIN/listener.ora)
-1. Ö±½ÓĞŞ¸ÄÅäÖÃÎÄ¼ş»òÍ¨¹ıÍ¼ĞÎ½çÃæÅäÖÃ¡£Ö÷ÒªÅäÖÃÔªËØÓĞ£º
-   - Ğ­Òé (TCP/IP)
-   - Á¬½ÓµØÖ·
-   - ¶Ë¿ÚºÅ (Ä¬ÈÏ1521£¬Ò»°ã²»ĞèÒªĞŞ¸Ä)
-2. ¿ªÆô TNSListener ·şÎñ
+** æœåŠ¡ç«¯ (NETWORK/ADMIN/listener.ora)
+1. ç›´æ¥ä¿®æ”¹é…ç½®æ–‡ä»¶æˆ–é€šè¿‡å›¾å½¢ç•Œé¢é…ç½®ã€‚ä¸»è¦é…ç½®å…ƒç´ æœ‰ï¼š
+   - åè®® (TCP/IP)
+   - è¿æ¥åœ°å€
+   - ç«¯å£å· (é»˜è®¤1521ï¼Œä¸€èˆ¬ä¸éœ€è¦ä¿®æ”¹)
+2. å¼€å¯ TNSListener æœåŠ¡
 
-** ¿Í»§¶Ë (NETWORK/ADMIN/tnsnames.ora)
-1. Ö±½ÓĞŞ¸ÄÅäÖÃÎÄ¼ş»òÍ¨¹ıÍ¼ĞÎ½çÃæÅäÖÃ¡£Ö÷ÒªÅäÖÃÔªËØÓĞ£º
-   - Ğ­Òé (TCP/IP)
-   - Á¬½ÓµØÖ· (»úÆ÷Ãû»òIPµØÖ·)
-   - ¶Ë¿ÚºÅ (Ä¬ÈÏ1521£¬ĞèÒª¸ú·şÎñÆ÷¶ËµÄÒ»ÖÂ)
-   - Êı¾İ¿âµÄ·şÎñÃû(Ä¬ÈÏ¸úSID/Êı¾İ¿âÃûµÈÊÇÒ»ÖÂµÄ)
-2. ÅäÖÃÍêºó£¬¾Í¿ÉÒÔÍ¨¹ıÀàËÆÈçÏÂÓï¾äÁ¬½Ó£º
+** å®¢æˆ·ç«¯ (NETWORK/ADMIN/tnsnames.ora)
+1. ç›´æ¥ä¿®æ”¹é…ç½®æ–‡ä»¶æˆ–é€šè¿‡å›¾å½¢ç•Œé¢é…ç½®ã€‚ä¸»è¦é…ç½®å…ƒç´ æœ‰ï¼š
+   - åè®® (TCP/IP)
+   - è¿æ¥åœ°å€ (æœºå™¨åæˆ–IPåœ°å€)
+   - ç«¯å£å· (é»˜è®¤1521ï¼Œéœ€è¦è·ŸæœåŠ¡å™¨ç«¯çš„ä¸€è‡´)
+   - æ•°æ®åº“çš„æœåŠ¡å(é»˜è®¤è·ŸSID/æ•°æ®åº“åç­‰æ˜¯ä¸€è‡´çš„)
+2. é…ç½®å®Œåï¼Œå°±å¯ä»¥é€šè¿‡ç±»ä¼¼å¦‚ä¸‹è¯­å¥è¿æ¥ï¼š
    : sqlplus scott/tiger@DBALIAS
 
 
 
-* ÓÃ»§ÓëÈ¨ÏŞ
-** ÓÃ»§
-ÓÃ»§ÊÇÓÃÓÚ×ÊÔ´¿ØÖÆºÍÈ¨ÏŞ¹ÜÀíµÄÒ»¸ö¸ÅÄî
+* ç”¨æˆ·ä¸æƒé™
+** ç”¨æˆ·
+ç”¨æˆ·æ˜¯ç”¨äºèµ„æºæ§åˆ¶å’Œæƒé™ç®¡ç†çš„ä¸€ä¸ªæ¦‚å¿µ
 
 
-¿ªÊ¼ĞÂµÄÏîÄ¿Ê±£¬±£³ÖÁ¼ºÃµÄÏ°¹ß£º 
-ÎªÏîÄ¿´´½¨ĞÂµÄÓÃ»§£¬Ö¸¶¨ĞÂµÄ±í¿Õ¼ä¡£
+å¼€å§‹æ–°çš„é¡¹ç›®æ—¶ï¼Œä¿æŒè‰¯å¥½çš„ä¹ æƒ¯ï¼š 
+ä¸ºé¡¹ç›®åˆ›å»ºæ–°çš„ç”¨æˆ·ï¼ŒæŒ‡å®šæ–°çš„è¡¨ç©ºé—´ã€‚
 
-*** ÏµÍ³È±Ê¡ÓÃ»§
-**** SYS ÓÃ»§£¬ÓÖ½ĞÌØÈ¨ÓÃ»§£¬Êı¾İ¿âÖĞÖÁ¸ßÎŞÉÏµÄÓÃ»§¡£
-- ËüÊÇÊı¾İ¿âµÄÏµÍ³¹ÜÀíÔ±£¬¸ºÔğµÄÊÇÊı¾İµÄ°²×°¡¢Î¬»¤¡¢Éı¼¶¡¢±¸·İ¡¢»Ö¸´¡¢ÓÅ»¯µÈ²Ù×÷¡£
-- ²»ÄÜÓÃ normal µÄÉí·İµÇÂ¼£¬±ØĞëÓÃ SYSDBA/SYSOPER µÄÉí·İµÇÂ¼¡£
-- ¼´Ê¹ÆäËûµÄÓÃ»§ÓÃ SYSDBA/SYSOPER µÄÉí·İµÇÂ¼£¬Êµ¼ÊÉÏµÇÂ¼µÄÒ²ÊÇ SYS¡£
+*** ç³»ç»Ÿç¼ºçœç”¨æˆ·
+**** SYS ç”¨æˆ·ï¼Œåˆå«ç‰¹æƒç”¨æˆ·ï¼Œæ•°æ®åº“ä¸­è‡³é«˜æ— ä¸Šçš„ç”¨æˆ·ã€‚
+- å®ƒæ˜¯æ•°æ®åº“çš„ç³»ç»Ÿç®¡ç†å‘˜ï¼Œè´Ÿè´£çš„æ˜¯æ•°æ®çš„å®‰è£…ã€ç»´æŠ¤ã€å‡çº§ã€å¤‡ä»½ã€æ¢å¤ã€ä¼˜åŒ–ç­‰æ“ä½œã€‚
+- ä¸èƒ½ç”¨ normal çš„èº«ä»½ç™»å½•ï¼Œå¿…é¡»ç”¨ SYSDBA/SYSOPER çš„èº«ä»½ç™»å½•ã€‚
+- å³ä½¿å…¶ä»–çš„ç”¨æˆ·ç”¨ SYSDBA/SYSOPER çš„èº«ä»½ç™»å½•ï¼Œå®é™…ä¸Šç™»å½•çš„ä¹Ÿæ˜¯ SYSã€‚
 
-**** SYSTEM ÓÃ»§¡£
-Êı¾İ¿âµÄ¹ÜÀíÔ±¡£SYSTEM ÓÃ»§Ö®ÏÂ±£´æ×ÅÊı¾İ¿âÔËĞĞµÄÒ»Ğ©»ù±¾×ÖµäÊı¾İ¡£
-ËüÓµÓĞ DBA µÄ½ÇÉ«¡£Ö÷Òª¸ºÔğ¶ÔÊı¾İ¿âÖĞ¸÷ÖÖ¶ÔÏó£¬¸÷ÖÖ×ÊÔ´µÄ¹ÜÀí¡£
+**** SYSTEM ç”¨æˆ·ã€‚
+æ•°æ®åº“çš„ç®¡ç†å‘˜ã€‚SYSTEM ç”¨æˆ·ä¹‹ä¸‹ä¿å­˜ç€æ•°æ®åº“è¿è¡Œçš„ä¸€äº›åŸºæœ¬å­—å…¸æ•°æ®ã€‚
+å®ƒæ‹¥æœ‰ DBA çš„è§’è‰²ã€‚ä¸»è¦è´Ÿè´£å¯¹æ•°æ®åº“ä¸­å„ç§å¯¹è±¡ï¼Œå„ç§èµ„æºçš„ç®¡ç†ã€‚
 
-**** ÆäËûÓÃ»§ (ÈçSCOTT)
-ÆÕÍ¨ÓÃ»§£¬ÄÜ¹»Ö´ĞĞ±»ÊÚÈ¨·¶Î§Ö®ÄÚµÄ²Ù×÷¡£
+**** å…¶ä»–ç”¨æˆ· (å¦‚SCOTT)
+æ™®é€šç”¨æˆ·ï¼Œèƒ½å¤Ÿæ‰§è¡Œè¢«æˆæƒèŒƒå›´ä¹‹å†…çš„æ“ä½œã€‚
 
-*** ÓÃ»§µÄÄ¬ÈÏ±í¿Õ¼ä
-SYS/SYSTEM -> SYSTEM ±í¿Õ¼ä
+*** ç”¨æˆ·çš„é»˜è®¤è¡¨ç©ºé—´
+SYS/SYSTEM -> SYSTEM è¡¨ç©ºé—´
 
-ÆÕÍ¨ÓÃ»§  -> USERS ±í¿Õ¼ä
+æ™®é€šç”¨æˆ·  -> USERS è¡¨ç©ºé—´
 
-*** ×ÊÔ´ÎÄ¼ş (Profile)
-×ÊÔ´ÎÄ¼şÊÇ¿ÚÁîÏŞÖÆ¡¢×ÊÔ´ÏŞÖÆµÄÃüÃû¼¯ºÏ
+*** èµ„æºæ–‡ä»¶ (Profile)
+èµ„æºæ–‡ä»¶æ˜¯å£ä»¤é™åˆ¶ã€èµ„æºé™åˆ¶çš„å‘½åé›†åˆ
 
 #+BEGIN_SRC sql
--- ²éÑ¯
+-- æŸ¥è¯¢
 select *from dba_profiles where profile = 'DEFAULT';    -- default profile
 
--- ´´½¨
+-- åˆ›å»º
 CREATE PROFILE filename LIMIT
   SESSION_PER_USER integer
   CPU_PER_SESSION integer
   USER_PER_CALL integer
   CONNECT_TIME integer|UNLIMITED
 
--- RESOURCE_LIMIT ÉèÖÃÎª TRUE£¬²Å»áÓĞĞ§
+-- RESOURCE_LIMIT è®¾ç½®ä¸º TRUEï¼Œæ‰ä¼šæœ‰æ•ˆ
 alter system set RESOURCE_LIMIT = TRUE;
--- ´´½¨×ÊÔ´ÏŞÖÆÎÄ¼ş
+-- åˆ›å»ºèµ„æºé™åˆ¶æ–‡ä»¶
 create profile myprofile limit failed_login_attempts 3;
 
 #+END_SRC
 
-³£ÓÃÑ¡Ïî£¨ÎÒËæ±ãĞ´µÄ£¬ÄãÃÇ×Ô¼ºÔÙÕûÀíĞŞ¶©ÏÂ£©
-| FAILED_LOGIN_ATTEMPTS    | ÓÃÓÚÖ¸¶¨ÁªÏµµÇÂ½µÄ×î´óÊ§°Ü´ÎÊı.                   |
-| PASSWORD_LOCK_TIME       | ÓÃÓÚÖ¸¶¨ÕÊ»§±»Ëø¶¨µÄÌìÊı.                         |
-| PASSWORD_LIFE_TIME       | ÓÃÓÚÖ¸¶¨¿ÚÁîÓĞĞ§ÆÚ                                |
-| PASSWORD_GRACE_TIME      | ÓÃÓÚÖ¸¶¨¿ÚÁî¿íÏŞÆÚ.                               |
-| PASSWORD_REUSE_TIME      | ÓÃÓÚÖ¸¶¨¿ÚÁî¿ÉÓÃÊ±¼ä.                             |
-| PASSWORD_REUSE_MAX       | ÓÃÓÚÖ¸¶¨¿ÚÁîÔÚÓĞĞ§ÆÚÄÚ¿É¸ü¸Ä´ÎÊı.                 |
-| PASSWORD_VERIFY_FUNCTION | ÊÇ·ñĞ£Ñé¿ÚÁî(Ğ£Ñé½«Öµ¸ÄÎªVERIFY_FUNCTION)         |
-| CPU_PER_SESSION          | ÓÃÓÚÖ¸¶¨Ã¿¸ö»á»°¿ÉÒÔÕ¼ÓÃµÄ×î´óCPUÊ±¼ä.            |
-| LOGICAL_READS_PER_SESSON | ÓÃÓÚÖ¸¶¨»á»°µÄ×î´óÂß¼­¶ÁÈ¡´ÎÊı.                   |
-| PRIVATE_SGA              | ÓÃÓÚÖ¸¶¨»á»°ÔÚ¹²Ïí³ØÖĞ¿ÉÒÔ·ÖÅäµÄ×î´ó×Ü¼ÆË½ÓĞ¿Õ¼ä. |
-| COMPOSITE_LIMIT          | ÓÃÓÚÖ¸¶¨»á»°µÄ×Ü¼Æ×ÊÔ´ÏûºÄ                        |
-| CPU_PER_CALL             | ÏŞÖÆÃ¿´Îµ÷ÓÃ¿ÉÕ¼ÓÃµÄ×î´óCPUÊ±¼ä                   |
-| LOGICAL_READS_PER_CALL   | ÓÃÓÚÏŞÖÆÃ¿´Îµ÷ÓÃµÄ×î´óÂß¼­I/O´ÎÊı.                |
-| SESSIONS_PER_USER        | ÓÃÓÚÖ¸¶¨Ã¿¸öÓÃ»§µÄ×î´ó²¢·¢»á»°¸öÊı.               |
-| CONNECT_TIME             | ÓÃÓÚÖ¸¶¨»á»°µÄ×î´óÁ¬½ÓÊ±¼ä.                       |
-| IDLE_TIME                | ÓÃÓÚÖ¸¶¨»á»°µÄ×î´ó¿ÕÏĞÊ±¼ä.                       |
+å¸¸ç”¨é€‰é¡¹ï¼ˆæˆ‘éšä¾¿å†™çš„ï¼Œä½ ä»¬è‡ªå·±å†æ•´ç†ä¿®è®¢ä¸‹ï¼‰
+| FAILED_LOGIN_ATTEMPTS    | ç”¨äºæŒ‡å®šè”ç³»ç™»é™†çš„æœ€å¤§å¤±è´¥æ¬¡æ•°.                   |
+| PASSWORD_LOCK_TIME       | ç”¨äºæŒ‡å®šå¸æˆ·è¢«é”å®šçš„å¤©æ•°.                         |
+| PASSWORD_LIFE_TIME       | ç”¨äºæŒ‡å®šå£ä»¤æœ‰æ•ˆæœŸ                                |
+| PASSWORD_GRACE_TIME      | ç”¨äºæŒ‡å®šå£ä»¤å®½é™æœŸ.                               |
+| PASSWORD_REUSE_TIME      | ç”¨äºæŒ‡å®šå£ä»¤å¯ç”¨æ—¶é—´.                             |
+| PASSWORD_REUSE_MAX       | ç”¨äºæŒ‡å®šå£ä»¤åœ¨æœ‰æ•ˆæœŸå†…å¯æ›´æ”¹æ¬¡æ•°.                 |
+| PASSWORD_VERIFY_FUNCTION | æ˜¯å¦æ ¡éªŒå£ä»¤(æ ¡éªŒå°†å€¼æ”¹ä¸ºVERIFY_FUNCTION)         |
+| CPU_PER_SESSION          | ç”¨äºæŒ‡å®šæ¯ä¸ªä¼šè¯å¯ä»¥å ç”¨çš„æœ€å¤§CPUæ—¶é—´.            |
+| LOGICAL_READS_PER_SESSON | ç”¨äºæŒ‡å®šä¼šè¯çš„æœ€å¤§é€»è¾‘è¯»å–æ¬¡æ•°.                   |
+| PRIVATE_SGA              | ç”¨äºæŒ‡å®šä¼šè¯åœ¨å…±äº«æ± ä¸­å¯ä»¥åˆ†é…çš„æœ€å¤§æ€»è®¡ç§æœ‰ç©ºé—´. |
+| COMPOSITE_LIMIT          | ç”¨äºæŒ‡å®šä¼šè¯çš„æ€»è®¡èµ„æºæ¶ˆè€—                        |
+| CPU_PER_CALL             | é™åˆ¶æ¯æ¬¡è°ƒç”¨å¯å ç”¨çš„æœ€å¤§CPUæ—¶é—´                   |
+| LOGICAL_READS_PER_CALL   | ç”¨äºé™åˆ¶æ¯æ¬¡è°ƒç”¨çš„æœ€å¤§é€»è¾‘I/Oæ¬¡æ•°.                |
+| SESSIONS_PER_USER        | ç”¨äºæŒ‡å®šæ¯ä¸ªç”¨æˆ·çš„æœ€å¤§å¹¶å‘ä¼šè¯ä¸ªæ•°.               |
+| CONNECT_TIME             | ç”¨äºæŒ‡å®šä¼šè¯çš„æœ€å¤§è¿æ¥æ—¶é—´.                       |
+| IDLE_TIME                | ç”¨äºæŒ‡å®šä¼šè¯çš„æœ€å¤§ç©ºé—²æ—¶é—´.                       |
 
-*** ´´½¨/ĞŞ¸Ä/É¾³ıÓÃ»§
+*** åˆ›å»º/ä¿®æ”¹/åˆ é™¤ç”¨æˆ·
 
-1. ´´½¨ÓÃ»§Óï·¨¸ñÊ½
+1. åˆ›å»ºç”¨æˆ·è¯­æ³•æ ¼å¼
    : create USER name
    :   identified by password
    :   [default tablespace users]
@@ -249,7 +248,7 @@ create profile myprofile limit failed_login_attempts 3;
    :   [quota xxx on users]
    :   [other key/value pair]
 
-2. ĞŞ¸ÄÓÃ»§Óï·¨¸ñÊ½
+2. ä¿®æ”¹ç”¨æˆ·è¯­æ³•æ ¼å¼
    : alter USER name
    :   identified by password
    :   [default tablespace users]
@@ -258,18 +257,18 @@ create profile myprofile limit failed_login_attempts 3;
    :   [quota xxx on users]
    :   [other key/value pair]
 
-3. É¾³ıÓÃ»§
+3. åˆ é™¤ç”¨æˆ·
    : drop USER name [cascade]
 
-4. ²Ù×÷Ê¾Àı
+4. æ“ä½œç¤ºä¾‹
    #+BEGIN_SRC sql
-   -- ²éÑ¯
+   -- æŸ¥è¯¢
    select * from dba_users where username='SCOTT';
    
-   -- ×î»ù±¾µÄ´´½¨Óï·¨£¨ÓÃ»§Ãû+ÃÜÂë£©
+   -- æœ€åŸºæœ¬çš„åˆ›å»ºè¯­æ³•ï¼ˆç”¨æˆ·å+å¯†ç ï¼‰
    create user vip identified by vip;
    
-   -- ½ÏÏêÏ¸µÄ´´½¨Óï·¨
+   -- è¾ƒè¯¦ç»†çš„åˆ›å»ºè¯­æ³•
    create User vip
      identified by vip
      default tablespace users
@@ -277,7 +276,7 @@ create profile myprofile limit failed_login_attempts 3;
      profile default
      quota ulimited on users;
    
-   -- ĞŞ¸ÄÓÃ»§
+   -- ä¿®æ”¹ç”¨æˆ·
    alter user vip identified by vop;
    alter user vip profile ttt;
    alter user vip default tablespace system;
@@ -285,53 +284,53 @@ create profile myprofile limit failed_login_attempts 3;
    alter user vip account unlock/lock;
    alter user vip quota unlimited on test;  -- very good
    
-   -- É¾³ıÓÃ»§¡£Èç¹ûÓÃ»§ÏÂ´æÔÚ¶ÔÏó£¬ĞèÒªÌí¼Ó cascade ¹Ø¼ü´Ê¡£
+   -- åˆ é™¤ç”¨æˆ·ã€‚å¦‚æœç”¨æˆ·ä¸‹å­˜åœ¨å¯¹è±¡ï¼Œéœ€è¦æ·»åŠ  cascade å…³é”®è¯ã€‚
    drop user vip;
    drop user vip cascade;
    
    #+END_SRC
 
 
-** È¨ÏŞ
-È¨ÏŞÖ¸µÄÊÇÖ´ĞĞÌØ¶¨ÃüÁî»ò·ÃÎÊÊı¾İ¿â¶ÔÏóµÄÈ¨Àû¡£·ÖÎªÏµÍ³È¨ÏŞºÍ¶ÔÏóÈ¨ÏŞ¡£
+** æƒé™
+æƒé™æŒ‡çš„æ˜¯æ‰§è¡Œç‰¹å®šå‘½ä»¤æˆ–è®¿é—®æ•°æ®åº“å¯¹è±¡çš„æƒåˆ©ã€‚åˆ†ä¸ºç³»ç»Ÿæƒé™å’Œå¯¹è±¡æƒé™ã€‚
 
-*** ÏµÍ³È¨ÏŞ (Ö´ĞĞÌØ¶¨ÃüÁî)
-**** ÊÚÈ¨Óï·¨
-: grant È¨ÏŞÃû×Ö to ÓÃ»§ [with admin option]
-with admin option ²ÎÊı¿ÉÒÔÊ¹µÃµ½ÊÚÈ¨µÄÓÃ»§ÓĞÈ¨°ÑµÃµ½µÄÈ¨ÏŞÊÚÓèÆäËûÓÃ»§¡£
+*** ç³»ç»Ÿæƒé™ (æ‰§è¡Œç‰¹å®šå‘½ä»¤)
+**** æˆæƒè¯­æ³•
+: grant æƒé™åå­— to ç”¨æˆ· [with admin option]
+with admin option å‚æ•°å¯ä»¥ä½¿å¾—åˆ°æˆæƒçš„ç”¨æˆ·æœ‰æƒæŠŠå¾—åˆ°çš„æƒé™æˆäºˆå…¶ä»–ç”¨æˆ·ã€‚
 
-****  ³·ÏúÓï·¨
-: revoke È¨ÏŞÃû×Ö from ÓÃ»§
+****  æ’¤é”€è¯­æ³•
+: revoke æƒé™åå­— from ç”¨æˆ·
 
-**** Ïà¹ØµÄ×Öµä±í
-: select * from system_privilege_map;  -- ËùÓĞµÄÏµÍ³È¨ÏŞ
-: select * from dba_sys_privs where grantee='SCOTT';         -- Ä¿Ç°ÒÑ¾­±»ÊÚÈ¨µÄÏµÍ³È¨ÏŞ
+**** ç›¸å…³çš„å­—å…¸è¡¨
+: select * from system_privilege_map;  -- æ‰€æœ‰çš„ç³»ç»Ÿæƒé™
+: select * from dba_sys_privs where grantee='SCOTT';         -- ç›®å‰å·²ç»è¢«æˆæƒçš„ç³»ç»Ÿæƒé™
 
-*** ¶ÔÏóÈ¨ÏŞ (·ÃÎÊÊı¾İ¿â¶ÔÏó)
+*** å¯¹è±¡æƒé™ (è®¿é—®æ•°æ®åº“å¯¹è±¡)
 
-**** ÊÚÈ¨Óï·¨
-: grant ¶ÔÏóÈ¨ÏŞµÄ¹Ø¼ü´Ê(select/update/..)on [schema.]¶ÔÏóÃû×Ö to ÓÃ»§ [with granted option];
+**** æˆæƒè¯­æ³•
+: grant å¯¹è±¡æƒé™çš„å…³é”®è¯(select/update/..)on [schema.]å¯¹è±¡åå­— to ç”¨æˆ· [with granted option];
 : grant all on scott.emp to vip with grant option;
 
-**** ³·ÏúÈ¨ÏŞ
-: revoke È¨ÏŞÃû×Ö from ÓÃ»§
+**** æ’¤é”€æƒé™
+: revoke æƒé™åå­— from ç”¨æˆ·
 
-**** Ïà¹ØµÄ×Öµä±í
-: select * from dba_tab_privs/all_tab_privs/user_tab_privs;      -- ´æ·ÅµÄÊÇËùÓĞ¶ÔÏóÈ¨ÏŞµÄÊÚÈ¨Çé¿ö¡£
+**** ç›¸å…³çš„å­—å…¸è¡¨
+: select * from dba_tab_privs/all_tab_privs/user_tab_privs;      -- å­˜æ”¾çš„æ˜¯æ‰€æœ‰å¯¹è±¡æƒé™çš„æˆæƒæƒ…å†µã€‚
 
-*** Ê¾Àı
+*** ç¤ºä¾‹
 #+BEGIN_SRC sql
--- ÊÚÈ¨
+-- æˆæƒ
 grant create table to vip;
 grant create session to vip [with admin option];
 grant select, insert on sys.dba_tab_privs to vip;
-grant all on scott to vip;           -- ÊÚÓèËùÓĞ
+grant all on scott to vip;           -- æˆäºˆæ‰€æœ‰
 
-grant create synonym to vip;         -- ¿ÉÒÔÎª×Ô¼º´´½¨ synonym
-grant create any synonym to vip;     -- ¿ÉÒÔÎªÈÎÒâÓÃ»§´´½¨ synonym
-grant create public synonym to vip;  -- ¿ÉÒÔ´´½¨ public synonym
+grant create synonym to vip;         -- å¯ä»¥ä¸ºè‡ªå·±åˆ›å»º synonym
+grant create any synonym to vip;     -- å¯ä»¥ä¸ºä»»æ„ç”¨æˆ·åˆ›å»º synonym
+grant create public synonym to vip;  -- å¯ä»¥åˆ›å»º public synonym
 
--- ³·È¨
+-- æ’¤æƒ
 revoke create table, create session from rain;
 revoke alter on scott from vip;
 
@@ -339,60 +338,60 @@ revoke alter on scott from vip;
 
 
 
-** ½ÇÉ«
-½ÇÉ«ÊÇÈ¨ÏŞµÄÃüÃû¼¯ºÏ¡£
+** è§’è‰²
+è§’è‰²æ˜¯æƒé™çš„å‘½åé›†åˆã€‚
 
-*** ´´½¨½ÇÉ«
+*** åˆ›å»ºè§’è‰²
 : create role name
 
-*** ÅäÖÃ½ÇÉ«
-: grant È¨ÏŞÃû×Ö to ½ÇÉ«Ãû×Ö
-: grant ½ÇÉ«Ãû×Ö to ½ÇÉ«Ãû×Ö
+*** é…ç½®è§’è‰²
+: grant æƒé™åå­— to è§’è‰²åå­—
+: grant è§’è‰²åå­— to è§’è‰²åå­—
 
-*** Ê¹ÓÃ½ÇÉ«
-: grant ½ÇÉ«Ãû×Ö to ÓÃ»§Ãû×Ö
+*** ä½¿ç”¨è§’è‰²
+: grant è§’è‰²åå­— to ç”¨æˆ·åå­—
 
-*** É¾³ı½ÇÉ«
-: drop ROLE ½ÇÉ«Ãû×Ö
+*** åˆ é™¤è§’è‰²
+: drop ROLE è§’è‰²åå­—
 
-*** Ïà¹ØµÄ×Öµä±í
-: select * from dba_roles;                            -- ÁĞ³öÏµÍ³ÖĞËùÓĞ´æÔÚµÄ½ÇÉ«¡£
-: select * from dba_sys_privs where grantee='DBA';    -- ²é¿´DBAËùÓµÓĞµÄËùÓĞÏµÍ³È¨ÏŞ
-: select * from dba_role_privs where grantee='SYSTEM' -- ²é¿´ÓÃ»§ËùÓµÓĞµÄËùÓĞ½ÇÉ«
+*** ç›¸å…³çš„å­—å…¸è¡¨
+: select * from dba_roles;                            -- åˆ—å‡ºç³»ç»Ÿä¸­æ‰€æœ‰å­˜åœ¨çš„è§’è‰²ã€‚
+: select * from dba_sys_privs where grantee='DBA';    -- æŸ¥çœ‹DBAæ‰€æ‹¥æœ‰çš„æ‰€æœ‰ç³»ç»Ÿæƒé™
+: select * from dba_role_privs where grantee='SYSTEM' -- æŸ¥çœ‹ç”¨æˆ·æ‰€æ‹¥æœ‰çš„æ‰€æœ‰è§’è‰²
 
-*** ÌØÊâµÄ PUBLIC ½ÇÉ«
-¹«ÓÃ½ÇÉ«£¬Ä¬ÈÏÊÇÊÚÓèÃ¿¸öÓÃ»§µÄ¡£
-
-
-* TODO ½×¶ÎĞÔÊµ¼ù
-¼ÆËã´ó¼ÒÍê³ÉÒÔÏÂ¹¤×÷ËùÏûºÄµÄÊ±¼ä£º
-1. Á¬½ÓÉÏÖ¸¶¨·şÎñÆ÷µÄÖ¸¶¨Êı¾İ¿â¡£
-2. ÎªĞÂµÄÓÃ»§´´½¨ËùĞèÒªµÄÄ¬ÈÏ±í¿Õ¼ä¡£
-3. ÎªĞÂµÄÓÃ»§´´½¨ËùĞèÒªµÄ×ÊÔ´ÎÄ¼ş¡£
-4. ´´½¨ÓÃ»§£¬Ö¸¶¨±í¿Õ¼ä¡¢×ÊÔ´ÎÄ¼ş£¬ÉèÖÃÅä¶î¡£
-5. ÎªËù´´½¨µÄÓÃ»§ÊÚÓèÌØ¶¨µÄÏµÍ³È¨ÏŞ£¬Èç´´½¨»á»°¡¢´´½¨±í¡¢¸üĞÂÊı¾İµÈ¡£
-6. Îª scott ÓÃ»§ÊÚÓèÏàÓ¦µÄ¶ÔÏóÈ¨ÏŞ£¬ÈÃ scott ÓÃ»§ÄÜ¹»²Ù×İÎÒÃÇËù´´½¨ÓÃ»§ÏÂµÄÒ»Ğ©¶ÔÏó¡£
-7. ½øĞĞÒ»ÏµÁĞµÄ¼òµ¥²Ù×÷¡£
+*** ç‰¹æ®Šçš„ PUBLIC è§’è‰²
+å…¬ç”¨è§’è‰²ï¼Œé»˜è®¤æ˜¯æˆäºˆæ¯ä¸ªç”¨æˆ·çš„ã€‚
 
 
+* TODO é˜¶æ®µæ€§å®è·µ
+è®¡ç®—å¤§å®¶å®Œæˆä»¥ä¸‹å·¥ä½œæ‰€æ¶ˆè€—çš„æ—¶é—´ï¼š
+1. è¿æ¥ä¸ŠæŒ‡å®šæœåŠ¡å™¨çš„æŒ‡å®šæ•°æ®åº“ã€‚
+2. ä¸ºæ–°çš„ç”¨æˆ·åˆ›å»ºæ‰€éœ€è¦çš„é»˜è®¤è¡¨ç©ºé—´ã€‚
+3. ä¸ºæ–°çš„ç”¨æˆ·åˆ›å»ºæ‰€éœ€è¦çš„èµ„æºæ–‡ä»¶ã€‚
+4. åˆ›å»ºç”¨æˆ·ï¼ŒæŒ‡å®šè¡¨ç©ºé—´ã€èµ„æºæ–‡ä»¶ï¼Œè®¾ç½®é…é¢ã€‚
+5. ä¸ºæ‰€åˆ›å»ºçš„ç”¨æˆ·æˆäºˆç‰¹å®šçš„ç³»ç»Ÿæƒé™ï¼Œå¦‚åˆ›å»ºä¼šè¯ã€åˆ›å»ºè¡¨ã€æ›´æ–°æ•°æ®ç­‰ã€‚
+6. ä¸º scott ç”¨æˆ·æˆäºˆç›¸åº”çš„å¯¹è±¡æƒé™ï¼Œè®© scott ç”¨æˆ·èƒ½å¤Ÿæ“çºµæˆ‘ä»¬æ‰€åˆ›å»ºç”¨æˆ·ä¸‹çš„ä¸€äº›å¯¹è±¡ã€‚
+7. è¿›è¡Œä¸€ç³»åˆ—çš„ç®€å•æ“ä½œã€‚
 
-* SQL Óï¾ä
-Structured Query Language£¬½á¹¹ĞÔ²éÑ¯ÓïÑÔ¡£
 
-** SQL µÄÀúÊ·¼°¸ÅÄî
-** SQL µÄ·ÖÀà
-*** DDL£¨Data Definition Language£©
+
+* SQL è¯­å¥
+Structured Query Languageï¼Œç»“æ„æ€§æŸ¥è¯¢è¯­è¨€ã€‚
+
+** SQL çš„å†å²åŠæ¦‚å¿µ
+** SQL çš„åˆ†ç±»
+*** DDLï¼ˆData Definition Languageï¼‰
 **** CREATE
- ´´½¨±íµÄµäĞÍÓï¾äÎª:
+ åˆ›å»ºè¡¨çš„å…¸å‹è¯­å¥ä¸º:
 : create TABLE table_name
 : (column_name column_type,[column_name column_type...]);
 
-Àı×Ó:
+ä¾‹å­:
 #+BEGIN_SRC sql
--- ×î»ù±¾µÄ´´½¨
+-- æœ€åŸºæœ¬çš„åˆ›å»º
 create table OrderTB (id number, name varchar2(20));
 
--- Ìí¼ÓÖ÷¼ü
+-- æ·»åŠ ä¸»é”®
 create table OrderTB (id number primary key, name varchar2(20));
 create table OrderTB 
   (id number,
@@ -400,7 +399,7 @@ create table OrderTB
    primary key(id));
 create table OrderTB (id number, name varchar2(20), constraints pk_ordertb primary key(id));
 
--- Ìí¼ÓÍâ¼ü£¬Íâ¼üÓ³Éäµ½µÄ±ØĞëÊÇÖ÷¼ü
+-- æ·»åŠ å¤–é”®ï¼Œå¤–é”®æ˜ å°„åˆ°çš„å¿…é¡»æ˜¯ä¸»é”®
 create table sex (value primary key, detail varchar2(20));
 create table Mates (id number primary key, name varchar2(20), sex number references sex(value));
 
@@ -416,69 +415,69 @@ create table Mates
    sex number,
    constraints fk_mates foreign key (sex) references sex(value));
 
--- check Ô¼Êø
+-- check çº¦æŸ
 create table Classes (id number, count number check (count > 10 and count < 100));
 create table Classes222
 ( id number primary key,
   count number,
   constraints ck_classes check (count > 10 and count < 100));
 
--- TODO Unique Ô¼Êø
+-- TODO Unique çº¦æŸ
 
 
--- Ë«ÒıºÅÇ¿ÖÆ±íÃû±£ÁôÔ­À´µÄ´óĞ¡Ğ´¡£
+-- åŒå¼•å·å¼ºåˆ¶è¡¨åä¿ç•™åŸæ¥çš„å¤§å°å†™ã€‚
 create table "XiaoMing" (name varchar2(20), age int);
 
 
--- ´´½¨Ò»ÕÅ±í£¬²»Éú²úÖØ×öÈÕÖ¾µÄ»°
+-- åˆ›å»ºä¸€å¼ è¡¨ï¼Œä¸ç”Ÿäº§é‡åšæ—¥å¿—çš„è¯
 create table nologtab (id number) nologging;
 
 
--- ´´½¨Ò»ÕÅ±í£¬Ö¸¶¨ÁíÍâµÄ±í¿Õ¼ä
+-- åˆ›å»ºä¸€å¼ è¡¨ï¼ŒæŒ‡å®šå¦å¤–çš„è¡¨ç©ºé—´
 create table spetab (id number) tablespace system;
 
--- Ç¿ÖÆ×Ö¶ÎÄÚÈİ²»ÄÜÎª
+-- å¼ºåˆ¶å­—æ®µå†…å®¹ä¸èƒ½ä¸º
 create table notnulltab (name varchar2(20) not null);
 
--- Ö¸¶¨Ä³¸ö×Ö¶ÎµÄÄ¬ÈÏÖµ
+-- æŒ‡å®šæŸä¸ªå­—æ®µçš„é»˜è®¤å€¼
 create table tab_defaultval (name varchar2(20) not null, sex number default 1);
 
 #+END_SRC
 
-ĞèÒª×¢Òâ£¬Ê×ÏÈ£¬±íµÄÃû×ÖÒª·ûºÏÒ»¶¨µÄ¹æ·¶(³¤¶È£¬×é³É×Ö·û£¬±£Áô×Ö£¬ÒÔ¼°ÆäËû)¡£
+éœ€è¦æ³¨æ„ï¼Œé¦–å…ˆï¼Œè¡¨çš„åå­—è¦ç¬¦åˆä¸€å®šçš„è§„èŒƒ(é•¿åº¦ï¼Œç»„æˆå­—ç¬¦ï¼Œä¿ç•™å­—ï¼Œä»¥åŠå…¶ä»–)ã€‚
 
-Oracle »á×Ô¶¯°Ñ±íÃû×ª»»Îª´óĞ´£¬µ«ÊÇÈç¹ûÏë±£Áô´óĞ¡Ğ´µÄ»°£¬¿ÉÒÔÔÚ´´½¨±íµÄÊ±ºò£¬°Ñ±íÃûÓÃË«ÒıºÅÀ¨ÆğÀ´¡£
+Oracle ä¼šè‡ªåŠ¨æŠŠè¡¨åè½¬æ¢ä¸ºå¤§å†™ï¼Œä½†æ˜¯å¦‚æœæƒ³ä¿ç•™å¤§å°å†™çš„è¯ï¼Œå¯ä»¥åœ¨åˆ›å»ºè¡¨çš„æ—¶å€™ï¼ŒæŠŠè¡¨åç”¨åŒå¼•å·æ‹¬èµ·æ¥ã€‚
 
-Ö÷¼ü£º
+ä¸»é”®ï¼š
 
-ĞèÒª¼ò¶Ì¡¢Ğ§ÂÊ¡¢²»ÖØ¸´¡¢²»¿É¸Ä±ä¡£
-ËùÒÔ£¬²»ÒªÓÃÒµÎñ×Ö¶Î×÷ÎªÖ÷¼ü£¬¼´Ê¹¾õµÃÒµÎñ×Ö¶ÎÊÇÎ¨Ò»ÇÒ²»¿É¸Ä±äµÄ¡£ÒòÎª£¬Äã¾õµÃ²»¿É¸Ä±äµÄ¶«Î÷£¬ÍùÍù¾­²»×¡Ê±¼äµÄ¿¼Ñé¡£
-ĞèÒªÓÃ×ÔÔöµÄ£¬¼òµ¥µÄ£¬¸úÒµÎñÃ»ÓĞ¹ØÏµµÄ£¬ËùÎ½µÄ´úÀíÖ÷¼ü¡£[[http://www.w3school.com.cn/sql/sql_autoincrement.asp][¾Í±ÈÈç sqlserver ÖĞµÄ identity, MySQL ÖĞµÄ auto_increment]].
+éœ€è¦ç®€çŸ­ã€æ•ˆç‡ã€ä¸é‡å¤ã€ä¸å¯æ”¹å˜ã€‚
+æ‰€ä»¥ï¼Œä¸è¦ç”¨ä¸šåŠ¡å­—æ®µä½œä¸ºä¸»é”®ï¼Œå³ä½¿è§‰å¾—ä¸šåŠ¡å­—æ®µæ˜¯å”¯ä¸€ä¸”ä¸å¯æ”¹å˜çš„ã€‚å› ä¸ºï¼Œä½ è§‰å¾—ä¸å¯æ”¹å˜çš„ä¸œè¥¿ï¼Œå¾€å¾€ç»ä¸ä½æ—¶é—´çš„è€ƒéªŒã€‚
+éœ€è¦ç”¨è‡ªå¢çš„ï¼Œç®€å•çš„ï¼Œè·Ÿä¸šåŠ¡æ²¡æœ‰å…³ç³»çš„ï¼Œæ‰€è°“çš„ä»£ç†ä¸»é”®ã€‚[[http://www.w3school.com.cn/sql/sql_autoincrement.asp][å°±æ¯”å¦‚ sqlserver ä¸­çš„ identity, MySQL ä¸­çš„ auto_increment]].
 
-²é¿´Êı¾İ¿âÖĞ±íµÄ DDL Óï¾ä£º
+æŸ¥çœ‹æ•°æ®åº“ä¸­è¡¨çš„ DDL è¯­å¥ï¼š
 : set long 999
 : select DBMS_METADATA.get_ddl('TABLE', 'EMP') from dual;
 
 
-´ÓÒÑ¾­´æÔÚµÄ±íÖĞ£¬´´½¨ĞÂµÄ±í
+ä»å·²ç»å­˜åœ¨çš„è¡¨ä¸­ï¼Œåˆ›å»ºæ–°çš„è¡¨
 
 #+BEGIN_SRC sql
--- Óï·¨
-create table ±íÃû as select clause...
+-- è¯­æ³•
+create table è¡¨å as select clause...
 
--- ¼òµ¥Ó¦ÓÃ
+-- ç®€å•åº”ç”¨
 create table emp1 as select * from scott.emp;
 
--- ÏŞ¶¨ÁĞ
+-- é™å®šåˆ—
 create table emp2 as select empno, ename, hiredate from scott.emp;
 
--- ÏŞ¶¨ÁĞµÄ¹ı³ÌÖĞ£¬¿ÉÒÔÊ¹ÓÃÔËËã·û»òÕßº¯Êı
+-- é™å®šåˆ—çš„è¿‡ç¨‹ä¸­ï¼Œå¯ä»¥ä½¿ç”¨è¿ç®—ç¬¦æˆ–è€…å‡½æ•°
 create table emp2 as select empno, ename, sal/1000 s from scott.emp;
 
--- ÏŞ¶¨ĞĞ(ÏŞ¶¨²åÈëµÄÊı¾İ)
+-- é™å®šè¡Œ(é™å®šæ’å…¥çš„æ•°æ®)
 create table emp3 as select empno, ename from scott.emp where empno < 7566;
 
--- Èç¹ûÖ»Ïë¸´ÖÆ±íµÄ½á¹¹µÄ»°
+-- å¦‚æœåªæƒ³å¤åˆ¶è¡¨çš„ç»“æ„çš„è¯
 create table emp4 as select * from scott.emp where 1=2;
 create table emp4 as select * from scott.emp where rownum < 1;
 
@@ -487,45 +486,45 @@ create table emp4 as select * from scott.emp where rownum < 1;
 
 **** ALTER
 #+BEGIN_SRC sql
--- ×î»ù±¾µÄÓÃ·¨
-alter table ±íÃû ²Ù×÷¹Ø¼ü´Ê ÊôĞÔ
+-- æœ€åŸºæœ¬çš„ç”¨æ³•
+alter table è¡¨å æ“ä½œå…³é”®è¯ å±æ€§
 
 
--- Ìí¼ÓÒ»¸öÁĞ
+-- æ·»åŠ ä¸€ä¸ªåˆ—
 alter table sss add howsoon number default 0;
 alter table sss add (status char);
-alter table sss add (status char not null);         -- ¿ÉÒÔÌí¼ÓÆäËûµÄÊôĞÔ
+alter table sss add (status char not null);         -- å¯ä»¥æ·»åŠ å…¶ä»–çš„å±æ€§
 alter table sss add (status char default '1');
 
--- Ìí¼ÓÒ»¸öÖ÷¼üÔ¼Êø
+-- æ·»åŠ ä¸€ä¸ªä¸»é”®çº¦æŸ
 alter table sss add constraints pk_sss primary key (id);
 
--- É¾³ıÒ»¸öÁĞ
+-- åˆ é™¤ä¸€ä¸ªåˆ—
 alter table sss drop COLUMN howsoon;
 
--- É¾³ıÖ÷¼ü
+-- åˆ é™¤ä¸»é”®
 alter table sss drop CONSTRAINTS pk_sss;
 
--- É¾³ıÍâ¼ü
-alter table ±íÃû drop constraints Íâ¼üÃû;
+-- åˆ é™¤å¤–é”®
+alter table è¡¨å drop constraints å¤–é”®å;
 
--- ĞŞ¸ÄÁĞ
+-- ä¿®æ”¹åˆ—
 alter table sss modify (status varchar2(20) not null);
 
--- ¸ü¸ÄÁĞÃû
+-- æ›´æ”¹åˆ—å
 alter table sss rename COLUMN status TO flag;
 
 
--- ¸ü¸Ä±íµÄ±í¿Õ¼ä
+-- æ›´æ”¹è¡¨çš„è¡¨ç©ºé—´
 alter table sss move tablespace system;
 
 
--- ¸ü¸ÄÊÇ·ñ¼ÇÂ¼ÈÕÖ¾
+-- æ›´æ”¹æ˜¯å¦è®°å½•æ—¥å¿—
 alter table sss logging;
 alter table sss nologging;
 
 
--- ÈçºÎÈ¥¸øÒ»¸ö±í¸ÄÃû×Ö
+-- å¦‚ä½•å»ç»™ä¸€ä¸ªè¡¨æ”¹åå­—
 ALTER TABLE sss RENAME TO sss_new;
 rename sss to sss_new;
 
@@ -534,21 +533,21 @@ rename sss to sss_new;
 
 
 **** DROP
-: drop table ±íÃû;
-: drop table ±íÃû cascade constraints;  -- ×¢Òâ£¬Ö»ÊÇÉ¾³ıÔ¼Êø
+: drop table è¡¨å;
+: drop table è¡¨å cascade constraints;  -- æ³¨æ„ï¼Œåªæ˜¯åˆ é™¤çº¦æŸ
 
-Èç¹û±í´æÔÚ±»Íâ¼üÒıÓÃµÄÇé¿öµÄ»°£¬ÒªÉ¾³ıÓĞÒ»ÏÂ¼¸ÖÖ·½Ê½£º
-1. É¾³ıÍâ¼üÒıÓÃµÄ±í
-2. É¾³ıÍâ¼üÒıÓÃ±íÉÏ´æÔÚµÄÍâ¼üÔ¼Êø
-3. ÔÚÉ¾³ıµÄ¹ı³ÌÖĞ¼ÓÉÏ¹Ø¼ü×Ö cascade constraints.
+å¦‚æœè¡¨å­˜åœ¨è¢«å¤–é”®å¼•ç”¨çš„æƒ…å†µçš„è¯ï¼Œè¦åˆ é™¤æœ‰ä¸€ä¸‹å‡ ç§æ–¹å¼ï¼š
+1. åˆ é™¤å¤–é”®å¼•ç”¨çš„è¡¨
+2. åˆ é™¤å¤–é”®å¼•ç”¨è¡¨ä¸Šå­˜åœ¨çš„å¤–é”®çº¦æŸ
+3. åœ¨åˆ é™¤çš„è¿‡ç¨‹ä¸­åŠ ä¸Šå…³é”®å­— cascade constraints.
 
-*** DML£¨Data Definition Language£©
-¸ÅÄî£¬ÔöÉ¾¸Ä²é£¬ÓÖ½Ğ CRUD(Create/Read/Update/Delete)
+*** DMLï¼ˆData Definition Languageï¼‰
+æ¦‚å¿µï¼Œå¢åˆ æ”¹æŸ¥ï¼Œåˆå« CRUD(Create/Read/Update/Delete)
 
-**** ²éÑ¯(select)
-»ù±¾Óï·¨:
+**** æŸ¥è¯¢(select)
+åŸºæœ¬è¯­æ³•:
 #+BEGIN_SRC sql
-select distinct ×Ö¶ÎÃû|±í´ïÊ½ from [schema.]±íÃû
+select distinct å­—æ®µå|è¡¨è¾¾å¼ from [schema.]è¡¨å
   where clause
   order by clause
   group by clause
@@ -556,18 +555,18 @@ select distinct ×Ö¶ÎÃû|±í´ïÊ½ from [schema.]±íÃû
 #+END_SRC
 
 
-ÓÃ·¨Ê¾Àı£º
+ç”¨æ³•ç¤ºä¾‹ï¼š
 #+BEGIN_SRC sql
--- »ù±¾µÄ²éÑ¯
-select * from scott.emp;   -- * ´ú±íËùÓĞµÄÁĞ£¬µ«ÔÚÉú²ú»·¾³ÖĞ²»½¨ÒéÊ¹ÓÃ¡£ÓĞÊ±ºò»áºÜµÍĞ§¡£¶øÇÒ²»±ãÓÚ½âñîºÏ¡£
+-- åŸºæœ¬çš„æŸ¥è¯¢
+select * from scott.emp;   -- * ä»£è¡¨æ‰€æœ‰çš„åˆ—ï¼Œä½†åœ¨ç”Ÿäº§ç¯å¢ƒä¸­ä¸å»ºè®®ä½¿ç”¨ã€‚æœ‰æ—¶å€™ä¼šå¾ˆä½æ•ˆã€‚è€Œä¸”ä¸ä¾¿äºè§£è€¦åˆã€‚
 
--- »ù±¾µÄÌõ¼ş
+-- åŸºæœ¬çš„æ¡ä»¶
 select * from scott.emp where empno < 7802;
 
--- ÅÅĞò
+-- æ’åº
 select * from scott.emp where empno < 7902 order by empno;
-select * from scott.emp where empno < 7902 order by empno desc;   -- ½µĞò
-select * from scott.emp where empno < 7902 order by job, empno;   -- ×éºÏ¶à¸öÅÅĞòµÄÁĞ
+select * from scott.emp where empno < 7902 order by empno desc;   -- é™åº
+select * from scott.emp where empno < 7902 order by job, empno;   -- ç»„åˆå¤šä¸ªæ’åºçš„åˆ—
 
 -- distinct
 select distinct job from emp;
@@ -579,52 +578,52 @@ select to_char(empno) as empnochar from emp where sal > 5000;
 #+END_SRC
 
 
-±íµÄÁ¬½Ó
+è¡¨çš„è¿æ¥
 #+BEGIN_SRC sql
--- cross join(²æ³Ë£¬µÑ¿¨¶û»ı)¡£Õ¹Ê¾ËùÓĞµÄ¼ÇÂ¼µÄ×éºÏ¡£ÊÇÄÚÁ¬½ÓºÍÍâÁ¬½ÓµÄ»ù´¡¡£
+-- cross join(å‰ä¹˜ï¼Œç¬›å¡å°”ç§¯)ã€‚å±•ç¤ºæ‰€æœ‰çš„è®°å½•çš„ç»„åˆã€‚æ˜¯å†…è¿æ¥å’Œå¤–è¿æ¥çš„åŸºç¡€ã€‚
 select * from a cross join b;
 select * from a, b;
 
--- inner join(ÄÚÁ¬½Ó)
+-- inner join(å†…è¿æ¥)
 select * from a inner join b on a.deptno = b.deptno;
 select a.ename, b.deptname from a inner join b using (deptno);
-select a.ename, b.deptname from a,b where b.deptno=a.deptno; -- oracle ÖĞµÄĞ´·¨
+select a.ename, b.deptname from a,b where b.deptno=a.deptno; -- oracle ä¸­çš„å†™æ³•
 
--- outer join(ÍâÁ¬½Ó)
+-- outer join(å¤–è¿æ¥)
 select * from a left join b on a.deptno = b.deptno;
 select * from a left outer join b using (deptno);
 select * from a right outer join b on a.deptno = b.deptno;
-select * from a full join b on a.deptno = b.deptno;   -- È«Á¬½Ó
-select * from a, b where a.deptno=b.deptno(+);        -- ×óÍâÁ¬
-select * from a, b where a.deptno(+)=b.deptno;        -- ÓÒÁ¬½Ó
+select * from a full join b on a.deptno = b.deptno;   -- å…¨è¿æ¥
+select * from a, b where a.deptno=b.deptno(+);        -- å·¦å¤–è¿
+select * from a, b where a.deptno(+)=b.deptno;        -- å³è¿æ¥
 
 #+END_SRC
 
-***** TODO ½×¶ÎĞÔ×÷Òµ£¨scottÓÃ»§ÏÂµÄ±í£©
-1. ²éÑ¯Ã¿¸ö²¿ÃÅÏÂÓĞ¶àÉÙÔ±¹¤
-2. ²éÑ¯³ıÈ¥ salesman ËùÓĞÆ½¾ù¹¤×Ê³¬¹ı 1500 µÄ²¿ÃÅ
-3. ²éÑ¯ÔÚ new york ¹¤×÷µÄËùÓĞÔ±¹¤µÄĞÕÃû£¬²¿ÃÅÃû³ÆºÍ¹¤×ÊĞÅÏ¢
-4. ²éÑ¯ĞÕÃûÎª King µÄÔ±¹¤µÄ±àºÅ£¬Ãû³Æ¸ú²¿ÃÅ
-5. ²éÑ¯¸÷ÖÖ¹¤×÷µÄ×îµÍ¹¤×Ê
-6. ²éÑ¯¹¤Áä´óÓÚ10ÄêµÄËùÓĞÔ±¹¤ĞÅÏ¢
-7. ²éÑ¯Ã¿¸ö²¿ÃÅÔ±¹¤ÊıÁ¿£¬Æ½¾ù¹¤×ÊºÍÆ½¾ù¹¤×÷ÄêÏŞ
-8. Í³¼Æ¸÷²¿ÃÅÃ¿¸ö¹¤ÖÖµÄÈËÊı£¬Æ½¾ù¹¤×Ê¡£
-9. ²éÑ¯´ÓÊÂÍ¬Ò»ÖÖ¹¤×÷µ«²»ÊôÓÚÍ¬Ò»²¿ÃÅµÄÔ±¹¤ĞÅÏ¢¡£
-10. ²éÑ¯ËùÓĞÔ±¹¤¹¤×Ê¶¼´óÓÚ1000µÄ²¿ÃÅµÄĞÅÏ¢¼°Ô±¹¤ĞÅÏ¢
-11. ²éÑ¯ÈëÖ°ÈÕÆÚÔçÓÚÆäÖ±½ÓÉÏ¼¶µÄËùÓĞÔ±¹¤ĞÅÏ¢¡£
-12. ÁĞ³ö¹ÍÔ±ÖĞ£¨³ıÈ¥mgrÎª¿ÕµÄÈË)¹¤×ÊµÚ¶ş¸ßµÄÈË¡£
-13. ÁĞ³ö1981ÄêÀ´¹«Ë¾ËùÓĞÔ±¹¤µÄ×ÜÊÕÈë£¨°üÀ¨salºÍcomm£©
+***** TODO é˜¶æ®µæ€§ä½œä¸šï¼ˆscottç”¨æˆ·ä¸‹çš„è¡¨ï¼‰
+1. æŸ¥è¯¢æ¯ä¸ªéƒ¨é—¨ä¸‹æœ‰å¤šå°‘å‘˜å·¥
+2. æŸ¥è¯¢é™¤å» salesman æ‰€æœ‰å¹³å‡å·¥èµ„è¶…è¿‡ 1500 çš„éƒ¨é—¨
+3. æŸ¥è¯¢åœ¨ new york å·¥ä½œçš„æ‰€æœ‰å‘˜å·¥çš„å§“åï¼Œéƒ¨é—¨åç§°å’Œå·¥èµ„ä¿¡æ¯
+4. æŸ¥è¯¢å§“åä¸º King çš„å‘˜å·¥çš„ç¼–å·ï¼Œåç§°è·Ÿéƒ¨é—¨
+5. æŸ¥è¯¢å„ç§å·¥ä½œçš„æœ€ä½å·¥èµ„
+6. æŸ¥è¯¢å·¥é¾„å¤§äº10å¹´çš„æ‰€æœ‰å‘˜å·¥ä¿¡æ¯
+7. æŸ¥è¯¢æ¯ä¸ªéƒ¨é—¨å‘˜å·¥æ•°é‡ï¼Œå¹³å‡å·¥èµ„å’Œå¹³å‡å·¥ä½œå¹´é™
+8. ç»Ÿè®¡å„éƒ¨é—¨æ¯ä¸ªå·¥ç§çš„äººæ•°ï¼Œå¹³å‡å·¥èµ„ã€‚
+9. æŸ¥è¯¢ä»äº‹åŒä¸€ç§å·¥ä½œä½†ä¸å±äºåŒä¸€éƒ¨é—¨çš„å‘˜å·¥ä¿¡æ¯ã€‚
+10. æŸ¥è¯¢æ‰€æœ‰å‘˜å·¥å·¥èµ„éƒ½å¤§äº1000çš„éƒ¨é—¨çš„ä¿¡æ¯åŠå‘˜å·¥ä¿¡æ¯
+11. æŸ¥è¯¢å…¥èŒæ—¥æœŸæ—©äºå…¶ç›´æ¥ä¸Šçº§çš„æ‰€æœ‰å‘˜å·¥ä¿¡æ¯ã€‚
+12. åˆ—å‡ºé›‡å‘˜ä¸­ï¼ˆé™¤å»mgrä¸ºç©ºçš„äºº)å·¥èµ„ç¬¬äºŒé«˜çš„äººã€‚
+13. åˆ—å‡º1981å¹´æ¥å…¬å¸æ‰€æœ‰å‘˜å·¥çš„æ€»æ”¶å…¥ï¼ˆåŒ…æ‹¬salå’Œcommï¼‰
 
 ***** Group By
-Ê¾Àı£º
+ç¤ºä¾‹ï¼š
 #+BEGIN_SRC sql
 
-select * from emp group by deptno;    -- ´íÎóµÄÓÃ·¨¡£ÒòÎªÓÃgroup byÖ®ºó£¬ĞèÒªÖ¸¶¨¸ú·Ö×éÏà¹ØµÄÁĞ¡¢×Ö¶Î¡£
+select * from emp group by deptno;    -- é”™è¯¯çš„ç”¨æ³•ã€‚å› ä¸ºç”¨group byä¹‹åï¼Œéœ€è¦æŒ‡å®šè·Ÿåˆ†ç»„ç›¸å…³çš„åˆ—ã€å­—æ®µã€‚
 
--- ²é¿´Ã¿Ò»×éµÄÊıÄ¿
-select deptno, count(*) from emp group by deptno;  -- ²é¿´Ã¿Ò»¸ö²¿ÃÅÓĞ¶àÉÙÈË
+-- æŸ¥çœ‹æ¯ä¸€ç»„çš„æ•°ç›®
+select deptno, count(*) from emp group by deptno;  -- æŸ¥çœ‹æ¯ä¸€ä¸ªéƒ¨é—¨æœ‰å¤šå°‘äºº
 
--- ²éÑ¯Ã¿¸ö²¿ÃÅÏÂÓĞ¶àÉÙÔ±¹¤
+-- æŸ¥è¯¢æ¯ä¸ªéƒ¨é—¨ä¸‹æœ‰å¤šå°‘å‘˜å·¥
 select d.dname, count(*) from dept d, emp e 
   where d.deptno = e.deptno group by d.dname;
 select d.dname,e.c 
@@ -633,98 +632,98 @@ select d.dname,e.c
  where d.deptno = e.deptno;
 
 
--- ·Ö×éµÄË³ĞòÊÇÕâÑùµÄ£º 
--- Ê×ÏÈ£¬where¹ıÂËÔ­Ê¼Êı¾İ£»
--- Æä´Î,ÒÀ¾İ group by ½øĞĞ·Ö×é£¬µÃµ½¸ú·Ö×éÊıÏàÍ¬µÄ¼ÇÂ¼ÊıÄ¿£»
--- ×îºó£¬ÓÃhaving¶ÔgroupbyÖ®ºó²úÉúµÄ½á¹ûÔÙ½øĞĞ¹ıÂË¡£
+-- åˆ†ç»„çš„é¡ºåºæ˜¯è¿™æ ·çš„ï¼š 
+-- é¦–å…ˆï¼Œwhereè¿‡æ»¤åŸå§‹æ•°æ®ï¼›
+-- å…¶æ¬¡,ä¾æ® group by è¿›è¡Œåˆ†ç»„ï¼Œå¾—åˆ°è·Ÿåˆ†ç»„æ•°ç›¸åŒçš„è®°å½•æ•°ç›®ï¼›
+-- æœ€åï¼Œç”¨havingå¯¹groupbyä¹‹åäº§ç”Ÿçš„ç»“æœå†è¿›è¡Œè¿‡æ»¤ã€‚
 select gno,
-    count(*) ÈËÊı,
-    max(yanzhi) ×îÃÀ,
-    min(yanzhi) ×îÓĞ²Å,
-    avg(yanzhi) Æ½¾ù,
-    sum(yanzhi) ×ÜºÍ
+    count(*) äººæ•°,
+    max(yanzhi) æœ€ç¾,
+    min(yanzhi) æœ€æœ‰æ‰,
+    avg(yanzhi) å¹³å‡,
+    sum(yanzhi) æ€»å’Œ
   from boysandgirls
-    where name <> '»Æ'
+    where name <> 'é»„'
     group by gno
     having sum(yanzhi)>400;
 
 select * from
   (select gno,
-      count(*) ÈËÊı,
-      max(yanzhi) ×îÃÀ,
-      min(yanzhi) ×îÓĞ²Å,
-      avg(yanzhi) Æ½¾ù,
-      sum(yanzhi) ×ÜºÍ
+      count(*) äººæ•°,
+      max(yanzhi) æœ€ç¾,
+      min(yanzhi) æœ€æœ‰æ‰,
+      avg(yanzhi) å¹³å‡,
+      sum(yanzhi) æ€»å’Œ
     from boysandgirls
-      where name <> '»Æ'
+      where name <> 'é»„'
       group by gno) a
-   where a.×ÜºÍ>400;
+   where a.æ€»å’Œ>400;
 
--- ·Ö×éÖ®ºóµÄ±íµÄÁ¬½Ó
+-- åˆ†ç»„ä¹‹åçš„è¡¨çš„è¿æ¥
 select * from
   groups a,
   (select gno,
-       count(*) ÈËÊı,
-       max(yanzhi) ×îÃÀ,
-       min(yanzhi) ×îÓĞ²Å,
-       avg(yanzhi) Æ½¾ù,
-       sum(yanzhi) ×ÜºÍ
+       count(*) äººæ•°,
+       max(yanzhi) æœ€ç¾,
+       min(yanzhi) æœ€æœ‰æ‰,
+       avg(yanzhi) å¹³å‡,
+       sum(yanzhi) æ€»å’Œ
      from boysandgirls
-       where name <> '»Æ'
+       where name <> 'é»„'
        group by gno
        having sum(yanzhi)>400) b
 where a.gno = b.gno;
 
--- ±íµÄÁ¬½ÓÖ®ºóÔÙ·Ö×é
+-- è¡¨çš„è¿æ¥ä¹‹åå†åˆ†ç»„
 select gname, sum(yanzhi) 
   from mates a, groups b 
-  where a.gno=b.gno and name<>'»ÆĞ¡²¨' 
+  where a.gno=b.gno and name<>'é»„å°æ³¢' 
   group by gname
   having sum(a.yanzhi)>350;
 
 
 #+End_src
 
-**** ²åÈë(insert)
-×î»ù±¾µÄÓï·¨
+**** æ’å…¥(insert)
+æœ€åŸºæœ¬çš„è¯­æ³•
 #+BEGIN_SRC sql
 insert into table_name [columns] values (value...);
 
--- Ê¾Àı±í
+-- ç¤ºä¾‹è¡¨
 create table demo (id number, name varchar2(20));
 
--- ×î¼òµ¥²åÈë
+-- æœ€ç®€å•æ’å…¥
 insert into demo values (1, 'haha');
 insert into demo (id, name) values (2, 'hehe');
 insert into demo (id) values (3);
 insert into demo (name, id) values ('heihei', 4);
 
 
--- ×¢Òâ£¬²åÈëÊ±£¬×îºÃÖ¸¶¨²åÈëµÄ×Ö¶Î¡£ÒòÎª¿ÉÒÔÌá¸ßĞ§ÂÊ£¬¿ÉÒÔ±ÜÃâ´íÎó¡£
-alter table demo add age number;      -- ¶Ô±í½øĞĞÀ©³ä
-insert into demo values (1, 'haha');  -- »á³ö´í£¬ÒòÎª¶àÁËÒ»ÁĞ£¬µ«ÊÇ²åÈëµÄÓï·¨Ã»±ä
-insert into demo (name, id) values ('heihei', 4);  -- Ã»ÓĞÎÊÌâ¡£
+-- æ³¨æ„ï¼Œæ’å…¥æ—¶ï¼Œæœ€å¥½æŒ‡å®šæ’å…¥çš„å­—æ®µã€‚å› ä¸ºå¯ä»¥æé«˜æ•ˆç‡ï¼Œå¯ä»¥é¿å…é”™è¯¯ã€‚
+alter table demo add age number;      -- å¯¹è¡¨è¿›è¡Œæ‰©å……
+insert into demo values (1, 'haha');  -- ä¼šå‡ºé”™ï¼Œå› ä¸ºå¤šäº†ä¸€åˆ—ï¼Œä½†æ˜¯æ’å…¥çš„è¯­æ³•æ²¡å˜
+insert into demo (name, id) values ('heihei', 4);  -- æ²¡æœ‰é—®é¢˜ã€‚
 
 
 
 
--- ´ÓÆäËûµÄ±íÖĞ¼ÓÔØÊı¾İ
+-- ä»å…¶ä»–çš„è¡¨ä¸­åŠ è½½æ•°æ®
 insert into table_name select xxx from yyy;
 
--- ¸´ÖÆ scott.dept ÖĞµÄdeptno>20µÄËùÓĞÊı¾İµ½Ö¸¶¨±í
-create table d as select * from scott.dept where 1=2;  -- °´ÕÕÖ®Ç°Ñ§µÄÓï·¨£¬¸´ÖÆ±íµÄ½á¹¹
+-- å¤åˆ¶ scott.dept ä¸­çš„deptno>20çš„æ‰€æœ‰æ•°æ®åˆ°æŒ‡å®šè¡¨
+create table d as select * from scott.dept where 1=2;  -- æŒ‰ç…§ä¹‹å‰å­¦çš„è¯­æ³•ï¼Œå¤åˆ¶è¡¨çš„ç»“æ„
 insert into dept select * from scott.dept where deptno>20;
 insert into dept (select * from scott.dept where deptno>20);
 
 
--- ´´½¨Ò»ÕÅ±í£¬Ö»ÓĞÒ»¸ö×Ö¶Î£¬ varchar2(20)
--- °Ñ scott.dept ÖĞËùÓĞ deptno > 20 µÄ²¿ÃÅµÄÃû³Æ²åÈëÆäÖĞ
-create table dept2 (dname varchar2(20));   -- ´´½¨±íµÄÓï¾ä
--- ÏÂÃæÈıÖÖÊÇµÈ¼ÛµÄ
+-- åˆ›å»ºä¸€å¼ è¡¨ï¼Œåªæœ‰ä¸€ä¸ªå­—æ®µï¼Œ varchar2(20)
+-- æŠŠ scott.dept ä¸­æ‰€æœ‰ deptno > 20 çš„éƒ¨é—¨çš„åç§°æ’å…¥å…¶ä¸­
+create table dept2 (dname varchar2(20));   -- åˆ›å»ºè¡¨çš„è¯­å¥
+-- ä¸‹é¢ä¸‰ç§æ˜¯ç­‰ä»·çš„
 insert into dept2 select dname from scott.dept where deptno > 20;
 insert into dept2 (dname) select dname from scott.dept where deptno > 20;
 insert into dept2 value select dname from scott.dept where deptno > 20;
--- ÏÂÃæÒ»ÖÖÊÇ´íÎóµÄ£¬ÒòÎªÔÚÖ¸¶¨×Ö¶ÎµÄÊ±ºò£¬²»ÄÜ¹»¸ú value ¹Ø¼ü×ÖÒ»ÆğÊ¹ÓÃ
+-- ä¸‹é¢ä¸€ç§æ˜¯é”™è¯¯çš„ï¼Œå› ä¸ºåœ¨æŒ‡å®šå­—æ®µçš„æ—¶å€™ï¼Œä¸èƒ½å¤Ÿè·Ÿ value å…³é”®å­—ä¸€èµ·ä½¿ç”¨
 insert into dept2 (dname) value select dname from scott.dept where deptno > 20;  ---
 
 
@@ -734,44 +733,44 @@ insert into dept2 (dname) value select dname from scott.dept where deptno > 20; 
 
 
 
-**** ¸üĞÂ(update)
+**** æ›´æ–°(update)
 #+BEGIN_SRC sql
--- »ù±¾Óï·¨
+-- åŸºæœ¬è¯­æ³•
 UPDATE table_name SET column=value[, column=value...] [WHERE condition]
 
--- ×¢Òâ£¬Ò»¶¨²»ÒªÈ±ÉÙÏàÓ¦µÄwhere£¬´ÖĞÄ´óÒâÊÇdba»òÕßÊı¾İ¿â²Ù×÷Ô±µÄÌìµĞ¡£
--- where Ìõ¼ş£¬¾¡¿ÉÄÜÊ¹ÓÃÖ÷¼ü£¬ÒòÎªÖ÷¼üÊÇÓÃÀ´±êÊ¶Î¨Ò»Ò»Ìõ¼ÇÂ¼µÄ¡£
-update dept set dname='ÏúÊÛ²¿' where deptno = 30;
+-- æ³¨æ„ï¼Œä¸€å®šä¸è¦ç¼ºå°‘ç›¸åº”çš„whereï¼Œç²—å¿ƒå¤§æ„æ˜¯dbaæˆ–è€…æ•°æ®åº“æ“ä½œå‘˜çš„å¤©æ•Œã€‚
+-- where æ¡ä»¶ï¼Œå°½å¯èƒ½ä½¿ç”¨ä¸»é”®ï¼Œå› ä¸ºä¸»é”®æ˜¯ç”¨æ¥æ ‡è¯†å”¯ä¸€ä¸€æ¡è®°å½•çš„ã€‚
+update dept set dname='é”€å”®éƒ¨' where deptno = 30;
 
 
 #+END_SRC
-**** É¾³ı(delete)
+**** åˆ é™¤(delete)
 #+BEGIN_SRC sql
--- Óï·¨
+-- è¯­æ³•
 delete from table_name [where condition]
 
-delete from dept;   -- É¾³ı±íÖĞËùÓĞ¼ÇÂ¼
-delete from dept where dname = 'SALES'; -- É¾³ı±íÖĞËùÓĞ SALES µÄ¼ÇÂ¼
+delete from dept;   -- åˆ é™¤è¡¨ä¸­æ‰€æœ‰è®°å½•
+delete from dept where dname = 'SALES'; -- åˆ é™¤è¡¨ä¸­æ‰€æœ‰ SALES çš„è®°å½•
 
--- truncate Óï·¨£¬½Ø¶ÏÊı¾İ£¬»áÇå¿Õ±íÖĞµÄËùÓĞÊı¾İ¡£
--- ²»ĞèÒªÌá½»ÊÂÎñ£¬Ò²²»ÄÜ¹»»Ø¹ö¡£ÒòÎª truncate ²»²úÉú»Ø¹ö¶Î£¬²»Ğ´ redolog
--- ËüÉ¾³ıµÄĞ§ÂÊÒª¸ßÓÚ delete from£¬µ«ÒòÎª²»ÄÜ»Ø¹ö£¬ËùÒÔÓ¦ÓÃÖĞÓ¦¸ÃÉ÷Ö®ÓÖÉ÷¡£
+-- truncate è¯­æ³•ï¼Œæˆªæ–­æ•°æ®ï¼Œä¼šæ¸…ç©ºè¡¨ä¸­çš„æ‰€æœ‰æ•°æ®ã€‚
+-- ä¸éœ€è¦æäº¤äº‹åŠ¡ï¼Œä¹Ÿä¸èƒ½å¤Ÿå›æ»šã€‚å› ä¸º truncate ä¸äº§ç”Ÿå›æ»šæ®µï¼Œä¸å†™ redolog
+-- å®ƒåˆ é™¤çš„æ•ˆç‡è¦é«˜äº delete fromï¼Œä½†å› ä¸ºä¸èƒ½å›æ»šï¼Œæ‰€ä»¥åº”ç”¨ä¸­åº”è¯¥æ…ä¹‹åˆæ…ã€‚
 truncate table table_name;
 
 #+END_SRC
 
 
 
-*** TCL£¨Transaction Control Language)
-¿ØÖÆÊı¾İµÄÊÂÎñ¡£ÊÂÎñ¾ÍÊÇ°ÑÊı¾İµ±×öÒ»¸öÍêÕûµÄ²Ù×÷µ¥Ôª£¬Ò»Æğ³É¹¦»òÕßÒ»ÆğÊ§°Ü¡£ÕâÑù²ÅÄÜ±£Ö¤Êı¾İµÄÒ»ÖÂĞÔ¡£
-- set transaction xxx ÅäÖÃÊÂÎñÊôĞÔ
-  : set transaction read only/write      -- ÉèÖÃÊÂÎñÊÇ·ñÖ»¶Á
-  : set transaction ISOLATION level read committed   -- ÉèÖÃÊÂÎñµÄ¸ôÀëÊôĞÔ
-- savepoint name ±£´æµã
-- rollback to [savepint] »Ø³·
-- commit Ìá½»
+*** TCLï¼ˆTransaction Control Language)
+æ§åˆ¶æ•°æ®çš„äº‹åŠ¡ã€‚äº‹åŠ¡å°±æ˜¯æŠŠæ•°æ®å½“åšä¸€ä¸ªå®Œæ•´çš„æ“ä½œå•å…ƒï¼Œä¸€èµ·æˆåŠŸæˆ–è€…ä¸€èµ·å¤±è´¥ã€‚è¿™æ ·æ‰èƒ½ä¿è¯æ•°æ®çš„ä¸€è‡´æ€§ã€‚
+- set transaction xxx é…ç½®äº‹åŠ¡å±æ€§
+  : set transaction read only/write      -- è®¾ç½®äº‹åŠ¡æ˜¯å¦åªè¯»
+  : set transaction ISOLATION level read committed   -- è®¾ç½®äº‹åŠ¡çš„éš”ç¦»å±æ€§
+- savepoint name ä¿å­˜ç‚¹
+- rollback to [savepint] å›æ’¤
+- commit æäº¤
 
-*** DCL£¨Data Control Language)
+*** DCLï¼ˆData Control Language)
 - grant
 - revoke
 
@@ -784,204 +783,204 @@ truncate table table_name;
 
 
 
-** Êı¾İÀàĞÍ
-*** ×Ö·ûÀàĞÍ
-**** char ÀàĞÍ(nchar)
-¹Ì¶¨³¤¶È£¬Ä¬ÈÏÊÇ1£¬×î´ó³¤¶ÈÊÇ2000¸ö×Ö½Ú¡£²»¹»µÄ³¤¶È£¬oracle »áÓÃ¿Õ¸ñ½øĞĞÌî³ä¡£
-: create table s1 (c char(2001));  -- ´íÎó£¬ÒòÎª2001³¬³öÁËÀàĞÍµÄ·¶Î§
-: create table s2 (c char);        -- Ä¬ÈÏcharµÄ³¤¶ÈÎª1.
-: insert into s2 values ('a');     -- ËüÊÇÕıÈ·µÄ¡£
-: insert into s2 values ('Äã');    -- ËüÊÇ´íÎóµÄ¡£ÁĞµÄÖµÌ«´ó£¬(Êµ¼ÊÖµ: 2, ×î´óÖµ: 1)
+** æ•°æ®ç±»å‹
+*** å­—ç¬¦ç±»å‹
+**** char ç±»å‹(nchar)
+å›ºå®šé•¿åº¦ï¼Œé»˜è®¤æ˜¯1ï¼Œæœ€å¤§é•¿åº¦æ˜¯2000ä¸ªå­—èŠ‚ã€‚ä¸å¤Ÿçš„é•¿åº¦ï¼Œoracle ä¼šç”¨ç©ºæ ¼è¿›è¡Œå¡«å……ã€‚
+: create table s1 (c char(2001));  -- é”™è¯¯ï¼Œå› ä¸º2001è¶…å‡ºäº†ç±»å‹çš„èŒƒå›´
+: create table s2 (c char);        -- é»˜è®¤charçš„é•¿åº¦ä¸º1.
+: insert into s2 values ('a');     -- å®ƒæ˜¯æ­£ç¡®çš„ã€‚
+: insert into s2 values ('ä½ ');    -- å®ƒæ˜¯é”™è¯¯çš„ã€‚åˆ—çš„å€¼å¤ªå¤§ï¼Œ(å®é™…å€¼: 2, æœ€å¤§å€¼: 1)
 
-**** varchar ÀàĞÍ
-ÊÇSQLµÄ±ê×¼ÀàĞÍ¡£
-²»½¨ÒéÊ¹ÓÃ£¬ÓÃ varchar2 ´úÌæ¡£ÒòÎª varchar2 ÓĞ¸ü¸ßµÄĞ§ÂÊºÍ¸üºÃµÄ¼æÈİĞÔ¡£
-**** varchar2 ÀàĞÍ(nvarchar2)
-¿É±ä³¤¶ÈµÄ¡£×î´ó³¤¶ÈÎª 4000¡£Ğ§ÂÊ²»¼°¹Ì¶¨³¤¶ÈµÄcharÀàĞÍ¡£Ó¢ÎÄÕ¼ÓÃÒ»¸ö×Ö½Ú£¬ÖĞÎÄÕ¼ÓÃ¶à×Ö½Ú£¬ËùÒÔ£¬ÖĞÎÄ¸úÖĞÎÄÕ¼ÓÃ¿Õ¼ä²»Ò»ÖÂ¡£
-nvarchar2, ÔÚ varchar2 »ù´¡ÉÏ¼ÓÈëÁË×Ö·û¼¯Ö§³Ö¡£
+**** varchar ç±»å‹
+æ˜¯SQLçš„æ ‡å‡†ç±»å‹ã€‚
+ä¸å»ºè®®ä½¿ç”¨ï¼Œç”¨ varchar2 ä»£æ›¿ã€‚å› ä¸º varchar2 æœ‰æ›´é«˜çš„æ•ˆç‡å’Œæ›´å¥½çš„å…¼å®¹æ€§ã€‚
+**** varchar2 ç±»å‹(nvarchar2)
+å¯å˜é•¿åº¦çš„ã€‚æœ€å¤§é•¿åº¦ä¸º 4000ã€‚æ•ˆç‡ä¸åŠå›ºå®šé•¿åº¦çš„charç±»å‹ã€‚è‹±æ–‡å ç”¨ä¸€ä¸ªå­—èŠ‚ï¼Œä¸­æ–‡å ç”¨å¤šå­—èŠ‚ï¼Œæ‰€ä»¥ï¼Œä¸­æ–‡è·Ÿä¸­æ–‡å ç”¨ç©ºé—´ä¸ä¸€è‡´ã€‚
+nvarchar2, åœ¨ varchar2 åŸºç¡€ä¸ŠåŠ å…¥äº†å­—ç¬¦é›†æ”¯æŒã€‚
 
-nvarchar2ÖĞ£¬³¤¶È±íÊ¾µÄÊÇ×Ö·û¸öÊı¡£
+nvarchar2ä¸­ï¼Œé•¿åº¦è¡¨ç¤ºçš„æ˜¯å­—ç¬¦ä¸ªæ•°ã€‚
 
 : create table demo (a char(100), b varchar2(100), c nvarchar2(100));
 : insert into demo values ('a', 'a', 'a');
-: insert into demo values ('Äã', 'Äã', 'Äã');
+: insert into demo values ('ä½ ', 'ä½ ', 'ä½ ');
 : select lengthb(a), lengthb(b), lengthb(c) from demo;
-: create table s4 (c varchar2(4 char));    -- char ÊÇ´ú±í×Ö·û¸öÊı£¬ÊÇÒ»¸öµ¥Î»·ûºÅ¡£Õâ¸öÓï¾ä´´½¨µÄ±í¸ñ£¬Ö»ÓĞÒ»¸ö×Ö¶Î£¬ ÊÇ varchar2 ÀàĞÍ£¬¿ÉÒÔÌî³ä 4 ¸ö×Ö·û£¨×¢Òâ£¬²»ÊÇ×Ö½Ú£©¡£
-: create table s4 (c varchar2(4 byte));    -- byte ÊÇ¸úÉÏÃæÓï¾äÒ»ÑùµÄµ¥Î»·ûºÅ£¬´ú±íµÄÊÇ×Ö½Ú¡£ÕâÊÇ varchar2 µÄÄ¬ÈÏµ¥Î»¡£Õâ¸öÓï¾ä´´½¨µÄ±í¸ñ£¬Ö»ÓĞÒ»¸ö×Ö¶Î£¬ÊÇ varchar2 ÀàĞÍ£¬¿ÉÒÔÌî³ä 4 ¸ö×Ö½Ú£¨×¢Òâ£¬²»ÊÇ×Ö·û£©¡£
+: create table s4 (c varchar2(4 char));    -- char æ˜¯ä»£è¡¨å­—ç¬¦ä¸ªæ•°ï¼Œæ˜¯ä¸€ä¸ªå•ä½ç¬¦å·ã€‚è¿™ä¸ªè¯­å¥åˆ›å»ºçš„è¡¨æ ¼ï¼Œåªæœ‰ä¸€ä¸ªå­—æ®µï¼Œ æ˜¯ varchar2 ç±»å‹ï¼Œå¯ä»¥å¡«å…… 4 ä¸ªå­—ç¬¦ï¼ˆæ³¨æ„ï¼Œä¸æ˜¯å­—èŠ‚ï¼‰ã€‚
+: create table s4 (c varchar2(4 byte));    -- byte æ˜¯è·Ÿä¸Šé¢è¯­å¥ä¸€æ ·çš„å•ä½ç¬¦å·ï¼Œä»£è¡¨çš„æ˜¯å­—èŠ‚ã€‚è¿™æ˜¯ varchar2 çš„é»˜è®¤å•ä½ã€‚è¿™ä¸ªè¯­å¥åˆ›å»ºçš„è¡¨æ ¼ï¼Œåªæœ‰ä¸€ä¸ªå­—æ®µï¼Œæ˜¯ varchar2 ç±»å‹ï¼Œå¯ä»¥å¡«å…… 4 ä¸ªå­—èŠ‚ï¼ˆæ³¨æ„ï¼Œä¸æ˜¯å­—ç¬¦ï¼‰ã€‚
 
-**** long ÀàĞÍ
-ÓÃÀ´´æ´¢´óÈİÁ¿Êı¾İµÄ£¬×î´óÊÇ 2GB¡£ÒÑÆúÓÃ£¬½¨ÒéÊ¹ÓÃ LOB ×Ö¶Î´úÌæ¡£
+**** long ç±»å‹
+ç”¨æ¥å­˜å‚¨å¤§å®¹é‡æ•°æ®çš„ï¼Œæœ€å¤§æ˜¯ 2GBã€‚å·²å¼ƒç”¨ï¼Œå»ºè®®ä½¿ç”¨ LOB å­—æ®µä»£æ›¿ã€‚
 
 
-*** Êı×ÖÀàĞÍ
-**** NUMBER ÀàĞÍ
-¶¨ÒåÓï·¨Îª£º
+*** æ•°å­—ç±»å‹
+**** NUMBER ç±»å‹
+å®šä¹‰è¯­æ³•ä¸ºï¼š
 : COLUMN number[(precision, scale)]
-Ä¬ÈÏµÄ³¤¶ÈÊÇ38¡£
+é»˜è®¤çš„é•¿åº¦æ˜¯38ã€‚
 
-Èç¹û²»´ø²ÎÊı£¬¾«¶ÈºÍĞ¡ÊıµÄÎ»ÊıÊÇ¸ù¾İÌî³äµÄÊı×Ö×Ô¶¯ÅĞ¶¨µÄ¡£
+å¦‚æœä¸å¸¦å‚æ•°ï¼Œç²¾åº¦å’Œå°æ•°çš„ä½æ•°æ˜¯æ ¹æ®å¡«å……çš„æ•°å­—è‡ªåŠ¨åˆ¤å®šçš„ã€‚
 : create table s5 (c number);
-Èç¹û scale Îª¿Õ£¬ÄÇÃ´Ä¬ÈÏ£¬ scale Îª 0¡£Ğ¡Êıµãºó±»½Ø¶ÏµÄÊıÎ»£¬²ÉÈ¡µÄÊÇËÄÉáÎåÈëÖÆ¡£
+å¦‚æœ scale ä¸ºç©ºï¼Œé‚£ä¹ˆé»˜è®¤ï¼Œ scale ä¸º 0ã€‚å°æ•°ç‚¹åè¢«æˆªæ–­çš„æ•°ä½ï¼Œé‡‡å–çš„æ˜¯å››èˆäº”å…¥åˆ¶ã€‚
 : create table s7 (c number(5));
-: insert into s7 values (9.2222);   -- ²åÈëµÄÊÇ 9
-: insert into s7 values (9.7777);   -- ²åÈëµÄÊÇ 10
-Èç¹û precision Îª¿Õ£¬ÄÇÃ´£¬È·¶¨Ğ¡ÊıµãÎ»ÊıÎª scale£¬precision ×Ô¶¯ÅĞ¶¨¡£
+: insert into s7 values (9.2222);   -- æ’å…¥çš„æ˜¯ 9
+: insert into s7 values (9.7777);   -- æ’å…¥çš„æ˜¯ 10
+å¦‚æœ precision ä¸ºç©ºï¼Œé‚£ä¹ˆï¼Œç¡®å®šå°æ•°ç‚¹ä½æ•°ä¸º scaleï¼Œprecision è‡ªåŠ¨åˆ¤å®šã€‚
 : create table s8 (c number(*, 2));
 : insert into s8 values (6.23236);
-Á½¸ö²ÎÊı¶¼¾ß±¸µÄÇé¿ö£º
+ä¸¤ä¸ªå‚æ•°éƒ½å…·å¤‡çš„æƒ…å†µï¼š
 : create table demo (a number(4, 2));
-: insert into demo values (987.1);  -- Öµ´óÓÚÎª´ËÁĞÖ¸¶¨µÄÔÊĞí¾«¶È
-: insert into demo values (7.101);  -- Êµ¼ÊÉÏ²åÈëµÄÊÇ 7.10
-Á½¸ö²ÎÊı£¬µÚÒ»¸ö´ú±í¾«¶È£¬µÚ¶ş¸ö´ú±íĞ¡ÊıÎ»Êı¡£
+: insert into demo values (987.1);  -- å€¼å¤§äºä¸ºæ­¤åˆ—æŒ‡å®šçš„å…è®¸ç²¾åº¦
+: insert into demo values (7.101);  -- å®é™…ä¸Šæ’å…¥çš„æ˜¯ 7.10
+ä¸¤ä¸ªå‚æ•°ï¼Œç¬¬ä¸€ä¸ªä»£è¡¨ç²¾åº¦ï¼Œç¬¬äºŒä¸ªä»£è¡¨å°æ•°ä½æ•°ã€‚
 
-»¹ÓĞÁ½¸ö×ÓÀàĞÍ int/float
+è¿˜æœ‰ä¸¤ä¸ªå­ç±»å‹ int/float
 : create table s9 (c int);
 : insert into s9 values (22.22);
 
-*** Ê±¼äÀàĞÍ
-**** DATE Êı¾İÀàĞÍ
-ÏÔÊ¾µÄÊÇÄêÔÂÈÕ¡£
+*** æ—¶é—´ç±»å‹
+**** DATE æ•°æ®ç±»å‹
+æ˜¾ç¤ºçš„æ˜¯å¹´æœˆæ—¥ã€‚
 #+BEGIN_SRC sql
--- ²é¿´µ±ÌìµÄÈÕÆÚ
+-- æŸ¥çœ‹å½“å¤©çš„æ—¥æœŸ
 select sysdate from dual;
 
--- ĞŞ¸Äµ±Ç°ÈÕÆÚÏÔÊ¾µÄ¸ñÊ½
+-- ä¿®æ”¹å½“å‰æ—¥æœŸæ˜¾ç¤ºçš„æ ¼å¼
 alter session set nls_date_format='yyyy.mm.dd';
 
--- Ó¦ÓÃÊ¾Àı
+-- åº”ç”¨ç¤ºä¾‹
 create table d1 (birth date);
 insert into d1 values (sysdate);
-insert into d1 values (sysdate - 1);             -- ¿ÉÒÔ½øĞĞ¼òµ¥ÔËËã£¬Ä¬ÈÏµ¥Î»ÊÇ¡°Ìì¡±
-insert into d1 values (to_date('20120701'));     -- ÓÃ to_date º¯Êı¶Ô×Ö·û´®½øĞĞ×ª»»¡£¿ÉÒÔ´øÁ½¸ö²ÎÊı£¬µÚÒ»¸öÊÇ±ØĞëµÄ¡£Èç¹ûµÚ¶ş¸ö²ÎÊı±»ºöÂÔ£¬ÄÇÃ´ oracle »á¸ù¾İ yyyy/mm/dd µÄË³Ğò³¢ÊÔ¶ÔÈÕÆÚ½øĞĞ¸ñÊ½»¯¡£
+insert into d1 values (sysdate - 1);             -- å¯ä»¥è¿›è¡Œç®€å•è¿ç®—ï¼Œé»˜è®¤å•ä½æ˜¯â€œå¤©â€
+insert into d1 values (to_date('20120701'));     -- ç”¨ to_date å‡½æ•°å¯¹å­—ç¬¦ä¸²è¿›è¡Œè½¬æ¢ã€‚å¯ä»¥å¸¦ä¸¤ä¸ªå‚æ•°ï¼Œç¬¬ä¸€ä¸ªæ˜¯å¿…é¡»çš„ã€‚å¦‚æœç¬¬äºŒä¸ªå‚æ•°è¢«å¿½ç•¥ï¼Œé‚£ä¹ˆ oracle ä¼šæ ¹æ® yyyy/mm/dd çš„é¡ºåºå°è¯•å¯¹æ—¥æœŸè¿›è¡Œæ ¼å¼åŒ–ã€‚
 insert into d1 values (to_date('2012/07/01'));
 insert into d1 values (to_date('2012=07=01'));
 
-insert into d1 values (to_date('01.07.2012', 'dd.mm.yyyy'));   -- Á½¸ö²ÎÊı¶¼ÊÇ×Ö·û´®£¬ĞèÒªÓÃµ¥ÒıºÅÒıÆğÀ´¡£
+insert into d1 values (to_date('01.07.2012', 'dd.mm.yyyy'));   -- ä¸¤ä¸ªå‚æ•°éƒ½æ˜¯å­—ç¬¦ä¸²ï¼Œéœ€è¦ç”¨å•å¼•å·å¼•èµ·æ¥ã€‚
 
 create table s1 values (birth varchar2(20));
-insert into s1 values (to_char(sysdate, 'yyyy-mm-dd'));        -- to_char ÊÇ°ÑÆäËûµÄÀàĞÍ×ª»»Îª char ÀàĞÍ
+insert into s1 values (to_char(sysdate, 'yyyy-mm-dd'));        -- to_char æ˜¯æŠŠå…¶ä»–çš„ç±»å‹è½¬æ¢ä¸º char ç±»å‹
 
 
 
 #+END_SRC
 
-**** TIMESTAMP Êı¾İÀàĞÍ
+**** TIMESTAMP æ•°æ®ç±»å‹
 
 #+BEGIN_SRC sql
 
--- ·µ»ØµÄÊÇ timestamp with timezone ÀàĞÍ£¬°üº¬ÄêÔÂÈÕÊ±·ÖÃëÎ¢ÃîºÁÃë£¬ÉÏÎçÏÂÎç£¬Ê±Çø
--- ÔÚÒ»°ãÒµÎñÏµÍ³ÖĞ£¬Ê±¼ä»ù±¾ÉÏÓÃµÄ¶¼ÊÇ timestamp ÀàĞÍ
--- ¿ÉÒÔÓÃ nls_timestamp_format ¶¨ÖÆÏÔÊ¾·½Ê½
+-- è¿”å›çš„æ˜¯ timestamp with timezone ç±»å‹ï¼ŒåŒ…å«å¹´æœˆæ—¥æ—¶åˆ†ç§’å¾®å¦™æ¯«ç§’ï¼Œä¸Šåˆä¸‹åˆï¼Œæ—¶åŒº
+-- åœ¨ä¸€èˆ¬ä¸šåŠ¡ç³»ç»Ÿä¸­ï¼Œæ—¶é—´åŸºæœ¬ä¸Šç”¨çš„éƒ½æ˜¯ timestamp ç±»å‹
+-- å¯ä»¥ç”¨ nls_timestamp_format å®šåˆ¶æ˜¾ç¤ºæ–¹å¼
 select systimestamp from dual;;
 
 #+END_SRC
 
 
-*** RAW ÀàĞÍ
-Ö÷ÒªÓÃÀ´´¦Àí¶ş½øÖÆµÄ¡£
+*** RAW ç±»å‹
+ä¸»è¦ç”¨æ¥å¤„ç†äºŒè¿›åˆ¶çš„ã€‚
 
-·ÖÎª
+åˆ†ä¸º
 **** RAW
-Ä¬ÈÏÕ¼ÓÃ¿Õ¼äÎª 2kb
+é»˜è®¤å ç”¨ç©ºé—´ä¸º 2kb
 
 **** Long RAW
-²»½¨ÒéÊ¹ÓÃ£¬¸ú long ÀàĞÍÓĞÏàÍ¬µÄÈ±µã¡£
+ä¸å»ºè®®ä½¿ç”¨ï¼Œè·Ÿ long ç±»å‹æœ‰ç›¸åŒçš„ç¼ºç‚¹ã€‚
 
-*** LOBÀàĞÍ(large Object)
-**** CLOB ÀàĞÍ
-ÊÇ´æ´¢×Ö·ûµÄ´ó¶ÔÏóÀàĞÍ¡£
-: create table lobdemo1 (c clob);  -- ´´½¨Ò»¸ö¾ß±¸ blob ×Ö¶ÎµÄ±í
+*** LOBç±»å‹(large Object)
+**** CLOB ç±»å‹
+æ˜¯å­˜å‚¨å­—ç¬¦çš„å¤§å¯¹è±¡ç±»å‹ã€‚
+: create table lobdemo1 (c clob);  -- åˆ›å»ºä¸€ä¸ªå…·å¤‡ blob å­—æ®µçš„è¡¨
 : insert into lobdemo1 values ('ssss');
 : insert into lobdemo1 values (22222222222222222);
 : insert into lobdemo1 values (null);
-: insert into lobdemo1 values (empty_clob());   -- ²åÈëµÄ²»ÊÇ¿ÕÖµ
+: insert into lobdemo1 values (empty_clob());   -- æ’å…¥çš„ä¸æ˜¯ç©ºå€¼
 
-**** BLOB ÀàĞÍ
-ÊÇ´æ´¢¶ş½øÖÆÊı¾İµÄ´ó¶ÔÏóÀàĞÍ¡£Ö÷ÒªµÄÓÃ´¦ÊÇ´æ´¢Í¼ĞÎ£¬ÒôÆµ£¬ÊÓÆµµÈ¡£
+**** BLOB ç±»å‹
+æ˜¯å­˜å‚¨äºŒè¿›åˆ¶æ•°æ®çš„å¤§å¯¹è±¡ç±»å‹ã€‚ä¸»è¦çš„ç”¨å¤„æ˜¯å­˜å‚¨å›¾å½¢ï¼ŒéŸ³é¢‘ï¼Œè§†é¢‘ç­‰ã€‚
 
-oracle Ìá¹©ÁËdbms_lob °ü£¬¶Ô lob ×Ö¶Î½øĞĞ²Ù×÷¡£
+oracle æä¾›äº†dbms_lob åŒ…ï¼Œå¯¹ lob å­—æ®µè¿›è¡Œæ“ä½œã€‚
 
-**** BFILE ÀàĞÍ
-Ò²ÊÇ´æ´¢¶ş½øÖÆ¡£ÊÇÒÔÍâ²¿ÎÄ¼şµÄĞÎÊ½½øĞĞ´æ´¢µÄ¡£
+**** BFILE ç±»å‹
+ä¹Ÿæ˜¯å­˜å‚¨äºŒè¿›åˆ¶ã€‚æ˜¯ä»¥å¤–éƒ¨æ–‡ä»¶çš„å½¢å¼è¿›è¡Œå­˜å‚¨çš„ã€‚
 
-**** XMLType ÀàĞÍ
-Ö÷ÒªÊÇÎªÁË´¦Àí xml ÎÄµµµÄ¡£
+**** XMLType ç±»å‹
+ä¸»è¦æ˜¯ä¸ºäº†å¤„ç† xml æ–‡æ¡£çš„ã€‚
 
 
 *** ROWID/ROWNUM
 **** rowid
-rowid ÊÇ oracle ÖĞµÄÎ±ÁĞ¡£¿ÉÒÔÍ¨¹ıÏÂÃæÓï¾äÏÔÊ¾:
+rowid æ˜¯ oracle ä¸­çš„ä¼ªåˆ—ã€‚å¯ä»¥é€šè¿‡ä¸‹é¢è¯­å¥æ˜¾ç¤º:
 : select d.rowid, d.* from dept d
-ËüÊÇÎ¨Ò»µÄ£¬²»¿É±äµÄ£¬¹Ì¶¨³¤¶ÈµÄ¡£
+å®ƒæ˜¯å”¯ä¸€çš„ï¼Œä¸å¯å˜çš„ï¼Œå›ºå®šé•¿åº¦çš„ã€‚
 
-ËüÊÇÊı¾İ´æ´¢ÎïÀíµØÖ·µÄÒ»ÖÖÓ³Éä¡£Ò»¹²ÓĞ18Î»£¬Ç°6Î»±íÊ¾¶ÔÏóid£¬ºó3Î»±íÊ¾fno£¬ºó6Î»±íÊ¾¿é±àºÅ£¬×îºó3Î»±íÊ¾ĞĞ±àºÅ¡£
-ËùÒÔ£¬Í¨¹ırowid¿ÉÒÔ×î¿ìËÙ¶ÈµØ¶¨Î»µ½Êı¾İËùÔÚµÄÎ»ÖÃ¡£
+å®ƒæ˜¯æ•°æ®å­˜å‚¨ç‰©ç†åœ°å€çš„ä¸€ç§æ˜ å°„ã€‚ä¸€å…±æœ‰18ä½ï¼Œå‰6ä½è¡¨ç¤ºå¯¹è±¡idï¼Œå3ä½è¡¨ç¤ºfnoï¼Œå6ä½è¡¨ç¤ºå—ç¼–å·ï¼Œæœ€å3ä½è¡¨ç¤ºè¡Œç¼–å·ã€‚
+æ‰€ä»¥ï¼Œé€šè¿‡rowidå¯ä»¥æœ€å¿«é€Ÿåº¦åœ°å®šä½åˆ°æ•°æ®æ‰€åœ¨çš„ä½ç½®ã€‚
 
-rowid ÊÇ oracle ÌØÓĞµÄ¡£
+rowid æ˜¯ oracle ç‰¹æœ‰çš„ã€‚
 
-²»½¨ÒéÊ¹ÓÃ rowid ×÷Îª±íµÄÖ÷¼ü¡£Ç¨ÒÆµÄĞèÇó£¬ÓĞ¸Ä±äµÄ·çÏÕ¡£
+ä¸å»ºè®®ä½¿ç”¨ rowid ä½œä¸ºè¡¨çš„ä¸»é”®ã€‚è¿ç§»çš„éœ€æ±‚ï¼Œæœ‰æ”¹å˜çš„é£é™©ã€‚
 
 
 
 **** rownum
-ÁĞ³öÃ¿Ò»ĞĞÊı¾İµÄĞĞÊı£¬´Ó1¿ªÊ¼£¬×ÔÈ»Ôö³¤¡£
+åˆ—å‡ºæ¯ä¸€è¡Œæ•°æ®çš„è¡Œæ•°ï¼Œä»1å¼€å§‹ï¼Œè‡ªç„¶å¢é•¿ã€‚
 
 #+BEGIN_SRC sql
--- »ù±¾ÓÃ·¨
+-- åŸºæœ¬ç”¨æ³•
 select rownum, d.* from dept;
-select rownum, d.* from dept d where rownum < 3;     -- ÏÔÊ¾Ç°Á½Ìõ
-select * from (select rownum rn, d.* from dept d) t where t.rn = 3;   -- Ö»ÏÔÊ¾µÚÈıÌõ
+select rownum, d.* from dept d where rownum < 3;     -- æ˜¾ç¤ºå‰ä¸¤æ¡
+select * from (select rownum rn, d.* from dept d) t where t.rn = 3;   -- åªæ˜¾ç¤ºç¬¬ä¸‰æ¡
 
-select * from (select * from emp order by sal desc) where rownum<=3;  -- ÏÔÊ¾ emp ±íÖĞ¹¤×ÊÇ°ÈıÎ»µÄ¹ÍÔ±ĞÅÏ¢¡£
+select * from (select * from emp order by sal desc) where rownum<=3;  -- æ˜¾ç¤º emp è¡¨ä¸­å·¥èµ„å‰ä¸‰ä½çš„é›‡å‘˜ä¿¡æ¯ã€‚
 
 
 #+END_SRC
 
 
 *** NULL
-ËüÊÇ Oracle ÖĞ·Ç³£ÌØÊâµÄÒ»ÖÖÀàĞÍ¡£Ëü±íÊ¾²»È·¶¨£¬±íÊ¾Ã»ÓĞÖµ¡£²¢ÇÒËüÄÜ×ª»¯³ÉËùÓĞµÄÀàĞÍ¡£
-ÏòÊı¾İ¿âÖĞ²åÈë¿Õ×Ö·û´®Ê±£¬oracle »á°ÑËü×Ô¶¯×ª»¯Îª null ÀàĞÍ¡£ËùÒÔ£¬ÔÚ²éÑ¯¿Õ×Ö·ûµÄÊ±ºò£º
+å®ƒæ˜¯ Oracle ä¸­éå¸¸ç‰¹æ®Šçš„ä¸€ç§ç±»å‹ã€‚å®ƒè¡¨ç¤ºä¸ç¡®å®šï¼Œè¡¨ç¤ºæ²¡æœ‰å€¼ã€‚å¹¶ä¸”å®ƒèƒ½è½¬åŒ–æˆæ‰€æœ‰çš„ç±»å‹ã€‚
+å‘æ•°æ®åº“ä¸­æ’å…¥ç©ºå­—ç¬¦ä¸²æ—¶ï¼Œoracle ä¼šæŠŠå®ƒè‡ªåŠ¨è½¬åŒ–ä¸º null ç±»å‹ã€‚æ‰€ä»¥ï¼Œåœ¨æŸ¥è¯¢ç©ºå­—ç¬¦çš„æ—¶å€™ï¼š
 : select * from n3 where s = '';
-ÉÏÃæµÄÓï¾äÊÇ·Ç·¨£¬²»ºÏÊÊµÄ¡£Ó¦¸ÃÕâÑù²é£º
+ä¸Šé¢çš„è¯­å¥æ˜¯éæ³•ï¼Œä¸åˆé€‚çš„ã€‚åº”è¯¥è¿™æ ·æŸ¥ï¼š
 : select * from n3 where s is null;
 : select * from n3 where s is not null;
-´´½¨±íµÄÊ±ºò£¬ÎªÁËÔ¼Êø²åÈëµÄÊı¾İ²»ÄÜÎª¿Õ£¬Ó¦¸ÃÔÚ×Ö¶ÎµÄºóÃæĞ´ÉÏ not null Ô¼Êø¡£
+åˆ›å»ºè¡¨çš„æ—¶å€™ï¼Œä¸ºäº†çº¦æŸæ’å…¥çš„æ•°æ®ä¸èƒ½ä¸ºç©ºï¼Œåº”è¯¥åœ¨å­—æ®µçš„åé¢å†™ä¸Š not null çº¦æŸã€‚
 : create table n5 (s varchar2(20) not null);
-¸ú null ×öÈÎºÎµÄÔËËã£¬½á¹ûÈÔÈ»ÊÇ null.
+è·Ÿ null åšä»»ä½•çš„è¿ç®—ï¼Œç»“æœä»ç„¶æ˜¯ null.
 : select null + '' from dual;
 
 
 
-** ÔËËã·û
-**** ËãÊõÔËËã·û
-¼Ó/¼õ/³Ë/³ı
-**** Á¬½ÓÔËËã·û
-ÊÇÓÃÀ´Á¬½Ó×Ö·û´®µÄ¡£¸újavaÖĞµÄ + ÊÇÒ»ÖÂµÄ¡£
-: select 'abc' || ' bcd ' as Á¬½ÓºóµÄ½á¹û from dual;
-: select d.dname || ' ²¿ÃÅ' from dept d;
+** è¿ç®—ç¬¦
+**** ç®—æœ¯è¿ç®—ç¬¦
+åŠ /å‡/ä¹˜/é™¤
+**** è¿æ¥è¿ç®—ç¬¦
+æ˜¯ç”¨æ¥è¿æ¥å­—ç¬¦ä¸²çš„ã€‚è·Ÿjavaä¸­çš„ + æ˜¯ä¸€è‡´çš„ã€‚
+: select 'abc' || ' bcd ' as è¿æ¥åçš„ç»“æœ from dual;
+: select d.dname || ' éƒ¨é—¨' from dept d;
 
-**** ¹ØÏµÔËËã·û
-¼û¿Î±¾
-**** ±È½ÏÔËËã·û
+**** å…³ç³»è¿ç®—ç¬¦
+è§è¯¾æœ¬
+**** æ¯”è¾ƒè¿ç®—ç¬¦
 IS NULL / Like / Between / In / Exsist.
 #+BEGIN_SRC sql
 
 
--- ÅĞ¶Ï null Öµ
+-- åˆ¤æ–­ null å€¼
 select * from n5 where s is null;
 select * from n5 where s is not null;
 
--- like Ä£ºı²éÑ¯¡£É÷ÓÃ£¬ÓĞ¿ÉÄÜ»áµ¼ÖÂÈ«±íÉ¨Ãè£¬Ğ§ÂÊµÍ¡£
+-- like æ¨¡ç³ŠæŸ¥è¯¢ã€‚æ…ç”¨ï¼Œæœ‰å¯èƒ½ä¼šå¯¼è‡´å…¨è¡¨æ‰«æï¼Œæ•ˆç‡ä½ã€‚
 select username from dba_users where username like 'VI_';
 select username from dba_users where username like 'SC%';
 select username from dba_users where username like '%SC%';
 
--- in£¬ÊÇ where x = a or x = b or x = c µÄÒ»ÖÖËõĞ´¡£ÏÂÃæÁ½ÌõÊÇµÈ¼ÛµÄ¡£
+-- inï¼Œæ˜¯ where x = a or x = b or x = c çš„ä¸€ç§ç¼©å†™ã€‚ä¸‹é¢ä¸¤æ¡æ˜¯ç­‰ä»·çš„ã€‚
 select * from emp where empno in (700, 800, 900);
 select * from emp where empno = 700 or empno = 800 or empno = 900;
--- in ºóÃæ¸úµÄ²»Ò»¶¨ÊÇ¶ººÅ·Ö¸ôµÄµ¥Ïî£¬Ò²¿ÉÄÜÊÇÒ»¸öÍêÕûµÄ²éÑ¯Óï¾ä¡£
--- ÏÂÃæÁ½Ìõ½á¹ûÊÇÒ»ÖÂµÄ
--- ÕâÖÖ in É÷ÓÃ
+-- in åé¢è·Ÿçš„ä¸ä¸€å®šæ˜¯é€—å·åˆ†éš”çš„å•é¡¹ï¼Œä¹Ÿå¯èƒ½æ˜¯ä¸€ä¸ªå®Œæ•´çš„æŸ¥è¯¢è¯­å¥ã€‚
+-- ä¸‹é¢ä¸¤æ¡ç»“æœæ˜¯ä¸€è‡´çš„
+-- è¿™ç§ in æ…ç”¨
 select * from emp where deptno in (select deptno from dept where dname = 'SALES');
 select a.* from emp a,dept d where a.deptno =d.deptno and d.dname='SALES';
 
@@ -991,18 +990,18 @@ select * from emp where empno between 7800 and 9000;
 
 #+END_SRC
 
-**** Âß¼­ÔËËã·û
+**** é€»è¾‘è¿ç®—ç¬¦
 and / or / not
 
-[[http://www.cnblogs.com/nick-huang/p/4027038.html][not µÄÓÅÏÈ¼¶ > and µÄÓÅÏÈ¼¶ > or µÄÓÅÏÈ¼¶]]
+[[http://www.cnblogs.com/nick-huang/p/4027038.html][not çš„ä¼˜å…ˆçº§ > and çš„ä¼˜å…ˆçº§ > or çš„ä¼˜å…ˆçº§]]
 
-**** ¼¯ºÏ²Ù×÷·û
+**** é›†åˆæ“ä½œç¬¦
 Union/UnionAll/Intersect/Minus
 #+BEGIN_SRC sql
 
 create table depd as select * from dept where rownum < 2;
-insert into depd values (99, 'ÍâÂô²¿', 'Öéº£');
-insert into depd values (98, 'Ğ¡³Ô²¿', '¶·ÃÅ');
+insert into depd values (99, 'å¤–å–éƒ¨', 'ç æµ·');
+insert into depd values (98, 'å°åƒéƒ¨', 'æ–—é—¨');
 
 select * from depd
 union
@@ -1027,102 +1026,102 @@ select * from dept;
 
 
 
-** º¯Êı
-*** ÊıÖµº¯Êı
-- abs Çó¾ø¶ÔÖµ
+** å‡½æ•°
+*** æ•°å€¼å‡½æ•°
+- abs æ±‚ç»å¯¹å€¼
   : select abs(-22) from dual;
-- round ËÄÉáÎåÈë
+- round å››èˆäº”å…¥
   : SELECT ROUND(123415.193) "Round" FROM DUAL;
   : SELECT ROUND(123415.193, 2) "Round" FROM DUAL;
   : SELECT ROUND(123415.193, -1) "Round" FROM DUAL;
-- power ÇóÃİ
-- sqrt ¿ª¸ùºÅ
-- trunc ±£ÁôĞ¡ÊıÓĞĞ§Êı×Ö
+- power æ±‚å¹‚
+- sqrt å¼€æ ¹å·
+- trunc ä¿ç•™å°æ•°æœ‰æ•ˆæ•°å­—
 
-*** ×Ö·ûº¯Êı
-- lower ×ª»¯ÎªĞ¡Ğ´
-- upper ×ª»»Îª´óĞ´
-- trim È¥³ıÄ³Ğ©×Ö·û
+*** å­—ç¬¦å‡½æ•°
+- lower è½¬åŒ–ä¸ºå°å†™
+- upper è½¬æ¢ä¸ºå¤§å†™
+- trim å»é™¤æŸäº›å­—ç¬¦
   : select trim('x' from 'xsxdfsxxxx') from dual;
-  : select trim(both 'x' from 'xsxdfsxxxx') from dual; -- È¥³ı¿ªÊ¼µÄ x ×Ö·û
-  : select trim(leading 'x' from 'xsxdfsxxxx') from dual; -- È¥³ı¿ªÊ¼µÄ x ×Ö·û
-  : select trim(trailing 'x' from 'xsxdfsxxxx') from dual; -- È¥³ı½áÎ²µÄ x ×Ö·û
-- ltrim / rtrim ×óÓÒÈ¥³ı×Ö·û
-  : SELECT RTRIM('BROWNING: ./=./=./=./=./=.=',      '/=.') FROM DUAL;  -- µÚ¶ş¸ö²ÎÊı°üº¬ÁËÒª¿³µôµÄËùÓĞ×Ö·ûµÄ¼¯ºÏ
-  : SELECT RTRIM('BROWNING: ./=./=./=./=./=.=     ') FROM DUAL;         -- Èç¹ûµÚ¶ş¸ö²ÎÊıÎª¿Õ£¬ÄÇÃ´Ä¬ÈÏ trim µôµÄÊÇ¿Õ¸ñ
-- lpad / rpad Ìî³ä×Ö·û
-  : SELECT LPAD('Page 1',15,'*.') "LPAD example" FROM DUAL;  -- µÚ¶ş¸ö²ÎÊı´ú±íÁË·µ»ØÖµµÄ×Ü³¤¶È£¬×îºóÒ»¸ö²ÎÊıÈç¹ûÈ¥µôµÄ»°£¬ÄÇÃ´Ä¬ÈÏÌî³äµÄÊÇ¿Õ¸ñ
-- concate(||) Á¬½Ó×Ö·û
-- REGEXP_REPLACE ÕıÔòÌæ»»
-- replace ³£¹æÌæ»»
-  : SELECT REPLACE('JACK and JUE','J','BL') "Changes" FROM DUAL; -- Ò»¹² 3 ¸ö²ÎÊı£¬µÚÒ»¸öÊÇÔ´×Ö·û´®£¬µÚ¶ş¸öÊÇÒªÌæ»»µÄ×Ö·û´®£¬µÚÈı¸öÊÇÒªÌæ»»ÎªµÄ×Ö·û´®¡£
-  : SELECT REPLACE('JACK and JUE','J') "Changes" FROM DUAL;      -- Èç¹ûµÚÈı¸ö²ÎÊıÎª¿ÕµÄ»°£¬Ä¬ÈÏ°ÑµÚ¶ş¸ö×Ö·û´®Ìæ»»Îª¿Õ¡£
+  : select trim(both 'x' from 'xsxdfsxxxx') from dual; -- å»é™¤å¼€å§‹çš„ x å­—ç¬¦
+  : select trim(leading 'x' from 'xsxdfsxxxx') from dual; -- å»é™¤å¼€å§‹çš„ x å­—ç¬¦
+  : select trim(trailing 'x' from 'xsxdfsxxxx') from dual; -- å»é™¤ç»“å°¾çš„ x å­—ç¬¦
+- ltrim / rtrim å·¦å³å»é™¤å­—ç¬¦
+  : SELECT RTRIM('BROWNING: ./=./=./=./=./=.=',      '/=.') FROM DUAL;  -- ç¬¬äºŒä¸ªå‚æ•°åŒ…å«äº†è¦ç æ‰çš„æ‰€æœ‰å­—ç¬¦çš„é›†åˆ
+  : SELECT RTRIM('BROWNING: ./=./=./=./=./=.=     ') FROM DUAL;         -- å¦‚æœç¬¬äºŒä¸ªå‚æ•°ä¸ºç©ºï¼Œé‚£ä¹ˆé»˜è®¤ trim æ‰çš„æ˜¯ç©ºæ ¼
+- lpad / rpad å¡«å……å­—ç¬¦
+  : SELECT LPAD('Page 1',15,'*.') "LPAD example" FROM DUAL;  -- ç¬¬äºŒä¸ªå‚æ•°ä»£è¡¨äº†è¿”å›å€¼çš„æ€»é•¿åº¦ï¼Œæœ€åä¸€ä¸ªå‚æ•°å¦‚æœå»æ‰çš„è¯ï¼Œé‚£ä¹ˆé»˜è®¤å¡«å……çš„æ˜¯ç©ºæ ¼
+- concate(||) è¿æ¥å­—ç¬¦
+- REGEXP_REPLACE æ­£åˆ™æ›¿æ¢
+- replace å¸¸è§„æ›¿æ¢
+  : SELECT REPLACE('JACK and JUE','J','BL') "Changes" FROM DUAL; -- ä¸€å…± 3 ä¸ªå‚æ•°ï¼Œç¬¬ä¸€ä¸ªæ˜¯æºå­—ç¬¦ä¸²ï¼Œç¬¬äºŒä¸ªæ˜¯è¦æ›¿æ¢çš„å­—ç¬¦ä¸²ï¼Œç¬¬ä¸‰ä¸ªæ˜¯è¦æ›¿æ¢ä¸ºçš„å­—ç¬¦ä¸²ã€‚
+  : SELECT REPLACE('JACK and JUE','J') "Changes" FROM DUAL;      -- å¦‚æœç¬¬ä¸‰ä¸ªå‚æ•°ä¸ºç©ºçš„è¯ï¼Œé»˜è®¤æŠŠç¬¬äºŒä¸ªå­—ç¬¦ä¸²æ›¿æ¢ä¸ºç©ºã€‚
 - SUBSTR 
-  : SELECT SUBSTR('ABCDEFG',3,4) "Substring" FROM DUAL;   -- µÚÒ»²ÎÊı±íÊ¾Òª´¦ÀíµÄÔ´×Ö·û´®£¬µÚ¶ş¸ö²ÎÊı±íÊ¾×Ó´®ÆğÊ¼µÄÎ»ÖÃ£¬µÚÈı¸ö²ÎÊıÊÇ¿ÉÑ¡µÄ£¬±íÊ¾×Ó´®µÄ³¤¶È
-  : SELECT SUBSTR('ABCDEFG',3) "Substring" FROM DUAL;     -- Èç¹û²»ÊÊÓÃµÚÈı¸ö²ÎÊı£¬ÄÇÃ´×Ó´®Ä¬ÈÏµ½Ô´×Ö·û´®µÄ½áÎ²¡£
-  : SELECT SUBSTR('ABCDEFG',-2,1) "Substring" FROM DUAL;  -- Èç¹ûµÚ¶ş¸ö²ÎÊıÊÇ¸ºÊı£¬±íÊ¾´Ó½áÎ²Íù»Ø»ØËİ¡£
-- TRANSLATE Ìæ»»ÏàÓ¦µÄ×Ö·û
-  : select translate('hehehello,haha', 'o,h', '0!') from dual;  -- Èı¸ö²ÎÊı£¬µÚÒ»¸öÔ´×Ö·û´®£¬µÚ¶ş¸öºÍµÚÈı¸ö²ÎÊıÀïÃæµÄ×Ö·ûÊÇ°´Ë³ĞòÒ»Ò»¶ÔÓ¦µÄ¡£Õâ¸öº¯Êı¾ÍÊÇ°´ÕÕºóÃæÁ½¸ö²ÎÊıÄÚµÄ×Ö·û£¬½øĞĞË³ĞòÌæ»»¡£
+  : SELECT SUBSTR('ABCDEFG',3,4) "Substring" FROM DUAL;   -- ç¬¬ä¸€å‚æ•°è¡¨ç¤ºè¦å¤„ç†çš„æºå­—ç¬¦ä¸²ï¼Œç¬¬äºŒä¸ªå‚æ•°è¡¨ç¤ºå­ä¸²èµ·å§‹çš„ä½ç½®ï¼Œç¬¬ä¸‰ä¸ªå‚æ•°æ˜¯å¯é€‰çš„ï¼Œè¡¨ç¤ºå­ä¸²çš„é•¿åº¦
+  : SELECT SUBSTR('ABCDEFG',3) "Substring" FROM DUAL;     -- å¦‚æœä¸é€‚ç”¨ç¬¬ä¸‰ä¸ªå‚æ•°ï¼Œé‚£ä¹ˆå­ä¸²é»˜è®¤åˆ°æºå­—ç¬¦ä¸²çš„ç»“å°¾ã€‚
+  : SELECT SUBSTR('ABCDEFG',-2,1) "Substring" FROM DUAL;  -- å¦‚æœç¬¬äºŒä¸ªå‚æ•°æ˜¯è´Ÿæ•°ï¼Œè¡¨ç¤ºä»ç»“å°¾å¾€å›å›æº¯ã€‚
+- TRANSLATE æ›¿æ¢ç›¸åº”çš„å­—ç¬¦
+  : select translate('hehehello,haha', 'o,h', '0!') from dual;  -- ä¸‰ä¸ªå‚æ•°ï¼Œç¬¬ä¸€ä¸ªæºå­—ç¬¦ä¸²ï¼Œç¬¬äºŒä¸ªå’Œç¬¬ä¸‰ä¸ªå‚æ•°é‡Œé¢çš„å­—ç¬¦æ˜¯æŒ‰é¡ºåºä¸€ä¸€å¯¹åº”çš„ã€‚è¿™ä¸ªå‡½æ•°å°±æ˜¯æŒ‰ç…§åé¢ä¸¤ä¸ªå‚æ•°å†…çš„å­—ç¬¦ï¼Œè¿›è¡Œé¡ºåºæ›¿æ¢ã€‚
 
-- ASCII ÏÔÊ¾×Ö·ûasciiÂë
-  : select ascii('A') from dual;   -- ½á¹ûÊÇ 65
-  : select * from scott.emp e where ascii(substr(e.ename, 1, 1)) = 67;  -- ÏÔÊ¾ emp ÖĞËùÓĞÃû×ÖÒÔ C ¿ªÍ·µÄÔ±¹¤¡£
-- LENGTH/LENGTHB ±íÊ¾³¤¶È¡£
+- ASCII æ˜¾ç¤ºå­—ç¬¦asciiç 
+  : select ascii('A') from dual;   -- ç»“æœæ˜¯ 65
+  : select * from scott.emp e where ascii(substr(e.ename, 1, 1)) = 67;  -- æ˜¾ç¤º emp ä¸­æ‰€æœ‰åå­—ä»¥ C å¼€å¤´çš„å‘˜å·¥ã€‚
+- LENGTH/LENGTHB è¡¨ç¤ºé•¿åº¦ã€‚
 
-*** Ê±¼äº¯Êı
-- sysdate/systimestamp systimestamp ÏÔÊ¾µÄÊ±¼äÊ±ÇøÊÇ´Ó²Ù×÷ÏµÍ³ÖĞ»ñÈ¡µÄ¡£µÄ·µ»ØÖµÊÇ TIMESTAMP WITH TIME ZONE ÀàĞÍ¡£
-- current_date/current_timestamp ·µ»ØµÄÊÇµ±Ç°»á»°Ê±ÇøµÄÊ±¼ä¡£¸ú sessiontimezone ÓĞ¹ØÏµµÄ¡£¿ÉÒÔÍ¨¹ı alter session set time_zone='-5:0' À´ĞŞ¸Ä»á»°µÄÊ±Çø¡£
-- localtimestamp ÏÔÊ¾µ±Ç°Ê±¼ä£¬µ«ÊÇ²»´øÊ±ÇøĞÅÏ¢
-- add_months Ôö¼ÓÈÕÆÚ
+*** æ—¶é—´å‡½æ•°
+- sysdate/systimestamp systimestamp æ˜¾ç¤ºçš„æ—¶é—´æ—¶åŒºæ˜¯ä»æ“ä½œç³»ç»Ÿä¸­è·å–çš„ã€‚çš„è¿”å›å€¼æ˜¯ TIMESTAMP WITH TIME ZONE ç±»å‹ã€‚
+- current_date/current_timestamp è¿”å›çš„æ˜¯å½“å‰ä¼šè¯æ—¶åŒºçš„æ—¶é—´ã€‚è·Ÿ sessiontimezone æœ‰å…³ç³»çš„ã€‚å¯ä»¥é€šè¿‡ alter session set time_zone='-5:0' æ¥ä¿®æ”¹ä¼šè¯çš„æ—¶åŒºã€‚
+- localtimestamp æ˜¾ç¤ºå½“å‰æ—¶é—´ï¼Œä½†æ˜¯ä¸å¸¦æ—¶åŒºä¿¡æ¯
+- add_months å¢åŠ æ—¥æœŸ
   : select add_months(sysdate, 5) from dual;
-  : select add_months(sysdate, -5) from dual;   -- Èç¹ûµÚ¶ş¸ö²ÎÊıÊÇ¸ºÊı£¬ÏàÓ¦µÄÊÇ¼õÉÙ¼¸¸öÔÂ
-- LAST_DAY Ò»¸öÔÂµÄ×îºóÒ»Ìì
+  : select add_months(sysdate, -5) from dual;   -- å¦‚æœç¬¬äºŒä¸ªå‚æ•°æ˜¯è´Ÿæ•°ï¼Œç›¸åº”çš„æ˜¯å‡å°‘å‡ ä¸ªæœˆ
+- LAST_DAY ä¸€ä¸ªæœˆçš„æœ€åä¸€å¤©
   : select last_day(sysdate) from dual;
-- MONTHS_BETWEEN ¼ÆËãÏà²îµÄÔÂÊı
-  : select months_between(sysdate, to_date('19981105')) from dual;  -- ÖÜÇ¿´Ó³öÉúµ½ÏÖÔÚ¾­ÀúÁË¶àÉÙ¸öÔÂ¡£Èç¹û°ÑÁ½¸ö²ÎÊı»»¹ıÀ´£¬µÃµ½µÄÊÇÏàÓ¦µÄ¸ºÊı¡£
-  : select (sysdate - to_date('19981105'))/30 from dual;  -- ÕâÑùĞ´ÊÇ´íÎóµÄ£¬ÒòÎª£¬Ò»¸öÔÂÎ´±ØÊÇ30Ìì
-- next_day ¼ÆËãÈÕÆÚÖ®ºóµÄµÚÒ»¸öÏàÓ¦¹¤×÷ÈÕÈÕÆÚ
-  : SELECT NEXT_DAY(sysdate, 1) "NEXT DAY" from dual;    -- Èç¹ûÊÇÊı×Ö£¬ÄÇÃ´Ö»ÄÜÊÇ1-7¡£ÏàÓ¦1±íÊ¾ĞÇÆÚÈÕ£¬2´ú±íĞÇÆÚÒ»...
-  : SELECT NEXT_DAY(to_date('20111111', 'ĞÇÆÚÁù') "NEXT DAY" from dual;    -- µÚ¶ş¸ö²ÎÊı±ØĞë¸ú nls_date_language Ö¸¶¨µÄ×Ö·û¼¯Ïà¹ØÁª
-- round(date) ×î½Ó½üµÄÈÕÆÚ
-  : select round(sysdate - 200, 'YEAR') from dual;  -- ¸úÏÖÔÚ×î½Ó½üµÄÄê·İ
-  : select round(sysdate, 'MONTH') from dual;       -- ¸ú½ñÌì×î½Ó½üµÄÔÂ·İ
-- trunc(date) ½ØÈ¡ÈÕÆÚ
+- MONTHS_BETWEEN è®¡ç®—ç›¸å·®çš„æœˆæ•°
+  : select months_between(sysdate, to_date('19981105')) from dual;  -- å‘¨å¼ºä»å‡ºç”Ÿåˆ°ç°åœ¨ç»å†äº†å¤šå°‘ä¸ªæœˆã€‚å¦‚æœæŠŠä¸¤ä¸ªå‚æ•°æ¢è¿‡æ¥ï¼Œå¾—åˆ°çš„æ˜¯ç›¸åº”çš„è´Ÿæ•°ã€‚
+  : select (sysdate - to_date('19981105'))/30 from dual;  -- è¿™æ ·å†™æ˜¯é”™è¯¯çš„ï¼Œå› ä¸ºï¼Œä¸€ä¸ªæœˆæœªå¿…æ˜¯30å¤©
+- next_day è®¡ç®—æ—¥æœŸä¹‹åçš„ç¬¬ä¸€ä¸ªç›¸åº”å·¥ä½œæ—¥æ—¥æœŸ
+  : SELECT NEXT_DAY(sysdate, 1) "NEXT DAY" from dual;    -- å¦‚æœæ˜¯æ•°å­—ï¼Œé‚£ä¹ˆåªèƒ½æ˜¯1-7ã€‚ç›¸åº”1è¡¨ç¤ºæ˜ŸæœŸæ—¥ï¼Œ2ä»£è¡¨æ˜ŸæœŸä¸€...
+  : SELECT NEXT_DAY(to_date('20111111', 'æ˜ŸæœŸå…­') "NEXT DAY" from dual;    -- ç¬¬äºŒä¸ªå‚æ•°å¿…é¡»è·Ÿ nls_date_language æŒ‡å®šçš„å­—ç¬¦é›†ç›¸å…³è”
+- round(date) æœ€æ¥è¿‘çš„æ—¥æœŸ
+  : select round(sysdate - 200, 'YEAR') from dual;  -- è·Ÿç°åœ¨æœ€æ¥è¿‘çš„å¹´ä»½
+  : select round(sysdate, 'MONTH') from dual;       -- è·Ÿä»Šå¤©æœ€æ¥è¿‘çš„æœˆä»½
+- trunc(date) æˆªå–æ—¥æœŸ
   : SELECT TRUNC(TO_DATE('2010-09-20'), 'MONTH') "New Year" FROM DUAL;
-- dbtimezone ÏÔÊ¾Ê±Çø
-- EXTRACT(datetime) ·Ö½âÊ±¼ä
+- dbtimezone æ˜¾ç¤ºæ—¶åŒº
+- EXTRACT(datetime) åˆ†è§£æ—¶é—´
   #+BEGIN_SRC sql
-  SELECT EXTRACT(year FROM systimestamp) "Äê",
-    EXTRACT(month FROM systimestamp) "ÔÂ",
-    EXTRACT(day FROM systimestamp) "ÈÕ" from dual;  -- Ä¬ÈÏ²ÉÈ¡µÄÊÇ 0 Ê±Çø£¬¼´ unk Ê±ÇøµÄÖµ.
+  SELECT EXTRACT(year FROM systimestamp) "å¹´",
+    EXTRACT(month FROM systimestamp) "æœˆ",
+    EXTRACT(day FROM systimestamp) "æ—¥" from dual;  -- é»˜è®¤é‡‡å–çš„æ˜¯ 0 æ—¶åŒºï¼Œå³ unk æ—¶åŒºçš„å€¼.
 
-  select extract(hour from timestamp '1998-03-03 9:10:11') from dual;  -- ·µ»ØµÄÊÇ 9
+  select extract(hour from timestamp '1998-03-03 9:10:11') from dual;  -- è¿”å›çš„æ˜¯ 9
   #+END_SRC
 
 
-*** ±È½Ïº¯Êı
-- GREATEST È¡×î´óÖµ
-  : select greatest(2, 3, 4) from dual;  -- ½á¹û 4
-- LEAST È¡×îĞ¡Öµ
-  : select least(2, 3, 4) from dual;     -- ½á¹û 2
+*** æ¯”è¾ƒå‡½æ•°
+- GREATEST å–æœ€å¤§å€¼
+  : select greatest(2, 3, 4) from dual;  -- ç»“æœ 4
+- LEAST å–æœ€å°å€¼
+  : select least(2, 3, 4) from dual;     -- ç»“æœ 2
 
-*** ×ª»»º¯Êı
+*** è½¬æ¢å‡½æ•°
 - to_char
 - to_date
 - to_number
 
-*** ÆäËûº¯Êı
-- nvl(e1, e2) ÅĞ¶¨e1ÊÇ·ñÎª¿Õ£¬Èç¹ûÎª¿ÕÄÇÃ´Ìæ»»ÎªÖ¸¶¨µÄe2.
+*** å…¶ä»–å‡½æ•°
+- nvl(e1, e2) åˆ¤å®še1æ˜¯å¦ä¸ºç©ºï¼Œå¦‚æœä¸ºç©ºé‚£ä¹ˆæ›¿æ¢ä¸ºæŒ‡å®šçš„e2.
   : select nvl(null, 2) from dual;
   : select e.ename, nvl(e.comm, 0) from scott.emp e where comm is null;
 - nvl2(e1, e2, e3)
-  : select e.ename, nvl2(e.comm, e.comm/10, 0) "Ó¶½ğ/10"  from scott.emp e; -- Èı¸ö²ÎÊı¡£ÅĞ¶¨µÚÒ»¸öÊÇ·ñÎª null£¬Èç¹û²»ÊÇ£¬·µ»ØµÚ¶ş¸ö²ÎÊı£¬Èç¹ûÊÇ£¬·µ»ØµÚÈı¸ö²ÎÊı¡£
+  : select e.ename, nvl2(e.comm, e.comm/10, 0) "ä½£é‡‘/10"  from scott.emp e; -- ä¸‰ä¸ªå‚æ•°ã€‚åˆ¤å®šç¬¬ä¸€ä¸ªæ˜¯å¦ä¸º nullï¼Œå¦‚æœä¸æ˜¯ï¼Œè¿”å›ç¬¬äºŒä¸ªå‚æ•°ï¼Œå¦‚æœæ˜¯ï¼Œè¿”å›ç¬¬ä¸‰ä¸ªå‚æ•°ã€‚
 - nullif
   : select nullif(100, 50*2) n1, nullif(100, 33*3) n2 from dual;
-- decode ´ó¼Ò×ÔÎÒĞŞÁ¶£¬¼ÌĞøÉîÈë¡£ÒòÎªËüºÜÇ¿´ó£¬ºÜÀ÷º¦£¬ºÜÅ£x¡£ÎÒÃÇÒªÕÆÎÕËü£¬ÊìÁ·Ê¹ÓÃËü£¬ÈÃËü³ÉÎªÎÒÃÇµÄºÃÅóÓÑ¡£
-  : select m.name, decode(m.sex, 2, 'ÄĞ', 1, 'Å®', 'Î´Öª') from mates m;
+- decode å¤§å®¶è‡ªæˆ‘ä¿®ç‚¼ï¼Œç»§ç»­æ·±å…¥ã€‚å› ä¸ºå®ƒå¾ˆå¼ºå¤§ï¼Œå¾ˆå‰å®³ï¼Œå¾ˆç‰›xã€‚æˆ‘ä»¬è¦æŒæ¡å®ƒï¼Œç†Ÿç»ƒä½¿ç”¨å®ƒï¼Œè®©å®ƒæˆä¸ºæˆ‘ä»¬çš„å¥½æœ‹å‹ã€‚
+  : select m.name, decode(m.sex, 2, 'ç”·', 1, 'å¥³', 'æœªçŸ¥') from mates m;
 
-*** ·Ö×éº¯Êı
+*** åˆ†ç»„å‡½æ•°
 - avg
 - max
 - sum
@@ -1131,7 +1130,7 @@ select * from dept;
   : select count(1) from scott.emp;
   : select count(distinct deptno) from scott.emp;
 
-*** ·ÖÎöº¯Êı
+*** åˆ†æå‡½æ•°
 - row_number
 - rank
 - dense_rank
@@ -1139,21 +1138,21 @@ select * from dept;
 
 
 
-** ×Ô¶¨Òåº¯Êı
-Óï·¨:
+** è‡ªå®šä¹‰å‡½æ•°
+è¯­æ³•:
 #+BEGIN_SRC sql
-CREATE [or REPLACE] FUNCTION function_name [(²ÎÊı ²ÎÊıÀàĞÍ := Ä¬ÈÏÖµ [, ÆäËû²ÎÊı])] RETURN ²ÎÊıÀàĞÍ
+CREATE [or REPLACE] FUNCTION function_name [(å‚æ•° å‚æ•°ç±»å‹ := é»˜è®¤å€¼ [, å…¶ä»–å‚æ•°])] RETURN å‚æ•°ç±»å‹
 AS|IS
-  ¶¨ÒåµÄ±äÁ¿
+  å®šä¹‰çš„å˜é‡
 BEGIN
-  Âß¼­
+  é€»è¾‘
   return xxx;
 END;
 #+END_SRC
 
-Ê¾Àı:
+ç¤ºä¾‹:
 #+BEGIN_SRC sql
--- Ëæ»ú³éÈ¡ 1-n Ö®¼äµÄÒ»¸öÕûÊı
+-- éšæœºæŠ½å– 1-n ä¹‹é—´çš„ä¸€ä¸ªæ•´æ•°
 create or replace function hehe (n number := 10) return number
 is
   s number;
@@ -1164,7 +1163,7 @@ end hehe;
 /
 
 
--- ÄãÒª»¹Òª¶à¾Ã±ÏÒµ£¿Ê¾Àı¡£
+-- ä½ è¦è¿˜è¦å¤šä¹…æ¯•ä¸šï¼Ÿç¤ºä¾‹ã€‚
 create or replace function howsoon (d date := to_date('20170101', 'yyyymmdd')) return number
 is
 begin
@@ -1173,164 +1172,164 @@ end;
 /
 
 
--- º¯ÊıµÄ²ÎÊı¿ÉÒÔ´øÈıÖÖÀàĞÍ£¬ in/out/in out
--- Èç¹û²ÎÊıÃ»ÓĞ×¢Ã÷in»òoutµÈ£¬ÄÇÃ´Ä¬ÈÏ¾ÍÊÇ in ÀàĞÍ
--- in ÀàĞÍµÄ²ÎÊı£¬ÊÇ´«ÈëÖµ£¬ËùÒÔ£¬±ØĞëÔÚ´«ÈëµÄÊ±ºò£¬¸³ÓèÒ»¸ö¾ßÌåµÄÖµ¡£
--- out ÀàĞÍµÄ²ÎÊı£¬ÊÇ´«³öÖµ£¬ËùÒÔ£¬ÔÚ´«ÈëµÄÊ±ºò£¬²»±Ø¸³Öµ£¬µ«ÊÇ£¬ÔÚº¯ÊıÌåÄÚ£¬±ØĞëÒª¸øÓëÒ»¸öÖµ¡£
+-- å‡½æ•°çš„å‚æ•°å¯ä»¥å¸¦ä¸‰ç§ç±»å‹ï¼Œ in/out/in out
+-- å¦‚æœå‚æ•°æ²¡æœ‰æ³¨æ˜inæˆ–outç­‰ï¼Œé‚£ä¹ˆé»˜è®¤å°±æ˜¯ in ç±»å‹
+-- in ç±»å‹çš„å‚æ•°ï¼Œæ˜¯ä¼ å…¥å€¼ï¼Œæ‰€ä»¥ï¼Œå¿…é¡»åœ¨ä¼ å…¥çš„æ—¶å€™ï¼Œèµ‹äºˆä¸€ä¸ªå…·ä½“çš„å€¼ã€‚
+-- out ç±»å‹çš„å‚æ•°ï¼Œæ˜¯ä¼ å‡ºå€¼ï¼Œæ‰€ä»¥ï¼Œåœ¨ä¼ å…¥çš„æ—¶å€™ï¼Œä¸å¿…èµ‹å€¼ï¼Œä½†æ˜¯ï¼Œåœ¨å‡½æ•°ä½“å†…ï¼Œå¿…é¡»è¦ç»™ä¸ä¸€ä¸ªå€¼ã€‚
 create or replace function mtimes (a number, res out number) return number
 as
 begin
-  res := a*a*a;  -- ±ØĞëÒªÓĞÕâÑùµÄ¸³Öµ²Ù×÷£¬²ÅÄÜÊ¹ res µÃµ½Ò»¸öÖµ£¬ÕâÑù²ÅÓĞÒâÒå¡£
+  res := a*a*a;  -- å¿…é¡»è¦æœ‰è¿™æ ·çš„èµ‹å€¼æ“ä½œï¼Œæ‰èƒ½ä½¿ res å¾—åˆ°ä¸€ä¸ªå€¼ï¼Œè¿™æ ·æ‰æœ‰æ„ä¹‰ã€‚
   return a;  
 end;
 
--- ÉÏÊöº¯ÊıµÄµ÷ÓÃ·½Ê½
+-- ä¸Šè¿°å‡½æ•°çš„è°ƒç”¨æ–¹å¼
 declare
   abc number;
 begin
-  dbms_output.put_line('ÎÒÃÇ´«ÈëµÄ²ÎÊıÊÇ:' || mtimes(82, abc));
-  dbms_output.put_line('ËüµÄµÄÈı´Î·½ÊÇ:' || abc);
+  dbms_output.put_line('æˆ‘ä»¬ä¼ å…¥çš„å‚æ•°æ˜¯:' || mtimes(82, abc));
+  dbms_output.put_line('å®ƒçš„çš„ä¸‰æ¬¡æ–¹æ˜¯:' || abc);
 end;
 
 
 
 #+END_SRC
 
-* Í¬Òå´Ê (Synonymous)
+* åŒä¹‰è¯ (Synonymous)
 #+BEGIN_SRC sql
--- ±ØĞëÒªÓµÓĞ´´½¨Í¬Òå´ÊµÄÈ¨ÏŞ
+-- å¿…é¡»è¦æ‹¥æœ‰åˆ›å»ºåŒä¹‰è¯çš„æƒé™
 grant create synonym to vip;
 
--- »ù±¾µÄ´´½¨
-create synonym s10 for sssssssss;                    -- ¼ò»¯ sql Óï¾ä.
-create or replace synonym e for scott.emp;           -- Ê¡ÂÔ schema£¬Òş²ØÏ¸½Ú£¬¼ò»¯²Ù×÷
+-- åŸºæœ¬çš„åˆ›å»º
+create synonym s10 for sssssssss;                    -- ç®€åŒ– sql è¯­å¥.
+create or replace synonym e for scott.emp;           -- çœç•¥ schemaï¼Œéšè—ç»†èŠ‚ï¼Œç®€åŒ–æ“ä½œ
 
 
--- Í¬Òå´ÊµÄÉ¾³ı
+-- åŒä¹‰è¯çš„åˆ é™¤
 drop synonym e;
 
 
--- ¹«ÓÃÍ¬Òå´ÊµÄÊ¹ÓÃ¡£Ò»´Î´´½¨£¬Ã¿¸öÓÃ»§¶¼¿ÉÒÔÊ¹ÓÃ¡£
+-- å…¬ç”¨åŒä¹‰è¯çš„ä½¿ç”¨ã€‚ä¸€æ¬¡åˆ›å»ºï¼Œæ¯ä¸ªç”¨æˆ·éƒ½å¯ä»¥ä½¿ç”¨ã€‚
 grant create public synonym to vip;
 create public synonym e for scott.emp;
 
 
--- É¾³ı¹«ÓÃÍ¬Òå´Ê
+-- åˆ é™¤å…¬ç”¨åŒä¹‰è¯
 drop public synonym e;
 
 
--- DBA_XXX µÈÆäÊµÒ²ÊÇÍ¬Òå´Ê£¬ËùÒÔÔÚµ÷ÓÃµÄÊ±ºò£¬²»ĞèÒªĞ´ SYS.
+-- DBA_XXX ç­‰å…¶å®ä¹Ÿæ˜¯åŒä¹‰è¯ï¼Œæ‰€ä»¥åœ¨è°ƒç”¨çš„æ—¶å€™ï¼Œä¸éœ€è¦å†™ SYS.
 select object_name, object_type from dba_objects where object_name = 'DBA_OBJECTS;'
 
 #+END_SRC
 
-ÓĞÓàÁ¦µÄÍ¬Ñ§Ò²¿ÉÒÔ¿´Ò»ÏÂ database link µÄ¸ÅÄî¡£
+æœ‰ä½™åŠ›çš„åŒå­¦ä¹Ÿå¯ä»¥çœ‹ä¸€ä¸‹ database link çš„æ¦‚å¿µã€‚
 
-* ĞòÁĞ (Sequence)
+* åºåˆ— (Sequence)
 #+BEGIN_SRC sql
--- SQLServer ÖĞ×ÔÔö×Ö¶ÎµÄĞ´·¨
+-- SQLServer ä¸­è‡ªå¢å­—æ®µçš„å†™æ³•
 create table test(id int primary key identity);
--- MySQL ÖĞ×ÔÔö×Ö¶ÎµÄĞ´·¨
+-- MySQL ä¸­è‡ªå¢å­—æ®µçš„å†™æ³•
 create table test(id int primary key auto_increment);
 
 
--- ´´½¨Ò»¸öĞòÁĞÓï·¨
-CREATE SEQUENCE ĞòÁĞÃû×Ö
-  [start with Êı×Ö]     -- ³õÊ¼Êı×Ö
-  [minvalue Êı×Ö]       -- ×îĞ¡Öµ
-  [maxvalue Êı×Ö]       -- ×î´óÖµ
-  [increment by Êı×Ö]   -- ÔöÁ¿
-  [cycle]               -- ÊÇ·ñÒªÑ­»·
-  [cache Êı×Ö]          -- ÊÇ·ñ»º´æ£¬¼´ÊÇ·ñÔÚÄÚ´æÖĞÔ¤ÏÈ·ÖÅä½ÓÏÂÀ´ÒªÓÃµ½µÄÊı×Ö
-  [order | nooreder]    -- ÅÅĞò
-¡¡
+-- åˆ›å»ºä¸€ä¸ªåºåˆ—è¯­æ³•
+CREATE SEQUENCE åºåˆ—åå­—
+  [start with æ•°å­—]     -- åˆå§‹æ•°å­—
+  [minvalue æ•°å­—]       -- æœ€å°å€¼
+  [maxvalue æ•°å­—]       -- æœ€å¤§å€¼
+  [increment by æ•°å­—]   -- å¢é‡
+  [cycle]               -- æ˜¯å¦è¦å¾ªç¯
+  [cache æ•°å­—]          -- æ˜¯å¦ç¼“å­˜ï¼Œå³æ˜¯å¦åœ¨å†…å­˜ä¸­é¢„å…ˆåˆ†é…æ¥ä¸‹æ¥è¦ç”¨åˆ°çš„æ•°å­—
+  [order | nooreder]    -- æ’åº
+ã€€
 
--- ×î»ù±¾µÄ´´½¨¡£Ä¬ÈÏ´Ó1¿ªÊ¼£¬ÔöÁ¿Îª1
+-- æœ€åŸºæœ¬çš„åˆ›å»ºã€‚é»˜è®¤ä»1å¼€å§‹ï¼Œå¢é‡ä¸º1
 create sequence seq_001;
 
--- start with µÄÖµ±íÊ¾³õÊ¼£¬±ØĞëÒª´óÓÚµÈÓÚ minvalue
--- Èç¹ûÊÇ nocycle Ä£Ê½£¬µ½´ï×î´óÖµ¼ÌĞøÖ´ĞĞ»á±¨´í¡£·ñÔò£¬»áÑ­»·¡£
--- Ñ­»·µÄÆğÊ¼ÊıÖµÊÇ minvalue ¶ø²»ÊÇ start with µÄÖµ¡£
+-- start with çš„å€¼è¡¨ç¤ºåˆå§‹ï¼Œå¿…é¡»è¦å¤§äºç­‰äº minvalue
+-- å¦‚æœæ˜¯ nocycle æ¨¡å¼ï¼Œåˆ°è¾¾æœ€å¤§å€¼ç»§ç»­æ‰§è¡Œä¼šæŠ¥é”™ã€‚å¦åˆ™ï¼Œä¼šå¾ªç¯ã€‚
+-- å¾ªç¯çš„èµ·å§‹æ•°å€¼æ˜¯ minvalue è€Œä¸æ˜¯ start with çš„å€¼ã€‚
 create sequence seq_006 start with 3 minvalue -6 maxvalue 8 cycle nocache;
 
--- ĞŞ¸Ä
+-- ä¿®æ”¹
 alter sequence increment by 8;
 rename seq_006 to seq_666;
 
--- É¾³ıĞòÁĞ
+-- åˆ é™¤åºåˆ—
 drop sequence seq_006;
 
--- ĞòÁĞµÄÊ¹ÓÃ
-select ĞòÁĞÃû×Ö.nextval from dual;    -- ĞòÁĞµÄÏÂÒ»¸öÖµ£¬µ÷ÓÃÖ®ºó»á×Ô¶¯Ôö³¤£¬Ã¿´Î·µ»ØÖµ²»Ò»¶¨ÏàÍ¬¡£
-select ĞòÁĞÃû×Ö.currval from dual;    -- ·µ»ØĞòÁĞµÄµ±Ç°Öµ£¬Ã¿´Îµ÷ÓÃ·µ»ØÖµÊÇÒ»ÖÂµÄ¡£ĞèÒªĞòÁĞ±»³õÊ¼»¯(nextval)Ö®ºó²ÅÄÜÊ¹ÓÃ£¬·ñÔò±¨´í¡£
+-- åºåˆ—çš„ä½¿ç”¨
+select åºåˆ—åå­—.nextval from dual;    -- åºåˆ—çš„ä¸‹ä¸€ä¸ªå€¼ï¼Œè°ƒç”¨ä¹‹åä¼šè‡ªåŠ¨å¢é•¿ï¼Œæ¯æ¬¡è¿”å›å€¼ä¸ä¸€å®šç›¸åŒã€‚
+select åºåˆ—åå­—.currval from dual;    -- è¿”å›åºåˆ—çš„å½“å‰å€¼ï¼Œæ¯æ¬¡è°ƒç”¨è¿”å›å€¼æ˜¯ä¸€è‡´çš„ã€‚éœ€è¦åºåˆ—è¢«åˆå§‹åŒ–(nextval)ä¹‹åæ‰èƒ½ä½¿ç”¨ï¼Œå¦åˆ™æŠ¥é”™ã€‚
 
 create table seqtab (id number primary key, name varchar2(20));
-insert into seqtab values (seq_001.nextval, 'hello'); -- ÕâÖÖĞ´·¨ËäÈ»¿´ÆğÀ´Âé·³£¬µ«ÊÇÔÚ¿ª·¢ÖĞÓĞÆäÁé»îĞÔºÍÍ¨ÓÃĞÔ£¬ÊÇ·Ç³£Ç¿´óµÄ¡£
+insert into seqtab values (seq_001.nextval, 'hello'); -- è¿™ç§å†™æ³•è™½ç„¶çœ‹èµ·æ¥éº»çƒ¦ï¼Œä½†æ˜¯åœ¨å¼€å‘ä¸­æœ‰å…¶çµæ´»æ€§å’Œé€šç”¨æ€§ï¼Œæ˜¯éå¸¸å¼ºå¤§çš„ã€‚
 
--- ×Ô¶¯²åÈë£¬ĞèÒªÅäºÏ´¥·¢Æ÷ (triggle) Ê¹ÓÃ¡£ÓĞĞËÈ¤¡¢ÓĞÓàÁ¦µÄÍ¬Ñ§£¬Çë×Ô¼º¹Ø×¢¡£ÆäËûÈËÎŞÊÓÔò¿É¡£
+-- è‡ªåŠ¨æ’å…¥ï¼Œéœ€è¦é…åˆè§¦å‘å™¨ (triggle) ä½¿ç”¨ã€‚æœ‰å…´è¶£ã€æœ‰ä½™åŠ›çš„åŒå­¦ï¼Œè¯·è‡ªå·±å…³æ³¨ã€‚å…¶ä»–äººæ— è§†åˆ™å¯ã€‚
 
 #+END_SRC
 
-* ·ÖÇø (Partition)
-½¨ÒéÔÚÏÂÃæÁ½ÖÖÇé¿öÏÂÒª¶Ô±í½øĞĞ·ÖÇø:
-1. ±íµÄÊı¾İÁ¿³¬¹ı 2G
-2. ±íÀïÃæ´æÔÚ´óÁ¿µÄÀúÊ·Êı¾İ
+* åˆ†åŒº (Partition)
+å»ºè®®åœ¨ä¸‹é¢ä¸¤ç§æƒ…å†µä¸‹è¦å¯¹è¡¨è¿›è¡Œåˆ†åŒº:
+1. è¡¨çš„æ•°æ®é‡è¶…è¿‡ 2G
+2. è¡¨é‡Œé¢å­˜åœ¨å¤§é‡çš„å†å²æ•°æ®
 
-±í·ÖÇøÊÇÎªÁË´ïµ½·Ö¶øÖÎÖ®µÄÄ¿µÄ£¬ÊÇ¼¦µ°²»ÄÜ·ÅÔÚÍ¬Ò»¸öÀº×ÓÀïµÄÇĞÊµÊµ¼ù¡£Ê×ÏÈÄÜÌá¸ßĞ§ÂÊ£¬ÔÙÕß¿É±£ÕÏ°²È«¡£
+è¡¨åˆ†åŒºæ˜¯ä¸ºäº†è¾¾åˆ°åˆ†è€Œæ²»ä¹‹çš„ç›®çš„ï¼Œæ˜¯é¸¡è›‹ä¸èƒ½æ”¾åœ¨åŒä¸€ä¸ªç¯®å­é‡Œçš„åˆ‡å®å®è·µã€‚é¦–å…ˆèƒ½æé«˜æ•ˆç‡ï¼Œå†è€…å¯ä¿éšœå®‰å…¨ã€‚
 
-Oracle ÀïµÄ»ù±¾·ÖÇøÓĞ£º
-1. ·¶Î§·ÖÇø(Range)
-2. ÁĞ±í·ÖÇø(List)
-3. ¹şÏ£·ÖÇø(Hash)
+Oracle é‡Œçš„åŸºæœ¬åˆ†åŒºæœ‰ï¼š
+1. èŒƒå›´åˆ†åŒº(Range)
+2. åˆ—è¡¨åˆ†åŒº(List)
+3. å“ˆå¸Œåˆ†åŒº(Hash)
 
-ÁíÍâ¿ÉÒÔ¶Ô±íµÄ·ÖÇø½øĞĞ¸´ºÏ£¬½¨Á¢×Ó·ÖÇø¡£ Oracle 11 Ö®ºóÌí¼ÓÁËºÜ¶à²»Í¬µÄ¸´ºÏĞÎÊ½£¬µ«³£ÓÃµÄÓĞÁ½ÖÖ£º
-1. ·¶Î§-¹şÏ£·ÖÇø
-2. ·¶Î§-ÁĞ±í·ÖÇø
+å¦å¤–å¯ä»¥å¯¹è¡¨çš„åˆ†åŒºè¿›è¡Œå¤åˆï¼Œå»ºç«‹å­åˆ†åŒºã€‚ Oracle 11 ä¹‹åæ·»åŠ äº†å¾ˆå¤šä¸åŒçš„å¤åˆå½¢å¼ï¼Œä½†å¸¸ç”¨çš„æœ‰ä¸¤ç§ï¼š
+1. èŒƒå›´-å“ˆå¸Œåˆ†åŒº
+2. èŒƒå›´-åˆ—è¡¨åˆ†åŒº
 
 #+BEGIN_SRC sql
 
--- ²é¿´µ±Ç°ÓÃ»§ÏÂ±íµÄ·ÖÇøÏêÇé¡£
+-- æŸ¥çœ‹å½“å‰ç”¨æˆ·ä¸‹è¡¨çš„åˆ†åŒºè¯¦æƒ…ã€‚
 select table_name, partition_name from user_tab_partitions;
 select table_name, partition_name, subpartition_name from user_tab_subpartitions;
 
--- ´Ó·ÖÇøÖĞ²éÑ¯Êı¾İ
+-- ä»åˆ†åŒºä¸­æŸ¥è¯¢æ•°æ®
 select * from table_name partition (partition_name);
 
--- ¸´ºÏ·ÖÇøÖĞ½øĞĞ²éÑ¯Êı¾İ
-select * from cxbe3 subpartition (p1_ps4);   -- ±íÊ¾ p1 ·ÖÇøÏÂµÄ ps4 ×Ó·ÖÇø
+-- å¤åˆåˆ†åŒºä¸­è¿›è¡ŒæŸ¥è¯¢æ•°æ®
+select * from cxbe3 subpartition (p1_ps4);   -- è¡¨ç¤º p1 åˆ†åŒºä¸‹çš„ ps4 å­åˆ†åŒº
 
 #+END_SRC
 
-** ·¶Î§·ÖÇø
+** èŒƒå›´åˆ†åŒº
 #+BEGIN_SRC sql
--- »ù±¾´´½¨
-create table bea1 (name varchar2(20), birth date, yz number);   -- ±íµÄ´´½¨Óï¾ä£¬²»´ø·ÖÇøµÄÇé¿ö
-create table bea2 (name varchar2(20), birth date, yz number)    -- °´ÕÕÉúÈÕ£¬·¶Î§·ÖÇø¡£
+-- åŸºæœ¬åˆ›å»º
+create table bea1 (name varchar2(20), birth date, yz number);   -- è¡¨çš„åˆ›å»ºè¯­å¥ï¼Œä¸å¸¦åˆ†åŒºçš„æƒ…å†µ
+create table bea2 (name varchar2(20), birth date, yz number)    -- æŒ‰ç…§ç”Ÿæ—¥ï¼ŒèŒƒå›´åˆ†åŒºã€‚
 partition by range (birth)
 (
   partition p1 values less than (to_date('19900101', 'yyyymmdd')),
   partition p2 values less than (to_date('20000101', 'yyyymmdd'))
 );
--- ²âÊÔ bea2
-insert into bea2 values ('xxx', to_date('19880102'), 87);   -- »á±»²åÈëµ½ p1 ·ÖÇø
-insert into bea2 values ('yyy', to_date('19920102'), 82);   -- »á±»²åÈëµ½ p2 ·ÖÇø
-insert into bea2 values ('zzz', to_date('20010102'), 89);   -- »á³öÏÖ´íÎó£¬ORA-14400: ²åÈëµÄ·ÖÇø¹Ø¼ü×ÖÎ´Ó³Éäµ½ÈÎºÎ·ÖÇø¡£ÒòÎªÃ»ÎªÕâÌõÊı¾İ´´½¨ÏàÓ¦·ÖÇø¡£
-select * from bea2;                   -- Á½ÌõÊı¾İ£¬xxx ºÍ yyy
-select * from bea2 partition (p1);    -- ÏÔÊ¾µÄÊÇ xxx µÄÊı¾İ¡£ÕâÊÇ´ÓÌØ¶¨·ÖÇøÖĞ²éÑ¯Êı¾İµÄÓï·¨
-select * from bea2 partition (p2);    -- ÏÔÊ¾µÄÊÇ yyy µÄÊı¾İ
+-- æµ‹è¯• bea2
+insert into bea2 values ('xxx', to_date('19880102'), 87);   -- ä¼šè¢«æ’å…¥åˆ° p1 åˆ†åŒº
+insert into bea2 values ('yyy', to_date('19920102'), 82);   -- ä¼šè¢«æ’å…¥åˆ° p2 åˆ†åŒº
+insert into bea2 values ('zzz', to_date('20010102'), 89);   -- ä¼šå‡ºç°é”™è¯¯ï¼ŒORA-14400: æ’å…¥çš„åˆ†åŒºå…³é”®å­—æœªæ˜ å°„åˆ°ä»»ä½•åˆ†åŒºã€‚å› ä¸ºæ²¡ä¸ºè¿™æ¡æ•°æ®åˆ›å»ºç›¸åº”åˆ†åŒºã€‚
+select * from bea2;                   -- ä¸¤æ¡æ•°æ®ï¼Œxxx å’Œ yyy
+select * from bea2 partition (p1);    -- æ˜¾ç¤ºçš„æ˜¯ xxx çš„æ•°æ®ã€‚è¿™æ˜¯ä»ç‰¹å®šåˆ†åŒºä¸­æŸ¥è¯¢æ•°æ®çš„è¯­æ³•
+select * from bea2 partition (p2);    -- æ˜¾ç¤ºçš„æ˜¯ yyy çš„æ•°æ®
 
--- maxvalue µÄÊ¹ÓÃ
-create table bea3 (name varchar2(20), birth date, yz number)    -- °´ÕÕÉúÈÕ£¬·¶Î§·ÖÇø¡£
+-- maxvalue çš„ä½¿ç”¨
+create table bea3 (name varchar2(20), birth date, yz number)    -- æŒ‰ç…§ç”Ÿæ—¥ï¼ŒèŒƒå›´åˆ†åŒºã€‚
 partition by range (birth)
 (
   partition p1 values less than (to_date('19900101', 'yyyymmdd')),
   partition p2 values less than (to_date('20000101', 'yyyymmdd')),
   partition p3 values less than (MAXVALUE);
 );
-insert into bea3 values ('zzz', to_date('20010102'), 89);   -- ²åÈëµÄÊÇÓĞmaxvalue¹Ø¼ü×ÖµÄ p3 ·ÖÇø
-select * from bea3 partition (p3);                          -- ¿ÉÒÔ²éÑ¯µ½.
+insert into bea3 values ('zzz', to_date('20010102'), 89);   -- æ’å…¥çš„æ˜¯æœ‰maxvalueå…³é”®å­—çš„ p3 åˆ†åŒº
+select * from bea3 partition (p3);                          -- å¯ä»¥æŸ¥è¯¢åˆ°.
 
--- ·ÖÇøµÄ¹Ø¼ü×Ö£¬¿ÉÒÔÊÇÊıÖµ£¬¿ÉÒÔÊÇÈÕÆÚ£¬Ò²¿ÉÒÔÊÇ×Ö·û´®
+-- åˆ†åŒºçš„å…³é”®å­—ï¼Œå¯ä»¥æ˜¯æ•°å€¼ï¼Œå¯ä»¥æ˜¯æ—¥æœŸï¼Œä¹Ÿå¯ä»¥æ˜¯å­—ç¬¦ä¸²
 create table bea5(name varchar2(20),birth date, yz number)
 partition by range(name)
 (
@@ -1339,7 +1338,7 @@ partition by range(name)
   partition p3 values less than (MAXVALUE)
 );
 
--- ÔÚ´´½¨Ã¿¸ö·ÖÇøµÄÊ±ºò£¬ÎªÃ¿¸ö·ÖÇøÖ¸¶¨±í¿Õ¼ä
+-- åœ¨åˆ›å»ºæ¯ä¸ªåˆ†åŒºçš„æ—¶å€™ï¼Œä¸ºæ¯ä¸ªåˆ†åŒºæŒ‡å®šè¡¨ç©ºé—´
 create table bea6(name varchar2(20),birth date, yz number)
 partition by range(yz)
 (
@@ -1348,7 +1347,7 @@ partition by range(yz)
   partition p3 values less than (MAXVALUE) tablespace system
 );
 
--- ¿ÉÒÔ°´ÕÕ¶à¸ö×Ö¶Î½øĞĞ·ÖÇø
+-- å¯ä»¥æŒ‰ç…§å¤šä¸ªå­—æ®µè¿›è¡Œåˆ†åŒº
 create table bea7(name varchar2(20),birth date, yz number)
 partition by range(name, yz)
 (
@@ -1361,31 +1360,31 @@ partition by range(name, yz)
 #+END_SRC
 
 
-** ÁĞ±í·ÖÇø
+** åˆ—è¡¨åˆ†åŒº
 #+BEGIN_SRC sql
--- °´ÕÕĞÔ±ğ½øĞĞ·ÖÇø¡£²»ÒªÍü¼ÇÖ¸¶¨Ä¬ÈÏ·ÖÇø
+-- æŒ‰ç…§æ€§åˆ«è¿›è¡Œåˆ†åŒºã€‚ä¸è¦å¿˜è®°æŒ‡å®šé»˜è®¤åˆ†åŒº
 create table beaa (name varchar2(20), sex varchar2(20), yz number)
 partition by list (sex)
 (
-	partition p1 values ('ÄĞ'),
-	partition p2 values ('Å®'),
+	partition p1 values ('ç”·'),
+	partition p2 values ('å¥³'),
 	partition p3 values (DEFAULT)
 );
 
--- Ö¸¶¨ÏàÓ¦µÄ´æ´¢±í¿Õ¼ä
+-- æŒ‡å®šç›¸åº”çš„å­˜å‚¨è¡¨ç©ºé—´
 create table beaa (name varchar2(20), sex varchar2(20), yz number)
 partition by list (sex)
 (
-	partition p1 values ('ÄĞ') tablespace users,
-	partition p2 values ('Å®') tablespace system,
+	partition p1 values ('ç”·') tablespace users,
+	partition p2 values ('å¥³') tablespace system,
 	partition p3 values (DEFAULT)
 );
 
 #+END_SRC
 
-** ¹şÏ£·ÖÇø
+** å“ˆå¸Œåˆ†åŒº
 
-[[http://www.bing.com/knows/search?q=%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&mkt=zh-cn&FORM=BKACAI][¹şÏ£Ëã·¨]],É¢ÁĞÊÇÒ²~
+[[http://www.bing.com/knows/search?q=%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&mkt=zh-cn&FORM=BKACAI][å“ˆå¸Œç®—æ³•]],æ•£åˆ—æ˜¯ä¹Ÿ~
 
 #+BEGIN_SRC sql
 create table beax (name varchar2(20), yz number)
@@ -1398,12 +1397,12 @@ partition by hash (name)
   partition p5
 );
 
--- ´´½¨¶à¸ö·ÖÇøµÄ¼òÂÔĞ´·¨¡£·ÖÇøµÄÃû×ÖÓÉoracle×Ô¶¯Î¬»¤¡£
+-- åˆ›å»ºå¤šä¸ªåˆ†åŒºçš„ç®€ç•¥å†™æ³•ã€‚åˆ†åŒºçš„åå­—ç”±oracleè‡ªåŠ¨ç»´æŠ¤ã€‚
 create table beax (name varchar2(20), yz number)
 partition by hash (name)
 partitions 5;
 
--- Ö¸¶¨±í¿Õ¼ä
+-- æŒ‡å®šè¡¨ç©ºé—´
 create table beax (name varchar2(20), yz number)
 partition by hash (name)
 partitions 5 stores in (users, system, users, system, system);
@@ -1411,9 +1410,9 @@ partitions 5 stores in (users, system, users, system, system);
 
 #+END_SRC
 
-** ·¶Î§-ÁĞ±í·ÖÇø
+** èŒƒå›´-åˆ—è¡¨åˆ†åŒº
 #+BEGIN_SRC sql
--- ÏÈ°´ÕÕÉúÈÕ·ÖÇø£¬Ö®ºó×Ó·ÖÇøÊÇ°´ÕÕÃû×Ö¹şÏ£·ÖÇø
+-- å…ˆæŒ‰ç…§ç”Ÿæ—¥åˆ†åŒºï¼Œä¹‹åå­åˆ†åŒºæ˜¯æŒ‰ç…§åå­—å“ˆå¸Œåˆ†åŒº
 create table cxbe1 (name varchar2(20), birth date, yz number)
 partition by range (birth)
 subpartition by hash (name)
@@ -1424,7 +1423,7 @@ subpartitions 3
   partition p3 values less than (maxvalue)
 );
 
--- ÏÈ°´ÕÕÑÕÖµ·ÖÇø£¬Ö®ºó×Ó·ÖÇøÊÇ°´ÕÕÉúÈÕ¹şÏ£·ÖÇø
+-- å…ˆæŒ‰ç…§é¢œå€¼åˆ†åŒºï¼Œä¹‹åå­åˆ†åŒºæ˜¯æŒ‰ç…§ç”Ÿæ—¥å“ˆå¸Œåˆ†åŒº
 create table cxbe2 (name varchar2(20), birth date, yz number)
 partition by range (yz)
 subpartition by hash (birth)
@@ -1438,16 +1437,16 @@ subpartitions 3
 
 #+END_SRC
 
-** ·¶Î§-ÁĞ±í·ÖÇø
+** èŒƒå›´-åˆ—è¡¨åˆ†åŒº
 #+BEGIN_SRC sql
--- ÏÈ°´ÕÕÑÕÖµ·¶Î§·ÖÇø£¬ÔÚÃ¿¸ö·ÖÇøÄÚÔÙ½øĞĞ¹şÏ£·ÖÇø
+-- å…ˆæŒ‰ç…§é¢œå€¼èŒƒå›´åˆ†åŒºï¼Œåœ¨æ¯ä¸ªåˆ†åŒºå†…å†è¿›è¡Œå“ˆå¸Œåˆ†åŒº
 create table cxbe3 (name varchar2(20), sex varchar2(20), yz number)
 partition by range (yz)
 subpartition by list (sex)
 subpartitions template
 (
-  subpartition ps1 values ('ÄĞ') tablespace users,
-  subpartition ps2 values ('Å®') tablespace users,
+  subpartition ps1 values ('ç”·') tablespace users,
+  subpartition ps2 values ('å¥³') tablespace users,
   subpartition ps2 values (DEFAULT)
 )
 (
@@ -1459,103 +1458,103 @@ subpartitions template
 
 #+END_SRC
 
-** ·ÖÇøµÄĞŞ¸Ä
+** åˆ†åŒºçš„ä¿®æ”¹
 #+BEGIN_SRC sql
 
--- Ìí¼Ó·ÖÇø
+-- æ·»åŠ åˆ†åŒº
 alter table bea2 add partition p9 values less than (MAXVALUE);
-alter table bea2 add partition p9 values (1, 2);   -- Õë¶Ô list ·ÖÇø
-alter table bea2 add partition;                    -- Õë¶Ô hash ·ÖÇø
+alter table bea2 add partition p9 values (1, 2);   -- é’ˆå¯¹ list åˆ†åŒº
+alter table bea2 add partition;                    -- é’ˆå¯¹ hash åˆ†åŒº
 
--- É¾³ı·ÖÇøÄÚÊı¾İ
+-- åˆ é™¤åˆ†åŒºå†…æ•°æ®
 alter table bea2 truncate partition p3;
 
--- É¾³ı·ÖÇø
+-- åˆ é™¤åˆ†åŒº
 alter table bea2 drop partition p3;
 
--- ºÏ²¢ÏàÁÚ·ÖÇø
+-- åˆå¹¶ç›¸é‚»åˆ†åŒº
 alter table bea2 merge partitions p2, p3 into partition p8;
 
--- ²ğ·Ö·ÖÇø
-alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);     -- ·¶Î§·ÖÇøµÄ²ğ·Ö
-alter table bea2 split partition p2 values (1,2) into (partition p3, partition p4);   -- ÁĞ±í·ÖÇøµÄ²ğ·Ö
-alter table bea2 split partition p2 into (partition p3 values (1, 2), partition p4 values (3), partition p5);   -- ÁĞ±í·ÖÇøµÄ²ğ·Ö
+-- æ‹†åˆ†åˆ†åŒº
+alter table bea2 split partition p2 at (3000) into (partition p3, partition p14);     -- èŒƒå›´åˆ†åŒºçš„æ‹†åˆ†
+alter table bea2 split partition p2 values (1,2) into (partition p3, partition p4);   -- åˆ—è¡¨åˆ†åŒºçš„æ‹†åˆ†
+alter table bea2 split partition p2 into (partition p3 values (1, 2), partition p4 values (3), partition p5);   -- åˆ—è¡¨åˆ†åŒºçš„æ‹†åˆ†
 
--- ÖØÃüÃû·ÖÇø
+-- é‡å‘½ååˆ†åŒº
 alter table bea2 rename partition p2 to p12;
 
 #+END_SRC
 
-Èç¹û·ÖÇø×Ö¶ÎµÄÊı¾İ±» update£¬·¢ÉúÁË¿ç·ÖÇøµÄÇé¿ö£¬»á·¢ÉúÊ²Ã´£¿
-: ´íÎó:¸üĞÂ·ÖÇø¹Ø¼ü×ÖÁĞ½«µ¼ÖÂ·ÖÇøµÄ¸ü¸Ä
-¿ÉÒÔÍ¨¹ıÒÔÏÂÓï·¨£¬Ê¹ĞĞÊı¾İ¿ÉÒÔÒÆ¶¯
+å¦‚æœåˆ†åŒºå­—æ®µçš„æ•°æ®è¢« updateï¼Œå‘ç”Ÿäº†è·¨åˆ†åŒºçš„æƒ…å†µï¼Œä¼šå‘ç”Ÿä»€ä¹ˆï¼Ÿ
+: é”™è¯¯:æ›´æ–°åˆ†åŒºå…³é”®å­—åˆ—å°†å¯¼è‡´åˆ†åŒºçš„æ›´æ”¹
+å¯ä»¥é€šè¿‡ä»¥ä¸‹è¯­æ³•ï¼Œä½¿è¡Œæ•°æ®å¯ä»¥ç§»åŠ¨
 : alter table m8 enable row movement;
-Í¨¹ıÕâÖÖ·½Ê½£¬ÊµÏÖÁËĞĞÊı¾İµÄÇ¨ÒÆ¡£µ«ÊÇÊı¾İµÄ rowid Ò²»áËæÖ®·¢Éú±ä»¯¡£
+é€šè¿‡è¿™ç§æ–¹å¼ï¼Œå®ç°äº†è¡Œæ•°æ®çš„è¿ç§»ã€‚ä½†æ˜¯æ•°æ®çš„ rowid ä¹Ÿä¼šéšä¹‹å‘ç”Ÿå˜åŒ–ã€‚
 
-* ÊÓÍ¼ (View)
+* è§†å›¾ (View)
 
-ËÄÖÖÀàĞÍ
-1. ¹ØÏµÊÓÍ¼ (Relational View)
-2. ÄÚÇ¶Ê½Í¼ (Inline View)
-3. ¶ÔÏóÊÓÍ¼ (Object View)
-4. Îï»¯ÊÓÍ¼ (Materialize View)
+å››ç§ç±»å‹
+1. å…³ç³»è§†å›¾ (Relational View)
+2. å†…åµŒå¼å›¾ (Inline View)
+3. å¯¹è±¡è§†å›¾ (Object View)
+4. ç‰©åŒ–è§†å›¾ (Materialize View)
 
-** ¹ØÏµÊÓÍ¼
-ÓÖ³ÆÎªĞé±í£¬²»Õ¼ÎïÀí¿Õ¼ä£¬´æ´¢ÔÚÊı¾İ×ÖµäÖĞ¡£ËüÄÜ¼ò»¯ÃüÁî£¬Òş²Ø¸´ÔÓ¶È£¬½âñî£¬ÔöÇ¿°²È«ĞÔ¡£
+** å…³ç³»è§†å›¾
+åˆç§°ä¸ºè™šè¡¨ï¼Œä¸å ç‰©ç†ç©ºé—´ï¼Œå­˜å‚¨åœ¨æ•°æ®å­—å…¸ä¸­ã€‚å®ƒèƒ½ç®€åŒ–å‘½ä»¤ï¼Œéšè—å¤æ‚åº¦ï¼Œè§£è€¦ï¼Œå¢å¼ºå®‰å…¨æ€§ã€‚
 
 #+BEGIN_SRC sql
--- ³õÊ¼»¯ÒªÊ¹ÓÃµÄ±í
-create table emp as select * from emp;                        -- ¸´ÖÆ±í
-alter table emp add constraints pk_emp primary key (empno);   -- Ìí¼ÓÖ÷¼ü
+-- åˆå§‹åŒ–è¦ä½¿ç”¨çš„è¡¨
+create table emp as select * from emp;                        -- å¤åˆ¶è¡¨
+alter table emp add constraints pk_emp primary key (empno);   -- æ·»åŠ ä¸»é”®
 create table dept as select * from dept;
 
--- ´´½¨Óï·¨
+-- åˆ›å»ºè¯­æ³•
 create [or replace] [force | noforce]
 view view_name as select * from table_name
-[with read only]              -- Ç¿ÆÈÊÓÍ¼Ö»ÄÜ²é¿´£¬²»ÄÜĞŞ¸Ä
+[with read only]              -- å¼ºè¿«è§†å›¾åªèƒ½æŸ¥çœ‹ï¼Œä¸èƒ½ä¿®æ”¹
 [with check option]
 ;
 
--- ´´½¨ÊÓÍ¼
+-- åˆ›å»ºè§†å›¾
 create view v_emp as select empno, ename, sal from emp where sal > 1000;
 
 create view v_emp01 as
 select e.ename, e.sal, d.dname from emp e, dept d where e.deptno = d.deptno;
 
 
--- É¾³ıÊÓÍ¼
+-- åˆ é™¤è§†å›¾
 drop view v_emp01;
 
 
 #+END_SRC
 
 
-** ÄÚÇ¶ÊÓÍ¼
+** å†…åµŒè§†å›¾
 
 #+BEGIN_SRC sql
 
--- ²éÑ¯µÄ»ù±¾Óï¾ä£¬from ºóÃæ¸úµÄÊÇ±í»òÕßÊÓÍ¼
-select ËùÓĞÒª²éÑ¯µÄÁĞ from Òª²éÑ¯µÄ±í/ÊÓÍ¼ where clause;
+-- æŸ¥è¯¢çš„åŸºæœ¬è¯­å¥ï¼Œfrom åé¢è·Ÿçš„æ˜¯è¡¨æˆ–è€…è§†å›¾
+select æ‰€æœ‰è¦æŸ¥è¯¢çš„åˆ— from è¦æŸ¥è¯¢çš„è¡¨/è§†å›¾ where clause;
 
--- ÕâÊÇÖ®Ç°ÎÒÃÇÓÃ¹ıµÄÒ»¸ö²éÑ¯£¬²éÑ¯ËùÓĞ rownum > 2 µÄËùÓĞÊı¾İ
--- ÔÚÕâ¸ö²éÑ¯ÖĞ£¬ÎÒÃÇÔÚ from Ö®ºóÓÃµ½ÁËÒ»¸ö´øÀ¨ºÅµÄ²éÑ¯Óï¾ä£¬Õâ¸ö²éÑ¯Óï¾ä¾ÍÊÇÄÚÇ¶ÊÓÍ¼¡£
+-- è¿™æ˜¯ä¹‹å‰æˆ‘ä»¬ç”¨è¿‡çš„ä¸€ä¸ªæŸ¥è¯¢ï¼ŒæŸ¥è¯¢æ‰€æœ‰ rownum > 2 çš„æ‰€æœ‰æ•°æ®
+-- åœ¨è¿™ä¸ªæŸ¥è¯¢ä¸­ï¼Œæˆ‘ä»¬åœ¨ from ä¹‹åç”¨åˆ°äº†ä¸€ä¸ªå¸¦æ‹¬å·çš„æŸ¥è¯¢è¯­å¥ï¼Œè¿™ä¸ªæŸ¥è¯¢è¯­å¥å°±æ˜¯å†…åµŒè§†å›¾ã€‚
 select * from 
   (select rownum rn, empno, ename, sal from scott.emp) 
   where rn > 2;
 
--- ÄÚÇ¶ÊÓÍ¼£¬´ÓÂß¼­ÉÏ¿ÉÒÔ·Ö½âÎª:
--- µÚÒ»²½£º
+-- å†…åµŒè§†å›¾ï¼Œä»é€»è¾‘ä¸Šå¯ä»¥åˆ†è§£ä¸º:
+-- ç¬¬ä¸€æ­¥ï¼š
 create view linshigong001 as select rownum rn, empno, ename, sal from scott.emp;
--- µÚ¶ş²½£º
+-- ç¬¬äºŒæ­¥ï¼š
 select * from linshigong001 where rn > 2;
--- µÚÈı²½£º
+-- ç¬¬ä¸‰æ­¥ï¼š
 drop view linshigong001;
 
 #+END_SRC
 
-** ¶ÔÏóÊÓÍ¼£¨¿ÉÑ¡£©
+** å¯¹è±¡è§†å›¾ï¼ˆå¯é€‰ï¼‰
 #+BEGIN_SRC sql
--- ´´½¨¶ÔÏó
+-- åˆ›å»ºå¯¹è±¡
 CREATE OR REPLACE TYPE depttype 
 AS OBJECT 
 (
@@ -1576,28 +1575,28 @@ select ref(t) from v_dept t;  -- oid
 
 
 
-** Îï»¯ÊÓÍ¼
+** ç‰©åŒ–è§†å›¾
 
-ËüÊÇ Oracle ÖĞ±£´æÁË²éÑ¯½á¹ûµÄ¶ÔÏó¡£Ëü°Ñ²éÑ¯µÄÊı¾İ±£´æÎªÊµÊµÔÚÔÚµÄÊı¾İ£¬ÔÙ´Î·ÃÎÊµÄÊ±ºò£¬¾Í²»ĞèÒª´Ó»ù±íÖĞÈ¥²éÑ¯£¬¶øÖ±½Ó´Ó±£´æµÄÊı¾İÀïÄÃÈ¡¡£ËùÒÔÄÜ´ó´óÌá¸ßĞ§ÂÊ£¬ÔöÇ¿ĞÔÄÜ¡£ÎÒÃÇ¿ÉÒÔÓÃÄÜ×Ô¶¯Í¬²½Êı¾İµÄÁÙÊ±±íµÄ¸ÅÄîÀ´Àí½âËü¡£ËùÒÔ£¬Ëü²»ÊÇĞé±í£¬ËüÕ¼ÓÃ´æ´¢¿Õ¼ä¡£
+å®ƒæ˜¯ Oracle ä¸­ä¿å­˜äº†æŸ¥è¯¢ç»“æœçš„å¯¹è±¡ã€‚å®ƒæŠŠæŸ¥è¯¢çš„æ•°æ®ä¿å­˜ä¸ºå®å®åœ¨åœ¨çš„æ•°æ®ï¼Œå†æ¬¡è®¿é—®çš„æ—¶å€™ï¼Œå°±ä¸éœ€è¦ä»åŸºè¡¨ä¸­å»æŸ¥è¯¢ï¼Œè€Œç›´æ¥ä»ä¿å­˜çš„æ•°æ®é‡Œæ‹¿å–ã€‚æ‰€ä»¥èƒ½å¤§å¤§æé«˜æ•ˆç‡ï¼Œå¢å¼ºæ€§èƒ½ã€‚æˆ‘ä»¬å¯ä»¥ç”¨èƒ½è‡ªåŠ¨åŒæ­¥æ•°æ®çš„ä¸´æ—¶è¡¨çš„æ¦‚å¿µæ¥ç†è§£å®ƒã€‚æ‰€ä»¥ï¼Œå®ƒä¸æ˜¯è™šè¡¨ï¼Œå®ƒå ç”¨å­˜å‚¨ç©ºé—´ã€‚
 
-ËüÖ÷ÒªÓÃÀ´Ìá¸ßĞ§ÂÊ£¬ËùÒÔÓÃÔÚ²éÑ¯ÏûºÄ±È½Ï´óµÄÁ¬½ÓÉÏ¡£Ò²¿ÉÒÔÓÃÀ´°ÑÔ¶³ÌµÄÊı¾İ»º´æµ½±¾µØ£¬Í¨¹ıÕâÖÖ·½Ê½±£ÕÏĞÔÄÜ¡£
+å®ƒä¸»è¦ç”¨æ¥æé«˜æ•ˆç‡ï¼Œæ‰€ä»¥ç”¨åœ¨æŸ¥è¯¢æ¶ˆè€—æ¯”è¾ƒå¤§çš„è¿æ¥ä¸Šã€‚ä¹Ÿå¯ä»¥ç”¨æ¥æŠŠè¿œç¨‹çš„æ•°æ®ç¼“å­˜åˆ°æœ¬åœ°ï¼Œé€šè¿‡è¿™ç§æ–¹å¼ä¿éšœæ€§èƒ½ã€‚
 
-ÕâÊÇÒ»ÖÖÒÔ¿Õ¼ä»»Ê±¼äµÄ·½·¨¡£
+è¿™æ˜¯ä¸€ç§ä»¥ç©ºé—´æ¢æ—¶é—´çš„æ–¹æ³•ã€‚
 
-´´½¨Îï»¯ÊÓÍ¼Òª¿¼ÂÇÒ»ÏÂ¼¸¸ö·½Ãæ£º
-1. Ê²Ã´Ê±ºòÉú³ÉÊı¾İ¡£
-   : build immediate/deferred                               -- ÔÚ´´½¨ÎŞ»°ÊÓÍ¼µÄÊ±ºòÁ¢¿Ì´´½¨£¬»òÕßÍÆ³Ùµ½ĞèÒªµÄÊ±ºòÊÖ¶¯´´½¨
-2. Èç¹û»ù±íÀïµÄÊı¾İ·¢Éú±ä»¯£¬ÒÔÒ»ÖÖÊ²Ã´ÑùµÄ²ßÂÔ±£³ÖÍ¬²½
-   : refresh complete/fast/force/never                      -- ËÄÖĞ·½Ê½ÒÀ´Î¶ÔÓ¦£º È«Á¿Ë¢ĞÂ£¬¼´É¾³ıºóÖØĞÂÉú³É / ÔöÁ¿Ë¢ĞÂ / oracle ×Ô¶¯ÅĞ¶Ï£¬Èç¹ûÄÜÔöÁ¿ÔòÔöÁ¿·ñÔòÈ«Á¿ / ²»Í¬²½Êı¾İ
-3. Èç¹û»ù±íÀïµÄÊı¾İ·¢Éú±ä»¯£¬Ë¢ĞÂµÄÊ±»ú
-   : on commit/demand start with sysdate next sysdate + 1   -- ·Ö±ğÎª£º »ù±íÓĞ¸üĞÂµÄ»°Á¢¿ÌÍ¬²½ / °´ÕÕÊ±¼ä¶Î£¬°´ĞèÍ¬²½£¬°´ĞèÍ¬²½ÒªÓë start with next Ò»ÆğÊ¹ÓÃ
-4. ¸æËß Oracle£¬Èç¹û´Ó»ù±¾ÖĞ²éÑ¯Êı¾İµÄÊ±ºò£¬ÔÊ²»ÔÊĞí²Î¿¼Ê¹ÓÃÎï»¯ÊÓÍ¼ÀïµÄ½á¹û¡££¨Èç¹ûÊ¹ÓÃÎï»¯ÊÓÍ¼µÄ»°£¬ÊµÖÊÉÏ oracle ÒªĞŞ¸ÄÄã²éÑ¯µÄÓï¾ä£¬ËùÒÔ²Å½Ğ²éÑ¯ÖØĞ´£©
+åˆ›å»ºç‰©åŒ–è§†å›¾è¦è€ƒè™‘ä¸€ä¸‹å‡ ä¸ªæ–¹é¢ï¼š
+1. ä»€ä¹ˆæ—¶å€™ç”Ÿæˆæ•°æ®ã€‚
+   : build immediate/deferred                               -- åœ¨åˆ›å»ºæ— è¯è§†å›¾çš„æ—¶å€™ç«‹åˆ»åˆ›å»ºï¼Œæˆ–è€…æ¨è¿Ÿåˆ°éœ€è¦çš„æ—¶å€™æ‰‹åŠ¨åˆ›å»º
+2. å¦‚æœåŸºè¡¨é‡Œçš„æ•°æ®å‘ç”Ÿå˜åŒ–ï¼Œä»¥ä¸€ç§ä»€ä¹ˆæ ·çš„ç­–ç•¥ä¿æŒåŒæ­¥
+   : refresh complete/fast/force/never                      -- å››ä¸­æ–¹å¼ä¾æ¬¡å¯¹åº”ï¼š å…¨é‡åˆ·æ–°ï¼Œå³åˆ é™¤åé‡æ–°ç”Ÿæˆ / å¢é‡åˆ·æ–° / oracle è‡ªåŠ¨åˆ¤æ–­ï¼Œå¦‚æœèƒ½å¢é‡åˆ™å¢é‡å¦åˆ™å…¨é‡ / ä¸åŒæ­¥æ•°æ®
+3. å¦‚æœåŸºè¡¨é‡Œçš„æ•°æ®å‘ç”Ÿå˜åŒ–ï¼Œåˆ·æ–°çš„æ—¶æœº
+   : on commit/demand start with sysdate next sysdate + 1   -- åˆ†åˆ«ä¸ºï¼š åŸºè¡¨æœ‰æ›´æ–°çš„è¯ç«‹åˆ»åŒæ­¥ / æŒ‰ç…§æ—¶é—´æ®µï¼ŒæŒ‰éœ€åŒæ­¥ï¼ŒæŒ‰éœ€åŒæ­¥è¦ä¸ start with next ä¸€èµ·ä½¿ç”¨
+4. å‘Šè¯‰ Oracleï¼Œå¦‚æœä»åŸºæœ¬ä¸­æŸ¥è¯¢æ•°æ®çš„æ—¶å€™ï¼Œå…ä¸å…è®¸å‚è€ƒä½¿ç”¨ç‰©åŒ–è§†å›¾é‡Œçš„ç»“æœã€‚ï¼ˆå¦‚æœä½¿ç”¨ç‰©åŒ–è§†å›¾çš„è¯ï¼Œå®è´¨ä¸Š oracle è¦ä¿®æ”¹ä½ æŸ¥è¯¢çš„è¯­å¥ï¼Œæ‰€ä»¥æ‰å«æŸ¥è¯¢é‡å†™ï¼‰
    : enable/disable query rewrite
 
 
-ÏêÏ¸µÄÀõ×ÓÈçÏÂ£º
+è¯¦ç»†çš„æ —å­å¦‚ä¸‹ï¼š
 #+BEGIN_SRC sql
--- ×î»ù±¾µÄ´´½¨¡£ÕâÀïÓÃµÄÊÇÈ«Á¿¸üĞÂ¡£È«Á¿¸üĞÂ»áºÜ±¿ÖØ¡£
+-- æœ€åŸºæœ¬çš„åˆ›å»ºã€‚è¿™é‡Œç”¨çš„æ˜¯å…¨é‡æ›´æ–°ã€‚å…¨é‡æ›´æ–°ä¼šå¾ˆç¬¨é‡ã€‚
 create materialized view mv_emp
   build immediate
   refresh complete
@@ -1609,51 +1608,51 @@ create materialized view mv_emp
 
 
 
--- µ«Èç¹ûÒªÓÃ refresh fast ·½Ê½£¬¼´ÔöÁ¿¸üĞÂ·½Ê½£¬ÄÇÃ´£¬ĞèÒªÔÚÔ­À´µÄ±íÉÏ´´½¨Îï»¯ÊÓÍ¼ÈÕÖ¾±í£¬ÒÔ±ãÈÃ oracle ÖªµÀĞèÒªÍ¬²½Ğ©Ê²Ã´¶«Î÷¡£
--- ´´½¨Óï¾äÎªÈçÏÂ£¬ºóÃæĞèÒª with Óï¾äÖ¸¶¨°´ÕÕ rowid »¹ÊÇÖ÷¼ü×÷ÎªÃ¿Ò»ĞĞÊı¾İµÄÉí·İÖ¤ºÅÂë¡£
+-- ä½†å¦‚æœè¦ç”¨ refresh fast æ–¹å¼ï¼Œå³å¢é‡æ›´æ–°æ–¹å¼ï¼Œé‚£ä¹ˆï¼Œéœ€è¦åœ¨åŸæ¥çš„è¡¨ä¸Šåˆ›å»ºç‰©åŒ–è§†å›¾æ—¥å¿—è¡¨ï¼Œä»¥ä¾¿è®© oracle çŸ¥é“éœ€è¦åŒæ­¥äº›ä»€ä¹ˆä¸œè¥¿ã€‚
+-- åˆ›å»ºè¯­å¥ä¸ºå¦‚ä¸‹ï¼Œåé¢éœ€è¦ with è¯­å¥æŒ‡å®šæŒ‰ç…§ rowid è¿˜æ˜¯ä¸»é”®ä½œä¸ºæ¯ä¸€è¡Œæ•°æ®çš„èº«ä»½è¯å·ç ã€‚
 create materialized view log on emp with primary key;
--- Ö®ºó´´½¨ÔöÁ¿Ë¢ĞÂµÄÎï»¯ÊÓÍ¼
+-- ä¹‹ååˆ›å»ºå¢é‡åˆ·æ–°çš„ç‰©åŒ–è§†å›¾
 create materialized view mv_emp_fast
   build immediate
   refresh fast
   on demand start with sysdate next sysdate + 1
-  with primary key   -- ÕâÀïÒª¸úÎï»¯ÊÓÍ¼ÈÕÖ¾Ö¸¶¨µÄÏà¶ÔÓ¦¡£
+  with primary key   -- è¿™é‡Œè¦è·Ÿç‰©åŒ–è§†å›¾æ—¥å¿—æŒ‡å®šçš„ç›¸å¯¹åº”ã€‚
   enable query rewrite
   as
   select * from emp;
 
 
 
--- É¾³ı
+-- åˆ é™¤
 drop materialized view log on emp;
 drop materialized view mv_emp;
 
 #+END_SRC
 
 
-* Ë÷Òı (Index)
+* ç´¢å¼• (Index)
 
-´´½¨Óï¾ä
-: CREATE INDEX Ë÷ÒıÃû×Ö ON ±íÃû (±íµÄ×Ö¶ÎÃû) [TABLESPACE ±í¿Õ¼äÃû×Ö];
-ÖØ½¨Ë÷Òı
+åˆ›å»ºè¯­å¥
+: CREATE INDEX ç´¢å¼•åå­— ON è¡¨å (è¡¨çš„å­—æ®µå) [TABLESPACE è¡¨ç©ºé—´åå­—];
+é‡å»ºç´¢å¼•
 : alter index ind_s rebuild;
-É¾³ıÓï¾ä
+åˆ é™¤è¯­å¥
 : drop index ind_s;
 
-Ë÷ÒıµÄÀàĞÍ
+ç´¢å¼•çš„ç±»å‹
 
-1. Î¨Ò»Ë÷Òı
+1. å”¯ä¸€ç´¢å¼•
    : create unique index ind_s on s (name);
-2. ×éºÏË÷Òı
+2. ç»„åˆç´¢å¼•
    : create index ind_s on s (name, addr);
-3. ·´ÏòË÷Òı
+3. åå‘ç´¢å¼•
    : create index ind_s_reverse on s (name) reverse;
-4. º¯ÊıË÷Òı
+4. å‡½æ•°ç´¢å¼•
    #+BEGIN_SRC sql
-   -- ´´½¨Ò»¸ö±í
+   -- åˆ›å»ºä¸€ä¸ªè¡¨
    create table ss (name varchar2(20), value number);
    
-   -- ²åÈë¼¸ÌõÊı¾İ
+   -- æ’å…¥å‡ æ¡æ•°æ®
    insert into ss values ('abc', 100);
    insert into ss values ('hello', 99);
    insert into ss values ('ok', 22);
@@ -1661,63 +1660,63 @@ drop materialized view mv_emp;
    insert into ss values ('admin', 190);
    commit;
 
-   -- ÔÚ name ×Ö¶ÎÉÏ´´½¨ÆÕÍ¨µÄË÷Òı
+   -- åœ¨ name å­—æ®µä¸Šåˆ›å»ºæ™®é€šçš„ç´¢å¼•
    create index ind_ss_normal on ss (name);
 
-   -- ´ò¿ª autotrace£¬²é¿´Ö´ĞĞ¼Æ»®¡£
-   -- ½á¹û£¬ table_access_full£¬¼´È«±íÉ¨Ãè£¬Ò²¾ÍÊÇËµ£¬Ã»ÓĞ×ßË÷Òı
+   -- æ‰“å¼€ autotraceï¼ŒæŸ¥çœ‹æ‰§è¡Œè®¡åˆ’ã€‚
+   -- ç»“æœï¼Œ table_access_fullï¼Œå³å…¨è¡¨æ‰«æï¼Œä¹Ÿå°±æ˜¯è¯´ï¼Œæ²¡æœ‰èµ°ç´¢å¼•
    set autotrace on;
    select * from ss where substr(name, 1, 1) = 'h';
 
-   -- ´´½¨¹ØÓÚ name µÄº¯ÊıË÷Òı
+   -- åˆ›å»ºå…³äº name çš„å‡½æ•°ç´¢å¼•
    create index ind_ss_substr on ss (substr(name, 1, 1));
 
-   -- ÔÙ´Î²é¿´Ö´ĞĞ¼Æ»®
+   -- å†æ¬¡æŸ¥çœ‹æ‰§è¡Œè®¡åˆ’
    select * from ss where substr(name, 1, 1) = 'h';
-   -- ÏÔÊ¾½á¹ûÈçÏÂ£¬¼´×ßÁËË÷Òı£¬×ßµÄÊÇÎÒÃÇ´´½¨µÄº¯ÊıË÷Òı¡£
+   -- æ˜¾ç¤ºç»“æœå¦‚ä¸‹ï¼Œå³èµ°äº†ç´¢å¼•ï¼Œèµ°çš„æ˜¯æˆ‘ä»¬åˆ›å»ºçš„å‡½æ•°ç´¢å¼•ã€‚
    -- | TABLE ACCESS BY INDEX ROWID | SS              |
    -- | INDEX RANGE SCAN            | INDEX_SS_SUBSTR |
    
    #+END_SRC
 
-5. Î»Í¼Ë÷Òı
+5. ä½å›¾ç´¢å¼•
    : create bitmap index ind_aaa on s (sex);
    : create bitmap index ind_aaa on s (status);
    : create bitmap index ind_aaa on s (mz);
 
 
-×¢Òâ£¬ÒªºÏÀíÊ¹ÓÃË÷Òı¡£ÒòÎª£¬²»ºÏÀíµÄË÷Òı£¬²»½ö²»ÄÜ´øÀ´Ğ§ÂÊµÄÌáÉı£¬·´¶ø»áÍÏÀÛÏµÍ³¡£
-Ë÷ÒıµÄ¸üĞÂÍ¬²½£¬ÊÇ±È½ÏÏûºÄ×ÊÔ´µÄ¡£
+æ³¨æ„ï¼Œè¦åˆç†ä½¿ç”¨ç´¢å¼•ã€‚å› ä¸ºï¼Œä¸åˆç†çš„ç´¢å¼•ï¼Œä¸ä»…ä¸èƒ½å¸¦æ¥æ•ˆç‡çš„æå‡ï¼Œåè€Œä¼šæ‹–ç´¯ç³»ç»Ÿã€‚
+ç´¢å¼•çš„æ›´æ–°åŒæ­¥ï¼Œæ˜¯æ¯”è¾ƒæ¶ˆè€—èµ„æºçš„ã€‚
 
 
 
 
-²»ÒªÖ»Æ¾Ö÷¹ÛÈ¥¿´ SQL Óï¾äµ½µ×ÓĞÃ»ÓĞ×ßË÷Òı£¬ÒªÑ§»á¿´OracleµÄ Explain Plan£¨½âÊÍ¼Æ»®)¡£
-Ö÷ÒªÓĞÁ½ÖÖ·½Ê½:
-1. ÔÚ sqlplus Ö®ÏÂ£¬´ò¿ª autotrace Ñ¡Ïî:
+ä¸è¦åªå‡­ä¸»è§‚å»çœ‹ SQL è¯­å¥åˆ°åº•æœ‰æ²¡æœ‰èµ°ç´¢å¼•ï¼Œè¦å­¦ä¼šçœ‹Oracleçš„ Explain Planï¼ˆè§£é‡Šè®¡åˆ’)ã€‚
+ä¸»è¦æœ‰ä¸¤ç§æ–¹å¼:
+1. åœ¨ sqlplus ä¹‹ä¸‹ï¼Œæ‰“å¼€ autotrace é€‰é¡¹:
    : set autotrace on
-   ÕâÑù£¬Ã¿ÌõÓï¾äÖ´ĞĞÖ®ºó¾Í»á´òÓ¡³öÏà¹ØµÄÖ´ĞĞ¼Æ»®Çé¿ö¡£
-   ÆäÖĞ£¬ Table_Access_Full ±íÊ¾È«±íÉ¨Ãè£¬ xxx_by_index_rowid ±íÊ¾É¨ÃèË÷Òı¡£
+   è¿™æ ·ï¼Œæ¯æ¡è¯­å¥æ‰§è¡Œä¹‹åå°±ä¼šæ‰“å°å‡ºç›¸å…³çš„æ‰§è¡Œè®¡åˆ’æƒ…å†µã€‚
+   å…¶ä¸­ï¼Œ Table_Access_Full è¡¨ç¤ºå…¨è¡¨æ‰«æï¼Œ xxx_by_index_rowid è¡¨ç¤ºæ‰«æç´¢å¼•ã€‚
 
-2. ÊÖ¶¯Éú³É½âÊÍ¼Æ»®£¬ÔÚ sqlplus ÏÂµÄÓï·¨Îª:
+2. æ‰‹åŠ¨ç”Ÿæˆè§£é‡Šè®¡åˆ’ï¼Œåœ¨ sqlplus ä¸‹çš„è¯­æ³•ä¸º:
    #+BEGIN_SRC sql
-   explain plan for select CLAUSE;   -- Í¨¹ı explain plan for Éú³É¼Æ»®
-   select * from plan_table;         -- plan_table ±£´æµÄÊÇÉÏÊö½âÊÍ¼Æ»®µÄ½á¹û
-   select * from table(dbms_xplan.display);  -- ÊÇ¶ÔÉÏÃæ±íÀïÃæÊı¾İµÄ¸üÖ±¹ÛÏÔÊ¾
+   explain plan for select CLAUSE;   -- é€šè¿‡ explain plan for ç”Ÿæˆè®¡åˆ’
+   select * from plan_table;         -- plan_table ä¿å­˜çš„æ˜¯ä¸Šè¿°è§£é‡Šè®¡åˆ’çš„ç»“æœ
+   select * from table(dbms_xplan.display);  -- æ˜¯å¯¹ä¸Šé¢è¡¨é‡Œé¢æ•°æ®çš„æ›´ç›´è§‚æ˜¾ç¤º
    #+END_SRC
 
 
 * PL/SQL
-È«³ÆÎª Procedure Language / Structured Query Language.
+å…¨ç§°ä¸º Procedure Language / Structured Query Language.
 
-ËüÊÇOracle¿ª·¢µÄ£¬½áºÏ¹ı³ÌÓë½á¹¹»¯²éÑ¯ÓïÑÔµÄÒ»ÖÖ³ÌĞòÓïÑÔ¡£
-ËùÒÔ£¬Ëü³ä·ÖÀûÓÃÁË SQL ÓïÑÔµÄÓÅÊÆ£¬ÓÖÌí¼ÓÁË¹ı³Ì»¯µÄ¹¦ÄÜ¡£
-ÔÚ½â¾öÊµ¼ÊÎÊÌâµÄ¹ı³ÌÖĞ£¬·Ç³£Ç¿´ó¡¢ÊµÓÃ¡£
+å®ƒæ˜¯Oracleå¼€å‘çš„ï¼Œç»“åˆè¿‡ç¨‹ä¸ç»“æ„åŒ–æŸ¥è¯¢è¯­è¨€çš„ä¸€ç§ç¨‹åºè¯­è¨€ã€‚
+æ‰€ä»¥ï¼Œå®ƒå……åˆ†åˆ©ç”¨äº† SQL è¯­è¨€çš„ä¼˜åŠ¿ï¼Œåˆæ·»åŠ äº†è¿‡ç¨‹åŒ–çš„åŠŸèƒ½ã€‚
+åœ¨è§£å†³å®é™…é—®é¢˜çš„è¿‡ç¨‹ä¸­ï¼Œéå¸¸å¼ºå¤§ã€å®ç”¨ã€‚
 
-** »ù±¾Óï·¨
+** åŸºæœ¬è¯­æ³•
 #+BEGIN_SRC sql
 
--- ¼òµ¥À´Ëµ£¬½á¹¹
+-- ç®€å•æ¥è¯´ï¼Œç»“æ„
 [declare]
 ...
 begin
@@ -1726,64 +1725,64 @@ begin
 ...
 end;
 
--- Ò»¸öÍêÕûµãµÄÀõ×Ó
+-- ä¸€ä¸ªå®Œæ•´ç‚¹çš„æ —å­
 DECLARE
-  -- ±äÁ¿¶¨ÒåÇø£¬ÔÚÕâÀï¶¨ÒåËùÓĞÒªÊ¹ÓÃµÄ±äÁ¿£¨»ò³£Á¿£©
-  -- ÕâÒ»²¿·ÖÊÇ¿ÉÑ¡µÄ
+  -- å˜é‡å®šä¹‰åŒºï¼Œåœ¨è¿™é‡Œå®šä¹‰æ‰€æœ‰è¦ä½¿ç”¨çš„å˜é‡ï¼ˆæˆ–å¸¸é‡ï¼‰
+  -- è¿™ä¸€éƒ¨åˆ†æ˜¯å¯é€‰çš„
   id number;
-  flag CONSTANT number := 1;      -- CONSTANT ¹Ø¼ü×Ö¶¨ÒåµÄÊÇ³£Á¿£¬ºóÃæ²»ÄÜ±»ĞŞ¸Ä
-  name varchar2(20) := 'hello';   -- ¿ÉÒÔÔÚ¶¨ÒåµÄÊ±ºò£¬¸³Óè³õÊ¼Öµ
-  sal emp.sal%TYPE;               -- ¶¨Òå±äÁ¿µÄÀàĞÍ¿ÉÒÔÓÃ %TYPE/%ROWTYPE »ñÈ¡
+  flag CONSTANT number := 1;      -- CONSTANT å…³é”®å­—å®šä¹‰çš„æ˜¯å¸¸é‡ï¼Œåé¢ä¸èƒ½è¢«ä¿®æ”¹
+  name varchar2(20) := 'hello';   -- å¯ä»¥åœ¨å®šä¹‰çš„æ—¶å€™ï¼Œèµ‹äºˆåˆå§‹å€¼
+  sal emp.sal%TYPE;               -- å®šä¹‰å˜é‡çš„ç±»å‹å¯ä»¥ç”¨ %TYPE/%ROWTYPE è·å–
 
 BEGIN
-  -- ´úÂëÇø£¬¹ı³Ì¿éµÄÖ÷Ìå¡£
-  -- ÀïÃæ°üº¬ DDL/DML µÈ SQL Óï¾ä£¬Ò²°üº¬Ò»Ğ©ÃæÏò¹ı³ÌµÄ¿ØÖÆÓï¾ä¡£
+  -- ä»£ç åŒºï¼Œè¿‡ç¨‹å—çš„ä¸»ä½“ã€‚
+  -- é‡Œé¢åŒ…å« DDL/DML ç­‰ SQL è¯­å¥ï¼Œä¹ŸåŒ…å«ä¸€äº›é¢å‘è¿‡ç¨‹çš„æ§åˆ¶è¯­å¥ã€‚
 
-  -- ÅĞ¶ÏÓï¾ä
+  -- åˆ¤æ–­è¯­å¥
   if flag = 1 then
-    -- Õâ¾äÏàµ±ÓÚ java ÖĞµÄ System.out.println(string);
-    dbms_output.put_line('ºÅÂë£º ' || flag);
+    -- è¿™å¥ç›¸å½“äº java ä¸­çš„ System.out.println(string);
+    dbms_output.put_line('å·ç ï¼š ' || flag);
   end if;
 
 
-  -- select into Óï¾ä»ñÈ¡¼ÇÂ¼£¬²¢¸ø±äÁ¿¸³Öµ
+  -- select into è¯­å¥è·å–è®°å½•ï¼Œå¹¶ç»™å˜é‡èµ‹å€¼
   select max(empno) into id from emp;
 
 
-  -- Ñ­»·Óï¾ä
+  -- å¾ªç¯è¯­å¥
   for i in 1..10 loop
-    -- insert into returning£¬Íê³É²åÈë²Ù×÷£¬²¢°Ñ±¾ĞĞÏà¹ØµÄĞÅÏ¢¸³Öµ¸ø±äÁ¿
+    -- insert into returningï¼Œå®Œæˆæ’å…¥æ“ä½œï¼Œå¹¶æŠŠæœ¬è¡Œç›¸å…³çš„ä¿¡æ¯èµ‹å€¼ç»™å˜é‡
     insert into emp (empno, ename, sal) values (id + i, dbms_random.string('u', 5), i*100)
       returning ename, sal into name, sal;
 
-    dbms_output.put_line('Ô±¹¤' || name || 'µÄ¹¤×ÊÎª£º' || sal);
+    dbms_output.put_line('å‘˜å·¥' || name || 'çš„å·¥èµ„ä¸ºï¼š' || sal);
     commit;
 
   end loop;
 
 
 EXCEPTION
-  -- ÕâÀïÊÇÒì³£´¦ÀíÇø£¬´¦Àí²¶»ñµ½µÄÒì³£
-  -- Õâ²¿·ÖÒ²ÊÇ¿ÉÑ¡µÄ
+  -- è¿™é‡Œæ˜¯å¼‚å¸¸å¤„ç†åŒºï¼Œå¤„ç†æ•è·åˆ°çš„å¼‚å¸¸
+  -- è¿™éƒ¨åˆ†ä¹Ÿæ˜¯å¯é€‰çš„
   WHEN no_data_found THEN
-    dbms_output.put_line('Ã»ÓĞ²éÑ¯µ½ÈÎºÎµÄÊı¾İ');
+    dbms_output.put_line('æ²¡æœ‰æŸ¥è¯¢åˆ°ä»»ä½•çš„æ•°æ®');
   WHEN others THEN
-    dbms_output.put_line('Î´Öª´íÎó:' || sqlerrm);
+    dbms_output.put_line('æœªçŸ¥é”™è¯¯:' || sqlerrm);
 
 END;
 /
 
 
 
--- pl/sql °æ±¾µÄ hello,world
--- Ò»¸ö pl/sql ¿é£¬ÖÁÉÙÒª°üº¬ begin ºÍ end;
--- ĞèÒª°Ñ serveroutput Ñ¡ÏîÉèÎª on£¬²ÅÄÜ¿´µ½´òÓ¡µÄ½á¹û
+-- pl/sql ç‰ˆæœ¬çš„ hello,world
+-- ä¸€ä¸ª pl/sql å—ï¼Œè‡³å°‘è¦åŒ…å« begin å’Œ end;
+-- éœ€è¦æŠŠ serveroutput é€‰é¡¹è®¾ä¸º onï¼Œæ‰èƒ½çœ‹åˆ°æ‰“å°çš„ç»“æœ
 begin
   dbms_output.put_line('hello,world');
 end;
 
 
--- ÔÙ¸´ÔÓÒ»µãµã£¬Ôö¼Ó±äÁ¿£¬ĞèÒªÓÃµ½ declare ¶Î
+-- å†å¤æ‚ä¸€ç‚¹ç‚¹ï¼Œå¢åŠ å˜é‡ï¼Œéœ€è¦ç”¨åˆ° declare æ®µ
 declare
   str varchar2(20);
 begin
@@ -1792,18 +1791,18 @@ begin
 end;
 
 
--- ÔÙ¸´ÔÓÒ»µã£¬Ôö¼ÓÒì³£´¦Àí£¬ĞèÒªÓÃµ½ exception ¶Î
+-- å†å¤æ‚ä¸€ç‚¹ï¼Œå¢åŠ å¼‚å¸¸å¤„ç†ï¼Œéœ€è¦ç”¨åˆ° exception æ®µ
 declare
   n number;
 begin
   n := 10/0;
 exception
   when others then
-    dbms_output.put_line('ÓĞ´íÎó·¢Éú');
+    dbms_output.put_line('æœ‰é”™è¯¯å‘ç”Ÿ');
 end;
 
 
--- ÔÙ¸´ÔÓÒ»µã£¬°Ñ´íÎóµÄĞÅÏ¢±£´æµ½Ö¸¶¨±íÖĞ
+-- å†å¤æ‚ä¸€ç‚¹ï¼ŒæŠŠé”™è¯¯çš„ä¿¡æ¯ä¿å­˜åˆ°æŒ‡å®šè¡¨ä¸­
 declare
   n number;
   emsg varchar2(20);
@@ -1811,23 +1810,23 @@ begin
   n := 10/0;
 exception
   when others then
-    dbms_output.put_line('ÓĞ´íÎó·¢Éú');
-    emsg := sqlerrm;   -- sqlerrm º¯Êı¿ÉÒÔ»ñÈ¡Òì³£µÄÃèÊöĞÅÏ¢
+    dbms_output.put_line('æœ‰é”™è¯¯å‘ç”Ÿ');
+    emsg := sqlerrm;   -- sqlerrm å‡½æ•°å¯ä»¥è·å–å¼‚å¸¸çš„æè¿°ä¿¡æ¯
     insert into log values (emsg);
     commit;
 end;
 
 #+END_SRC
 
-** ±äÁ¿¸³Öµ
+** å˜é‡èµ‹å€¼
 #+BEGIN_SRC sql
 
--- ×î»ù±¾µÄ¸³ÖµÔËËã·ûÊÇ:
+-- æœ€åŸºæœ¬çš„èµ‹å€¼è¿ç®—ç¬¦æ˜¯:
 a := 666;
 
 
--- ÔÚ begin Ö®ºó£¬Èç¹û select Óï¾ä²»´ø into ¹Ø¼ü´ÊµÄ»°£¬»á±¨´í¡£
--- Í¨¹ı select x into y from ÕâÑùµÄ¾äÊ½£¬¿ÉÒÔ°Ñ²éÑ¯µ½µÄ½á¹û¸³Öµ¸øÏàÓ¦±äÁ¿¡£
+-- åœ¨ begin ä¹‹åï¼Œå¦‚æœ select è¯­å¥ä¸å¸¦ into å…³é”®è¯çš„è¯ï¼Œä¼šæŠ¥é”™ã€‚
+-- é€šè¿‡ select x into y from è¿™æ ·çš„å¥å¼ï¼Œå¯ä»¥æŠŠæŸ¥è¯¢åˆ°çš„ç»“æœèµ‹å€¼ç»™ç›¸åº”å˜é‡ã€‚
 declare
   a emp.ename%type;
 begin
@@ -1836,39 +1835,39 @@ begin
 end;
 /
 
--- Èç¹ûÓĞ¶à¸ö±äÁ¿£¬ÄÇÃ´£¬ÒÀ´ÎÓÃ¶ººÅ¸ô¿ª
+-- å¦‚æœæœ‰å¤šä¸ªå˜é‡ï¼Œé‚£ä¹ˆï¼Œä¾æ¬¡ç”¨é€—å·éš”å¼€
 declare
   a emp.ename%type;
   b emp.sal%type;
 begin
   select ename, sal into a, b from emp where rownum < 2;
-  dbms_output.put_line('print result: ' || a || '  µÄ¹¤×ÊÊÇ: ' || b || 'ÃÀÔª');
+  dbms_output.put_line('print result: ' || a || '  çš„å·¥èµ„æ˜¯: ' || b || 'ç¾å…ƒ');
 end;
 /
--- result: SMITH  µÄ¹¤×ÊÊÇ: 800ÃÀÔª
+-- result: SMITH  çš„å·¥èµ„æ˜¯: 800ç¾å…ƒ
 
 
 
--- ÔÚÔöÉ¾¸ÄµÄ¹ı³ÌÖĞ£¬DMLÓï¾äÖ®ºóÍ¨¹ı¼ÓÈë returning into Óï¾ä£¬
--- Ò²¿ÉÒÔÊµÏÖ¸ú select into ÀàËÆµÄ±äÁ¿¸³Öµ¡£
+-- åœ¨å¢åˆ æ”¹çš„è¿‡ç¨‹ä¸­ï¼ŒDMLè¯­å¥ä¹‹åé€šè¿‡åŠ å…¥ returning into è¯­å¥ï¼Œ
+-- ä¹Ÿå¯ä»¥å®ç°è·Ÿ select into ç±»ä¼¼çš„å˜é‡èµ‹å€¼ã€‚
 declare
   a number;
 begin
   update emp set comm=800 where ename='KING'
     returning sal + comm into a;
-  dbms_output.put_line('King ÏÖÔÚµÄ¹¤×ÊÊÇ:' || a);
+  dbms_output.put_line('King ç°åœ¨çš„å·¥èµ„æ˜¯:' || a);
 end;
 /
 
 
 
--- ÔÚÓÎ±êµÄÊ¹ÓÃÖĞ£¬Í¨¹ı fetch into ¸³Öµ
+-- åœ¨æ¸¸æ ‡çš„ä½¿ç”¨ä¸­ï¼Œé€šè¿‡ fetch into èµ‹å€¼
 declare
   cursor a is select ename from emp;
   b varchar2(20);
 begin
   open a;
-  fetch a into b;   -- Í¨¹ı fetch into °Ñ½á¹û¸³Óè a;
+  fetch a into b;   -- é€šè¿‡ fetch into æŠŠç»“æœèµ‹äºˆ a;
   dbms_output.put_line(b);
   close a;
 end;
@@ -1877,12 +1876,12 @@ end;
 #+END_SRC
 
 
-** ±äÁ¿ÀàĞÍ
-*** ±êÁ¿ÀàĞÍ(Scalar)
-»ù±¾µÈÍ¬ÓÚ sql ÖĞµÄÊı¾İÀàĞÍ£¬±ÈÈç varchar2, number, date, blob, raw µÈ£¬»¹°üÀ¨ boolean ÀàĞÍ¡£
+** å˜é‡ç±»å‹
+*** æ ‡é‡ç±»å‹(Scalar)
+åŸºæœ¬ç­‰åŒäº sql ä¸­çš„æ•°æ®ç±»å‹ï¼Œæ¯”å¦‚ varchar2, number, date, blob, raw ç­‰ï¼Œè¿˜åŒ…æ‹¬ boolean ç±»å‹ã€‚
 
 #+BEGIN_SRC sql
--- ÕâÊÇ×î³£ÓÃµÄÊıÖµÀàĞÍµÄ¶¨Òå
+-- è¿™æ˜¯æœ€å¸¸ç”¨çš„æ•°å€¼ç±»å‹çš„å®šä¹‰
 declare
   a number;
   b number(20);
@@ -1895,7 +1894,7 @@ begin
 end;
 /
 
--- ÆäËû³£ÓÃÀàĞÍ
+-- å…¶ä»–å¸¸ç”¨ç±»å‹
 declare
   a varchar2(20);
   b char(20);
@@ -1913,11 +1912,11 @@ end;
 
 
 
--- ¶ÔÓÚ lob ÀàĞÍ£¬¿ÉÒÔÍ¨¹ı Oracle Ìá¹©µÄ dbms_lob °ü½øĞĞ²Ù×÷
--- ÏÂÃæÊÇÒ»¸öÀõ×Ó£¬Ò»ÆªÎÄÕÂ¡£
--- Ò»ÆªÎÄÕÂ¿ÉÄÜÓĞÒÔÏÂ×Ö¶Î£ºÖ÷¼ü¡¢×÷Õß¡¢ÌâÄ¿¡¢ÄÚÈİ¡¢´´×÷ÈÕÆÚ¡¢µãÔŞÊıµÈ£¬·Ö±ğÊ¹ÓÃÁË²»Í¬µÄ±äÁ¿ÀàĞÍ¡£
--- ÒòÎªÎÄÕÂÕıÎÄµÄÄÚÈİ¿ÉÄÜºÜ³¤£¬»á³¬¹ı varchar2 ÀàĞÍ 4000 ×Ö½ÚµÄÏŞÖÆ£¬ËùÒÔ×îºÃÊ¹ÓÃµÄÊÇ clob ÀàĞÍ¡£
--- Ê×ÏÈ´´½¨±í£¬ÈçÏÂ:
+-- å¯¹äº lob ç±»å‹ï¼Œå¯ä»¥é€šè¿‡ Oracle æä¾›çš„ dbms_lob åŒ…è¿›è¡Œæ“ä½œ
+-- ä¸‹é¢æ˜¯ä¸€ä¸ªæ —å­ï¼Œä¸€ç¯‡æ–‡ç« ã€‚
+-- ä¸€ç¯‡æ–‡ç« å¯èƒ½æœ‰ä»¥ä¸‹å­—æ®µï¼šä¸»é”®ã€ä½œè€…ã€é¢˜ç›®ã€å†…å®¹ã€åˆ›ä½œæ—¥æœŸã€ç‚¹èµæ•°ç­‰ï¼Œåˆ†åˆ«ä½¿ç”¨äº†ä¸åŒçš„å˜é‡ç±»å‹ã€‚
+-- å› ä¸ºæ–‡ç« æ­£æ–‡çš„å†…å®¹å¯èƒ½å¾ˆé•¿ï¼Œä¼šè¶…è¿‡ varchar2 ç±»å‹ 4000 å­—èŠ‚çš„é™åˆ¶ï¼Œæ‰€ä»¥æœ€å¥½ä½¿ç”¨çš„æ˜¯ clob ç±»å‹ã€‚
+-- é¦–å…ˆåˆ›å»ºè¡¨ï¼Œå¦‚ä¸‹:
 create table article 
 (
   id number primary key,
@@ -1928,14 +1927,14 @@ create table article
   score number
 );
 
--- Îª²åÈëÊı¾İ´´½¨Ò»¸öĞòÁĞ¡£Ä¬ÈÏ´Ó1¿ªÊ¼£¬²½³¤Îª1
+-- ä¸ºæ’å…¥æ•°æ®åˆ›å»ºä¸€ä¸ªåºåˆ—ã€‚é»˜è®¤ä»1å¼€å§‹ï¼Œæ­¥é•¿ä¸º1
 create sequence seq_article;
--- ²åÈëÒ»ÌõÊı¾İ
-insert into article values (seq_article.nextval, 'º«º®', '´©×ÅÃŞ°ÀÏ´Ôè', 'ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À', systimestamp, 0);
--- ²åÈëÒ»ÌõÄÚÈİÎª¿ÕµÄÎÄÕÂ¡£ÓÃ empty_clob() º¯Êı³õÊ¼»¯ clob ×Ö¶Î
-insert into article values (seq_article.nextval, '¹ù¾´Ã÷', '¾Ş´óÊ±´ú', empty_clob(), systimestamp, 0);
+-- æ’å…¥ä¸€æ¡æ•°æ®
+insert into article values (seq_article.nextval, 'éŸ©å¯’', 'ç©¿ç€æ£‰è¢„æ´—æ¾¡', 'æˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„', systimestamp, 0);
+-- æ’å…¥ä¸€æ¡å†…å®¹ä¸ºç©ºçš„æ–‡ç« ã€‚ç”¨ empty_clob() å‡½æ•°åˆå§‹åŒ– clob å­—æ®µ
+insert into article values (seq_article.nextval, 'éƒ­æ•¬æ˜', 'å·¨å¤§æ—¶ä»£', empty_clob(), systimestamp, 0);
 
--- Ğ´Ò»¸öÀõ×Ó£¬´òÓ¡ÎÄÕÂµÄ×÷Õß¡¢´´×÷ÈÕÆÚ¡¢±êÌâ¡¢ÄÚÈİ¼ò½é£¨Ç°20¸ö×Ö£©¡£
+-- å†™ä¸€ä¸ªæ —å­ï¼Œæ‰“å°æ–‡ç« çš„ä½œè€…ã€åˆ›ä½œæ—¥æœŸã€æ ‡é¢˜ã€å†…å®¹ç®€ä»‹ï¼ˆå‰20ä¸ªå­—ï¼‰ã€‚
 declare
   amount number default 20;
   v_author varchar2(20);
@@ -1944,45 +1943,45 @@ declare
   v_content clob;
   v_desc varchar2(400);
 begin
-  -- ²éÑ¯£¬¸³Öµ
+  -- æŸ¥è¯¢ï¼Œèµ‹å€¼
   select author, to_char(create_date, 'yyyy.mm.dd hh:mi:ss'), title, content into v_author, v_date, v_title, v_content from article where rownum < 2;
-  -- »ñÈ¡Ç°20¸ö×Ö·ûµÄÓï·¨¡£º¯Êı read µÄ²ÎÊı·Ö±ğÎª blob×Ö¶Î¡¢Òª¶ÁÈ¡µÄ³¤¶È¡¢¿ªÊ¼µÄÎ»ÖÃ¡¢¶ÁÈ¡µÄ½á¹û¡£
+  -- è·å–å‰20ä¸ªå­—ç¬¦çš„è¯­æ³•ã€‚å‡½æ•° read çš„å‚æ•°åˆ†åˆ«ä¸º blobå­—æ®µã€è¦è¯»å–çš„é•¿åº¦ã€å¼€å§‹çš„ä½ç½®ã€è¯»å–çš„ç»“æœã€‚
   dbms_lob.read(v_content, amount, 1, v_desc);
   dbms_output.put_line(v_author || '(' || v_date || ')');
-  dbms_output.put_line('±êÌâ£º' || v_title);
+  dbms_output.put_line('æ ‡é¢˜ï¼š' || v_title);
   dbms_output.put_line(v_desc || '...');
 end;
 /
--- ½á¹ûÏÔÊ¾£º
--- º«º®(2016.09.29 05:00:56)
--- ±êÌâ£º´©×ÅÃŞ°ÀÏ´Ôè
--- ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ¶àÃŞ°À£¬ÎÒÃÇÓĞºÜ...
+-- ç»“æœæ˜¾ç¤ºï¼š
+-- éŸ©å¯’(2016.09.29 05:00:56)
+-- æ ‡é¢˜ï¼šç©¿ç€æ£‰è¢„æ´—æ¾¡
+-- æˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆå¤šæ£‰è¢„ï¼Œæˆ‘ä»¬æœ‰å¾ˆ...
 
 
 #+END_SRC
 
 *** TYPE/ROWTYPE
 
-ÕâÊÇÓÃÀ´ÒıÓÃÊı¾İ¿âÖĞ±íµÄÄ³Ò»ĞĞ£¬»òÄ³¸ö×Ö¶ÎµÄÀàĞÍ¡£
+è¿™æ˜¯ç”¨æ¥å¼•ç”¨æ•°æ®åº“ä¸­è¡¨çš„æŸä¸€è¡Œï¼Œæˆ–æŸä¸ªå­—æ®µçš„ç±»å‹ã€‚
 
 #+BEGIN_SRC sql
--- %type ÊÇÓÃÀ´¿ìËÙ»ñÈ¡±íÖĞÄ³¸ö×Ö¶Î¾ßÌåÀàĞÍµÄÒ»ÖÖ·½Ê½¡£
--- Í¨¹ıÀûÓÃÕâÖÖ·½Ê½£¬¿ÉÒÔ¼ò»¯ÎÒÃÇµÄ¶¨Òå¡£
+-- %type æ˜¯ç”¨æ¥å¿«é€Ÿè·å–è¡¨ä¸­æŸä¸ªå­—æ®µå…·ä½“ç±»å‹çš„ä¸€ç§æ–¹å¼ã€‚
+-- é€šè¿‡åˆ©ç”¨è¿™ç§æ–¹å¼ï¼Œå¯ä»¥ç®€åŒ–æˆ‘ä»¬çš„å®šä¹‰ã€‚
 declare
-  a emp.ename%type;   -- Ïàµ±ÓÚ a varchar2(xx)
-  b emp.sal%type;     -- Ïàµ±ÓÚ b number(7,2)
+  a emp.ename%type;   -- ç›¸å½“äº a varchar2(xx)
+  b emp.sal%type;     -- ç›¸å½“äº b number(7,2)
 begin
   select ename, sal into a, b from emp where rownum < 2;
-  dbms_output.put_line('Ô±¹¤µÄÃû×ÖÊÇ:' || a || ', ËûµÄ¹¤×ÊÊÇ: ' || b || ' ÃÀÔª');
+  dbms_output.put_line('å‘˜å·¥çš„åå­—æ˜¯:' || a || ', ä»–çš„å·¥èµ„æ˜¯: ' || b || ' ç¾å…ƒ');
 end;
 
--- %rowtype ÊÇÒ»ÖÖ»ñÈ¡ĞĞ¼ÇÂ¼µÄ·½Ê½£¬Ëü°üº¬ÁËÒ»ĞĞ¼ÇÂ¼ËùÓĞµÄ×Ö¶Î¡£
--- ËùÒÔ£¬ÎÒÃÇ¿ÉÒÔÓÃjsÖĞÊı×éµÄ½Ç¶ÈÈ¥±È½ÏÖ®¡£
+-- %rowtype æ˜¯ä¸€ç§è·å–è¡Œè®°å½•çš„æ–¹å¼ï¼Œå®ƒåŒ…å«äº†ä¸€è¡Œè®°å½•æ‰€æœ‰çš„å­—æ®µã€‚
+-- æ‰€ä»¥ï¼Œæˆ‘ä»¬å¯ä»¥ç”¨jsä¸­æ•°ç»„çš„è§’åº¦å»æ¯”è¾ƒä¹‹ã€‚
 declare
   v_emp emp%rowtype;
 begin
   select * into v_emp from emp where rownum < 2;
-  dbms_output.put_line('½á¹ûÊÇ£º' || v_emp.ename || 'µÄ¹¤×ÊÊÇ' || v_emp.sal || 'Ó¢°÷ , ²¿ÃÅ±àºÅÊÇ: ' || v_emp.deptno2);
+  dbms_output.put_line('ç»“æœæ˜¯ï¼š' || v_emp.ename || 'çš„å·¥èµ„æ˜¯' || v_emp.sal || 'è‹±é•‘ , éƒ¨é—¨ç¼–å·æ˜¯: ' || v_emp.deptno2);
 
 end;
 /
@@ -1990,40 +1989,40 @@ end;
 
 #+END_SRC
 
-*** ×Ô¶¨Òå¼ÇÂ¼/Êı×éÀàĞÍ
+*** è‡ªå®šä¹‰è®°å½•/æ•°ç»„ç±»å‹
 #+BEGIN_SRC sql
--- ¿ÉÒÔÔÚ»ù±¾ÀàĞÍµÄ»ù´¡ÉÏ£¬¹¹Ôì³öĞí¶àµÄ¸´ÔÓµÄÀàĞÍ£¬±ÈÈçÊı×é¡£
--- record ÀàĞÍ£¬Ê¹ÓÃ name À´»ñÈ¡ÀïÃæµÄÖµ¡£
--- Oracle ÖĞ£¬¶¨ÒåĞÂÀàĞÍµÄÓï¾äÎª type¡£±ÈÈç£¬¶¨ÒåÒ»¸ö record Êı×é£¬Óï¾äÈçÏÂ£º
-TYPE type_name IS RECORD (µÚÒ»¸öÔªËØµÄÃû×Ö µÚÒ»¸öÔªËØµÄ»ù±¾ÀàĞÍ, µÚ¶ş¸ö..., µÚÈı¸ö);
--- ÀàĞÍ¶¨ÒåÍê±ÏÖ®ºó£¬¾Í¿ÉÒÔÏñÆÕÍ¨µÄÀàĞÍÄÇÑùÈ¥Ê¹ÓÃÁË¡£Èç¹û£¬ÎÒÃÇ¿ÉÒÔÕâÑù´´½¨Ò»¸öÉÏÊöÀàĞÍµÄ±äÁ¿
+-- å¯ä»¥åœ¨åŸºæœ¬ç±»å‹çš„åŸºç¡€ä¸Šï¼Œæ„é€ å‡ºè®¸å¤šçš„å¤æ‚çš„ç±»å‹ï¼Œæ¯”å¦‚æ•°ç»„ã€‚
+-- record ç±»å‹ï¼Œä½¿ç”¨ name æ¥è·å–é‡Œé¢çš„å€¼ã€‚
+-- Oracle ä¸­ï¼Œå®šä¹‰æ–°ç±»å‹çš„è¯­å¥ä¸º typeã€‚æ¯”å¦‚ï¼Œå®šä¹‰ä¸€ä¸ª record æ•°ç»„ï¼Œè¯­å¥å¦‚ä¸‹ï¼š
+TYPE type_name IS RECORD (ç¬¬ä¸€ä¸ªå…ƒç´ çš„åå­— ç¬¬ä¸€ä¸ªå…ƒç´ çš„åŸºæœ¬ç±»å‹, ç¬¬äºŒä¸ª..., ç¬¬ä¸‰ä¸ª);
+-- ç±»å‹å®šä¹‰å®Œæ¯•ä¹‹åï¼Œå°±å¯ä»¥åƒæ™®é€šçš„ç±»å‹é‚£æ ·å»ä½¿ç”¨äº†ã€‚å¦‚æœï¼Œæˆ‘ä»¬å¯ä»¥è¿™æ ·åˆ›å»ºä¸€ä¸ªä¸Šè¿°ç±»å‹çš„å˜é‡
 v_name type_name;
 
--- ÏÂÃæÊÇÒ»¸ö¾ßÌåµãµÄÀı×Ó
+-- ä¸‹é¢æ˜¯ä¸€ä¸ªå…·ä½“ç‚¹çš„ä¾‹å­
 declare
   type t_emp is record (ename varchar2(20), sal number);
-  v_emp t_emp;     -- ¶¨ÒåÒ»¸ö t_emp ÀàĞÍµÄ±äÁ¿¡£¶¨ÒåÍê±äÁ¿Ö®ºó£¬ÎÒÃÇ²Å¿ÉÒÔÊ¹ÓÃ¡£
-  v_emp2 t_emp;    -- ÕâÊÇ¶¨ÒåµÄµÚ¶ş¸ö t_emp ÀàĞÍµÄ±äÁ¿.
+  v_emp t_emp;     -- å®šä¹‰ä¸€ä¸ª t_emp ç±»å‹çš„å˜é‡ã€‚å®šä¹‰å®Œå˜é‡ä¹‹åï¼Œæˆ‘ä»¬æ‰å¯ä»¥ä½¿ç”¨ã€‚
+  v_emp2 t_emp;    -- è¿™æ˜¯å®šä¹‰çš„ç¬¬äºŒä¸ª t_emp ç±»å‹çš„å˜é‡.
 begin
   select ename, sal into v_emp from emp where rownum < 2;
-  dbms_output.put_line('½á¹ûÊÇ£º' || v_emp.ename || 'µÄ¹¤×ÊÊÇ' || v_emp.sal || 'Ó¢°÷ ');
+  dbms_output.put_line('ç»“æœæ˜¯ï¼š' || v_emp.ename || 'çš„å·¥èµ„æ˜¯' || v_emp.sal || 'è‹±é•‘ ');
 end;
 /
 
--- ²éÑ¯ KING µÄ¹¤×ÊºÍ²¿ÃÅ¡£ÀûÓÃÁË record ÀàĞÍ¡£
+-- æŸ¥è¯¢ KING çš„å·¥èµ„å’Œéƒ¨é—¨ã€‚åˆ©ç”¨äº† record ç±»å‹ã€‚
 declare
   type t_emp is record (ename varchar2(20), sal number,dname varchar2(20));
   v_emp t_emp;
 begin
   select ename, sal ,dname into v_emp from emp join scott.dept on emp.deptno=scott.dept.deptno where sal>1000;
-  dbms_output.put_line('½á¹ûÊÇ£º' || v_emp.ename || 'µÄ¹¤×ÊÊÇ' || v_emp.sal || 'Ó¢°÷ '||'²¿ÃÅÊÇ'||v_emp.dname);
+  dbms_output.put_line('ç»“æœæ˜¯ï¼š' || v_emp.ename || 'çš„å·¥èµ„æ˜¯' || v_emp.sal || 'è‹±é•‘ '||'éƒ¨é—¨æ˜¯'||v_emp.dname);
 end;
 
 
 
--- Êı×éÀàĞÍ£¬ÓÃĞòºÅÀ´»ñÈ¡ÀïÃæµÄÖµ¡£
--- varray ¹Ø¼ü×Ö£¬ĞèÒªÖ¸Ã÷³¤¶È£¬Ö¸Ã÷ÀàĞÍ
--- type ³ıÁË record ºÍ varray Íâ£¬»¹ÓĞºÜ¶àÆäËûÀàĞÍ£¬±ÈÈç table,object µÈ¡£ÓĞĞËÈ¤µÄÍ¬Ñ§×Ô¼ºÕÒ×ÊÁÏ¡£
+-- æ•°ç»„ç±»å‹ï¼Œç”¨åºå·æ¥è·å–é‡Œé¢çš„å€¼ã€‚
+-- varray å…³é”®å­—ï¼Œéœ€è¦æŒ‡æ˜é•¿åº¦ï¼ŒæŒ‡æ˜ç±»å‹
+-- type é™¤äº† record å’Œ varray å¤–ï¼Œè¿˜æœ‰å¾ˆå¤šå…¶ä»–ç±»å‹ï¼Œæ¯”å¦‚ table,object ç­‰ã€‚æœ‰å…´è¶£çš„åŒå­¦è‡ªå·±æ‰¾èµ„æ–™ã€‚
 declare
   type t_numarr is varray(4) of number;
   a t_numarr;
@@ -2038,56 +2037,56 @@ end;
 
 #+END_SRC
 
-** ²Ù×÷·û
-ÏêÇé¿´ p227
-** Á÷³Ì¿ØÖÆ
-*** ·ÖÖ§ÅĞ¶Ï
-IF Óï¾ä
+** æ“ä½œç¬¦
+è¯¦æƒ…çœ‹ p227
+** æµç¨‹æ§åˆ¶
+*** åˆ†æ”¯åˆ¤æ–­
+IF è¯­å¥
 #+BEGIN_SRC sql
--- ×î¼òÓï·¨Îª
-IF Ìõ¼ş THEN
-  ÒªÖ´ĞĞµÄ´úÂë;
+-- æœ€ç®€è¯­æ³•ä¸º
+IF æ¡ä»¶ THEN
+  è¦æ‰§è¡Œçš„ä»£ç ;
 END IF;
 
--- ¸´ÔÓÒ»µã£¬ĞèÒªÓÃ elsif ºÍ else Ìí¼Ó¸ü¶àµÄ·ÖÖ§
-IF Ìõ¼ş THEN
-  ÒªÖ´ĞĞµÄ´úÂë;
-ELSIF ÁíÍâµÄÌõ¼ş THEN
-  ÒªÖ´ĞĞµÄ´úÂë;
+-- å¤æ‚ä¸€ç‚¹ï¼Œéœ€è¦ç”¨ elsif å’Œ else æ·»åŠ æ›´å¤šçš„åˆ†æ”¯
+IF æ¡ä»¶ THEN
+  è¦æ‰§è¡Œçš„ä»£ç ;
+ELSIF å¦å¤–çš„æ¡ä»¶ THEN
+  è¦æ‰§è¡Œçš„ä»£ç ;
 ELSE
-  ÒªÖ´ĞĞµÄ´úÂë;
+  è¦æ‰§è¡Œçš„ä»£ç ;
 END IF;
 
 
 
--- Àı×Ó1£¬ÕâÊÇÒ»¸öÉÔÎ¢Ïê¾¡µÄÀı×Ó
+-- ä¾‹å­1ï¼Œè¿™æ˜¯ä¸€ä¸ªç¨å¾®è¯¦å°½çš„ä¾‹å­
 declare
   a number;
 begin
   a := dbms_random.value(0, 4);
-  dbms_output.put_line('ÄãÊäÈëµÄÊÇ:' || a);
+  dbms_output.put_line('ä½ è¾“å…¥çš„æ˜¯:' || a);
   if (a < 1) then
-    dbms_output.put_line('ÄãÊäÈëµÄÊı×ÖÌ«Ğ¡ÁË');
+    dbms_output.put_line('ä½ è¾“å…¥çš„æ•°å­—å¤ªå°äº†');
   elsif a < 2 then
-    dbms_output.put_line('ÚÀÑ½£¬¸Õ¸ÕºÃ°¡');
+    dbms_output.put_line('è¯¶å‘€ï¼Œåˆšåˆšå¥½å•Š');
   else
-    dbms_output.put_line('ÄúÊäÈëµÄÌ«´óÁË');
+    dbms_output.put_line('æ‚¨è¾“å…¥çš„å¤ªå¤§äº†');
   end if;
 end;
 /
 
 
--- if µÄÊ¹ÓÃ£¬Àı×Ó2
+-- if çš„ä½¿ç”¨ï¼Œä¾‹å­2
 declare
   a number;
 begin
-  a := round(dbms_random.value(0.5,3.5));  -- È¡Ò»¸öËæ»úÊı£¬¿ÉÄÜµÄÖµÊÇ 1/2/3
+  a := round(dbms_random.value(0.5,3.5));  -- å–ä¸€ä¸ªéšæœºæ•°ï¼Œå¯èƒ½çš„å€¼æ˜¯ 1/2/3
   if a = 1 then
-    dbms_output.put_line('ÄãÊÇÄĞÉú£¬Ó¦¸Ã¶à¸É»î');
+    dbms_output.put_line('ä½ æ˜¯ç”·ç”Ÿï¼Œåº”è¯¥å¤šå¹²æ´»');
   elsif a = 2 then
-    dbms_output.put_line('ÄãÊÇÅ®Éú£¬Ó¦¸Ã¶à±£Ñø');
+    dbms_output.put_line('ä½ æ˜¯å¥³ç”Ÿï¼Œåº”è¯¥å¤šä¿å…»');
   else
-    dbms_output.put_line('ÄãÏÈÈ¥ÑéÒ»ÏÂĞÔ±ğ°É');
+    dbms_output.put_line('ä½ å…ˆå»éªŒä¸€ä¸‹æ€§åˆ«å§');
   end if;
 
 end;
@@ -2095,16 +2094,16 @@ end;
 
 #+END_SRC
 
-Case Óï¾ä
+Case è¯­å¥
 #+BEGIN_SRC sql
-CASE [×Ö¶Î]
-  WHEN Ìõ¼ş THEN ÒªÖ´ĞĞµÄ´úÂë
-  [WHEN Ìõ¼ş THEN ÒªÖ´ĞĞµÄ´úÂë]
-  [ELSE ÒªÖ´ĞĞµÄ´úÂë]
+CASE [å­—æ®µ]
+  WHEN æ¡ä»¶ THEN è¦æ‰§è¡Œçš„ä»£ç 
+  [WHEN æ¡ä»¶ THEN è¦æ‰§è¡Œçš„ä»£ç ]
+  [ELSE è¦æ‰§è¡Œçš„ä»£ç ]
 END CASE;
 
 
--- °ÑÉÏÃæ if/else µÄÀı×Ó1·­Òë¹ıÀ´¾ÍÊÇ£º
+-- æŠŠä¸Šé¢ if/else çš„ä¾‹å­1ç¿»è¯‘è¿‡æ¥å°±æ˜¯ï¼š
 declare
   a number;
 begin
@@ -2112,58 +2111,58 @@ begin
   dbms_output.put_line(a);
   case
     when a < 1 then
-      dbms_output.put_line('ÄãÊäÈëµÄÊı×ÖÌ«Ğ¡ÁË');
+      dbms_output.put_line('ä½ è¾“å…¥çš„æ•°å­—å¤ªå°äº†');
     when a < 2 then
-      dbms_output.put_line('ÚÀÑ½£¬¸Õ¸ÕºÃ°¡');
+      dbms_output.put_line('è¯¶å‘€ï¼Œåˆšåˆšå¥½å•Š');
     else 
-      dbms_output.put_line('ÄúÊäÈëµÄÌ«´óÁË');
+      dbms_output.put_line('æ‚¨è¾“å…¥çš„å¤ªå¤§äº†');
   end case;
 end;
 /
 
--- °ÑÉÏÃæ if ÀïÃæÀı×Ó2·­Òë¹ıÀ´ÊÇ£º
+-- æŠŠä¸Šé¢ if é‡Œé¢ä¾‹å­2ç¿»è¯‘è¿‡æ¥æ˜¯ï¼š
 declare
   a number;
 begin
   a := round(dbms_random.value(0.5,3.5));
   case a
     when 1 then
-      dbms_output.put_line('ÄãÊÇÄĞÉú£¬Ó¦¸Ã¶à¸É»î');
+      dbms_output.put_line('ä½ æ˜¯ç”·ç”Ÿï¼Œåº”è¯¥å¤šå¹²æ´»');
     when 2 then
-      dbms_output.put_line('ÄãÊÇÅ®Éú£¬Ó¦¸Ã¶à±£Ñø');
+      dbms_output.put_line('ä½ æ˜¯å¥³ç”Ÿï¼Œåº”è¯¥å¤šä¿å…»');
     else
-      dbms_output.put_line('ÄãÏÈÈ¥ÑéÒ»ÏÂĞÔ±ğ°É');
+      dbms_output.put_line('ä½ å…ˆå»éªŒä¸€ä¸‹æ€§åˆ«å§');
   end case;
 end;
 /
 
 #+END_SRC
 
-*** Ñ­»·µü´ú
+*** å¾ªç¯è¿­ä»£
 loop
 #+BEGIN_SRC sql
--- ×î¼òµ¥µÄÓï·¨
+-- æœ€ç®€å•çš„è¯­æ³•
 LOOP
-  Ñ­»·µÄ´úÂë;
-  -- ×¢Òâ£¬ÔÚÕâÑùµÄ loop Óï¾äÖĞ£¬ÒªÌí¼ÓºÏÊÊµÄÖĞÖ¹Óï¾ä¡£
+  å¾ªç¯çš„ä»£ç ;
+  -- æ³¨æ„ï¼Œåœ¨è¿™æ ·çš„ loop è¯­å¥ä¸­ï¼Œè¦æ·»åŠ åˆé€‚çš„ä¸­æ­¢è¯­å¥ã€‚
 END LOOP;
 
 
--- ÕâÊÇ loop µÄ»ù±¾ÓÃ·¨
+-- è¿™æ˜¯ loop çš„åŸºæœ¬ç”¨æ³•
 declare
   a number := 10;
 begin
   loop
     a := a - 1;
     dbms_output.put_line(systimestamp);
-    if a < 1 then  -- ĞèÒª¸ù¾İÌõ¼şÅĞ¶Ï£¬Ğ´ÏàÓ¦µÄÍË³öÓï¾ä
+    if a < 1 then  -- éœ€è¦æ ¹æ®æ¡ä»¶åˆ¤æ–­ï¼Œå†™ç›¸åº”çš„é€€å‡ºè¯­å¥
       exit;
     end if;
   end loop;
 end;
 /
 
--- ÍË³öÓï¾ä¿ÉÒÔÈçÏÂ¼òĞ´£¬¼´ exit when Ìõ¼ş
+-- é€€å‡ºè¯­å¥å¯ä»¥å¦‚ä¸‹ç®€å†™ï¼Œå³ exit when æ¡ä»¶
 declare
   a number := 10;
 begin
@@ -2180,13 +2179,13 @@ end;
 
 for
 #+BEGIN_SRC sql
--- Óï·¨
-FOR ±äÁ¿ IN ×îĞ¡Öµ..×î´óÖµ LOOP
-  Ö´ĞĞµÄÓï¾ä;
+-- è¯­æ³•
+FOR å˜é‡ IN æœ€å°å€¼..æœ€å¤§å€¼ LOOP
+  æ‰§è¡Œçš„è¯­å¥;
 END LOOP;
 
--- ÏÂÃæÊÇ loop µÄ½ø½×ÓÃ·¨£¬Òª¸ú for ½áºÏÊ¹ÓÃ
--- ÕâÖÖ·½Ê½ºÜÊµÓÃ
+-- ä¸‹é¢æ˜¯ loop çš„è¿›é˜¶ç”¨æ³•ï¼Œè¦è·Ÿ for ç»“åˆä½¿ç”¨
+-- è¿™ç§æ–¹å¼å¾ˆå®ç”¨
 begin
   for i in 1..10 loop
     dbms_output.put_line(systimestamp);
@@ -2199,14 +2198,14 @@ end;
 
 while
 #+BEGIN_SRC sql
--- Óï·¨
-WHILE Ìõ¼ş LOOP
-  Ö´ĞĞµÄÓï¾ä;
+-- è¯­æ³•
+WHILE æ¡ä»¶ LOOP
+  æ‰§è¡Œçš„è¯­å¥;
 END LOOP;
 
 
 
--- ¾ÙÀı
+-- ä¸¾ä¾‹
 declare
   a number := 10;
 begin
@@ -2219,44 +2218,44 @@ end;
 #+END_SRC
 
 
-** Òì³£´¦Àí
-×÷ÎªÒ»¸öÓÅĞãµÄ³ÌĞòÔ±£¬¿Ï¶¨ÒªÄÜĞ´³ö½¡×³µÄ´úÂë£¬¶ø½¡×³´úÂëµÄÊ×Òª¿¼ÂÇ£¬¾ÍÊÇ´¦ÀíºÃÒì³£¡£
+** å¼‚å¸¸å¤„ç†
+ä½œä¸ºä¸€ä¸ªä¼˜ç§€çš„ç¨‹åºå‘˜ï¼Œè‚¯å®šè¦èƒ½å†™å‡ºå¥å£®çš„ä»£ç ï¼Œè€Œå¥å£®ä»£ç çš„é¦–è¦è€ƒè™‘ï¼Œå°±æ˜¯å¤„ç†å¥½å¼‚å¸¸ã€‚
 
-Oracle ÔËĞĞ¹ı³ÌÖĞ³öÏÖµÄ´íÎó£¬³ÆÖ®Îª Oracle Òì³£¡£Ö÷Òª·ÖÎªÁ½ÖÖ£¬Ò»ÖÖÊÇÏµÍ³Ô¤¶¨ÒåÒì³£(¼´ÄÚ²¿Òì³£)£¬Ò»ÖÖÊÇÓÃ»§×Ô¶¨ÒåÒì³£¡£
+Oracle è¿è¡Œè¿‡ç¨‹ä¸­å‡ºç°çš„é”™è¯¯ï¼Œç§°ä¹‹ä¸º Oracle å¼‚å¸¸ã€‚ä¸»è¦åˆ†ä¸ºä¸¤ç§ï¼Œä¸€ç§æ˜¯ç³»ç»Ÿé¢„å®šä¹‰å¼‚å¸¸(å³å†…éƒ¨å¼‚å¸¸)ï¼Œä¸€ç§æ˜¯ç”¨æˆ·è‡ªå®šä¹‰å¼‚å¸¸ã€‚
 
-Òì³£ÒªÓĞÒ»¸öÃû×Ö£¬Ò»¸ö±àºÅ(sqlcode)£¬Ò»¸öÃèÊö(sqlerrm)¡£
+å¼‚å¸¸è¦æœ‰ä¸€ä¸ªåå­—ï¼Œä¸€ä¸ªç¼–å·(sqlcode)ï¼Œä¸€ä¸ªæè¿°(sqlerrm)ã€‚
 
-Òì³£µÄ»ù±¾²¶»ñÓï¾äÎª£º
+å¼‚å¸¸çš„åŸºæœ¬æ•è·è¯­å¥ä¸ºï¼š
 #+BEGIN_SRC sql
 declare
-  ±äÁ¿¶¨Òå;
+  å˜é‡å®šä¹‰;
 begin
-  ´úÂëÔËĞĞ;
+  ä»£ç è¿è¡Œ;
 exception
-  when Òì³£Ãû³Æ»òÕßothers then
-    ³öÏÖÒì³£ºóµÄ´¦Àí´úÂë;
+  when å¼‚å¸¸åç§°æˆ–è€…others then
+    å‡ºç°å¼‚å¸¸åçš„å¤„ç†ä»£ç ;
 end;
 #+END_SRC
 
-*** ÏµÍ³×Ô¶¨ÒåµÄÒì³£(Predefined)
-ÕâÖÖÒì³£ÎŞĞè¶¨Òå£¬µ±³öÏÖµÄÊ±ºò»á×Ô¶¯Å×³ö£¬ÎÒÃÇÖ»ĞèÒªÔÚ exception ÖĞ×öºÃÏàÓ¦µÄ²¶»ñ´¦Àí¾Í¿ÉÒÔÁË¡£
-¿ÉÒÔÊ¹ÓÃ sqlcode ºÍ sqlerrm ·Ö±ğ·µ»ØÒì³£µÄ´úÂë±àºÅ£¬ÒÔ¼°Òì³£µÄÃèÊöĞÅÏ¢¡£
+*** ç³»ç»Ÿè‡ªå®šä¹‰çš„å¼‚å¸¸(Predefined)
+è¿™ç§å¼‚å¸¸æ— éœ€å®šä¹‰ï¼Œå½“å‡ºç°çš„æ—¶å€™ä¼šè‡ªåŠ¨æŠ›å‡ºï¼Œæˆ‘ä»¬åªéœ€è¦åœ¨ exception ä¸­åšå¥½ç›¸åº”çš„æ•è·å¤„ç†å°±å¯ä»¥äº†ã€‚
+å¯ä»¥ä½¿ç”¨ sqlcode å’Œ sqlerrm åˆ†åˆ«è¿”å›å¼‚å¸¸çš„ä»£ç ç¼–å·ï¼Œä»¥åŠå¼‚å¸¸çš„æè¿°ä¿¡æ¯ã€‚
 
 #+BEGIN_SRC sql
--- Àõ×ÓÖĞÓĞÁ½ÖÖÒì³££¬Ò»ÖÖÊÇ×ÖÄ¸ÎªÁãµÄÒì³£(ZERO_DIVIDE)£¬ÁíÒ»ÖÖ£¬ÊÇÃ»ÓĞ²éÑ¯µ½Êı¾İµÄÒì³£(NO_DATA_FOUND)¡£
--- ÕâÁ½ÖÖ¶¼ÊÇ Oracle ÒÑ¾­×Ô¶¨ÒåºÃµÄÒì³££¬ÎÒÃÇ¿ÉÒÔÖ±½ÓÊ¹ÓÃ¡£
+-- æ —å­ä¸­æœ‰ä¸¤ç§å¼‚å¸¸ï¼Œä¸€ç§æ˜¯å­—æ¯ä¸ºé›¶çš„å¼‚å¸¸(ZERO_DIVIDE)ï¼Œå¦ä¸€ç§ï¼Œæ˜¯æ²¡æœ‰æŸ¥è¯¢åˆ°æ•°æ®çš„å¼‚å¸¸(NO_DATA_FOUND)ã€‚
+-- è¿™ä¸¤ç§éƒ½æ˜¯ Oracle å·²ç»è‡ªå®šä¹‰å¥½çš„å¼‚å¸¸ï¼Œæˆ‘ä»¬å¯ä»¥ç›´æ¥ä½¿ç”¨ã€‚
 declare
   a varchar2(20);
   b number;
 begin
-  b := 10000 / round(dbms_random.value(-0.1, 1.1));       -- Ëæ»úÊı£¬0»òÕß1£¬Èç¹ûËæ»úµ½0£¬Ôò»áÅ×³öÏàÓ¦Òì³£¡£
-  select ename into a from emp where empno = 2222222222;  -- Èç¹û²éÑ¯²»µ½¼ÇÂ¼£¬Ôò»áÅ×³öÎŞÊı¾İ¼ÇÂ¼Òì³£¡£
-  dbms_output.put_line('ok£¬Äú²éÑ¯³É¹¦ÁË');
+  b := 10000 / round(dbms_random.value(-0.1, 1.1));       -- éšæœºæ•°ï¼Œ0æˆ–è€…1ï¼Œå¦‚æœéšæœºåˆ°0ï¼Œåˆ™ä¼šæŠ›å‡ºç›¸åº”å¼‚å¸¸ã€‚
+  select ename into a from emp where empno = 2222222222;  -- å¦‚æœæŸ¥è¯¢ä¸åˆ°è®°å½•ï¼Œåˆ™ä¼šæŠ›å‡ºæ— æ•°æ®è®°å½•å¼‚å¸¸ã€‚
+  dbms_output.put_line('okï¼Œæ‚¨æŸ¥è¯¢æˆåŠŸäº†');
 exception
   when NO_DATA_FOUND then
-    dbms_output.put_line('hehe, Ã»Êı¾İ£¬Ç×');
+    dbms_output.put_line('hehe, æ²¡æ•°æ®ï¼Œäº²');
   when ZERO_DIVIDE then
-    dbms_output.put_line('×ÖÄ¸²»ÄÜÎªÁãÅ¶£¬Ç×');
+    dbms_output.put_line('å­—æ¯ä¸èƒ½ä¸ºé›¶å“¦ï¼Œäº²');
   when OTHERS then
     dbms_output.put_line('hehe,you are great');
 end;
@@ -2266,31 +2265,31 @@ end;
 #+END_SRC
 
 
-ÓĞµÄÄÚ²¿Òì³££¬Ö»ÓĞ±àºÅ¸úÃèÊö£¬Ã»ÓĞ¾ßÌåÃû×Ö£¬ÄÇÃ´£¬ÎÒÃÇĞèÒªÓÃ PRAGMA EXCEPTION_INIT À´¸øÒì³£ÆğÒ»¸öÃû×Ö¡£
+æœ‰çš„å†…éƒ¨å¼‚å¸¸ï¼Œåªæœ‰ç¼–å·è·Ÿæè¿°ï¼Œæ²¡æœ‰å…·ä½“åå­—ï¼Œé‚£ä¹ˆï¼Œæˆ‘ä»¬éœ€è¦ç”¨ PRAGMA EXCEPTION_INIT æ¥ç»™å¼‚å¸¸èµ·ä¸€ä¸ªåå­—ã€‚
 #+BEGIN_SRC sql
 declare
-  nested_delete exception;   -- ÏÈ×Ô¶¨ÒåÒì³££¬Ãû×ÖÎª nested_delete
-  PRAGMA EXCEPTION_INIT(nested_delete, -2292);  -- ÒòÎª¡°¼ÇÂ¼´æÔÚÍâ¼üÔ¼Êø¡±Õâ¸öÏµÍ³Òì³£Ö»ÓĞ±àºÅ£¬Îª -2292£¬Ã»ÓĞÃû×Ö¡£ÎÒÃÇÍ¨¹ıÕâ¸öÓï¾ä¸øÕâ¸öÒì³£¸³ÓèÃû×Ö nested_delete¡£
+  nested_delete exception;   -- å…ˆè‡ªå®šä¹‰å¼‚å¸¸ï¼Œåå­—ä¸º nested_delete
+  PRAGMA EXCEPTION_INIT(nested_delete, -2292);  -- å› ä¸ºâ€œè®°å½•å­˜åœ¨å¤–é”®çº¦æŸâ€è¿™ä¸ªç³»ç»Ÿå¼‚å¸¸åªæœ‰ç¼–å·ï¼Œä¸º -2292ï¼Œæ²¡æœ‰åå­—ã€‚æˆ‘ä»¬é€šè¿‡è¿™ä¸ªè¯­å¥ç»™è¿™ä¸ªå¼‚å¸¸èµ‹äºˆåå­— nested_deleteã€‚
 begin
-  delete from dept where deptno = 10;           -- ÕâÌõ¼ÇÂ¼´æÔÚÍâ¼üÔ¼Êø£¬ËùÒÔÉ¾³ıÊ§°Ü£¬Å×³öÒì³£ -2292¡£ÒòÎªÉÏÃæ¶¨ÒåÁË -2292 Îª nested_delete£¬ËùÒÔÕâ¸öÒì³£¿ÉÒÔÓÃ nested_delete À´²¶»ñ¡£
+  delete from dept where deptno = 10;           -- è¿™æ¡è®°å½•å­˜åœ¨å¤–é”®çº¦æŸï¼Œæ‰€ä»¥åˆ é™¤å¤±è´¥ï¼ŒæŠ›å‡ºå¼‚å¸¸ -2292ã€‚å› ä¸ºä¸Šé¢å®šä¹‰äº† -2292 ä¸º nested_deleteï¼Œæ‰€ä»¥è¿™ä¸ªå¼‚å¸¸å¯ä»¥ç”¨ nested_delete æ¥æ•è·ã€‚
 exception
   when nested_delete then
-    dbms_output.put_line('´íÎó´úÂë: ' || sqlcode);
-    dbms_output.put_line('´íÎóĞÅÏ¢: ' || sqlerrm);
-    dbms_output.put_line('deptno ±»Íâ¼üÒıÓÃ£¬ËùÒÔÉ¾³ıÊ§°Ü');
+    dbms_output.put_line('é”™è¯¯ä»£ç : ' || sqlcode);
+    dbms_output.put_line('é”™è¯¯ä¿¡æ¯: ' || sqlerrm);
+    dbms_output.put_line('deptno è¢«å¤–é”®å¼•ç”¨ï¼Œæ‰€ä»¥åˆ é™¤å¤±è´¥');
 end;
 /
 
 #+END_SRC
 
-*** ÓÃ»§×Ô¶¨ÒåµÄÒì³£(UserDefined)
-ÊÖ¶¯Å×³öÒ»¸öÒì³£µÄÓï¾äÈçÏÂ£¬¸ú java ÖĞµÄ throw Óï¾äÀàËÆ¡£
+*** ç”¨æˆ·è‡ªå®šä¹‰çš„å¼‚å¸¸(UserDefined)
+æ‰‹åŠ¨æŠ›å‡ºä¸€ä¸ªå¼‚å¸¸çš„è¯­å¥å¦‚ä¸‹ï¼Œè·Ÿ java ä¸­çš„ throw è¯­å¥ç±»ä¼¼ã€‚
 : raise exception
-Èç¹ûÏëÅ×³öÒ»¸ö´øÏêÏ¸ĞÅÏ¢µÄÒì³££¬¿ÉÒÔÓÃµ½ Oracle Ìá¹©¸øÎÒÃÇµÄ´æ´¢¹ı³Ì raise_application_error À´¼ò»¯²Ù×÷¡£
+å¦‚æœæƒ³æŠ›å‡ºä¸€ä¸ªå¸¦è¯¦ç»†ä¿¡æ¯çš„å¼‚å¸¸ï¼Œå¯ä»¥ç”¨åˆ° Oracle æä¾›ç»™æˆ‘ä»¬çš„å­˜å‚¨è¿‡ç¨‹ raise_application_error æ¥ç®€åŒ–æ“ä½œã€‚
 
 #+BEGIN_SRC sql
--- ×Ô¶¨ÒåÒ»¸öÒì³££¬ĞèÒªÔÚ declare ÀïÃæÉùÃ÷Ò»¸ö exception ÀàĞÍµÄ±äÁ¿
--- Èç¹ûÏëÊÖ¶¯Å×³öÒì³£µÄ»°£¬ĞèÒªÓÃµ½ ¡¾raise Òì³£Ãû×Ö¡¿ ÕâÑùµÄÓï·¨
+-- è‡ªå®šä¹‰ä¸€ä¸ªå¼‚å¸¸ï¼Œéœ€è¦åœ¨ declare é‡Œé¢å£°æ˜ä¸€ä¸ª exception ç±»å‹çš„å˜é‡
+-- å¦‚æœæƒ³æ‰‹åŠ¨æŠ›å‡ºå¼‚å¸¸çš„è¯ï¼Œéœ€è¦ç”¨åˆ° ã€raise å¼‚å¸¸åå­—ã€‘ è¿™æ ·çš„è¯­æ³•
 declare
    a number;
    womendajiadeyichang exception;  
@@ -2303,15 +2302,15 @@ begin
    end if;
 exception
    when womendajiadeyichang then
-     dbms_output.put_line('ÎÒÃÇ´ó¼ÒµÄÒì³££¬ÎÒÃÇ´ó¼ÒµÄ·½°¸');
+     dbms_output.put_line('æˆ‘ä»¬å¤§å®¶çš„å¼‚å¸¸ï¼Œæˆ‘ä»¬å¤§å®¶çš„æ–¹æ¡ˆ');
    when others then
-     dbms_output.put_line('ÎÒÒ²²»ÖªµÀ¸ÃÔõÃ´°ì');
+     dbms_output.put_line('æˆ‘ä¹Ÿä¸çŸ¥é“è¯¥æ€ä¹ˆåŠ');
 end;
 /
 
 
--- ¿ÉÒÔÍ¨¹ıÉÏÃæµÄ PRAGMA Óï¾ä¸³Óè±àºÅµÈ
--- Õâ¸ö´úÂë±àºÅÓ¦¸ÃÔÚ -20000 µ½ -20999 Ö®ÄÚ£¬ÕâÊÇ Oracle Ô¤Áô¸øÎÒÃÇÓÃ»§Ê¹ÓÃµÄ±àºÅ
+-- å¯ä»¥é€šè¿‡ä¸Šé¢çš„ PRAGMA è¯­å¥èµ‹äºˆç¼–å·ç­‰
+-- è¿™ä¸ªä»£ç ç¼–å·åº”è¯¥åœ¨ -20000 åˆ° -20999 ä¹‹å†…ï¼Œè¿™æ˜¯ Oracle é¢„ç•™ç»™æˆ‘ä»¬ç”¨æˆ·ä½¿ç”¨çš„ç¼–å·
 declare
    a number;
    womendajiadeyichang exception;
@@ -2325,27 +2324,27 @@ begin
    end if;
 exception
    when womendajiadeyichang then
-     dbms_output.put_line('ÎÒÃÇ´ó¼ÒµÄÒì³££¬ÎÒÃÇ´ó¼ÒµÄ·½°¸');
+     dbms_output.put_line('æˆ‘ä»¬å¤§å®¶çš„å¼‚å¸¸ï¼Œæˆ‘ä»¬å¤§å®¶çš„æ–¹æ¡ˆ');
    when others then
-     dbms_output.put_line('ÎÒÒ²²»ÖªµÀ¸ÃÔõÃ´°ì');
+     dbms_output.put_line('æˆ‘ä¹Ÿä¸çŸ¥é“è¯¥æ€ä¹ˆåŠ');
 end;
 /
 
 
--- µ±È»£¬Ò²¿ÉÒÔÊ¹ÓÃ raise_application_error(code, msg) Õâ¸ö¹ı³ÌÖ±½ÓÅ×³öÒì³£¡£·Ç³£¼òµ¥
+-- å½“ç„¶ï¼Œä¹Ÿå¯ä»¥ä½¿ç”¨ raise_application_error(code, msg) è¿™ä¸ªè¿‡ç¨‹ç›´æ¥æŠ›å‡ºå¼‚å¸¸ã€‚éå¸¸ç®€å•
 declare
   res number := 0;
 begin
   for i in 1..100 loop
     res := res + i;
     if res > 1000 then
-      raise_application_error(-20002, 'µ±Ç°µÄ½á¹ûÌ«´óÁË£¡£¡£¡¶¼³¬¹ı1000ÁË£¡£¡£¡');
+      raise_application_error(-20002, 'å½“å‰çš„ç»“æœå¤ªå¤§äº†ï¼ï¼ï¼éƒ½è¶…è¿‡1000äº†ï¼ï¼ï¼');
     end if;
   end loop;
 end;
 /
 
--- Èç¹ûÏëÎªÉÏÃæµÄÒì³£ÆğÒ»¸öÃû×Ö£¬»¹ÊÇ pragma.
+-- å¦‚æœæƒ³ä¸ºä¸Šé¢çš„å¼‚å¸¸èµ·ä¸€ä¸ªåå­—ï¼Œè¿˜æ˜¯ pragma.
 declare
   res number := 0;
   out_of_range exception;
@@ -2354,7 +2353,7 @@ begin
   for i in 1..100 loop
     res := res + i;
     if res > 1000 then
-      raise_application_error(-20002, 'µ±Ç°µÄ½á¹ûÌ«´óÁË£¡£¡£¡¶¼³¬¹ı1000ÁË£¡£¡£¡');
+      raise_application_error(-20002, 'å½“å‰çš„ç»“æœå¤ªå¤§äº†ï¼ï¼ï¼éƒ½è¶…è¿‡1000äº†ï¼ï¼ï¼');
     end if;
   end loop;
 exception
@@ -2365,46 +2364,46 @@ end;
 
 #+END_SRC
 
-** ¶¯Ì¬ SQL
-Oracle µÄ PL/SQL ÔËĞĞ·ÖÎª±àÒë£¬ÔËĞĞÁ½¸ö¹ı³Ì¡£
-ÎÒÃÇĞ´ÔÚ PL/SQL ¿éÖĞµÄ DDL/DML Óï¾äÔÚÇ°ÆÚÁª±àµÄ¹ı³ÌÖĞ¾Í±»È·¶¨ÁË£¬ËùÒÔ³ÉÎª¾²Ì¬ SQL¡£
-µ«ÊÇÓĞĞ©ÒªÖ´ĞĞµÄÓï¾ä£¬ÔÚÇ°ÆÚµÄÁª±à¹ı³ÌÖĞÎŞ·¨È·¶¨£¬Ö»ÓĞµ½ÔËĞĞÊ±²Å»áÈ·¶¨¡£ÄÇÃ´ÎÒÃÇ¾ÍĞèÒªÓÃµ½¶¯Ì¬ SQL¡£
+** åŠ¨æ€ SQL
+Oracle çš„ PL/SQL è¿è¡Œåˆ†ä¸ºç¼–è¯‘ï¼Œè¿è¡Œä¸¤ä¸ªè¿‡ç¨‹ã€‚
+æˆ‘ä»¬å†™åœ¨ PL/SQL å—ä¸­çš„ DDL/DML è¯­å¥åœ¨å‰æœŸè”ç¼–çš„è¿‡ç¨‹ä¸­å°±è¢«ç¡®å®šäº†ï¼Œæ‰€ä»¥æˆä¸ºé™æ€ SQLã€‚
+ä½†æ˜¯æœ‰äº›è¦æ‰§è¡Œçš„è¯­å¥ï¼Œåœ¨å‰æœŸçš„è”ç¼–è¿‡ç¨‹ä¸­æ— æ³•ç¡®å®šï¼Œåªæœ‰åˆ°è¿è¡Œæ—¶æ‰ä¼šç¡®å®šã€‚é‚£ä¹ˆæˆ‘ä»¬å°±éœ€è¦ç”¨åˆ°åŠ¨æ€ SQLã€‚
 
-ÓĞÁ½ÖÖ·½Ê½´¦Àí¶¯Ì¬ SQL£º
+æœ‰ä¸¤ç§æ–¹å¼å¤„ç†åŠ¨æ€ SQLï¼š
 1. EXECUTE IMMEDIATE
-2. ÔËÓÃ Oracle Ìá¹©µÄ DBMS_SQL °ü
+2. è¿ç”¨ Oracle æä¾›çš„ DBMS_SQL åŒ…
 
 #+BEGIN_SRC sql
--- EXECUTE IMMEDIATE »ù±¾Óï·¨
-EXECUTE IMMEDIATE ÎÒÃÇÒªÖ´ĞĞµÄ¶¯Ì¬Óï¾ä
-[INTO Òª¸³ÖµµÄ±äÁ¿]
-[USING ĞèÒª°ó¶¨µÄÖµ];
+-- EXECUTE IMMEDIATE åŸºæœ¬è¯­æ³•
+EXECUTE IMMEDIATE æˆ‘ä»¬è¦æ‰§è¡Œçš„åŠ¨æ€è¯­å¥
+[INTO è¦èµ‹å€¼çš„å˜é‡]
+[USING éœ€è¦ç»‘å®šçš„å€¼];
 
 
--- Ò»¸öÀõ×Ó
+-- ä¸€ä¸ªæ —å­
 declare
   sqlstr1 varchar2(88) := 'create table ssabc (a varchar2(20))';
   sqlstr2 varchar2(88);
   varstr varchar2(20) := 'hello';
   varres varchar2(20);
 begin
-  -- ´´½¨±íµÄ·½Ê½
+  -- åˆ›å»ºè¡¨çš„æ–¹å¼
   execute immediate sqlstr1;
 
-  -- ²åÈëµÚÒ»ÌõÊı¾İ¡£oracle Í¨¹ıÁ½¸ö''´ú±í×Ö·û´®ÀïµÄÒ»¸ö'·ûºÅ
+  -- æ’å…¥ç¬¬ä¸€æ¡æ•°æ®ã€‚oracle é€šè¿‡ä¸¤ä¸ª''ä»£è¡¨å­—ç¬¦ä¸²é‡Œçš„ä¸€ä¸ª'ç¬¦å·
   sqlstr2 := 'insert into ssabc values (''world'')';
   execute immediate sqlstr2;
   commit;
 
-  -- ²åÈëµÚ¶şÌõÊı¾İ
+  -- æ’å…¥ç¬¬äºŒæ¡æ•°æ®
   execute immediate ('insert into ssabc values (''' || varstr || ''')');
   commit;
 
-  -- ²åÈëµÚÈıÌõÊı¾İ£¬ÆäÖĞ :1 ÊÇ½øĞĞ±äÁ¿°ó¶¨µÄÒ»ÖÖĞÎÊ½
+  -- æ’å…¥ç¬¬ä¸‰æ¡æ•°æ®ï¼Œå…¶ä¸­ :1 æ˜¯è¿›è¡Œå˜é‡ç»‘å®šçš„ä¸€ç§å½¢å¼
   execute immediate 'insert into ssabc values (:1)' using varstr;
   commit;
 
-  -- ²éÑ¯Ò»ÌõÊı¾İ£¬ÀûÓÃ select into£¬¶Ô²éÑ¯½á¹û½øĞĞ¸³Öµ
+  -- æŸ¥è¯¢ä¸€æ¡æ•°æ®ï¼Œåˆ©ç”¨ select intoï¼Œå¯¹æŸ¥è¯¢ç»“æœè¿›è¡Œèµ‹å€¼
   execute immediate 'select a from ssabc where rownum < 2' into varres;
   dbms_output.put_line(varres);
     
@@ -2413,56 +2412,56 @@ end;
 
 #+END_SRC
 
-DBMS_SQL µÄ·½Ê½£¬Çë¿´¿Î±¾ p260.
+DBMS_SQL çš„æ–¹å¼ï¼Œè¯·çœ‹è¯¾æœ¬ p260.
 
 
-** ÓÎ±ê (Cursor)
-ÓÎ±êÊÇÒ»ÖÖÊı¾İ¼¯ºÏ£¬¿ÉÒÔÀàÍ¬ÓÚ java ÀïµÄ ResultSet£¬ÓÃÓÚ±£´æ SQL ²éÑ¯µÄ½á¹û¼¯¡£
+** æ¸¸æ ‡ (Cursor)
+æ¸¸æ ‡æ˜¯ä¸€ç§æ•°æ®é›†åˆï¼Œå¯ä»¥ç±»åŒäº java é‡Œçš„ ResultSetï¼Œç”¨äºä¿å­˜ SQL æŸ¥è¯¢çš„ç»“æœé›†ã€‚
 
-µ±²éÑ¯Ò»ÌõÓï¾äÊ±£¬ Oracle »á´ò¿ªÒ»Æ¬¹¤×÷Çø£¬°Ñ½á¹û±£´æÔÚÀïÃæ£¬ÔÚÕâÆ¬¹¤×÷Çø£¬´æÔÚÒ»¸öÖ¸Õë£¬Ä¬ÈÏÖ¸ÏòµÚÒ»Ìõ¼ÇÂ¼¡£ÎÒÃÇ¿ÉÒÔÍ¨¹ıÒÆ¶¯Ö¸Õë´ïµ½»ñÈ¡²»Í¬¼ÇÂ¼µÄÄ¿µÄ¡£
+å½“æŸ¥è¯¢ä¸€æ¡è¯­å¥æ—¶ï¼Œ Oracle ä¼šæ‰“å¼€ä¸€ç‰‡å·¥ä½œåŒºï¼ŒæŠŠç»“æœä¿å­˜åœ¨é‡Œé¢ï¼Œåœ¨è¿™ç‰‡å·¥ä½œåŒºï¼Œå­˜åœ¨ä¸€ä¸ªæŒ‡é’ˆï¼Œé»˜è®¤æŒ‡å‘ç¬¬ä¸€æ¡è®°å½•ã€‚æˆ‘ä»¬å¯ä»¥é€šè¿‡ç§»åŠ¨æŒ‡é’ˆè¾¾åˆ°è·å–ä¸åŒè®°å½•çš„ç›®çš„ã€‚
 
-Õâ¸öÖ¸Õë£¬¾ÍÊÇÓÎ±ê¡£
+è¿™ä¸ªæŒ‡é’ˆï¼Œå°±æ˜¯æ¸¸æ ‡ã€‚
 
-ÓÎ±ê·ÖÎªÒşÊ½ÓÎ±êºÍÏÔÊ½ÓÎ±ê¡£
+æ¸¸æ ‡åˆ†ä¸ºéšå¼æ¸¸æ ‡å’Œæ˜¾å¼æ¸¸æ ‡ã€‚
 
-ÒşÊ½ÓÎ±êÊÇ Oracle ×Ô¶¯¹ÜÀíµÄ£¬±ÈÈçÎÒÃÇ½øĞĞÒ»´Î update£¬Oracle »á´ò¿ªÒ»¸öÓÎ±ê¶¨Î»µ½Êı¾İ£¬ÎÒÃÇ¸üĞÂ½áÊøºó£¬Oracle ¾Í»á°ÑÓÎ±ê¸ø¹Ø±Õ¡£
+éšå¼æ¸¸æ ‡æ˜¯ Oracle è‡ªåŠ¨ç®¡ç†çš„ï¼Œæ¯”å¦‚æˆ‘ä»¬è¿›è¡Œä¸€æ¬¡ updateï¼ŒOracle ä¼šæ‰“å¼€ä¸€ä¸ªæ¸¸æ ‡å®šä½åˆ°æ•°æ®ï¼Œæˆ‘ä»¬æ›´æ–°ç»“æŸåï¼ŒOracle å°±ä¼šæŠŠæ¸¸æ ‡ç»™å…³é—­ã€‚
 
-ÏÔÊ½ÓÎ±ê£¬¾ÍÊÇÎÒÃÇÒª×Ô¶¨ÒåµÄÓÎ±ê£¬Ö÷ÒªÓÃÀ´´¦ÀíÓĞ¶àÌõÊı¾İ·µ»ØµÄ²éÑ¯¡£ÏÂÃæÊÇ¼òµ¥½éÉÜ¡£
+æ˜¾å¼æ¸¸æ ‡ï¼Œå°±æ˜¯æˆ‘ä»¬è¦è‡ªå®šä¹‰çš„æ¸¸æ ‡ï¼Œä¸»è¦ç”¨æ¥å¤„ç†æœ‰å¤šæ¡æ•°æ®è¿”å›çš„æŸ¥è¯¢ã€‚ä¸‹é¢æ˜¯ç®€å•ä»‹ç»ã€‚
 
-ÓÎ±êµÄÊ¹ÓÃ·ÖÎªÏÂÃæ¼¸²½£º
-1. ¶¨ÒåÓÎ±ê
-2. ´ò¿ªÓÎ±ê
-3. ´Óµ±Ç°Î»ÖÃ»ñÈ¡Êı¾İ
-4. Ñ­»·Ö±µ½¶ÁÈ¡½áÊø
-5. ¹Ø±ÕÓÎ±ê
+æ¸¸æ ‡çš„ä½¿ç”¨åˆ†ä¸ºä¸‹é¢å‡ æ­¥ï¼š
+1. å®šä¹‰æ¸¸æ ‡
+2. æ‰“å¼€æ¸¸æ ‡
+3. ä»å½“å‰ä½ç½®è·å–æ•°æ®
+4. å¾ªç¯ç›´åˆ°è¯»å–ç»“æŸ
+5. å…³é—­æ¸¸æ ‡
 
 #+BEGIN_SRC sql
 declare
-  cursor c_emp is select * from emp where deptno = 10;  -- ¶¨ÒåÓÎ±ê
+  cursor c_emp is select * from emp where deptno = 10;  -- å®šä¹‰æ¸¸æ ‡
   v_emp emp%rowtype;
 begin
-  open c_emp;              -- ´ò¿ªÓÎ±ê
-  fetch c_emp into v_emp;  -- ÌáÈ¡Êı¾İ
+  open c_emp;              -- æ‰“å¼€æ¸¸æ ‡
+  fetch c_emp into v_emp;  -- æå–æ•°æ®
   loop
-    dbms_output.put_line(v_emp.ename || ' ¹¤×Ê ' || v_emp.sal);
+    dbms_output.put_line(v_emp.ename || ' å·¥èµ„ ' || v_emp.sal);
     fetch c_emp into v_emp;
     exit when c_emp%notfound;
   end loop;
-  close c_emp;             -- ¹Ø±ÕÓÎ±ê
+  close c_emp;             -- å…³é—­æ¸¸æ ‡
 end;
 /
 
--- for »á×Ô¶¯´ò¿ª¹Ø±ÕÓÎ±ê
+-- for ä¼šè‡ªåŠ¨æ‰“å¼€å…³é—­æ¸¸æ ‡
 declare
   cursor c_emp is select * from emp where deptno = 10;
 begin
   for v_emp in c_emp loop
-    dbms_output.put_line(v_emp.name || ' ¹¤×Ê ' || v_emp.sal);
+    dbms_output.put_line(v_emp.name || ' å·¥èµ„ ' || v_emp.sal);
   end loop;
 end;
 /
 
--- ÔÙ¼òµ¥Ò»µãµã
+-- å†ç®€å•ä¸€ç‚¹ç‚¹
 BEGIN
   for item in 
   ( select last_name, job_id
@@ -2476,13 +2475,13 @@ END;
 
 #+END_SRC
 
-** ´æ´¢¹ı³Ì
-¶Ô PL/SQL ¿éÆğ¸öÃû×Ö£¬´ïµ½¸´ÓÃµÄ½á¹û¡£
+** å­˜å‚¨è¿‡ç¨‹
+å¯¹ PL/SQL å—èµ·ä¸ªåå­—ï¼Œè¾¾åˆ°å¤ç”¨çš„ç»“æœã€‚
 
-¸úº¯Êı±È£¬¹ı³ÌÃ»ÓĞ return Óï¾ä¡£ËùÒÔ¸ü×¨×¢ÓÚ¹ı³Ì£¬¶ø·Ç·µ»Ø½á¹û¡£
+è·Ÿå‡½æ•°æ¯”ï¼Œè¿‡ç¨‹æ²¡æœ‰ return è¯­å¥ã€‚æ‰€ä»¥æ›´ä¸“æ³¨äºè¿‡ç¨‹ï¼Œè€Œéè¿”å›ç»“æœã€‚
 
 #+BEGIN_SRC sql
--- ¼òµ¥Àõ×Ó
+-- ç®€å•æ —å­
 create or replace procedure demo_procedure (arg number)
 is
   name varchar2(20) := 'Tom';
@@ -2491,7 +2490,7 @@ begin
 end;
 /
 
--- Ö´ĞĞ´æ´¢¹ı³Ì
+-- æ‰§è¡Œå­˜å‚¨è¿‡ç¨‹
 exec demo_procedure(9);
 -- or
 begin
@@ -2502,60 +2501,60 @@ end;
 #+END_SRC
 
 * LOCK
-ËøÊÇÎªÁË±£Ö¤Êı¾İµÄ²¢ĞĞĞÔ£¬Ò»ÖÂĞÔ£¬ÍêÕûĞÔ
+é”æ˜¯ä¸ºäº†ä¿è¯æ•°æ®çš„å¹¶è¡Œæ€§ï¼Œä¸€è‡´æ€§ï¼Œå®Œæ•´æ€§
 
-** ĞĞ¼¶Ëø£¬ÊÂÎñËø
-¿ÉÒÔÍ¨¹ı update/insert/delete/select for update ¶ÔÖ¸¶¨Êı¾İ¼ÓÉÏĞĞ¼¶Ëø¡£
+** è¡Œçº§é”ï¼Œäº‹åŠ¡é”
+å¯ä»¥é€šè¿‡ update/insert/delete/select for update å¯¹æŒ‡å®šæ•°æ®åŠ ä¸Šè¡Œçº§é”ã€‚
 
-´óÖÂµÄÔ­ÀíÈçÏÂ£º
+å¤§è‡´çš„åŸç†å¦‚ä¸‹ï¼š
 #+BEGIN_QUOTE
-Oracle µÄÃ¿ĞĞÊı¾İÉÏ£¬¶¼´æÔÚÒ»¸ö±êÖ¾Î»±íÊ¾Ã¿ĞĞÊı¾İÊÇ·ñ±»Ëø¶¨¡£Ã¿¸ö±íÒ²ÓĞ±êÖ¾Î»±íÊ¾±íµÄËø¶¨Çé¿ö¡£
+Oracle çš„æ¯è¡Œæ•°æ®ä¸Šï¼Œéƒ½å­˜åœ¨ä¸€ä¸ªæ ‡å¿—ä½è¡¨ç¤ºæ¯è¡Œæ•°æ®æ˜¯å¦è¢«é”å®šã€‚æ¯ä¸ªè¡¨ä¹Ÿæœ‰æ ‡å¿—ä½è¡¨ç¤ºè¡¨çš„é”å®šæƒ…å†µã€‚
 : update emp set sal = sal + 1000 where empno = 7788;
-Oracle ¶ÔÓï¾ä½øĞĞ½âÎöºó£¬ÕÒµ½7788¼ÇÂ¼µÄÊı¾İ¿é£¬²¢ÕÒµ½Ò»¸ö¿ÉÓÃµÄundo¿é£¬½«salÁĞµÄÔ­Êı¾İ·ÅÈëundo¿é£¬
-È»ºóÔÚÊı¾İÍ·²¿ÉèÖÃÏàÓ¦SCN (System Change Number) ºÅ¡¢ÊÂÎñ²ÛĞÅÏ¢¡¢Ëø¶¨±êÖ¾µÈ£¬±íÃ÷ĞĞ±»Ëø¶¨¡£
-ÈôÓĞÆäËûÈËÒ²ÒªĞŞ¸ÄÕâÒ»ĞĞ£¬Æä¹ı³ÌÊÇÒ»ÑùµÄ£¬µ«ÔÚÉèÖÃËø¶¨±êÖ¾µÄÊ±ºò£¬Èç¹û·¢ÏÖËø¶¨ÒÑ¾­´æÔÚ£¬¾Í»áµÈ´ı£¬Ö±µ½Ö®Ç°µÄËøÏûÊ§¡£
+Oracle å¯¹è¯­å¥è¿›è¡Œè§£æåï¼Œæ‰¾åˆ°7788è®°å½•çš„æ•°æ®å—ï¼Œå¹¶æ‰¾åˆ°ä¸€ä¸ªå¯ç”¨çš„undoå—ï¼Œå°†salåˆ—çš„åŸæ•°æ®æ”¾å…¥undoå—ï¼Œ
+ç„¶ååœ¨æ•°æ®å¤´éƒ¨è®¾ç½®ç›¸åº”SCN (System Change Number) å·ã€äº‹åŠ¡æ§½ä¿¡æ¯ã€é”å®šæ ‡å¿—ç­‰ï¼Œè¡¨æ˜è¡Œè¢«é”å®šã€‚
+è‹¥æœ‰å…¶ä»–äººä¹Ÿè¦ä¿®æ”¹è¿™ä¸€è¡Œï¼Œå…¶è¿‡ç¨‹æ˜¯ä¸€æ ·çš„ï¼Œä½†åœ¨è®¾ç½®é”å®šæ ‡å¿—çš„æ—¶å€™ï¼Œå¦‚æœå‘ç°é”å®šå·²ç»å­˜åœ¨ï¼Œå°±ä¼šç­‰å¾…ï¼Œç›´åˆ°ä¹‹å‰çš„é”æ¶ˆå¤±ã€‚
 #+END_QUOTE
 
-ÏÂÃæ¾ä×ÓÖĞ£¬nowait±íÊ¾£¬Èç¹û·¢ÏÖÊı¾İËø¶¨ÁË£¬²»µÈ´ı£¬¶øÊÇÁ¢¿Ì·µ»Ø´íÎó¡£
+ä¸‹é¢å¥å­ä¸­ï¼Œnowaitè¡¨ç¤ºï¼Œå¦‚æœå‘ç°æ•°æ®é”å®šäº†ï¼Œä¸ç­‰å¾…ï¼Œè€Œæ˜¯ç«‹åˆ»è¿”å›é”™è¯¯ã€‚
 : select for update nowait;
 
-** ÀÖ¹ÛËø¡¢±¯¹ÛËø
-×Ô¼ºÕÒÒ»ÏÂÏà¹Ø×ÊÁÏ
+** ä¹è§‚é”ã€æ‚²è§‚é”
+è‡ªå·±æ‰¾ä¸€ä¸‹ç›¸å…³èµ„æ–™
 
 
-** ±»Ëø¶¨µÄ¶ÔÏó£¬½âËøµÄ·½·¨
-Ö»ÄÜÉ±µôËø¶¨¶ÔÏóµÄ session£¬²é¿´Ëø¶¨¶ÔÏóµÄÓï¾ä£º
+** è¢«é”å®šçš„å¯¹è±¡ï¼Œè§£é”çš„æ–¹æ³•
+åªèƒ½æ€æ‰é”å®šå¯¹è±¡çš„ sessionï¼ŒæŸ¥çœ‹é”å®šå¯¹è±¡çš„è¯­å¥ï¼š
 #+BEGIN_SRC sql
 SELECT c.sid, c.serial#, a.object_id, a.session_id, b.object_name, c.*
   FROM v$locked_object a, dba_objects b, v$session c
  WHERE a.object_id = b.object_id
    AND a.SESSION_ID = c.sid(+);
 #+END_SRC
-É±µô Session µÄÓï¾ä:
+æ€æ‰ Session çš„è¯­å¥:
 #+BEGIN_SRC sql
 alter system kill session 'sid, serial#';
 alter system kill session '2,33';
 #+END_SRC
 
-* µ¼Èëµ¼³ö
-ÕâÀïÖ»ÊÇ¼òµ¥Àõ×Ó£¬¸ü¶àÑ¡ÏîÇë²éÔÄ×ÊÁÏ
+* å¯¼å…¥å¯¼å‡º
+è¿™é‡Œåªæ˜¯ç®€å•æ —å­ï¼Œæ›´å¤šé€‰é¡¹è¯·æŸ¥é˜…èµ„æ–™
 #+BEGIN_SRC sh
 
-# exp ÃüÁîÓÃÀ´µ¼³öÊı¾İ
-# ÏÔÊ¾°ïÖúĞÅÏ¢
+# exp å‘½ä»¤ç”¨æ¥å¯¼å‡ºæ•°æ®
+# æ˜¾ç¤ºå¸®åŠ©ä¿¡æ¯
 exp help=y
 
-# ¾ÙÀı£º°Ñ scott ºÍ vip ÓÃ»§ÏÂµÄËùÓĞ±í¶¼µ¼³öÀ´£¬±£´æµ½ aaa ÎÄ¼ş
+# ä¸¾ä¾‹ï¼šæŠŠ scott å’Œ vip ç”¨æˆ·ä¸‹çš„æ‰€æœ‰è¡¨éƒ½å¯¼å‡ºæ¥ï¼Œä¿å­˜åˆ° aaa æ–‡ä»¶
 exp system/orcl file=D:\aaa.dmp owner=(scott,vip)
 
-# imp ÃüÁîÓÃÀ´µ¼ÈëÊı¾İ
-# ¾ÙÀı£¬°Ñ aaa ÎÄ¼şÖĞµÄ scott ÓÃ»§µÄ±íµ¼Èëµ½ vip ÓÃ»§ÖĞ
+# imp å‘½ä»¤ç”¨æ¥å¯¼å…¥æ•°æ®
+# ä¸¾ä¾‹ï¼ŒæŠŠ aaa æ–‡ä»¶ä¸­çš„ scott ç”¨æˆ·çš„è¡¨å¯¼å…¥åˆ° vip ç”¨æˆ·ä¸­
 imp system/orcl file=D:\aaa.dmp fromuser=(scott) touser=(vip);
 
 #+END_SRC
-* Éú³ÉÅúÁ¿Êı¾İ
+* ç”Ÿæˆæ‰¹é‡æ•°æ®
 #+BEGIN_SRC sql
--- µÚÒ»ÖÖ£¬Éú³ÉËæ»úÊı£¬Ëæ»ú×Ö·û´®
+-- ç¬¬ä¸€ç§ï¼Œç”Ÿæˆéšæœºæ•°ï¼Œéšæœºå­—ç¬¦ä¸²
 create sequence shello;
 
 create table demo as
@@ -2565,10 +2564,10 @@ create table demo as
      round(dbms_random.value(0, 100)) score
    from dual connect by level <= 100000;
 
--- µÚ¶şÖÖ£¬ÓÃÒÑÓĞµÄÊı¾İ£¬Àı£º
+-- ç¬¬äºŒç§ï¼Œç”¨å·²æœ‰çš„æ•°æ®ï¼Œä¾‹ï¼š
 begin
   for i in 1..100 loop
-     -- ¸´ÖÆ¶à·İÊı¾İ
+     -- å¤åˆ¶å¤šä»½æ•°æ®
      insert into demo select xxx,yyy from dba_objects;
   end loop;
 end;
@@ -2582,9 +2581,9 @@ select row_number over (order by )
 #+END_SRC
 
 
-* ×÷ÒµÏà¹Ø
+* ä½œä¸šç›¸å…³
 #+BEGIN_SRC sql
--- ¼òµ¥µÄ¹ı³ÌÓï¾ä¡£ÓÃÀ´ÔÚ t1 ±íÖĞ²åÈë 100000 ÌõÊı¾İ¡£
+-- ç®€å•çš„è¿‡ç¨‹è¯­å¥ã€‚ç”¨æ¥åœ¨ t1 è¡¨ä¸­æ’å…¥ 100000 æ¡æ•°æ®ã€‚
 create table t1 (id number, name varchar2(20));
 
 begin
@@ -2597,64 +2596,64 @@ end;
 /
 #+END_SRC
 
-ÁĞ³öµ±ÔÂËùÓĞµÄĞÇÆÚÎå.
-1. ĞèÒªÁĞ³öµ±ÔÂËùÓĞµÄÈÕÆÚ¡£
+åˆ—å‡ºå½“æœˆæ‰€æœ‰çš„æ˜ŸæœŸäº”.
+1. éœ€è¦åˆ—å‡ºå½“æœˆæ‰€æœ‰çš„æ—¥æœŸã€‚
 
-   ĞèÒªÓÃµ½µÄÖªÊ¶µã£º
-   1) ±¾ÔÂµÚÒ»Ìì£º trunc
-   2) ±¾ÔÂ×îºóÒ»Ìì£º last_day
-   3) ¼ÆËã±¾ÔÂµÄÌìÊı£º ÌìÊı = ÔÂÄ© - ÔÂ³õ + 1
-   3) ÈçºÎ»ñÈ¡Á¬ĞøµÄÊ±¼ä
+   éœ€è¦ç”¨åˆ°çš„çŸ¥è¯†ç‚¹ï¼š
+   1) æœ¬æœˆç¬¬ä¸€å¤©ï¼š trunc
+   2) æœ¬æœˆæœ€åä¸€å¤©ï¼š last_day
+   3) è®¡ç®—æœ¬æœˆçš„å¤©æ•°ï¼š å¤©æ•° = æœˆæœ« - æœˆåˆ + 1
+   3) å¦‚ä½•è·å–è¿ç»­çš„æ—¶é—´
 
       a. connect by
-         : select level from dual connect by level <= ±¾ÔÂµÄÌìÊı;
+         : select level from dual connect by level <= æœ¬æœˆçš„å¤©æ•°;
       b. rownum
-         : select rownum from dba_objects where rownum <= ±¾ÔÂµÄÌìÊı;
+         : select rownum from dba_objects where rownum <= æœ¬æœˆçš„å¤©æ•°;
 
 
-* Ğ¡²âÑé
-** ÏÂÔØ¿¼ÊÔÌâÄ¿µÄ·½·¨
-1. ´ò¿ª git bash
-2. ÊäÈëÒÔÏÂÃüÁî£¬½øĞĞÏÂÔØ£º
+* å°æµ‹éªŒ
+** ä¸‹è½½è€ƒè¯•é¢˜ç›®çš„æ–¹æ³•
+1. æ‰“å¼€ git bash
+2. è¾“å…¥ä»¥ä¸‹å‘½ä»¤ï¼Œè¿›è¡Œä¸‹è½½ï¼š
    : git clone https://github.com/s126/exam.git
 
-** ×é³¤Ìá½»´ğ°¸µÄ·½·¨
-1. ÔÚÏÂÔØµÄÏîÄ¿ÎÄ¼ş¼Ğ exam/20160930 ÏÂÃæ£¬´´½¨×Ô¼º×éºÅÎªÃû³ÆµÄÎÄ¼ş¼Ğ¡£
-   Èç£¬µÚ¾Å×é£¬´´½¨ÎÄ¼ş¼Ğ '9'
-2. °ÑËùÓĞ×éÔ±µÄ´ğ°¸(Ãû×Ö.sqlÎÄ¼ş)£¬·ÅÔÚÉÏ²½´´½¨µÄÎÄ¼ş¼ĞÏÂ¡£
-3. ÔÚ git bash ÖĞ£¬Ê×ÏÈÇĞ»»µ½ exam ÎÄ¼ş¼Ğ
+** ç»„é•¿æäº¤ç­”æ¡ˆçš„æ–¹æ³•
+1. åœ¨ä¸‹è½½çš„é¡¹ç›®æ–‡ä»¶å¤¹ exam/20160930 ä¸‹é¢ï¼Œåˆ›å»ºè‡ªå·±ç»„å·ä¸ºåç§°çš„æ–‡ä»¶å¤¹ã€‚
+   å¦‚ï¼Œç¬¬ä¹ç»„ï¼Œåˆ›å»ºæ–‡ä»¶å¤¹ '9'
+2. æŠŠæ‰€æœ‰ç»„å‘˜çš„ç­”æ¡ˆ(åå­—.sqlæ–‡ä»¶)ï¼Œæ”¾åœ¨ä¸Šæ­¥åˆ›å»ºçš„æ–‡ä»¶å¤¹ä¸‹ã€‚
+3. åœ¨ git bash ä¸­ï¼Œé¦–å…ˆåˆ‡æ¢åˆ° exam æ–‡ä»¶å¤¹
    : cd /e/exam/
-4. ÓÃÒÔÏÂÃüÁî±£´æ½á¹ûµ½±¾µØ°æ±¾¿â£º
+4. ç”¨ä»¥ä¸‹å‘½ä»¤ä¿å­˜ç»“æœåˆ°æœ¬åœ°ç‰ˆæœ¬åº“ï¼š
    : git add .
-   : git commit -m "ÕâÊÇµÚ¾Å×éµÄ´ğ°¸"
-   Èç¹ûÉÏÃæÁ½²½Ã»ÎÊÌâ£¬ÄÇÃ´ÓÃÏÂÃæÃüÁîÌá½»µ½ github
+   : git commit -m "è¿™æ˜¯ç¬¬ä¹ç»„çš„ç­”æ¡ˆ"
+   å¦‚æœä¸Šé¢ä¸¤æ­¥æ²¡é—®é¢˜ï¼Œé‚£ä¹ˆç”¨ä¸‹é¢å‘½ä»¤æäº¤åˆ° github
    : git push
   
 
 
 
 
-** ´ğ°¸
-*** ´´½¨ÓÃ»§£¬ÊÚÓèÈ¨ÏŞ
+** ç­”æ¡ˆ
+*** åˆ›å»ºç”¨æˆ·ï¼Œæˆäºˆæƒé™
 : grant dba to vip identified by vip;
 *** 
-** ±¸Íü
-- ²»ÒªÔÚ system/sys ÓÃ»§Ö®ÏÂ´´½¨Êı¾İ£¬½øĞĞÒµÎñ¡£ÒªÏ¸ĞÄ£¬ÔÚ½øĞĞddlµÈÓï¾äÖ®Ç°£¬ÏÈÒª¼ì²éµ±Ç°ÓÃ»§£¬²»Òª¸ã´í¡£
-- Ò»¶¨ÒªÈÏÕæ£¬×ĞÏ¸£¬ÓÃĞÄ¡£²»Òª·¸µÍ¼¶´íÎó£¬ÒòÎªÔ½µÍ¼¶µÄ´íÎó£¬Ô½¿ÓÈË£¬É±ÉËÁ¦ÍùÍùÔ½´ó¡£
-- ±íÃû¡¢ÊÓÍ¼Ãû×Ö¡¢Ë÷ÒıÃû×ÖµÈ£¬Òª¾¡Á¿·ûºÏÒ»¶¨¹æ·¶¡£ºÃ¶Á¡¢ºÃ¼Ç¡¢ÓĞÒâÒå¡£
-- ÔÚÏîÄ¿¿ªÊ¼Ç°£¬¸ù¾İĞèÇó£¬¾¡Á¿°ÑÊı¾İ¿âµÄ±í½¨Á¢ÍêÉÆ¡£¼ÓÉÏ¸Ã¼ÓµÄÖ÷¼ü£¬Íâ¼ü£¬·Ç¿ÕÔ¼Êø£¬×Ö¶Î³¤¶ÈµÈ¡£¼´£¬Éè¼ÆÒªºÏÀí£¬·ÀÖ¹ºóÃæ³öÏÖÊı¾İ»ìÂÒ»òÕßÆµ·±ĞŞ¸Ä¡£
+** å¤‡å¿˜
+- ä¸è¦åœ¨ system/sys ç”¨æˆ·ä¹‹ä¸‹åˆ›å»ºæ•°æ®ï¼Œè¿›è¡Œä¸šåŠ¡ã€‚è¦ç»†å¿ƒï¼Œåœ¨è¿›è¡Œddlç­‰è¯­å¥ä¹‹å‰ï¼Œå…ˆè¦æ£€æŸ¥å½“å‰ç”¨æˆ·ï¼Œä¸è¦æé”™ã€‚
+- ä¸€å®šè¦è®¤çœŸï¼Œä»”ç»†ï¼Œç”¨å¿ƒã€‚ä¸è¦çŠ¯ä½çº§é”™è¯¯ï¼Œå› ä¸ºè¶Šä½çº§çš„é”™è¯¯ï¼Œè¶Šå‘äººï¼Œæ€ä¼¤åŠ›å¾€å¾€è¶Šå¤§ã€‚
+- è¡¨åã€è§†å›¾åå­—ã€ç´¢å¼•åå­—ç­‰ï¼Œè¦å°½é‡ç¬¦åˆä¸€å®šè§„èŒƒã€‚å¥½è¯»ã€å¥½è®°ã€æœ‰æ„ä¹‰ã€‚
+- åœ¨é¡¹ç›®å¼€å§‹å‰ï¼Œæ ¹æ®éœ€æ±‚ï¼Œå°½é‡æŠŠæ•°æ®åº“çš„è¡¨å»ºç«‹å®Œå–„ã€‚åŠ ä¸Šè¯¥åŠ çš„ä¸»é”®ï¼Œå¤–é”®ï¼Œéç©ºçº¦æŸï¼Œå­—æ®µé•¿åº¦ç­‰ã€‚å³ï¼Œè®¾è®¡è¦åˆç†ï¼Œé˜²æ­¢åé¢å‡ºç°æ•°æ®æ··ä¹±æˆ–è€…é¢‘ç¹ä¿®æ”¹ã€‚
 * zu
 1. 
-2.×·Å®Éñ¡£  Â¼ÈëĞÄÒÇµÄÅ®ÉúµÄĞÔ¸ñ°®ºÃ£¬×Ô¶¯Îª¿Í»§Ìá¹©¶à·½ÃæµÄ×·Çó·½°¸¡£²¢´ÖÂÔ¼ÆËã³ö×·Çó³É±¾¡£
-3.ÁÄÌìÊÒ Ñ°ÕÒÓë×Ô¼ºÖ¾Í¬µÀºÏµÄ»ï°é
-4.Íæ°É¡£ÀàËÆÓÚ²©¿Í£¬¿Õ¼äµÈ£¬½«×Ô¼ºÂÃÓÎµÄÈÕÖ¾»òÕßÂ·Ïß·ÖÏí£¬Ò²ÀàËÆÓÚÉç½»ÍøÕ¾µÈµÈ£¬¼ÓºÃÓÑÁÄÌì¡£¼ÓÃËÂÃÓÎ¹«Ë¾ÍÆËÍ¶¨ÖÆÓÎÍæÂ·ÏßµÈµÈ¡£
+2.è¿½å¥³ç¥ã€‚  å½•å…¥å¿ƒä»ªçš„å¥³ç”Ÿçš„æ€§æ ¼çˆ±å¥½ï¼Œè‡ªåŠ¨ä¸ºå®¢æˆ·æä¾›å¤šæ–¹é¢çš„è¿½æ±‚æ–¹æ¡ˆã€‚å¹¶ç²—ç•¥è®¡ç®—å‡ºè¿½æ±‚æˆæœ¬ã€‚
+3.èŠå¤©å®¤ å¯»æ‰¾ä¸è‡ªå·±å¿—åŒé“åˆçš„ä¼™ä¼´
+4.ç©å§ã€‚ç±»ä¼¼äºåšå®¢ï¼Œç©ºé—´ç­‰ï¼Œå°†è‡ªå·±æ—…æ¸¸çš„æ—¥å¿—æˆ–è€…è·¯çº¿åˆ†äº«ï¼Œä¹Ÿç±»ä¼¼äºç¤¾äº¤ç½‘ç«™ç­‰ç­‰ï¼ŒåŠ å¥½å‹èŠå¤©ã€‚åŠ ç›Ÿæ—…æ¸¸å…¬å¸æ¨é€å®šåˆ¶æ¸¸ç©è·¯çº¿ç­‰ç­‰ã€‚
 5.
 6.
 7.
 8.
 9.
-10.ÉÌ³¡vipÏû·ÑÏµÍ³  ÎüÒıĞÂ¿Í»§£¬Áô×¡ÀÏ¿Í»§¡£
+10.å•†åœºvipæ¶ˆè´¹ç³»ç»Ÿ  å¸å¼•æ–°å®¢æˆ·ï¼Œç•™ä½è€å®¢æˆ·ã€‚
 
 
-DEBUG(µ÷ÊÔ
-BREAKPOINT£¨¶Ïµã£©
+DEBUG(è°ƒè¯•
+BREAKPOINTï¼ˆæ–­ç‚¹ï¼‰

@@ -325,15 +325,49 @@ private Author author;
 
 相应的注解形式为：
 roll(9);
-
+在School一端配置
+:@Id
+:@GeneratedValue
+:priavte int sid;
+:private String name;
+:private String addr;
+:@OneToOne
+:@JoinColumn
+:private Master master;
+在Master一端配置
+:@Id
+@GeneratedValue
+:private int mid;
+:private String name;
+:private Date birth;
+:@OneToOne
+:@JoinColumn
+:private School school;
 *** FK assoc
 在其中一端，配置如下，通过 manytoone 和 unique 配合，产生一对一的结果。而且会生成相应外键：
 : <many-to-one name="school" class="School" unique="true"></many-to-one>
 在另一端：
 : <one-to-one name="master" class="Master" property-ref="school"></one-to-one>
-
++
 相应的注解形式为：
 roll(2);
+在School一端配置如下：
+: @id 
+: @GeneratedValue 
+: private int sid;
+: private String name;
+: private String addr;
+: @OneToOne(mappedBy="school")
+: private Master master;
+在另一端：
+: @Id
+: @GeneratedValue
+: private int mid;
+: private String name;
+: private Date birth;
+: @ManToOne
+: @JoinColumn(name="masterId")
+: private School school;
 
 ** Embedded(Component)
 嵌入
