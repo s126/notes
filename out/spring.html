@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-07 周二 15:13 -->
+<!-- 2017-02-07 周二 15:27 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -219,13 +219,10 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 <h3 id="sec-2-2"><span class="section-number-3">2.2</span> Parameters</h3>
 <div class="outline-text-3" id="text-2-2">
 </div><div id="outline-container-sec-2-2-1" class="outline-4">
-<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Model/View/ModelAndView</h4>
-</div>
-<div id="outline-container-sec-2-2-2" class="outline-4">
-<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> 基本类型的自动封装</h4>
-<div class="outline-text-4" id="text-2-2-2">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> 基本类型的自动绑定</h4>
+<div class="outline-text-4" id="text-2-2-1">
 <p>
-会根据 handler 参数列表中的字段名字，自动封装成对应类型的值。
+会根据 handler 参数列表中的字段名字，自动绑定数据
 </p>
 
 <p>
@@ -234,12 +231,12 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 </div>
 </div>
 
-<div id="outline-container-sec-2-2-3" class="outline-4">
-<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> 集合类型的自动封装</h4>
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> 集合类型的自动绑定</h4>
 </div>
-<div id="outline-container-sec-2-2-4" class="outline-4">
-<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> 对象的自动封装</h4>
-<div class="outline-text-4" id="text-2-2-4">
+<div id="outline-container-sec-2-2-3" class="outline-4">
+<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> 对象的自动封装</h4>
+<div class="outline-text-4" id="text-2-2-3">
 <div class="org-src-container">
 
 <pre class="src src-html"><span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">form </span><span style="color: #b22222;">--&gt;</span>
@@ -269,18 +266,18 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 </div>
 </div>
 
-<div id="outline-container-sec-2-2-5" class="outline-4">
-<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> HttpSession/HttpServletRequest 等的自动封装</h4>
-<div class="outline-text-4" id="text-2-2-5">
+<div id="outline-container-sec-2-2-4" class="outline-4">
+<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> HttpSession/HttpServletRequest 等的自动绑定</h4>
+<div class="outline-text-4" id="text-2-2-4">
 <pre class="example">
 public String greeting(HttpServletRequest r, HttpSession s)
 </pre>
 </div>
 </div>
 
-<div id="outline-container-sec-2-2-6" class="outline-4">
-<h4 id="sec-2-2-6"><span class="section-number-4">2.2.6</span> @RequestParam</h4>
-<div class="outline-text-4" id="text-2-2-6">
+<div id="outline-container-sec-2-2-5" class="outline-4">
+<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> @RequestParam</h4>
+<div class="outline-text-4" id="text-2-2-5">
 <p>
 定制入参的名字和默认值等
 </p>
@@ -290,9 +287,9 @@ public String greeting(@RequestParam(name = "username", defaultValue = "xyz") St
 </div>
 </div>
 
-<div id="outline-container-sec-2-2-7" class="outline-4">
-<h4 id="sec-2-2-7"><span class="section-number-4">2.2.7</span> @RequestAttribute</h4>
-<div class="outline-text-4" id="text-2-2-7">
+<div id="outline-container-sec-2-2-6" class="outline-4">
+<h4 id="sec-2-2-6"><span class="section-number-4">2.2.6</span> @RequestAttribute</h4>
+<div class="outline-text-4" id="text-2-2-6">
 <p>
 将 request 的某个 Attribute 值，赋予 handler 参数
 </p>
@@ -302,11 +299,20 @@ public String greeting(@RequestAttribute(name = "name") String name)
 </div>
 </div>
 
+<div id="outline-container-sec-2-2-7" class="outline-4">
+<h4 id="sec-2-2-7"><span class="section-number-4">2.2.7</span> @CookieValue</h4>
+<div class="outline-text-4" id="text-2-2-7">
+<p>
+用来绑定 cookie 中的值
+</p>
+</div>
+</div>
+
 <div id="outline-container-sec-2-2-8" class="outline-4">
 <h4 id="sec-2-2-8"><span class="section-number-4">2.2.8</span> @RequestHeader</h4>
 <div class="outline-text-4" id="text-2-2-8">
 <p>
-从请求的头部获取某些数据
+绑定 http 请求头部的信息到参数中
 </p>
 <pre class="example">
 public String greeting(@RequestHeader(name = "user-agent") String ua)
@@ -318,7 +324,7 @@ public String greeting(@RequestHeader(name = "user-agent") String ua)
 <h4 id="sec-2-2-9"><span class="section-number-4">2.2.9</span> @PathVariable</h4>
 <div class="outline-text-4" id="text-2-2-9">
 <p>
-从请求的 url 中获取相关的数据，url 中用 {} 去匹配字段
+绑定 url 中匹配的串到参数中，用 {} 匹配
 </p>
 <pre class="example">
 @RequestMapping("/greeting/{id}")
@@ -331,7 +337,7 @@ public String greeting(@PathVariable int id)
 <h4 id="sec-2-2-10"><span class="section-number-4">2.2.10</span> @RequestBody</h4>
 <div class="outline-text-4" id="text-2-2-10">
 <p>
-从请求体中获取数据，进行自动封装
+将 http 请求 body 里的数据自动转换并绑定到参数。
 </p>
 </div>
 </div>
@@ -343,6 +349,10 @@ public String greeting(@PathVariable int id)
 忽略头部，直接将内容作为响应体返回。
 </p>
 </div>
+</div>
+
+<div id="outline-container-sec-2-2-12" class="outline-4">
+<h4 id="sec-2-2-12"><span class="section-number-4">2.2.12</span> Model/View/ModelAndView</h4>
 </div>
 </div>
 
@@ -383,7 +393,7 @@ public String greeting(@PathVariable int id)
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-07 周二 15:13</p>
+<p class="date">Created: 2017-02-07 周二 15:27</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
