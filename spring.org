@@ -1,11 +1,8 @@
 #+TITLE: Spring
 
-
-
 * Spring
 
 * Spring MVC
-
 ** 基本步骤
 
 第一步，创建 Gradle 项目，在 build.gradle 增加相关依赖
@@ -14,11 +11,12 @@
   apply plugin: 'war'
 
   // 指定 Java 版本
-  sourceCompatibility = 1.7
+  sourceCompatibility = 1.8
 
   // 配置下载 jar 包的地址
   repositories {
     jcenter()
+    mavenCentral()
   }
 
   // 配置需要的 jar 包依赖
@@ -42,7 +40,7 @@
     // 配置我们项目需要用到的所有 jar 包，即 compile 环节需要的 jar 包
     compile (
 
-      // 本地的 OJDBC 包加入进来
+      // 本地的 OJDBC 包加入进来，要改成自己的路径
       files("E:/SSH/lib_hibernate/ojdbc7.jar"),
 
       // 用来管理数据源的知名 jar 包
@@ -90,11 +88,11 @@
   <!-- 在这个 IOC 容器里，主要配置一些全局的东西 -->
   <!-- 比如 dao/service 的依赖，声明式事务之类 -->
   <listener>
-    <listener-class>org.springframework.web.context.ContextLoadListener</listener-class>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <!-- 配置路径，默认是 "WEB-INF/applicationContext.xml" -->
   <context-param>
-    <param-name>contextConfigPath</param-name>
+    <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring-root.xml</param-value>
   </context-param>
 
@@ -123,6 +121,9 @@
 
 第三步，配置 spring 的 context 文件，如 spring-miniblog.xml
 #+BEGIN_SRC xml
+
+  <!-- 注意，要引入正确的命名空间！！！ -->
+
   <!-- mvc 版本的 context:annotation-driven -->
   <!-- 针对 mvc 增加了一些其他支持，需要开启 -->
   <mvc:annotation-driven />
@@ -138,8 +139,8 @@
 
   <!-- 配置静态资源的访问映射 -->
   <!-- 比如访问 http://localhost/js/jquery.js，mvc 将会去寻找 /assets/javascript/jquery.js -->
-  <mvc:resource mapping="/js/**"  location="/assets/javascript" />
-  <mvc:resource mapping="/css/**" location="/assets/stylesheet" />
+  <mvc:resources mapping="/js/**"  location="/assets/javascript/" />
+  <mvc:resources mapping="/css/**" location="/assets/stylesheet/" />
 
 #+END_SRC
 
@@ -152,7 +153,80 @@
       @RequestMapping("/{name}")
       public String show(@PathVariable String name, Model model) {
           model.add("name", name);
-          return "show";
+          return "show";    // 返回的是 "/WEB-INF/view/show.jsp" 页面
       }
   }
 #+END_SRC
+
+** Parameters
+*** 基本类型的自动封装
+会根据 handler 参数列表中的字段名字，自动封装成对应类型的值。
+
+如果参数没有被赋值，默认会尝试将 null 赋予它。所以对于一些 int 之类的类型，会抛出 IllegalStateException 异常。
+
+*** 集合类型的自动封装
+*** 对象的自动封装
+#+BEGIN_SRC html
+<!-- form -->
+<form action="/greeting">
+  <input type="text" name="name" placeholder="请输入名字" />
+  <input type="text" name="age" placeholder="请输入年龄" />
+  <input type="submit">
+</form>
+#+END_SRC
+
+#+BEGIN_SRC java
+// handler
+@RequestMapping("/greeting")
+public String greeting(User user) {
+    return "greeting";
+}
+
+// model
+Class User {
+    private String name;
+    private int age;
+}
+#+END_SRC
+
+*** HttpSession/HttpServletRequest 等的自动封装
+: public String greeting(HttpServletRequest r, HttpSession s)
+
+*** @RequestParam
+定制入参的名字和默认值等
+: public String greeting(@RequestParam(name = "username", defaultValue = "xyz") String name)
+
+*** @RequestAttribute
+将 request 的某个 Attribute 值，赋予 handler 参数
+: public String greeting(@RequestAttribute(name = "name") String name)
+
+*** @RequestHeader
+从请求的头部获取某些数据
+: public String greeting(@RequestHeader(name = "user-agent") String ua)
+
+*** @PathVariable
+从请求的 url 中获取相关的数据，url 中用 {} 去匹配字段
+: @RequestMapping("/greeting/{id}")
+: public String greeting(@PathVariable int id)
+
+*** @RequestBody
+从请求体中获取数据，进行自动封装
+
+*** @ResponseBody
+忽略头部，直接将内容作为响应体返回。
+
+*** Model/View/ModelAndView
+
+** Handler 返回值
+- String
+- View
+- ModelAndView
+- void
+- JSON
+
+** Validation(表单验证)
+** ExceptionHandler(异常处理)
+** Interceptor(拦截器)
+** Convertor(自定义类型转换)
+** REStful 风格
+

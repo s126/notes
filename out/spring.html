@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-06 周一 10:22 -->
+<!-- 2017-02-07 周二 15:13 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -24,13 +24,18 @@
 <li><a href="#sec-2">2. Spring MVC</a>
 <ul>
 <li><a href="#sec-2-1">2.1. 基本步骤</a></li>
+<li><a href="#sec-2-2">2.2. Parameters</a></li>
+<li><a href="#sec-2-3">2.3. Handler 返回值</a></li>
+<li><a href="#sec-2-4">2.4. Validation(表单验证)</a></li>
+<li><a href="#sec-2-5">2.5. ExceptionHandler(异常处理)</a></li>
+<li><a href="#sec-2-6">2.6. Interceptor(拦截器)</a></li>
+<li><a href="#sec-2-7">2.7. Convertor(自定义类型转换)</a></li>
+<li><a href="#sec-2-8">2.8. REStful 风格</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </nav>
-
-
 
 <section id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><span class="section-number-2">1</span> Spring</h2>
@@ -51,11 +56,12 @@
 apply plugin: <span style="color: #8b2252;">'war'</span>
 
 <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25351;&#23450; Java &#29256;&#26412;</span>
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622;&#19979;&#36733; jar &#21253;&#30340;&#22320;&#22336;</span>
 repositories <span style="color: #707183;">{</span>
   jcenter<span style="color: #7388d6;">()</span>
+  mavenCentral<span style="color: #7388d6;">()</span>
 <span style="color: #707183;">}</span>
 
 <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622;&#38656;&#35201;&#30340; jar &#21253;&#20381;&#36182;</span>
@@ -79,7 +85,7 @@ dependencies <span style="color: #707183;">{</span>
   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622;&#25105;&#20204;&#39033;&#30446;&#38656;&#35201;&#29992;&#21040;&#30340;&#25152;&#26377; jar &#21253;&#65292;&#21363; compile &#29615;&#33410;&#38656;&#35201;&#30340; jar &#21253;</span>
   compile <span style="color: #7388d6;">(</span>
 
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26412;&#22320;&#30340; OJDBC &#21253;&#21152;&#20837;&#36827;&#26469;</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26412;&#22320;&#30340; OJDBC &#21253;&#21152;&#20837;&#36827;&#26469;&#65292;&#35201;&#25913;&#25104;&#33258;&#24049;&#30340;&#36335;&#24452;</span>
     files<span style="color: #909183;">(</span><span style="color: #8b2252;">"E:/SSH/lib_hibernate/ojdbc7.jar"</span><span style="color: #909183;">)</span>,
 
     <span style="color: #b22222;">// </span><span style="color: #b22222;">&#29992;&#26469;&#31649;&#29702;&#25968;&#25454;&#28304;&#30340;&#30693;&#21517; jar &#21253;</span>
@@ -131,11 +137,11 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#36825;&#20010; IOC &#23481;&#22120;&#37324;&#65292;&#20027;&#35201;&#37197;&#32622;&#19968;&#20123;&#20840;&#23616;&#30340;&#19996;&#35199; </span><span style="color: #b22222;">--&gt;</span>
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27604;&#22914; dao/service &#30340;&#20381;&#36182;&#65292;&#22768;&#26126;&#24335;&#20107;&#21153;&#20043;&#31867; </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #0000ff;">listener</span>&gt;
-  &lt;<span style="color: #0000ff;">listener-class</span>&gt;org.springframework.web.context.ContextLoadListener&lt;/<span style="color: #0000ff;">listener-class</span>&gt;
+  &lt;<span style="color: #0000ff;">listener-class</span>&gt;org.springframework.web.context.ContextLoaderListener&lt;/<span style="color: #0000ff;">listener-class</span>&gt;
 &lt;/<span style="color: #0000ff;">listener</span>&gt;
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#36335;&#24452;&#65292;&#40664;&#35748;&#26159; "WEB-INF/applicationContext.xml" </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #0000ff;">context-param</span>&gt;
-  &lt;<span style="color: #0000ff;">param-name</span>&gt;contextConfigPath&lt;/<span style="color: #0000ff;">param-name</span>&gt;
+  &lt;<span style="color: #0000ff;">param-name</span>&gt;contextConfigLocation&lt;/<span style="color: #0000ff;">param-name</span>&gt;
   &lt;<span style="color: #0000ff;">param-value</span>&gt;classpath:spring-root.xml&lt;/<span style="color: #0000ff;">param-value</span>&gt;
 &lt;/<span style="color: #0000ff;">context-param</span>&gt;
 
@@ -167,7 +173,9 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> mvc &#29256;&#26412;&#30340; context:annotation-driven </span><span style="color: #b22222;">--&gt;</span>
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292;&#35201;&#24341;&#20837;&#27491;&#30830;&#30340;&#21629;&#21517;&#31354;&#38388;&#65281;&#65281;&#65281; </span><span style="color: #b22222;">--&gt;</span>
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> mvc &#29256;&#26412;&#30340; context:annotation-driven </span><span style="color: #b22222;">--&gt;</span>
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#38024;&#23545; mvc &#22686;&#21152;&#20102;&#19968;&#20123;&#20854;&#20182;&#25903;&#25345;&#65292;&#38656;&#35201;&#24320;&#21551; </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">annotation-driven</span> /&gt;
 
@@ -182,8 +190,8 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#38745;&#24577;&#36164;&#28304;&#30340;&#35775;&#38382;&#26144;&#23556; </span><span style="color: #b22222;">--&gt;</span>
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27604;&#22914;&#35775;&#38382; http://localhost/js/jquery.js&#65292;mvc &#23558;&#20250;&#21435;&#23547;&#25214; /assets/javascript/jquery.js </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resource</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/js/**</span><span style="color: #8b2252;">"</span>  <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/javascript</span><span style="color: #8b2252;">"</span> /&gt;
-&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resource</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/css/**</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/stylesheet</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resources</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/js/**</span><span style="color: #8b2252;">"</span>  <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/javascript/</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resources</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/css/**</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/stylesheet/</span><span style="color: #8b2252;">"</span> /&gt;
 </pre>
 </div>
 
@@ -197,20 +205,185 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 <span style="color: #a020f0;">class</span> <span style="color: #228b22;">UserController</span> <span style="color: #707183;">{</span>
 
     <span style="color: #008b8b;">@RequestMapping</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"/{name}"</span><span style="color: #7388d6;">)</span>
-    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">show</span><span style="color: #7388d6;">(</span><span style="color: #008b8b;">@PathVarible</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>, <span style="color: #228b22;">Model</span> <span style="color: #a0522d;">model</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">show</span><span style="color: #7388d6;">(</span><span style="color: #008b8b;">@PathVariable</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>, <span style="color: #228b22;">Model</span> <span style="color: #a0522d;">model</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
         model.add<span style="color: #909183;">(</span><span style="color: #8b2252;">"name"</span>, name<span style="color: #909183;">)</span>;
-        <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"show"</span>;
+        <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"show"</span>;    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36820;&#22238;&#30340;&#26159; "/WEB-INF/view/show.jsp" &#39029;&#38754;</span>
     <span style="color: #7388d6;">}</span>
 <span style="color: #707183;">}</span>
 </pre>
 </div>
 </div>
 </div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Parameters</h3>
+<div class="outline-text-3" id="text-2-2">
+</div><div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Model/View/ModelAndView</h4>
+</div>
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> 基本类型的自动封装</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+会根据 handler 参数列表中的字段名字，自动封装成对应类型的值。
+</p>
+
+<p>
+如果参数没有被赋值，默认会尝试将 null 赋予它。所以对于一些 int 之类的类型，会抛出 IllegalStateException 异常。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-3" class="outline-4">
+<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> 集合类型的自动封装</h4>
+</div>
+<div id="outline-container-sec-2-2-4" class="outline-4">
+<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> 对象的自动封装</h4>
+<div class="outline-text-4" id="text-2-2-4">
+<div class="org-src-container">
+
+<pre class="src src-html"><span style="color: #b22222;">&lt;!-- </span><span style="color: #b22222;">form </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">form</span> <span style="color: #a0522d;">action</span>=<span style="color: #8b2252;">"/greeting"</span>&gt;
+  &lt;<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"text"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"name"</span> <span style="color: #a0522d;">placeholder</span>=<span style="color: #8b2252;">"&#35831;&#36755;&#20837;&#21517;&#23383;"</span> /&gt;
+  &lt;<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"text"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"age"</span> <span style="color: #a0522d;">placeholder</span>=<span style="color: #8b2252;">"&#35831;&#36755;&#20837;&#24180;&#40836;"</span> /&gt;
+  &lt;<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"submit"</span>&gt;
+&lt;/<span style="color: #0000ff;">form</span>&gt;
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">handler</span>
+<span style="color: #008b8b;">@RequestMapping</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"/greeting"</span><span style="color: #707183;">)</span>
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">greeting</span><span style="color: #707183;">(</span><span style="color: #228b22;">User</span> <span style="color: #a0522d;">user</span><span style="color: #707183;">)</span> <span style="color: #707183;">{</span>
+    <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"greeting"</span>;
+<span style="color: #707183;">}</span>
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">model</span>
+<span style="color: #228b22;">Class</span> <span style="color: #a0522d;">User</span> <span style="color: #707183;">{</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>;
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-5" class="outline-4">
+<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> HttpSession/HttpServletRequest 等的自动封装</h4>
+<div class="outline-text-4" id="text-2-2-5">
+<pre class="example">
+public String greeting(HttpServletRequest r, HttpSession s)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-6" class="outline-4">
+<h4 id="sec-2-2-6"><span class="section-number-4">2.2.6</span> @RequestParam</h4>
+<div class="outline-text-4" id="text-2-2-6">
+<p>
+定制入参的名字和默认值等
+</p>
+<pre class="example">
+public String greeting(@RequestParam(name = "username", defaultValue = "xyz") String name)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-7" class="outline-4">
+<h4 id="sec-2-2-7"><span class="section-number-4">2.2.7</span> @RequestAttribute</h4>
+<div class="outline-text-4" id="text-2-2-7">
+<p>
+将 request 的某个 Attribute 值，赋予 handler 参数
+</p>
+<pre class="example">
+public String greeting(@RequestAttribute(name = "name") String name)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-8" class="outline-4">
+<h4 id="sec-2-2-8"><span class="section-number-4">2.2.8</span> @RequestHeader</h4>
+<div class="outline-text-4" id="text-2-2-8">
+<p>
+从请求的头部获取某些数据
+</p>
+<pre class="example">
+public String greeting(@RequestHeader(name = "user-agent") String ua)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-9" class="outline-4">
+<h4 id="sec-2-2-9"><span class="section-number-4">2.2.9</span> @PathVariable</h4>
+<div class="outline-text-4" id="text-2-2-9">
+<p>
+从请求的 url 中获取相关的数据，url 中用 {} 去匹配字段
+</p>
+<pre class="example">
+@RequestMapping("/greeting/{id}")
+public String greeting(@PathVariable int id)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-10" class="outline-4">
+<h4 id="sec-2-2-10"><span class="section-number-4">2.2.10</span> @RequestBody</h4>
+<div class="outline-text-4" id="text-2-2-10">
+<p>
+从请求体中获取数据，进行自动封装
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-11" class="outline-4">
+<h4 id="sec-2-2-11"><span class="section-number-4">2.2.11</span> @ResponseBody</h4>
+<div class="outline-text-4" id="text-2-2-11">
+<p>
+忽略头部，直接将内容作为响应体返回。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Handler 返回值</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>String
+</li>
+<li>View
+</li>
+<li>ModelAndView
+</li>
+<li>void
+</li>
+<li>JSON
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Validation(表单验证)</h3>
+</div>
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> ExceptionHandler(异常处理)</h3>
+</div>
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> Interceptor(拦截器)</h3>
+</div>
+<div id="outline-container-sec-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3">2.7</span> Convertor(自定义类型转换)</h3>
+</div>
+<div id="outline-container-sec-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> REStful 风格</h3>
+</div>
 </section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-06 周一 10:22</p>
+<p class="date">Created: 2017-02-07 周二 15:13</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
