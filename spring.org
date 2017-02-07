@@ -159,12 +159,12 @@
 #+END_SRC
 
 ** Parameters
-*** 基本类型的自动封装
-会根据 handler 参数列表中的字段名字，自动封装成对应类型的值。
+*** 基本类型的自动绑定
+会根据 handler 参数列表中的字段名字，自动绑定数据
 
 如果参数没有被赋值，默认会尝试将 null 赋予它。所以对于一些 int 之类的类型，会抛出 IllegalStateException 异常。
 
-*** 集合类型的自动封装
+*** 集合类型的自动绑定
 *** 对象的自动封装
 #+BEGIN_SRC html
 <!-- form -->
@@ -189,7 +189,7 @@ Class User {
 }
 #+END_SRC
 
-*** HttpSession/HttpServletRequest 等的自动封装
+*** HttpSession/HttpServletRequest 等的自动绑定
 : public String greeting(HttpServletRequest r, HttpSession s)
 
 *** @RequestParam
@@ -200,17 +200,20 @@ Class User {
 将 request 的某个 Attribute 值，赋予 handler 参数
 : public String greeting(@RequestAttribute(name = "name") String name)
 
+*** @CookieValue
+用来绑定 cookie 中的值
+
 *** @RequestHeader
-从请求的头部获取某些数据
+绑定 http 请求头部的信息到参数中
 : public String greeting(@RequestHeader(name = "user-agent") String ua)
 
 *** @PathVariable
-从请求的 url 中获取相关的数据，url 中用 {} 去匹配字段
+绑定 url 中匹配的串到参数中，用 {} 匹配
 : @RequestMapping("/greeting/{id}")
 : public String greeting(@PathVariable int id)
 
 *** @RequestBody
-从请求体中获取数据，进行自动封装
+将 http 请求 body 里的数据自动转换并绑定到参数。
 
 *** @ResponseBody
 忽略头部，直接将内容作为响应体返回。
