@@ -167,26 +167,26 @@
 *** 集合类型的自动绑定
 *** 对象的自动封装
 #+BEGIN_SRC html
-<!-- form -->
-<form action="/greeting">
-  <input type="text" name="name" placeholder="请输入名字" />
-  <input type="text" name="age" placeholder="请输入年龄" />
-  <input type="submit">
-</form>
+  <!-- form -->
+  <form action="/greeting">
+    <input type="text" name="name" placeholder="请输入名字" />
+    <input type="text" name="age" placeholder="请输入年龄" />
+    <input type="submit">
+  </form>
 #+END_SRC
 
 #+BEGIN_SRC java
-// handler
-@RequestMapping("/greeting")
-public String greeting(User user) {
-    return "greeting";
-}
+  // handler
+  @RequestMapping("/greeting")
+  public String greeting(User user) {
+      return "greeting";
+  }
 
-// model
-Class User {
-    private String name;
-    private int age;
-}
+  // model
+  Class User {
+      private String name;
+      private int age;
+  }
 #+END_SRC
 
 *** HttpSession/HttpServletRequest 等的自动绑定
@@ -217,6 +217,37 @@ Class User {
 
 *** @ResponseBody
 忽略头部，直接将内容作为响应体返回。
+
+示例：
+
+#+BEGIN_SRC js
+  $("#showmsg").click(function () {
+      d = {"name": "xiaohui", "age": 9};
+      $.ajax({
+          method: 'post',
+          url: '/greeting',
+          data: JSON.stringify(d),
+          contentType: 'application/json',
+          success: function (o) {
+              console.log(o);  // 得到的是 json 对象
+              alert(eee.age);
+              alert(eee.name);
+          }
+      });
+  });
+#+END_SRC
+
+UserController:
+#+BEGIN_SRC java
+  @RequestMapping("/greeting")
+  @ResponseBody
+  public User greeting(@RequestBody User user) {
+      System.out.println("又过了一个新年！");
+      int age = user.getAge();
+      user.setAge(age + 1);
+      return user;
+  }
+#+END_SRC
 
 *** Model/View/ModelAndView
 

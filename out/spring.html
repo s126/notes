@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-07 周二 15:27 -->
+<!-- 2017-02-07 周二 15:35 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -348,6 +348,45 @@ public String greeting(@PathVariable int id)
 <p>
 忽略头部，直接将内容作为响应体返回。
 </p>
+
+<p>
+示例：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-js">$<span style="color: #707183;">(</span><span style="color: #8b2252;">"#showmsg"</span><span style="color: #707183;">)</span>.click<span style="color: #707183;">(</span><span style="color: #a020f0;">function</span> <span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+    d = <span style="color: #909183;">{</span><span style="color: #8b2252;">"name"</span>: <span style="color: #8b2252;">"xiaohui"</span>, <span style="color: #8b2252;">"age"</span>: 9<span style="color: #909183;">}</span>;
+    $.ajax<span style="color: #909183;">(</span><span style="color: #709870;">{</span>
+        method: <span style="color: #8b2252;">'post'</span>,
+        url: <span style="color: #8b2252;">'/greeting'</span>,
+        data: JSON.stringify<span style="color: #907373;">(</span>d<span style="color: #907373;">)</span>,
+        contentType: <span style="color: #8b2252;">'application/json'</span>,
+        <span style="color: #0000ff;">success</span>: <span style="color: #a020f0;">function</span> <span style="color: #907373;">(</span><span style="color: #a0522d;">o</span><span style="color: #907373;">)</span> <span style="color: #907373;">{</span>
+            console.log<span style="color: #6276ba;">(</span>o<span style="color: #6276ba;">)</span>;  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#24471;&#21040;&#30340;&#26159; json &#23545;&#35937;</span>
+            alert<span style="color: #6276ba;">(</span>eee.age<span style="color: #6276ba;">)</span>;
+            alert<span style="color: #6276ba;">(</span>eee.name<span style="color: #6276ba;">)</span>;
+        <span style="color: #907373;">}</span>
+    <span style="color: #709870;">}</span><span style="color: #909183;">)</span>;
+<span style="color: #7388d6;">}</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+<p>
+UserController:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@RequestMapping</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"/greeting"</span><span style="color: #707183;">)</span>
+<span style="color: #008b8b;">@ResponseBody</span>
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">User</span> <span style="color: #0000ff;">greeting</span><span style="color: #707183;">(</span><span style="color: #008b8b;">@RequestBody</span> <span style="color: #228b22;">User</span> <span style="color: #a0522d;">user</span><span style="color: #707183;">)</span> <span style="color: #707183;">{</span>
+    System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"&#21448;&#36807;&#20102;&#19968;&#20010;&#26032;&#24180;&#65281;"</span><span style="color: #7388d6;">)</span>;
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">age</span> = user.getAge<span style="color: #7388d6;">()</span>;
+    user.setAge<span style="color: #7388d6;">(</span>age + 1<span style="color: #7388d6;">)</span>;
+    <span style="color: #a020f0;">return</span> user;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
 </div>
 </div>
 
@@ -393,7 +432,7 @@ public String greeting(@PathVariable int id)
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-07 周二 15:27</p>
+<p class="date">Created: 2017-02-07 周二 15:35</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
