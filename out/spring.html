@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-07 周二 15:35 -->
+<!-- 2017-02-08 周三 11:01 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -415,7 +415,101 @@ UserController:
 
 <div id="outline-container-sec-2-4" class="outline-3">
 <h3 id="sec-2-4"><span class="section-number-3">2.4</span> Validation(表单验证)</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+三种方法：
+</p>
 </div>
+<div id="outline-container-sec-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> 最基本的校验</h4>
+<div class="outline-text-4" id="text-2-4-1">
+<p>
+几个重要的概念
+</p>
+<ul class="org-ul">
+<li>一个接口 Errors/BindingResult，用来保存绑定错误信息。
+</li>
+<li>两个方法 errors.reject() / errors.rejectValue()，用来注册全局/字段级别的错误信息
+</li>
+<li>一个标签 &lt;form:errors path="*" /&gt;
+</li>
+</ul>
+
+<p>
+例子，首先，在页面上：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-html">&lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">form</span> <span style="color: #a0522d;">action</span>=<span style="color: #8b2252;">"/users/create"</span> <span style="color: #a0522d;">modelAttribute</span>=<span style="color: #8b2252;">"user"</span>&gt;
+  &lt;<span style="color: #0000ff;">ul</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"errorTip"</span>&gt;
+    &lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">errors</span> <span style="color: #a0522d;">path</span>=<span style="color: #8b2252;">"*"</span> <span style="color: #a0522d;">cssClass</span>=<span style="color: #8b2252;">"error"</span> <span style="color: #a0522d;">element</span>=<span style="color: #8b2252;">"li"</span> /&gt;
+  &lt;/<span style="color: #0000ff;">ul</span>&gt;
+  &lt;<span style="color: #0000ff;">div</span>&gt;
+    &lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">path</span>=<span style="color: #8b2252;">"name"</span> /&gt;
+    &lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">errors</span> <span style="color: #a0522d;">path</span>=<span style="color: #8b2252;">"name"</span> <span style="color: #a0522d;">cssClass</span>=<span style="color: #8b2252;">"error"</span> <span style="color: #a0522d;">element</span>=<span style="color: #8b2252;">"div"</span> /&gt;
+  &lt;/<span style="color: #0000ff;">div</span>&gt;
+  &lt;<span style="color: #0000ff;">div</span>&gt;
+    &lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"number"</span> <span style="color: #a0522d;">path</span>=<span style="color: #8b2252;">"age"</span> /&gt;
+    &lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">errors</span> <span style="color: #a0522d;">path</span>=<span style="color: #8b2252;">"age"</span> <span style="color: #a0522d;">cssClass</span>=<span style="color: #8b2252;">"error"</span> <span style="color: #a0522d;">element</span>=<span style="color: #8b2252;">"p"</span> /&gt;
+  &lt;/<span style="color: #0000ff;">div</span>&gt;
+  &lt;<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"submit"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"&#27880;&#20876;"</span> /&gt;
+&lt;/<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">form</span>&gt;
+</pre>
+</div>
+
+<p>
+然后，可以在 Controller 中的 handler 里进行校验，添加错误信息
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Controller</span>
+<span style="color: #008b8b;">@RequestMapping</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"/users"</span><span style="color: #707183;">)</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">UserController</span> <span style="color: #707183;">{</span>
+
+    <span style="color: #008b8b;">@RequestMapping</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"/create"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">create</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">User</span> <span style="color: #a0522d;">user</span>, <span style="color: #228b22;">Errors</span> <span style="color: #a0522d;">errors</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
+
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26657;&#39564;&#21517;&#23383;</span>
+        <span style="color: #a020f0;">if</span><span style="color: #909183;">(</span>user.getName<span style="color: #709870;">()</span> == <span style="color: #008b8b;">null</span> || empty<span style="color: #709870;">(</span>user.getName<span style="color: #907373;">()</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+            errors.rejectValue<span style="color: #709870;">(</span><span style="color: #8b2252;">"name"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #8b2252;">"&#21517;&#23383;&#19981;&#33021;&#20026;&#31354;"</span><span style="color: #709870;">)</span>;
+        <span style="color: #909183;">}</span>
+
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26657;&#39564;&#24180;&#40836;</span>
+        <span style="color: #a020f0;">if</span><span style="color: #909183;">(</span>user.getAge<span style="color: #709870;">()</span> &lt; 18<span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+            errors.rejectValue<span style="color: #709870;">(</span><span style="color: #8b2252;">"age"</span>, <span style="color: #008b8b;">null</span>, <span style="color: #8b2252;">"&#24180;&#40836;&#22826;&#23567;&#20102;&#65292;18R"</span><span style="color: #709870;">)</span>;
+        <span style="color: #909183;">}</span>
+
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20840;&#23616;&#26816;&#39564;&#30340;&#20363;&#23376;</span>
+        <span style="color: #a020f0;">if</span><span style="color: #909183;">(</span>user.getName<span style="color: #709870;">()</span>.equals<span style="color: #709870;">(</span><span style="color: #8b2252;">"admin"</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+            errors.reject<span style="color: #709870;">(</span><span style="color: #008b8b;">null</span>, <span style="color: #8b2252;">"&#20320;&#26159;&#35841;&#65311;"</span><span style="color: #709870;">)</span>;
+        <span style="color: #909183;">}</span>
+
+
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#26377;&#26657;&#39564;&#38169;&#35823;&#65292;&#36820;&#22238;&#30456;&#24212;&#38169;&#35823;&#39029;&#38754;</span>
+        <span style="color: #a020f0;">if</span><span style="color: #909183;">(</span>errors.hasErrors<span style="color: #709870;">()</span><span style="color: #909183;">)</span>
+            <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"regist"</span>;
+
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#27809;&#26377;&#38169;&#35823;&#65292;&#36820;&#22238;&#30340;&#39029;&#38754;</span>
+        <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"greeting"</span>;
+    <span style="color: #7388d6;">}</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+这样，就可以了
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4-2" class="outline-4">
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> 自定义验证器</h4>
+</div>
+<div id="outline-container-sec-2-4-3" class="outline-4">
+<h4 id="sec-2-4-3"><span class="section-number-4">2.4.3</span> JSR 风格校验</h4>
+</div>
+</div>
+
 <div id="outline-container-sec-2-5" class="outline-3">
 <h3 id="sec-2-5"><span class="section-number-3">2.5</span> ExceptionHandler(异常处理)</h3>
 </div>
@@ -432,7 +526,7 @@ UserController:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-07 周二 15:35</p>
+<p class="date">Created: 2017-02-08 周三 11:01</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

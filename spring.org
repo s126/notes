@@ -259,6 +259,71 @@ UserController:
 - JSON
 
 ** Validation(表单验证)
+三种方法：
+*** 最基本的校验
+几个重要的概念
+- 一个接口 Errors/BindingResult，用来保存绑定错误信息。
+- 两个方法 errors.reject() / errors.rejectValue()，用来注册全局/字段级别的错误信息
+- 一个标签 <form:errors path="*" />
+
+例子，首先，在页面上：
+#+BEGIN_SRC html
+  <form:form action="/users/create" modelAttribute="user">
+    <ul class="errorTip">
+      <form:errors path="*" cssClass="error" element="li" />
+    </ul>
+    <div>
+      <form:input path="name" />
+      <form:errors path="name" cssClass="error" element="div" />
+    </div>
+    <div>
+      <form:input type="number" path="age" />
+      <form:errors path="age" cssClass="error" element="p" />
+    </div>
+    <input type="submit" value="注册" />
+  </form:form>
+#+END_SRC
+
+然后，可以在 Controller 中的 handler 里进行校验，添加错误信息
+#+BEGIN_SRC java
+  @Controller
+  @RequestMapping("/users")
+  class UserController {
+
+      @RequestMapping("/create")
+      public String create(User user, Errors errors) {
+
+          // 校验名字
+          if(user.getName() == null || empty(user.getName())) {
+              errors.rejectValue("name", null, "名字不能为空");
+          }
+
+          // 校验年龄
+          if(user.getAge() < 18) {
+              errors.rejectValue("age", null, "年龄太小了，18R");
+          }
+
+          // 全局检验的例子
+          if(user.getName().equals("admin")) {
+              errors.reject(null, "你是谁？");
+          }
+
+
+          // 如果有校验错误，返回相应错误页面
+          if(errors.hasErrors())
+              return "regist";
+
+          // 如果没有错误，返回的页面
+          return "greeting";
+      }
+  }
+#+END_SRC
+
+这样，就可以了
+
+*** 自定义验证器
+*** JSR 风格校验
+
 ** ExceptionHandler(异常处理)
 ** Interceptor(拦截器)
 ** Convertor(自定义类型转换)
