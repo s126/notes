@@ -373,7 +373,9 @@ UserController:
 最后，就可以在所需要验证的参数前面加上 @Validated 注解，来实现参数的自动校验了。
 
 *** JSR-303 风格校验
-JSR-303 是 java 官方推出的一套 Validation 接口。hibernate 给出了一个完整实现。
+JSR-303 是 java 官方推出的一套 Validation 接口。
+
+hibernate 给出了一个完整实现。
 
 首先，如果想使用 JSR-303 的校验风格，需要引入相应的包：
 : complie "org.hibernate:hibernate-validator:5.4.0.Final"
@@ -400,8 +402,6 @@ JSR-303 是 java 官方推出的一套 Validation 接口。hibernate 给出了�
   }
 #+END_SRC
 
-
-
 ** 日期转换
 *** 第一种方法：实现自定义转换器
 #+BEGIN_SRC java
@@ -424,7 +424,7 @@ JSR-303 是 java 官方推出的一套 Validation 接口。hibernate 给出了�
   <bean name="myConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
     <property name="converters">
       <set>
-        <bean class="fish.miniblog.converter.DateConverter" />
+        <bean class="fish.miniblog.converter.MyDateConverter" />
       </set>
     </property>
   </bean>
@@ -455,7 +455,37 @@ JSR-303 是 java 官方推出的一套 Validation 接口。hibernate 给出了�
 就可以了。
 
 ** ExceptionHandler(异常处理)
+*** Controller 范围内的异常处理
+*** 全局范围的异常配置
+
 ** Interceptor(拦截器)
+拦截器主要用来增强 handler 方法
+
+拦截器的接口有两个，定义拦截器就是实现他们之一
+- HandlerInterceptor
+- WebContentInterceptor
+
+主要实现以下三个方法:
+- preHandler()       在执行 Controller 相应 handler 之前要执行
+- postHandler()      执行完 handler，进入 render 页面渲染前的阶段执行
+- afterCompletion()  所有的东西都做完，退出前执行。主要用来做一些清理工作
+
+下面是例子:
+
+*定义*
+#+BEGIN_SRC java
+  // 例子暂缺。
+#+END_SRC
+
+*注册*
+#+BEGIN_SRC xml
+  <!-- 配置暂缺 -->
+#+END_SRC
+
 ** Convertor(自定义类型转换)
+略，看《日期转换》学习。
+
 ** REStful 风格
+*** 概念介绍
+*** 应用示例
 
