@@ -403,7 +403,21 @@ hibernate 给出了一个完整实现。
 #+END_SRC
 
 ** 日期转换
-*** 第一种方法：实现自定义转换器
+*** 第一种方法：利用内置的 CustomDateEditor
+首先，在我们的 Controller 的 InitBinder 里面，注册 CustomEditor
+#+BEGIN_SRC java
+  @InitBinder
+  public void init (WebDataBinder binder) {
+      CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true);
+      binder.registerCustomEditor(Date.class, dateEditor);                                );
+  }
+#+END_SRC
+
+然后，就可以正常转换了。
+
+*** 第二种方法：实现自定义转换器
+spring 3.0 之后，使用 converter
+
 #+BEGIN_SRC java
   public class MyDateConverter implements Converter<String, Date> {
       public Date convert(String datestr) {
@@ -417,7 +431,7 @@ hibernate 给出了一个完整实现。
 然后需要在配置文件中注册转换器
 #+BEGIN_SRC xml
   <!-- 配置我们定义的转换服务 -->
-  <mvc:annotation-driven conversion-service="conversionService" />
+  <mvc:annotation-driven conversion-service="myConversionService" />
 
   <!-- 定义全局的转换服务，可以配置多个转换器 -->
   <!-- 在这里，只配置了我们自定义的转换器，DateConverter -->
@@ -432,18 +446,6 @@ hibernate 给出了一个完整实现。
 #+END_SRC
 
 这样就可以了。所有的 yyyy-MM-yy 之类的字符串就可以正常转换成 Date 对象了。
-
-*** 第二种方法：利用内置的 CustomDateEditor
-首先，在我们的 Controller 的 InitBinder 里面，注册 CustomEditor
-#+BEGIN_SRC java
-  @InitBinder
-  public void init (WebDataBinder binder) {
-      CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true);
-      binder.registerCustomEditor(Date.class, dateEditor);                                );
-  }
-#+END_SRC
-
-然后，就可以正常转换了。
 
 *** 第三种方法：使用 @DateTimeFormat 注解
 在 model 上，增加相应注解：
@@ -482,7 +484,7 @@ hibernate 给出了一个完整实现。
   <!-- 配置暂缺 -->
 #+END_SRC
 
-** Convertor(自定义类型转换)
+** PropertyEditor/Convertor(自定义类型转换)
 略，看《日期转换》学习。
 
 ** REStful 风格
