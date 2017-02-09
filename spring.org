@@ -256,12 +256,22 @@ UserController:
 
 *** Model/View/ModelAndView
 
-** Handler 返回值
-- String
-- View
-- ModelAndView
-- void
-- JSON
+** flow
+在 url 请求阶段，大致流程是这样的：
+1. 预处理
+2. 通过 HandlerMapping 获取请求相对应的 handler
+3. 创建 ModelAndView 对象，这个对象将会保存所有的模型数据，还会持有页面展现相关的信息
+   : ModelAndView mv = null
+4. 调用查找到的 handler 方法，将结果封装成 ModelAndView 赋值给 mv
+5. 调用 render 方法，将 Model 里的数据渲染到 View 视图里
+6. 清理工作
+
+所以我们需要明白，我们的 handler 最终产生的应该是一个保存了数据和视图的 ModelAndView。
+即使我们的 handler 返回类型是字符串或其他，到最后还是被封装成了 ModelAndView。
+
+而且在封装 ModelAndView 时，会将 handler 参数列表上的数据自动添加到里面。
+
+我们可以在 jsp 里，对 ModelAndView 里的所有数据通过 el 表达式或 spring 标签进行获取。
 
 ** Validation(表单验证)
 三种方法：
@@ -450,11 +460,14 @@ spring 3.0 之后，使用 converter
 *** 第三种方法：使用 @DateTimeFormat 注解
 在 model 上，增加相应注解：
 #+BEGIN_SRC java
-  @DateTimeFormat("yyyy-MM-dd")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date birthday;
 #+END_SRC
 
 就可以了。
+
+*** 日期在页面上的显示
+暂缺。
 
 ** ExceptionHandler(异常处理)
 *** Controller 范围内的异常处理

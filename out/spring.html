@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-08 周三 15:57 -->
+<!-- 2017-02-09 周四 11:18 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -25,12 +25,12 @@
 <ul>
 <li><a href="#sec-2-1">2.1. 基本步骤</a></li>
 <li><a href="#sec-2-2">2.2. Parameters</a></li>
-<li><a href="#sec-2-3">2.3. Handler 返回值</a></li>
+<li><a href="#sec-2-3">2.3. flow</a></li>
 <li><a href="#sec-2-4">2.4. Validation(表单验证)</a></li>
 <li><a href="#sec-2-5">2.5. 日期转换</a></li>
 <li><a href="#sec-2-6">2.6. ExceptionHandler(异常处理)</a></li>
 <li><a href="#sec-2-7">2.7. Interceptor(拦截器)</a></li>
-<li><a href="#sec-2-8">2.8. Convertor(自定义类型转换)</a></li>
+<li><a href="#sec-2-8">2.8. PropertyEditor/Convertor(自定义类型转换)</a></li>
 <li><a href="#sec-2-9">2.9. REStful 风格</a></li>
 </ul>
 </li>
@@ -412,20 +412,41 @@ UserController:
 </div>
 
 <div id="outline-container-sec-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Handler 返回值</h3>
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> flow</h3>
 <div class="outline-text-3" id="text-2-3">
-<ul class="org-ul">
-<li>String
+<p>
+在 url 请求阶段，大致流程是这样的：
+</p>
+<ol class="org-ol">
+<li>预处理
 </li>
-<li>View
+<li>通过 HandlerMapping 获取请求相对应的 handler
 </li>
-<li>ModelAndView
+<li>创建 ModelAndView 对象，这个对象将会保存所有的模型数据，还会持有页面展现相关的信息
+<pre class="example">
+ModelAndView mv = null
+</pre>
 </li>
-<li>void
+<li>调用查找到的 handler 方法，将结果封装成 ModelAndView 赋值给 mv
 </li>
-<li>JSON
+<li>调用 render 方法，将 Model 里的数据渲染到 View 视图里
 </li>
-</ul>
+<li>清理工作
+</li>
+</ol>
+
+<p>
+所以我们需要明白，我们的 handler 最终产生的应该是一个保存了数据和视图的 ModelAndView。
+即使我们的 handler 返回类型是字符串或其他，到最后还是被封装成了 ModelAndView。
+</p>
+
+<p>
+而且在封装 ModelAndView 时，会将 handler 参数列表上的数据自动添加到里面。
+</p>
+
+<p>
+我们可以在 jsp 里，对 ModelAndView 里的所有数据通过 el 表达式或 spring 标签进行获取。
+</p>
 </div>
 </div>
 
@@ -642,49 +663,8 @@ complie "org.hibernate:hibernate-validator:5.4.0.Final"
 <h3 id="sec-2-5"><span class="section-number-3">2.5</span> 日期转换</h3>
 <div class="outline-text-3" id="text-2-5">
 </div><div id="outline-container-sec-2-5-1" class="outline-4">
-<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> 第一种方法：实现自定义转换器</h4>
+<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> 第一种方法：利用内置的 CustomDateEditor</h4>
 <div class="outline-text-4" id="text-2-5-1">
-<div class="org-src-container">
-
-<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">MyDateConverter</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">Converter</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">String</span>, <span style="color: #228b22;">Date</span><span style="color: #707183;">&gt;</span> <span style="color: #707183;">{</span>
-    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">Date</span> <span style="color: #0000ff;">convert</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">String</span> <span style="color: #a0522d;">datestr</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
-        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#33258;&#24049;&#21435;&#23454;&#29616;&#65292;&#23558;&#23383;&#31526;&#20018;&#36716;&#25442;&#20026; Date &#23545;&#35937;&#12290;</span>
-        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#32771;&#34385;&#24322;&#24120;&#22788;&#29702;&#31561;</span>
-        <span style="color: #a020f0;">return</span> <span style="color: #008b8b;">null</span>;
-    <span style="color: #7388d6;">}</span>
-<span style="color: #707183;">}</span>
-</pre>
-</div>
-
-<p>
-然后需要在配置文件中注册转换器
-</p>
-<div class="org-src-container">
-
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#25105;&#20204;&#23450;&#20041;&#30340;&#36716;&#25442;&#26381;&#21153; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">annotation-driven</span> <span style="color: #a0522d;">conversion-service</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">conversionService</span><span style="color: #8b2252;">"</span> /&gt;
-
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23450;&#20041;&#20840;&#23616;&#30340;&#36716;&#25442;&#26381;&#21153;&#65292;&#21487;&#20197;&#37197;&#32622;&#22810;&#20010;&#36716;&#25442;&#22120; </span><span style="color: #b22222;">--&gt;</span>
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#36825;&#37324;&#65292;&#21482;&#37197;&#32622;&#20102;&#25105;&#20204;&#33258;&#23450;&#20041;&#30340;&#36716;&#25442;&#22120;&#65292;DateConverter </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myConversionService</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.context.support.ConversionServiceFactoryBean</span><span style="color: #8b2252;">"</span>&gt;
-  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">converters</span><span style="color: #8b2252;">"</span>&gt;
-    &lt;<span style="color: #0000ff;">set</span>&gt;
-      &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fish.miniblog.converter.MyDateConverter</span><span style="color: #8b2252;">"</span> /&gt;
-    &lt;/<span style="color: #0000ff;">set</span>&gt;
-  &lt;/<span style="color: #0000ff;">property</span>&gt;
-&lt;/<span style="color: #0000ff;">bean</span>&gt;
-</pre>
-</div>
-
-<p>
-这样就可以了。所有的 yyyy-MM-yy 之类的字符串就可以正常转换成 Date 对象了。
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-2-5-2" class="outline-4">
-<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> 第二种方法：利用内置的 CustomDateEditor</h4>
-<div class="outline-text-4" id="text-2-5-2">
 <p>
 首先，在我们的 Controller 的 InitBinder 里面，注册 CustomEditor
 </p>
@@ -704,6 +684,51 @@ complie "org.hibernate:hibernate-validator:5.4.0.Final"
 </div>
 </div>
 
+<div id="outline-container-sec-2-5-2" class="outline-4">
+<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> 第二种方法：实现自定义转换器</h4>
+<div class="outline-text-4" id="text-2-5-2">
+<p>
+spring 3.0 之后，使用 converter
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">MyDateConverter</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">Converter</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">String</span>, <span style="color: #228b22;">Date</span><span style="color: #707183;">&gt;</span> <span style="color: #707183;">{</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">Date</span> <span style="color: #0000ff;">convert</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">String</span> <span style="color: #a0522d;">datestr</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#33258;&#24049;&#21435;&#23454;&#29616;&#65292;&#23558;&#23383;&#31526;&#20018;&#36716;&#25442;&#20026; Date &#23545;&#35937;&#12290;</span>
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#32771;&#34385;&#24322;&#24120;&#22788;&#29702;&#31561;</span>
+        <span style="color: #a020f0;">return</span> <span style="color: #008b8b;">null</span>;
+    <span style="color: #7388d6;">}</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+然后需要在配置文件中注册转换器
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#25105;&#20204;&#23450;&#20041;&#30340;&#36716;&#25442;&#26381;&#21153; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">annotation-driven</span> <span style="color: #a0522d;">conversion-service</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myConversionService</span><span style="color: #8b2252;">"</span> /&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23450;&#20041;&#20840;&#23616;&#30340;&#36716;&#25442;&#26381;&#21153;&#65292;&#21487;&#20197;&#37197;&#32622;&#22810;&#20010;&#36716;&#25442;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#36825;&#37324;&#65292;&#21482;&#37197;&#32622;&#20102;&#25105;&#20204;&#33258;&#23450;&#20041;&#30340;&#36716;&#25442;&#22120;&#65292;DateConverter </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">myConversionService</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.context.support.ConversionServiceFactoryBean</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">converters</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">set</span>&gt;
+      &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fish.miniblog.converter.MyDateConverter</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;/<span style="color: #0000ff;">set</span>&gt;
+  &lt;/<span style="color: #0000ff;">property</span>&gt;
+&lt;/<span style="color: #0000ff;">bean</span>&gt;
+</pre>
+</div>
+
+<p>
+这样就可以了。所有的 yyyy-MM-yy 之类的字符串就可以正常转换成 Date 对象了。
+</p>
+</div>
+</div>
+
 <div id="outline-container-sec-2-5-3" class="outline-4">
 <h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> 第三种方法：使用 @DateTimeFormat 注解</h4>
 <div class="outline-text-4" id="text-2-5-3">
@@ -712,13 +737,22 @@ complie "org.hibernate:hibernate-validator:5.4.0.Final"
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #008b8b;">@DateTimeFormat</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"yyyy-MM-dd"</span><span style="color: #707183;">)</span>
+<pre class="src src-java"><span style="color: #008b8b;">@DateTimeFormat</span><span style="color: #707183;">(</span>pattern = <span style="color: #8b2252;">"yyyy-MM-dd"</span><span style="color: #707183;">)</span>
 <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Date</span> <span style="color: #a0522d;">birthday</span>;
 </pre>
 </div>
 
 <p>
 就可以了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5-4" class="outline-4">
+<h4 id="sec-2-5-4"><span class="section-number-4">2.5.4</span> 日期在页面上的显示</h4>
+<div class="outline-text-4" id="text-2-5-4">
+<p>
+暂缺。
 </p>
 </div>
 </div>
@@ -789,7 +823,7 @@ complie "org.hibernate:hibernate-validator:5.4.0.Final"
 </div>
 
 <div id="outline-container-sec-2-8" class="outline-3">
-<h3 id="sec-2-8"><span class="section-number-3">2.8</span> Convertor(自定义类型转换)</h3>
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> PropertyEditor/Convertor(自定义类型转换)</h3>
 <div class="outline-text-3" id="text-2-8">
 <p>
 略，看《日期转换》学习。
@@ -811,7 +845,7 @@ complie "org.hibernate:hibernate-validator:5.4.0.Final"
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-08 周三 15:57</p>
+<p class="date">Created: 2017-02-09 周四 11:18</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
