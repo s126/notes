@@ -479,8 +479,90 @@ spring 3.0 之后，使用 converter
 暂缺。
 
 ** ExceptionHandler(异常处理)
-*** Controller 范围内的异常处理
-*** 全局范围的异常配置
+
+SpringMVC 中默认的异常处理器是 DefaultHandlerExceptionResolver，
+但它只是简单粗暴地将异常栈在页面上进行显示。
+在实际项目中这种处理是不合适的。
+所以，我们需要自己定制我们自己的异常处理方式。
+
+自定义异常，主要有下面两种方法：
+*** HandlerExceptionResolver
+
+这是 SpringMVC 中所有异常处理器的总接口。
+要实现自己的异常处理，就是要继承这个接口，实现自己的处理器：
+#+BEGIN_SRC java
+  public class MyExceptionResolver implements HandlerExceptionResolver {
+      @Override
+      public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+
+          ModelAndView mv = new ModelAndView();
+
+          if(ex instanceof MyException) {
+              mv.addObject("err", ex);
+              mv.setModelName("error");
+          } else {
+              // ... 其他各种情况
+          }
+
+          return mv;
+      }
+  }
+#+END_SRC
+
+然后，在 springmvc.xml 中注册为 bean 即可。
+#+BEGIN_SRC xml
+  <bean class="fish.miniblog.MyExceptionResolver" />
+#+END_SRC
+
+
+当然，如果每次异常处理都需要自己定义 ExceptionResovler，很麻烦。
+所以，spring 给我们提供了一个简单的默认实现，SimpleMappingExceptionResolver。
+如果需要，只需要在 springmvc.xml 中注册即可：
+#+BEGIN_SRC xml
+  <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    <!-- 如果有异常，最后由 error.jsp 页面来显示错误信息  -->
+    <property name="defaultErrorView"   value="error" />
+    <!-- 在 error.jsp 中，使用 ${err} 来获取异常信息 -->
+    <property name="exceptionAttribute" value="err" />
+
+    <property name="exceptionMappings">
+      <!-- 暂缺 -->
+    </property>
+  </bean>
+#+END_SRC
+
+
+*** @ExceptionHandler 注解
+
+可以定义一个类似于普通 handler 的方法，添加 @ExceptionHandler 将其作为一个异常处理方法
+#+BEGIN_SRC java
+  @Controller
+  @ControllerAdvice
+  public class ExceptionController {
+
+      @ExceptionHandler({YourException.class})
+      public ModelAndView hahaha (Exception e) {
+          ModelAndView mv = new ModelAndView("error");
+          mv.addObject("err", e);
+          return mv;
+      }
+
+      @ExceptionHandler
+      public String hahaha (MyException e) {
+          return "index";
+      }
+  }
+
+#+END_SRC
+
+默认只是 Controller 范围内有效的。
+
+Spring 3 之后增加了一个 @ControllerAdvice 注解，作用在类上。
+它会将类中所有的 @ExceptionHandler/@InitBinder/@ModelAttribute 等全局化。
+
+所以，一般情况下，我们可以将所有 @ExceptionHandler 方法统一放置在一个加了 @ControllerAdvice 的控制器里，实现全局异常的目的。
+
+就酱紫，没什么好说的。
 
 ** Interceptor(拦截器)
 拦截器主要用来增强 handler 方法
@@ -582,6 +664,8 @@ RESTful (Representational State Transfer) 一种 web 架构风格。
 - DELETE 用来发送删除某个资源的指令
 
 在 RESTful 里，充分利用了这些请求方法，结合资源 URL，完成了对资源的操作处理。
+
+[[http://stackoverflow.com/questions/671118/what-exactly-is-restful-programming][这篇帖子很有用]]
 
 *** 应用示例
 
