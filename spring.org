@@ -3,7 +3,7 @@
 * Spring
 
 * Spring MVC
-** 基本步骤
+** 创建 MVC 项目基本步骤
 
 第一步，创建 Gradle 项目，在 build.gradle 增加相关依赖
 #+BEGIN_SRC java
@@ -256,7 +256,7 @@ UserController:
 
 *** Model/View/ModelAndView
 
-** flow
+** 请求流程
 当请求被 DispatcherServlet 拦截，会在 doService 里面完成所有的处理逻辑。
 
 处理的大致流程是这样的：
@@ -264,11 +264,8 @@ UserController:
 2. 根据请求的 URL 通过 HandlerMapping 获取匹配的 Controller 和 handler
 3. 创建 ModelAndView 对象，这个对象将会保存所有的模型数据，还会持有页面展现相关的信息
    : ModelAndView mv = null
------
 4. 调用相应的 handler 方法，将结果封装成 ModelAndView 赋值给 mv。
------
 5. 调用 render 方法，将 Model 里的数据渲染到 View 视图里
------
 6. 清理工作
 
 所以我们需要明白，我们的 handler 最终产生的应该是一个保存了数据和视图的 ModelAndView。
@@ -417,7 +414,7 @@ hibernate 给出了一个完整实现。
   }
 #+END_SRC
 
-** 日期转换（PropertyEditor/Convertor/Formater）
+** PropertyEditor/Convertor/Formater(日期转换为例)
 *** 第一种方法：利用内置的 CustomDateEditor
 首先，在我们的 Controller 的 InitBinder 里面，注册 CustomEditor
 #+BEGIN_SRC java
@@ -478,7 +475,7 @@ spring 3.0 之后，使用 converter
 *** 日期在页面上的显示
 暂缺。
 
-** ExceptionHandler(异常处理)
+** Exception(异常处理)
 
 SpringMVC 中默认的异常处理器是 DefaultHandlerExceptionResolver，
 但它只是简单粗暴地将异常栈在页面上进行显示。
@@ -557,10 +554,10 @@ SpringMVC 中默认的异常处理器是 DefaultHandlerExceptionResolver，
 
 默认只是 Controller 范围内有效的。
 
-Spring 3 之后增加了一个 @ControllerAdvice 注解，作用在类上。
-它会将类中所有的 @ExceptionHandler/@InitBinder/@ModelAttribute 等全局化。
+Spring 3 之后增加了一个 @ControllerAdvice 注解，作用在控制器上。
+它会将其中所有的 @ExceptionHandler、@InitBinder、@ModelAttribute 等全局化。
 
-所以，一般情况下，我们可以将所有 @ExceptionHandler 方法统一放置在一个加了 @ControllerAdvice 的控制器里，实现全局异常的目的。
+所以，一般情况下，我们可以将所有 @ExceptionHandler 方法统一放置在一个加了 @ControllerAdvice 的控制器里，实现全局异常。
 
 就酱紫，没什么好说的。
 
@@ -643,7 +640,34 @@ Spring 3 之后增加了一个 @ControllerAdvice 注解，作用在类上。
 
 然后，就这样了。
 
-** RESTful 风格
+** MessageSource(国际化，资源文件)
+
+使用资源文件，实现国际化。
+
+如果使用资源文件，只需要自定义我们自己的资源文件处理器，即实现 MessageSource 接口。
+
+但 spring 提供了一些实现好的处理器，我们只需要注册使用，比如，ReloadableResourceBundleMessageSource：
+#+BEGIN_SRC xml
+  <bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <!-- 指定我们的资源文件为class根目录下的 message.properties 文件 -->
+    <property name="basename" value="message" />
+  </bean>
+#+END_SRC
+
+在 message[.zh_CN].properties 里面定义 k/v 形式的信息。
+: MY_NAME = GODMAN
+: NAME.ERROR = 名字错误
+
+然后，就可以使用了。比如：
+: <fmt:message key="MY_NAME" />
+再比如，在 JSR-303 验证里：
+: @NotNull(message = "NAME.ERROR")
+在自定义验证器里:
+: errors.rejectValue("name", "NAME.ERROR")
+
+就这样。。。简单。
+
+* RESTful Style
 
 RESTful (Representational State Transfer) 一种 web 架构风格。
 
@@ -669,15 +693,15 @@ RESTful (Representational State Transfer) 一种 web 架构风格。
 
 *** 应用示例
 
-post 代表一篇微博，它是存在于网络上的资源。
+post 代表一条微博，它是存在于网络上的资源。
 
-所有博客的 url 为：
+所有微博的 url 为：
 : localhost/posts
 
-某篇博客的 url 为：
+某条微博的 url 为：
 : localhost/posts/223
 
-所有的 mapping，按照 RESTful 风格，我们可以设计为：
+按照 RESTful 风格，我们可以将 Mapping 设计为：
 | 功能         | URL                | 请求的方法 |
 | 显示所有微博 | localhost/posts    | GET        |
 | 增加一条微博 | localhost/posts    | POST       |
