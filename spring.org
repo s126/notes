@@ -551,7 +551,8 @@ spring 3.0 之后，使用 converter
 
     <!-- 作用于指定映射的拦截器 -->
     <mvc:interceptor>
-      <mvc:mapping path="fish.miniblog.controller.UserController"/>
+      <!-- 为所有 /users/** 请求配置拦截器 -->
+      <mvc:mapping path="/users/**"/>
       <bean class="fish.miniblog.interceptor.HisInterceptor" />
     </mvc:interceptor>
 
