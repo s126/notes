@@ -562,6 +562,52 @@ spring 3.0 之后，使用 converter
 然后，就这样了。
 
 ** RESTful 风格
-*** 概念介绍
+
+RESTful (Representational State Transfer) 一种 web 架构风格。
+
+它将网络上存在的每件东西都抽象成了一种“资源”。
+而我们访问网络的过程就是对某种“资源”的访问和控制。
+
+比如，网络上某个地方存在一本书，这本书的 URL 资源地址就是：
+: theremoteserver.com/books/战争与和平
+
+如果我们想对这本书（这个资源）进行处理，可以把这个 URL 和 相关的 http 协议方法（GET/POST/PUT/DELETE）发送给服务器，比如，要删除：
+: DELETE theremoteserver.com/books/战争与和平
+
+在 HTTP 协议中，定义了很多不同的请求方法，比如我们熟悉的 GET/POST。
+除了这两个，还有其他一些，这些请求方法是具备语义的，分别对应数据的 CRUD：
+- GET    从网络上获取资源，用来显示
+- POST   用来在网络上增加一个资源
+- PUT    用来更新网络上某个资源的信息
+- DELETE 用来发送删除某个资源的指令
+
+在 RESTful 里，充分利用了这些请求方法，结合资源 URL，完成了对资源的操作处理。
+
 *** 应用示例
+
+post 代表一篇微博，它是存在于网络上的资源。
+
+所有博客的 url 为：
+: localhost/posts
+
+某篇博客的 url 为：
+: localhost/posts/223
+
+所有的 mapping，按照 RESTful 风格，我们可以设计为：
+| 功能         | URL                | 请求的方法 |
+| 显示所有微博 | localhost/posts    | GET        |
+| 增加一条微博 | localhost/posts    | POST       |
+| 显示某条微博 | localhost/posts/11 | GET        |
+| 更新某条微博 | localhost/posts/11 | PUT        |
+| 删除某条微博 | localhost/posts/11 | DELETE     |
+
+当然，还需要额外两个映射
+| 功能                   | URL                     | 请求的方法 |
+| 跳转到添加微博页面     | localhost/posts/edit    | GET        |
+| 跳转到编辑某条微博页面 | localhost/posts/11/edit | POST       | 
+
+设计完这些后，我们就可以在 SpringMVC 里面，结合 @PathVariable 进行编程了。
+
+而这种风格，展现了它的清晰和简单的性质。
+
 
