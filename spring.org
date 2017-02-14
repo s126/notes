@@ -1,6 +1,9 @@
 #+TITLE: Spring
 
 * Spring
+** IOC
+** AOP
+** 声明式事务
 
 * Spring MVC
 ** 创建 MVC 项目基本步骤
@@ -15,8 +18,8 @@
 
   // 配置下载 jar 包的地址
   repositories {
-    jcenter()
     mavenCentral()
+    jcenter()
   }
 
   // 配置需要的 jar 包依赖
@@ -54,12 +57,14 @@
 
       // 配置 hibernate
       "org.hibernate:hibernate-core:$hibernateVersion",
+      "org.hibernate:hibernate-validator:5.4.0.Final",
 
       // 配置 spring
       "org.springframework:spring-web:$springVersion",
       "org.springframework:spring-orm:$springVersion",
+      "org.springframework:spring-aop:$springVersion",
       "org.springframework:spring-webmvc:$springVersion",
-      "com.fasterxml.jackson.core:jackson-databind:2.5.1"
+      "com.fasterxml.jackson.core:jackson-databind:2.5.1",
     )
   }
 
@@ -83,43 +88,56 @@
 
 第二步，配置 web.xml，加入 spring 和 mvc 支持
 #+BEGIN_SRC xml
+
+  <!-- 如果使用 RESTful 风格的编程，需要加上这个过滤器 -->
+  <!-- 它能使得 FORM 提交支持 PUT/DELETE 等方法 -->
+  <filter>
+    <filter-name>forRESTful</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>forRESTful</filter-name>
+    <servlet-name>springmvc</servlet-name>
+  </filter-mapping>
+
+
+  <!-- 配置 SpringMVC 的 DispatcherServlet  context (child) -->
+  <!-- 它会为 SpringMVC 创建一个独立的容器 -->
+  <!-- 如果使用 SpringMVC，这里必须要配置 -->
+  <!-- 它的父容器是下面配置的 root Context -->
+  <!-- 可以在 init-param 中指定配置文件路径，如果不配置，默认是 "WEB-INF/miniblog-servlet.xml" -->
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-miniblog.xml</param-value>
+    </init-param>
+    <load-on-start>1</load-on-start>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+
   <!-- 配置 spring 的 root application context (parent) -->
-  <!-- 在 spring mvc 中，这个配置是可选的 -->
-  <!-- 在这个 IOC 容器里，主要配置一些全局的东西 -->
-  <!-- 比如 dao/service 的依赖，声明式事务之类 -->
+  <!-- 创建一个根容器 -->
+  <!-- 如果只是使用 SpringMVC 但不使用 Spring 其他功能，这里可以不配置 -->
+  <!-- 在这个容器里，配置一些全局的东西 -->
+  <!-- 比如 dao/service 的依赖，数据源，sessionFactory，声明式事务之类 -->
+  <!-- 可以通过 context-param 指定配置文件路径，如果不指定，默认是 "WEB-INF/applicationContext.xml" -->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
-  <!-- 配置路径，默认是 "WEB-INF/applicationContext.xml" -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring-root.xml</param-value>
   </context-param>
 
-
-  <!-- 配置 SpringMVC 的 DispatcherServlet  context (child) -->
-  <!-- 这个必须要配置，它的父容器是 上面的那个 -->
-  <servlet>
-    <servlet-name>miniblog</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <!-- 指定配置文件路径，可选 -->
-    <!-- 默认文件是 "WEB-INF/miniblog-dispatcher.xml" -->
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring-miniblog.xml</param-value>
-    </init-param>
-    <!-- 可以指定 tomcat 启动的时候，自动初始化 DispatcherServlet -->
-    <!-- 如果没有这个配置，会在第一次访问的时候才会去创建 -->
-    <load-on-start>1</load-on-start>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>miniblog</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
-
 #+END_SRC
 
-第三步，配置 spring 的 context 文件，如 spring-miniblog.xml
+第三步，配置 SpringMVC 的 context 文件(spring-miniblog.xml):
 #+BEGIN_SRC xml
 
   <!-- 注意，要引入正确的命名空间！！！ -->
@@ -129,7 +147,14 @@
   <mvc:annotation-driven />
 
   <!-- 配置扫描发现所有具有 @Controller 注解的类，加载到容器 -->
+  <!-- 注意，在 SpringMVC 的配置文件中，不要扫描 @Controller 之外的类 -->
   <context:component-scan base-package="app.controller" />
+
+  <!-- 配置静态资源的访问映射 -->
+  <!-- 比如访问 http://localhost/js/jquery.js，mvc 将会去寻找 /assets/javascript/jquery.js -->
+  <mvc:resources mapping="/js/**"  location="/assets/javascript/" />
+  <mvc:resources mapping="/css/**" location="/assets/stylesheet/" />
+
 
   <!-- 配置视图解析器，将 Controller 返回的字符串组织成全路径 -->
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -137,14 +162,64 @@
     <property name="suffix" value=".jsp" />
   </bean>
 
-  <!-- 配置静态资源的访问映射 -->
-  <!-- 比如访问 http://localhost/js/jquery.js，mvc 将会去寻找 /assets/javascript/jquery.js -->
-  <mvc:resources mapping="/js/**"  location="/assets/javascript/" />
-  <mvc:resources mapping="/css/**" location="/assets/stylesheet/" />
+  <!-- 配置资源文件，如下配置，资源文件则为 resource 文件夹下的 message*.properties 或 message*.xml -->
+  <!-- 注意，要把资源文件保存成 UTF-8 格式，否则，需要在这里通过 defaultEncoding 指定编码 -->
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="message" />
+    <property name="defaultEncoding" value="GBK" />
+  </bean>
+
+  <!-- 根据需要，还可以在这个配置文件里配置拦截器、转换服务等 -->
 
 #+END_SRC
 
-第四步，建立 Controller，进行测试
+第四步，如果需要建立根容器，配置根容器的 context 文件(spring-root.xml):
+#+BEGIN_SRC xml
+  <!-- 启用注解，让 spring 在加载的时候自动扫描指定包 -->
+  <!-- 这样会将含有 @Service/@Repository/@Component 等注解的类在容器中实例化 -->
+  <context:component-scan base-package="fish.miniblog.service, fish.miniblog.dao" />
+
+
+  <!-- 使用外部的 properties 文件 -->
+  <!-- 我们一般会将经常要改动的一些参数提取出来放到外部 -->
+  <context:property-placeholder location="classpath:db.properties" />
+
+
+  <!-- 配置 Hibernate 的 Sessionfactory -->
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource">
+      <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="user" value="${user}" />
+        <property name="password" value="${password}" />
+        <property name="jdbcUrl" value="${url}" />
+        <property name="driverClass" value="${driver}" />
+      </bean>
+    </property>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.dialect">${dialect}</prop>
+      </props>
+    </property>
+    <property name="packagesToScan" value="fish.miniblog.model" />
+  </bean>
+
+
+  <!-- 配置事务管理器 -->
+  <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+
+  <!-- 开启事务相关的注解 -->
+  <!-- 然后，就可以在 Service 相关的类或方法上通过 @Transactional 开启事务支持了 -->
+  <tx:annotation-driven proxy-target-class="true"/>
+
+#+END_SRC
+
+第五步，建立 Controller，进行测试
 #+BEGIN_SRC java
   @Controller
   @RequestMapping("/users")

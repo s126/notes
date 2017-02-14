@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-10 周五 15:43 -->
+<!-- 2017-02-14 周二 09:22 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -20,7 +20,13 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. Spring</a></li>
+<li><a href="#sec-1">1. Spring</a>
+<ul>
+<li><a href="#sec-1-1">1.1. IOC</a></li>
+<li><a href="#sec-1-2">1.2. AOP</a></li>
+<li><a href="#sec-1-3">1.3. 声明式事务</a></li>
+</ul>
+</li>
 <li><a href="#sec-2">2. Spring MVC</a>
 <ul>
 <li><a href="#sec-2-1">2.1. 创建 MVC 项目基本步骤</a></li>
@@ -40,6 +46,16 @@
 
 <section id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><span class="section-number-2">1</span> Spring</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> IOC</h3>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> AOP</h3>
+</div>
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> 声明式事务</h3>
+</div>
 </section>
 
 <section id="outline-container-sec-2" class="outline-2">
@@ -61,8 +77,8 @@ sourceCompatibility = 1.8
 
 <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622;&#19979;&#36733; jar &#21253;&#30340;&#22320;&#22336;</span>
 repositories <span style="color: #707183;">{</span>
-  jcenter<span style="color: #7388d6;">()</span>
   mavenCentral<span style="color: #7388d6;">()</span>
+  jcenter<span style="color: #7388d6;">()</span>
 <span style="color: #707183;">}</span>
 
 <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622;&#38656;&#35201;&#30340; jar &#21253;&#20381;&#36182;</span>
@@ -100,12 +116,14 @@ dependencies <span style="color: #707183;">{</span>
 
     <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622; hibernate</span>
     <span style="color: #8b2252;">"org.hibernate:hibernate-core:$hibernateVersion"</span>,
+    <span style="color: #8b2252;">"org.hibernate:hibernate-validator:5.4.0.Final"</span>,
 
     <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37197;&#32622; spring</span>
     <span style="color: #8b2252;">"org.springframework:spring-web:$springVersion"</span>,
     <span style="color: #8b2252;">"org.springframework:spring-orm:$springVersion"</span>,
+    <span style="color: #8b2252;">"org.springframework:spring-aop:$springVersion"</span>,
     <span style="color: #8b2252;">"org.springframework:spring-webmvc:$springVersion"</span>,
-    <span style="color: #8b2252;">"com.fasterxml.jackson.core:jackson-databind:2.5.1"</span>
+    <span style="color: #8b2252;">"com.fasterxml.jackson.core:jackson-databind:2.5.1"</span>,
   <span style="color: #7388d6;">)</span>
 <span style="color: #707183;">}</span>
 
@@ -133,44 +151,56 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 </p>
 <div class="org-src-container">
 
-<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622; spring &#30340; root application context (parent) </span><span style="color: #b22222;">--&gt;</span>
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312; spring mvc &#20013;&#65292;&#36825;&#20010;&#37197;&#32622;&#26159;&#21487;&#36873;&#30340; </span><span style="color: #b22222;">--&gt;</span>
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#36825;&#20010; IOC &#23481;&#22120;&#37324;&#65292;&#20027;&#35201;&#37197;&#32622;&#19968;&#20123;&#20840;&#23616;&#30340;&#19996;&#35199; </span><span style="color: #b22222;">--&gt;</span>
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27604;&#22914; dao/service &#30340;&#20381;&#36182;&#65292;&#22768;&#26126;&#24335;&#20107;&#21153;&#20043;&#31867; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">listener</span>&gt;
-  &lt;<span style="color: #0000ff;">listener-class</span>&gt;org.springframework.web.context.ContextLoaderListener&lt;/<span style="color: #0000ff;">listener-class</span>&gt;
-&lt;/<span style="color: #0000ff;">listener</span>&gt;
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#36335;&#24452;&#65292;&#40664;&#35748;&#26159; "WEB-INF/applicationContext.xml" </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">context-param</span>&gt;
-  &lt;<span style="color: #0000ff;">param-name</span>&gt;contextConfigLocation&lt;/<span style="color: #0000ff;">param-name</span>&gt;
-  &lt;<span style="color: #0000ff;">param-value</span>&gt;classpath:spring-root.xml&lt;/<span style="color: #0000ff;">param-value</span>&gt;
-&lt;/<span style="color: #0000ff;">context-param</span>&gt;
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22914;&#26524;&#20351;&#29992; RESTful &#39118;&#26684;&#30340;&#32534;&#31243;&#65292;&#38656;&#35201;&#21152;&#19978;&#36825;&#20010;&#36807;&#28388;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23427;&#33021;&#20351;&#24471; FORM &#25552;&#20132;&#25903;&#25345; PUT/DELETE &#31561;&#26041;&#27861; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">filter</span>&gt;
+  &lt;<span style="color: #0000ff;">filter-name</span>&gt;forRESTful&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
+  &lt;<span style="color: #0000ff;">filter-class</span>&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/<span style="color: #0000ff;">filter-class</span>&gt;
+&lt;/<span style="color: #0000ff;">filter</span>&gt;
+&lt;<span style="color: #0000ff;">filter-mapping</span>&gt;
+  &lt;<span style="color: #0000ff;">filter-name</span>&gt;forRESTful&lt;/<span style="color: #0000ff;">filter-name</span>&gt;
+  &lt;<span style="color: #0000ff;">servlet-name</span>&gt;springmvc&lt;/<span style="color: #0000ff;">servlet-name</span>&gt;
+&lt;/<span style="color: #0000ff;">filter-mapping</span>&gt;
 
 
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622; SpringMVC &#30340; DispatcherServlet  context (child) </span><span style="color: #b22222;">--&gt;</span>
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36825;&#20010;&#24517;&#39035;&#35201;&#37197;&#32622;&#65292;&#23427;&#30340;&#29238;&#23481;&#22120;&#26159; &#19978;&#38754;&#30340;&#37027;&#20010; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23427;&#20250;&#20026; SpringMVC &#21019;&#24314;&#19968;&#20010;&#29420;&#31435;&#30340;&#23481;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22914;&#26524;&#20351;&#29992; SpringMVC&#65292;&#36825;&#37324;&#24517;&#39035;&#35201;&#37197;&#32622; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23427;&#30340;&#29238;&#23481;&#22120;&#26159;&#19979;&#38754;&#37197;&#32622;&#30340; root Context </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#21487;&#20197;&#22312; init-param &#20013;&#25351;&#23450;&#37197;&#32622;&#25991;&#20214;&#36335;&#24452;&#65292;&#22914;&#26524;&#19981;&#37197;&#32622;&#65292;&#40664;&#35748;&#26159; "WEB-INF/miniblog-servlet.xml" </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #0000ff;">servlet</span>&gt;
-  &lt;<span style="color: #0000ff;">servlet-name</span>&gt;miniblog&lt;/<span style="color: #0000ff;">servlet-name</span>&gt;
+  &lt;<span style="color: #0000ff;">servlet-name</span>&gt;springmvc&lt;/<span style="color: #0000ff;">servlet-name</span>&gt;
   &lt;<span style="color: #0000ff;">servlet-class</span>&gt;org.springframework.web.servlet.DispatcherServlet&lt;/<span style="color: #0000ff;">servlet-class</span>&gt;
-  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25351;&#23450;&#37197;&#32622;&#25991;&#20214;&#36335;&#24452;&#65292;&#21487;&#36873; </span><span style="color: #b22222;">--&gt;</span>
-  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#40664;&#35748;&#25991;&#20214;&#26159; "WEB-INF/miniblog-dispatcher.xml" </span><span style="color: #b22222;">--&gt;</span>
   &lt;<span style="color: #0000ff;">init-param</span>&gt;
     &lt;<span style="color: #0000ff;">param-name</span>&gt;contextConfigLocation&lt;/<span style="color: #0000ff;">param-name</span>&gt;
     &lt;<span style="color: #0000ff;">param-value</span>&gt;classpath:spring-miniblog.xml&lt;/<span style="color: #0000ff;">param-value</span>&gt;
   &lt;/<span style="color: #0000ff;">init-param</span>&gt;
-  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#21487;&#20197;&#25351;&#23450; tomcat &#21551;&#21160;&#30340;&#26102;&#20505;&#65292;&#33258;&#21160;&#21021;&#22987;&#21270; DispatcherServlet </span><span style="color: #b22222;">--&gt;</span>
-  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22914;&#26524;&#27809;&#26377;&#36825;&#20010;&#37197;&#32622;&#65292;&#20250;&#22312;&#31532;&#19968;&#27425;&#35775;&#38382;&#30340;&#26102;&#20505;&#25165;&#20250;&#21435;&#21019;&#24314; </span><span style="color: #b22222;">--&gt;</span>
   &lt;<span style="color: #0000ff;">load-on-start</span>&gt;1&lt;/<span style="color: #0000ff;">load-on-start</span>&gt;
 &lt;/<span style="color: #0000ff;">servlet</span>&gt;
 &lt;<span style="color: #0000ff;">servlet-mapping</span>&gt;
-  &lt;<span style="color: #0000ff;">servlet-name</span>&gt;miniblog&lt;/<span style="color: #0000ff;">servlet-name</span>&gt;
+  &lt;<span style="color: #0000ff;">servlet-name</span>&gt;springmvc&lt;/<span style="color: #0000ff;">servlet-name</span>&gt;
   &lt;<span style="color: #0000ff;">url-pattern</span>&gt;/&lt;/<span style="color: #0000ff;">url-pattern</span>&gt;
 &lt;/<span style="color: #0000ff;">servlet-mapping</span>&gt;
+
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622; spring &#30340; root application context (parent) </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#21019;&#24314;&#19968;&#20010;&#26681;&#23481;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22914;&#26524;&#21482;&#26159;&#20351;&#29992; SpringMVC &#20294;&#19981;&#20351;&#29992; Spring &#20854;&#20182;&#21151;&#33021;&#65292;&#36825;&#37324;&#21487;&#20197;&#19981;&#37197;&#32622; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#36825;&#20010;&#23481;&#22120;&#37324;&#65292;&#37197;&#32622;&#19968;&#20123;&#20840;&#23616;&#30340;&#19996;&#35199; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27604;&#22914; dao/service &#30340;&#20381;&#36182;&#65292;&#25968;&#25454;&#28304;&#65292;sessionFactory&#65292;&#22768;&#26126;&#24335;&#20107;&#21153;&#20043;&#31867; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#21487;&#20197;&#36890;&#36807; context-param &#25351;&#23450;&#37197;&#32622;&#25991;&#20214;&#36335;&#24452;&#65292;&#22914;&#26524;&#19981;&#25351;&#23450;&#65292;&#40664;&#35748;&#26159; "WEB-INF/applicationContext.xml" </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">listener</span>&gt;
+  &lt;<span style="color: #0000ff;">listener-class</span>&gt;org.springframework.web.context.ContextLoaderListener&lt;/<span style="color: #0000ff;">listener-class</span>&gt;
+&lt;/<span style="color: #0000ff;">listener</span>&gt;
+&lt;<span style="color: #0000ff;">context-param</span>&gt;
+  &lt;<span style="color: #0000ff;">param-name</span>&gt;contextConfigLocation&lt;/<span style="color: #0000ff;">param-name</span>&gt;
+  &lt;<span style="color: #0000ff;">param-value</span>&gt;classpath:spring-root.xml&lt;/<span style="color: #0000ff;">param-value</span>&gt;
+&lt;/<span style="color: #0000ff;">context-param</span>&gt;
 </pre>
 </div>
 
 <p>
-第三步，配置 spring 的 context 文件，如 spring-miniblog.xml
+第三步，配置 SpringMVC 的 context 文件(spring-miniblog.xml):
 </p>
 <div class="org-src-container">
 
@@ -181,7 +211,14 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
 &lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">annotation-driven</span> /&gt;
 
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#25195;&#25551;&#21457;&#29616;&#25152;&#26377;&#20855;&#26377; @Controller &#27880;&#35299;&#30340;&#31867;&#65292;&#21152;&#36733;&#21040;&#23481;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292;&#22312; SpringMVC &#30340;&#37197;&#32622;&#25991;&#20214;&#20013;&#65292;&#19981;&#35201;&#25195;&#25551; @Controller &#20043;&#22806;&#30340;&#31867; </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #483d8b;">context</span>:<span style="color: #0000ff;">component-scan</span> <span style="color: #a0522d;">base-package</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">app.controller</span><span style="color: #8b2252;">"</span> /&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#38745;&#24577;&#36164;&#28304;&#30340;&#35775;&#38382;&#26144;&#23556; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27604;&#22914;&#35775;&#38382; http://localhost/js/jquery.js&#65292;mvc &#23558;&#20250;&#21435;&#23547;&#25214; /assets/javascript/jquery.js </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resources</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/js/**</span><span style="color: #8b2252;">"</span>  <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/javascript/</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resources</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/css/**</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/stylesheet/</span><span style="color: #8b2252;">"</span> /&gt;
+
 
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#35270;&#22270;&#35299;&#26512;&#22120;&#65292;&#23558; Controller &#36820;&#22238;&#30340;&#23383;&#31526;&#20018;&#32452;&#32455;&#25104;&#20840;&#36335;&#24452; </span><span style="color: #b22222;">--&gt;</span>
 &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">viewResolver</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.web.servlet.view.InternalResourceViewResolver</span><span style="color: #8b2252;">"</span>&gt;
@@ -189,15 +226,68 @@ tasks.<span style="color: #0000ff;">withType</span><span style="color: #707183;"
   &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">suffix</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">.jsp</span><span style="color: #8b2252;">"</span> /&gt;
 &lt;/<span style="color: #0000ff;">bean</span>&gt;
 
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#38745;&#24577;&#36164;&#28304;&#30340;&#35775;&#38382;&#26144;&#23556; </span><span style="color: #b22222;">--&gt;</span>
-<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27604;&#22914;&#35775;&#38382; http://localhost/js/jquery.js&#65292;mvc &#23558;&#20250;&#21435;&#23547;&#25214; /assets/javascript/jquery.js </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resources</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/js/**</span><span style="color: #8b2252;">"</span>  <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/javascript/</span><span style="color: #8b2252;">"</span> /&gt;
-&lt;<span style="color: #483d8b;">mvc</span>:<span style="color: #0000ff;">resources</span> <span style="color: #a0522d;">mapping</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/css/**</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">/assets/stylesheet/</span><span style="color: #8b2252;">"</span> /&gt;
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#36164;&#28304;&#25991;&#20214;&#65292;&#22914;&#19979;&#37197;&#32622;&#65292;&#36164;&#28304;&#25991;&#20214;&#21017;&#20026; resource &#25991;&#20214;&#22841;&#19979;&#30340; message*.properties &#25110; message*.xml </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#27880;&#24847;&#65292;&#35201;&#25226;&#36164;&#28304;&#25991;&#20214;&#20445;&#23384;&#25104; UTF-8 &#26684;&#24335;&#65292;&#21542;&#21017;&#65292;&#38656;&#35201;&#22312;&#36825;&#37324;&#36890;&#36807; defaultEncoding &#25351;&#23450;&#32534;&#30721; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">messageSource</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.context.support.ReloadableResourceBundleMessageSource</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">basename</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">message</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">defaultEncoding</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">GBK</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#26681;&#25454;&#38656;&#35201;&#65292;&#36824;&#21487;&#20197;&#22312;&#36825;&#20010;&#37197;&#32622;&#25991;&#20214;&#37324;&#37197;&#32622;&#25318;&#25130;&#22120;&#12289;&#36716;&#25442;&#26381;&#21153;&#31561; </span><span style="color: #b22222;">--&gt;</span>
 </pre>
 </div>
 
 <p>
-第四步，建立 Controller，进行测试
+第四步，如果需要建立根容器，配置根容器的 context 文件(spring-root.xml):
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#21551;&#29992;&#27880;&#35299;&#65292;&#35753; spring &#22312;&#21152;&#36733;&#30340;&#26102;&#20505;&#33258;&#21160;&#25195;&#25551;&#25351;&#23450;&#21253; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36825;&#26679;&#20250;&#23558;&#21547;&#26377; @Service/@Repository/@Component &#31561;&#27880;&#35299;&#30340;&#31867;&#22312;&#23481;&#22120;&#20013;&#23454;&#20363;&#21270; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">context</span>:<span style="color: #0000ff;">component-scan</span> <span style="color: #a0522d;">base-package</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fish.miniblog.service, fish.miniblog.dao</span><span style="color: #8b2252;">"</span> /&gt;
+
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#20351;&#29992;&#22806;&#37096;&#30340; properties &#25991;&#20214; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25105;&#20204;&#19968;&#33324;&#20250;&#23558;&#32463;&#24120;&#35201;&#25913;&#21160;&#30340;&#19968;&#20123;&#21442;&#25968;&#25552;&#21462;&#20986;&#26469;&#25918;&#21040;&#22806;&#37096; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">context</span>:<span style="color: #0000ff;">property-placeholder</span> <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">classpath:db.properties</span><span style="color: #8b2252;">"</span> /&gt;
+
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622; Hibernate &#30340; Sessionfactory </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sessionFactory</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.orm.hibernate5.LocalSessionFactoryBean</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">dataSource</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">com.mchange.v2.c3p0.ComboPooledDataSource</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">destroy-method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">close</span><span style="color: #8b2252;">"</span>&gt;
+      &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">user</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${user}</span><span style="color: #8b2252;">"</span> /&gt;
+      &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${password}</span><span style="color: #8b2252;">"</span> /&gt;
+      &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">jdbcUrl</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${url}</span><span style="color: #8b2252;">"</span> /&gt;
+      &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">driverClass</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${driver}</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;/<span style="color: #0000ff;">bean</span>&gt;
+  &lt;/<span style="color: #0000ff;">property</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernateProperties</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">props</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.show_sql</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">prop</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.format_sql</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">prop</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.hbm2ddl.auto</span><span style="color: #8b2252;">"</span>&gt;update&lt;/<span style="color: #0000ff;">prop</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.dialect</span><span style="color: #8b2252;">"</span>&gt;${dialect}&lt;/<span style="color: #0000ff;">prop</span>&gt;
+    &lt;/<span style="color: #0000ff;">props</span>&gt;
+  &lt;/<span style="color: #0000ff;">property</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">packagesToScan</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">fish.miniblog.model</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#20107;&#21153;&#31649;&#29702;&#22120; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">transactionManager</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.orm.hibernate5.HibernateTransactionManager</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sessionFactory</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sessionFactory</span><span style="color: #8b2252;">"</span>/&gt;
+&lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#24320;&#21551;&#20107;&#21153;&#30456;&#20851;&#30340;&#27880;&#35299; </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#28982;&#21518;&#65292;&#23601;&#21487;&#20197;&#22312; Service &#30456;&#20851;&#30340;&#31867;&#25110;&#26041;&#27861;&#19978;&#36890;&#36807; @Transactional &#24320;&#21551;&#20107;&#21153;&#25903;&#25345;&#20102; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">annotation-driven</span> <span style="color: #a0522d;">proxy-target-class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span>/&gt;
+</pre>
+</div>
+
+<p>
+第五步，建立 Controller，进行测试
 </p>
 <div class="org-src-container">
 
@@ -1225,7 +1315,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-10 周五 15:43</p>
+<p class="date">Created: 2017-02-14 周二 09:22</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
