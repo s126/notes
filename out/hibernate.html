@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Hibernate</title>
-<!-- 2017-02-16 周四 13:55 -->
+<!-- 2017-02-16 周四 14:26 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -452,12 +452,15 @@ ORM 主要是用面向对象的思维去操作数据库。
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
+<pre class="src src-java"><span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
     <span style="color: #008b8b;">@OneToOne</span>
     <span style="color: #008b8b;">@JoinColumn</span>
     <span style="color: #a020f0;">private</span> <span style="color: #228b22;">IdCard</span> <span style="color: #a0522d;">idcard</span>;
 <span style="color: #707183;">}</span>
 
+
+<span style="color: #008b8b;">@Entity</span>
 <span style="color: #a020f0;">class</span> <span style="color: #228b22;">IdCard</span> <span style="color: #707183;">{</span>
     <span style="color: #008b8b;">@OneToOne</span>
     <span style="color: #008b8b;">@JoinColumn</span>
@@ -477,10 +480,10 @@ ORM 主要是用面向对象的思维去操作数据库。
 <div class="org-src-container">
 
 <pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#20854;&#20013;&#19968;&#31471; ManyToOne &#21644; unique &#37197;&#21512;&#65292;&#20135;&#29983;&#19968;&#23545;&#19968;&#30340;&#32467;&#26524;&#65292;&#29983;&#25104;&#30456;&#24212;&#22806;&#38190; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">many-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">school</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">School</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">unique</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;<span style="color: #0000ff;">many-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">person</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Person</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">unique</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span> /&gt;
 
 <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#21478;&#19968;&#31471; </span><span style="color: #b22222;">--&gt;</span>
-&lt;<span style="color: #0000ff;">one-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">master</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Master</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">property-ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">school</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;<span style="color: #0000ff;">one-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">idcard</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">IdCard</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">property-ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">person</span><span style="color: #8b2252;">"</span> /&gt;
 </pre>
 </div>
 
@@ -489,13 +492,16 @@ ORM 主要是用面向对象的思维去操作数据库。
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
+<pre class="src src-java"><span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
     <span style="color: #008b8b;">@OneToOne</span>
     <span style="color: #008b8b;">@JoinColumn</span><span style="color: #7388d6;">(</span>mappedBy=<span style="color: #8b2252;">"person"</span><span style="color: #7388d6;">)</span>
     <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Card</span> <span style="color: #a0522d;">card</span>;
 <span style="color: #707183;">}</span>
 
-<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Card</span> <span style="color: #707183;">{</span>
+
+<span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">IdCard</span> <span style="color: #707183;">{</span>
     <span style="color: #008b8b;">@ManyToOne</span>
     <span style="color: #008b8b;">@JoinColumn</span><span style="color: #7388d6;">(</span>name=<span style="color: #8b2252;">"cardid"</span><span style="color: #7388d6;">)</span>
     <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Person</span> <span style="color: #a0522d;">person</span>;
@@ -570,7 +576,6 @@ fetch 有以下几个选项：
 <li>如果设置了 subselect，那么多个查询会尽量合并成子查询形式
 </li>
 </ul>
-
 
 
 <p>
@@ -673,15 +678,27 @@ fetch 有以下几个选项：
 <h3 id="sec-5-6"><span class="section-number-3">5.6</span> 多对多（双向）</h3>
 <div class="outline-text-3" id="text-5-6">
 <p>
-JPA中使用 @ManyToMany 来注解多对多的关系，由一个关联表来维护。可以指定某一方为关系维护者。
+JPA中使用 @ManyToMany 来注解多对多的关系。
 </p>
 
 <p>
-多对多关系中一般不设置级联操作。
+多对多的关系，需要使用一张中间表来维护关系。
+</p>
+
+<p>
+在 hibernate 中，可以指定其中一方去维护关系，另一边只需要添加 mappedBy 即可。
+</p>
+
+<p>
+生产环境中，多对多关系一般不设置级联操作。
 </p>
 
 <p>
 如果已经绑定了多对多的关系，不能直接删除从断，需要主端解除绑定再删除。但可以直接删除主端。
+</p>
+
+<p>
+[例] 游戏和玩家是多对多的关系：一款游戏有多个人在玩，一个人玩多个游戏。
 </p>
 
 <div class="org-src-container">
@@ -689,7 +706,7 @@ JPA中使用 @ManyToMany 来注解多对多的关系，由一个关联表来维�
 <pre class="src src-java"><span style="color: #008b8b;">@Entity</span>
 <span style="color: #a020f0;">class</span> <span style="color: #228b22;">Player</span> <span style="color: #707183;">{</span>
   <span style="color: #008b8b;">@ManyToMany</span>
-  <span style="color: #008b8b;">@JoinTable</span><span style="color: #7388d6;">(</span>name=<span style="color: #8b2252;">"player_game"</span>, joinColumns=<span style="color: #008b8b;">@JoinColumn</span><span style="color: #909183;">(</span>name=<span style="color: #8b2252;">"player_id"</span><span style="color: #909183;">)</span>, inverseJoinColumns=<span style="color: #008b8b;">@JoinColumn</span><span style="color: #909183;">(</span>name=<span style="color: #8b2252;">"game_id"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
+  <span style="color: #008b8b;">@JoinTable</span><span style="color: #7388d6;">(</span>name=<span style="color: #8b2252;">"QQGame"</span>, joinColumns=<span style="color: #008b8b;">@JoinColumn</span><span style="color: #909183;">(</span>name=<span style="color: #8b2252;">"player_id"</span><span style="color: #909183;">)</span>, inverseJoinColumns=<span style="color: #008b8b;">@JoinColumn</span><span style="color: #909183;">(</span>name=<span style="color: #8b2252;">"game_id"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20851;&#31995;&#32500;&#25252;&#31471;&#65292;&#36127;&#36131;&#22810;&#23545;&#22810;&#20851;&#31995;&#30340;&#32465;&#23450;&#21644;&#35299;&#38500;</span>
   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21487;&#20197;&#19981;&#25351;&#23450; @JoinTable&#65292;&#37027;&#20040;&#20013;&#38388;&#34920;&#12289;&#22806;&#38190;&#21517;&#31561;&#23601;&#20250;&#37319;&#29992;&#40664;&#35748;&#20540;</span>
   <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Game</span><span style="color: #7388d6;">&gt;</span> <span style="color: #a0522d;">games</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #7388d6;">&lt;&gt;()</span>;
@@ -995,7 +1012,7 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-16 周四 13:55</p>
+<p class="date">Created: 2017-02-16 周四 14:26</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

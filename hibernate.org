@@ -208,12 +208,15 @@ ORM 主要是用面向对象的思维去操作数据库。
 
 *Anno 的配置方式：*
 #+BEGIN_SRC java
+  @Entity
   class Person {
       @OneToOne
       @JoinColumn
       private IdCard idcard;
   }
 
+
+  @Entity
   class IdCard {
       @OneToOne
       @JoinColumn
@@ -226,21 +229,24 @@ ORM 主要是用面向对象的思维去操作数据库。
 *XML 的形式：*
 #+BEGIN_SRC xml
   <!-- 在其中一端 ManyToOne 和 unique 配合，产生一对一的结果，生成相应外键 -->
-  <many-to-one name="school" class="School" unique="true" />
+  <many-to-one name="person" class="Person" unique="true" />
 
   <!-- 在另一端 -->
-  <one-to-one name="master" class="Master" property-ref="school" />
+  <one-to-one name="idcard" class="IdCard" property-ref="person" />
 #+END_SRC
 
 *Anno 的形式：*
 #+BEGIN_SRC java
+  @Entity
   class Person {
       @OneToOne
       @JoinColumn(mappedBy="person")
       private Card card;
   }
 
-  class Card {
+
+  @Entity
+  class IdCard {
       @ManyToOne
       @JoinColumn(name="cardid")
       private Person person;
@@ -283,7 +289,6 @@ fetch 有以下几个选项：
 - 如果设置了 select，那么，查询的是多条 select 语句。这是默认值。
 - 如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
 - 如果设置了 subselect，那么多个查询会尽量合并成子查询形式
-
 
 
 *Anno 方式：*
@@ -348,17 +353,23 @@ fetch 有以下几个选项：
 还要注意，在保存的时候，要先保存 1 的一方，否则，会产生很多不必要的 update 语句，从而影响效率。
 
 ** 多对多（双向）
-JPA中使用 @ManyToMany 来注解多对多的关系，由一个关联表来维护。可以指定某一方为关系维护者。
+JPA中使用 @ManyToMany 来注解多对多的关系。
 
-多对多关系中一般不设置级联操作。
+多对多的关系，需要使用一张中间表来维护关系。
+
+在 hibernate 中，可以指定其中一方去维护关系，另一边只需要添加 mappedBy 即可。
+
+生产环境中，多对多关系一般不设置级联操作。
 
 如果已经绑定了多对多的关系，不能直接删除从断，需要主端解除绑定再删除。但可以直接删除主端。
+
+[例] 游戏和玩家是多对多的关系：一款游戏有多个人在玩，一个人玩多个游戏。
 
 #+BEGIN_SRC java
   @Entity
   class Player {
     @ManyToMany
-    @JoinTable(name="player_game", joinColumns=@JoinColumn(name="player_id"), inverseJoinColumns=@JoinColumn(name="game_id"))
+    @JoinTable(name="QQGame", joinColumns=@JoinColumn(name="player_id"), inverseJoinColumns=@JoinColumn(name="game_id"))
     // 关系维护端，负责多对多关系的绑定和解除
     // 可以不指定 @JoinTable，那么中间表、外键名等就会采用默认值
     private Set<Game> games = new HashSet<>();
