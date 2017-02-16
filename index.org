@@ -1,6 +1,7 @@
 #+TITLE: Action!!!
 
-   + [[file:hibernate.org][Hibernate ORM]]
+   + [[file:hibernate.org][Hibernate]]
+   + [[file:java.org][Java 基础]]
    + [[file:oracle.org][Oracle11g]]
    + [[file:spring.org][Spring]]
    + [[file:struts.org][struts]]
