@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Hibernate ORM</title>
-<!-- 2017-02-06 周一 09:36 -->
+<!-- 2017-02-16 周四 11:05 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -30,31 +30,31 @@
 <li><a href="#sec-4-3">4.3. session.clear()</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">5. 关联映射</a>
+<li><a href="#sec-5">5. 关联映射(Assoc)</a>
 <ul>
-<li><a href="#sec-5-1">5.1. ManyToOne</a></li>
-<li><a href="#sec-5-2">5.2. OneToMany</a></li>
-<li><a href="#sec-5-3">5.3. OneToMany.BothWay</a></li>
-<li><a href="#sec-5-4">5.4. ManyToMany</a></li>
-<li><a href="#sec-5-5">5.5. OneToOne</a></li>
-<li><a href="#sec-5-6">5.6. Embedded(Component)</a></li>
+<li><a href="#sec-5-1">5.1. 一对一（主键关联）</a></li>
+<li><a href="#sec-5-2">5.2. 一对一（外键关联）</a></li>
+<li><a href="#sec-5-3">5.3. 多对一（单向）</a></li>
+<li><a href="#sec-5-4">5.4. 一对多（单向）</a></li>
+<li><a href="#sec-5-5">5.5. 一对多（双向）</a></li>
+<li><a href="#sec-5-6">5.6. 多对多（双向）</a></li>
 </ul>
 </li>
-<li><a href="#sec-6">6. 级联（Cascade）</a></li>
-<li><a href="#sec-7">7. 懒加载</a></li>
-<li><a href="#sec-8">8. 检索策略</a></li>
-<li><a href="#sec-9">9. 检索方式</a>
+<li><a href="#sec-6">6. 继承(Inheritance)</a>
 <ul>
-<li><a href="#sec-9-1">9.1. HQL</a></li>
-<li><a href="#sec-9-2">9.2. QBC</a></li>
-<li><a href="#sec-9-3">9.3. SQLQuery</a></li>
+<li><a href="#sec-6-1">6.1. subclass</a></li>
+<li><a href="#sec-6-2">6.2. joined-class</a></li>
+<li><a href="#sec-6-3">6.3. union-subclass</a></li>
 </ul>
 </li>
-<li><a href="#sec-10">10. 继承</a>
+<li><a href="#sec-7">7. 级联（Cascade）</a></li>
+<li><a href="#sec-8">8. 懒加载</a></li>
+<li><a href="#sec-9">9. 检索策略</a></li>
+<li><a href="#sec-10">10. 检索方式</a>
 <ul>
-<li><a href="#sec-10-1">10.1. subclass</a></li>
-<li><a href="#sec-10-2">10.2. joined-class</a></li>
-<li><a href="#sec-10-3">10.3. union-subclass</a></li>
+<li><a href="#sec-10-1">10.1. HQL</a></li>
+<li><a href="#sec-10-2">10.2. QBC</a></li>
+<li><a href="#sec-10-3">10.3. SQLQuery</a></li>
 </ul>
 </li>
 <li><a href="#sec-11">11. 二级缓存</a></li>
@@ -65,8 +65,6 @@
 <li><a href="#sec-13-2">13.2. getter 代码，实现更好的封装</a></li>
 </ul>
 </li>
-<li><a href="#sec-14">14. 改写 hello，增加 hibernate 支持</a></li>
-<li><a href="#sec-15">15. Roll</a></li>
 </ul>
 </div>
 </nav>
@@ -398,30 +396,30 @@ commit() 方法，其实就是简单调用了 session.flush() 和 conn.commit()�
 
 
 <section id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> 关联映射</h2>
+<h2 id="sec-5"><span class="section-number-2">5</span> 关联映射(Assoc)</h2>
 <div class="outline-text-2" id="text-5">
 <p>
-因为，在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
+在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
 </p>
 
 <p>
-但是，在我们的java中，存在的是多个类，类之间是通过互相引用的形式进行沟通。（即一个类中，包含另一个类的引用）。
+在 Java 中，存在的是多个类，类之间是通过互相引用的形式进行沟通。
 </p>
 
 <p>
-ORM 的主要是，用面向对象的思维去操作数据库。所以，我们在操作java中的对象，或者修改java中对象之间的关系的时候，ORM 框架能够把我们对对象的修改转换为数据库中表的修改。
+ORM 的主要是用面向对象的思维去操作数据库。
 </p>
 
 <p>
-所以，我们需要在 java 中设置类之间的相互关系，那么，ORM 框架（hibernate）才能够正确的进行这种转换。
+所以，在操作 Java 中的对象，或者修改对象之间的关系的时候，ORM 框架能够帮我们完成相应的数据库的修改。
 </p>
 
 <p>
-即，hibernate 会根据我们设置的 ManyToOne 等设置，生成正确的表跟表之间的关联。还能够在我们增删改查的时候，根据我们的设置，生成正确的 sql 语句。
+我们需要在 Java 中设置类之间的相互关系，ORM 框架（hibernate）才能够正确的进行这种转换。
 </p>
 
 <p>
-所以，不管通过xml还是annotation的形式，你要告诉 hibernate 类之间的关系，他才能在你调用类似 session.save(对象) 的方法时，生成正确的语句并插入数据库。
+我们可以通过 xml 或者 annotation 的形式，声明类之间的关系，hibernate 才能正确将这种关系映射到数据库操作上。
 </p>
 
 <p>
@@ -429,65 +427,131 @@ ORM 的主要是，用面向对象的思维去操作数据库。所以，我们�
 </p>
 </div>
 
-
 <div id="outline-container-sec-5-1" class="outline-3">
-<h3 id="sec-5-1"><span class="section-number-3">5.1</span> ManyToOne</h3>
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> 一对一（主键关联）</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
-如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
-那么就不能简单用 @Basic 注解或者 &lt;property /&gt; 标签去定义这个属性跟数据库中表的字段之间的映射关系。
+[例] IdCard 和 Person 是一对一的关联关系
+</p>
+
+<p>
+<b>XML 的配置方式：</b>
 </p>
 <div class="org-src-container">
 
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#20854;&#20013;&#19968;&#31471;&#65292;&#37197;&#32622; One-To-One &#33410;&#28857; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">one-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">person</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.Person</span><span style="color: #8b2252;">"</span> /&gt;
+
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#21478;&#19968;&#31471;&#65292;&#37197;&#32622; One-To-One &#33410;&#28857;&#65292;&#27880;&#24847;&#65292;&#35201;&#21152;&#19978;Constrained="true" </span><span style="color: #b22222;">--&gt;</span>
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#32780;&#19988;&#35201;&#37197;&#32622;&#20027;&#38190;&#30340;&#29983;&#25104;&#26041;&#24335;&#20026; foreign. </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">id</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">id</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">int</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">column</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">ID</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;<span style="color: #0000ff;">generator</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">foreign</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">param</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">property</span><span style="color: #8b2252;">"</span>&gt;person&lt;/<span style="color: #0000ff;">param</span>&gt;
+  &lt;/<span style="color: #0000ff;">generator</span>&gt;
+&lt;/<span style="color: #0000ff;">id</span>&gt;
+&lt;<span style="color: #0000ff;">one-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">IdCard</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">hibernate.IdCard</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">constrained</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span> /&gt;
+</pre>
+</div>
+
+<p>
+<b>Anno 的配置方式：</b>
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@OneToOne</span>
+    <span style="color: #008b8b;">@JoinColumn</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">IdCard</span> <span style="color: #a0522d;">idcard</span>;
+<span style="color: #707183;">}</span>
+
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">IdCard</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@OneToOne</span>
+    <span style="color: #008b8b;">@JoinColumn</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Person</span> <span style="color: #a0522d;">person</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> 一对一（外键关联）</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+<b>XML 的形式：</b>
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#20854;&#20013;&#19968;&#31471; ManyToOne &#21644; unique &#37197;&#21512;&#65292;&#20135;&#29983;&#19968;&#23545;&#19968;&#30340;&#32467;&#26524;&#65292;&#29983;&#25104;&#30456;&#24212;&#22806;&#38190; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">many-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">school</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">School</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">unique</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span> /&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22312;&#21478;&#19968;&#31471; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #0000ff;">one-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">master</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Master</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">property-ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">school</span><span style="color: #8b2252;">"</span> /&gt;
+</pre>
+</div>
+
+
+<p>
+<b>Anno 的形式：</b>
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@OneToOne</span>
+    <span style="color: #008b8b;">@JoinColumn</span><span style="color: #7388d6;">(</span>mappedBy=<span style="color: #8b2252;">"person"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Card</span> <span style="color: #a0522d;">card</span>;
+<span style="color: #707183;">}</span>
+
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Card</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@ManyToOne</span>
+    <span style="color: #008b8b;">@JoinColumn</span><span style="color: #7388d6;">(</span>name=<span style="color: #8b2252;">"cardid"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Person</span> <span style="color: #a0522d;">person</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> 多对一（单向）</h3>
+<div class="outline-text-3" id="text-5-3">
+<div class="org-src-container">
+
 <pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#20363;&#22914;&#65292;&#19968;&#26412;&#20070;&#65292;&#32943;&#23450;&#26377;&#19968;&#20010;&#20316;&#32773;&#65292;&#32780; author &#23646;&#24615;&#19981;&#26159;&#19968;&#20010;&#31616;&#21333;&#31867;&#22411;&#65292;&#32780;&#26159;&#19968;&#20010;&#23545;&#35937;&#30340;&#24341;&#29992;&#12290;</span>
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#20070;&#36319;&#20316;&#32773;&#26159;&#19968;&#20010;&#19968;&#23545;&#19968;&#30340;&#20851;&#31995;&#65292;&#20063;&#23601;&#26159;&#19968;&#26412;&#20070;&#65292;&#21482;&#26377;&#19968;&#20010;&#20316;&#32773;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#20070;&#36319;&#20316;&#32773;&#26159;&#19968;&#20010;&#22810;&#23545;&#19968;&#30340;&#20851;&#31995;&#65292;&#20063;&#23601;&#26159;&#19968;&#20010;&#20316;&#32773;&#26377;&#22810;&#26412;&#20070;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22312;&#36825;&#31181;&#24773;&#20917;&#20043;&#19979;&#65292;&#25105;&#20204;&#38656;&#35201;&#29992; @ManyToOne &#27880;&#35299; &#25110;&#32773;&#29992; &lt;many-to-one /&gt; &#26631;&#31614;&#21435;&#23450;&#20041;&#36825;&#20010;&#23646;&#24615;&#36319;&#34920;&#23383;&#27573;&#20043;&#38388;&#30340;&#26144;&#23556;&#12290;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">many-to-one&#65292;&#36825;&#20010;&#26631;&#31614;&#30340;&#20316;&#29992;&#26159;&#20026;&#25152;&#22312;&#30340;&#21015;&#65292;&#28155;&#21152;&#19968;&#20010;&#22806;&#38190;&#32422;&#26463;&#12290;&#22914;&#26524;&#19981;&#26174;&#24335;&#25351;&#23450; column &#21517;&#23383;&#30340;&#35805;&#65292;&#37027;&#20040;&#40664;&#35748;&#29983;&#25104;&#30340;&#21517;&#23383;&#26159; &#23646;&#24615;&#21517;_&#32034;&#24341;&#30340;&#20027;&#38190;&#21517;</span>
+<span style="color: #008b8b;">@Entity</span>
 <span style="color: #a020f0;">class</span> <span style="color: #228b22;">Book</span> <span style="color: #707183;">{</span>
+  <span style="color: #008b8b;">@ManyToOne</span>
   <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Author</span> <span style="color: #a0522d;">author</span>;
 <span style="color: #707183;">}</span>
 </pre>
 </div>
-<p>
-在这种情况之下，我们需要用 @ManyToOne 注解 或者用 &lt;many-to-one /&gt; 标签去定义这个属性跟表字段之间的映射。
-</p>
-
 
 <p>
-many-to-one，这个标签的作用是为所在的列，添加一个外键约束。如果不显式指定 column 名字的话，那么默认生成的名字是 属性名_索引的主键名
-</p>
-
-<p>
-many-to-one 标签内可以设置 lazy=(false|proxy|no-proxy), fetch=(select|join)。
-</p>
-
-<p>
-lazy 通过设置为 false 或其他，定义是否要进行懒加载。如果设置为 false，不会启用懒加载，否则，则会启用懒加载。
-懒加载是通过创建代理对象的形式去实现的，所以需要用到字节码编译的技术。
-lazy=proxy，那么当设置为懒加载的属性被调用的时候，才会触发查询操作。
-lazy=no-proxy，那么当被调用的时候，未必会去查询，只有当调用的语句中使用到数据库里存的数据的时候，才会真正的去数据库查询。
-所以，它是加强版的懒加载。lazy=no-proxy需要额外的字节码增强的设置，否则会跟 proxy 一致。
-</p>
-
-<p>
-fetch 设置立即加载组织成的查询语句的策略，如果设置为 join，那么会组织成一条 left-join 语句，
-如果是 select，那么会组织成若干条独立的查询语句，会查询多次。
+many-to-one 可以设置 lazy=(false|proxy|no-proxy), fetch=(select|join)。
 </p>
 </div>
 </div>
 
+<div id="outline-container-sec-5-4" class="outline-3">
+<h3 id="sec-5-4"><span class="section-number-3">5.4</span> 一对多（单向）</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+比如，Father 和 Son 是一对多关联
+</p>
 
-
-
-<div id="outline-container-sec-5-2" class="outline-3">
-<h3 id="sec-5-2"><span class="section-number-3">5.2</span> OneToMany</h3>
-<div class="outline-text-3" id="text-5-2">
-</div><div id="outline-container-sec-5-2-1" class="outline-4">
-<h4 id="sec-5-2-1"><span class="section-number-4">5.2.1</span> xml 中的配置</h4>
-<div class="outline-text-4" id="text-5-2-1">
+<p>
+<b>XML 方式：</b>
+</p>
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">set</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">books</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">cascade</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">save-update</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">lazy</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">extra</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">fetch</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">select</span><span style="color: #8b2252;">"</span>&gt;
-    &lt;<span style="color: #0000ff;">key</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">authorid</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">key</span>&gt;
-    &lt;<span style="color: #0000ff;">one-to-many</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Book</span><span style="color: #8b2252;">"</span> /&gt;
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">set</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sons</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">cascade</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">save-update</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">lazy</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">extra</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">fetch</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">select</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">key</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">father_id</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">key</span>&gt;
+  &lt;<span style="color: #0000ff;">one-to-many</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Son</span><span style="color: #8b2252;">"</span> /&gt;
 &lt;/<span style="color: #0000ff;">set</span>&gt;
 </pre>
 </div>
@@ -504,7 +568,6 @@ lazy 有下面几个选项： false/true/extra。默认是 true。
 </li>
 </ul>
 
-
 <p>
 fetch 有以下几个选项：
 </p>
@@ -513,74 +576,95 @@ fetch 有以下几个选项：
 </li>
 <li>如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
 </li>
-<li>如果设置了 subselect &#x2026;.
-<div class="org-src-container">
-
-<pre class="src src-sql"><span style="color: #b22222;">-- &#22914;&#26524;&#26597;&#35810;&#21040;&#22810;&#26465;&#25968;&#25454;&#65292;&#27599;&#26465;&#25968;&#25454;&#20013;&#37117;&#21547;&#26377;&#19968;&#20010;&#19968;&#23545;&#22810;&#30340;&#20851;&#32852;&#25968;&#25454;&#65292;&#37027;&#20040;&#21021;&#22987;&#21270;&#36825;&#20123;&#20851;&#32852;&#25968;&#25454;&#26102;&#65306;</span>
-
-<span style="color: #b22222;">-- &#22914;&#26524;&#35774;&#32622;&#20026; select&#65292;&#37027;&#20040;&#20998;&#21035;&#21457;&#36865;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;</span>
-<span style="color: #a020f0;">select</span> * <span style="color: #a020f0;">from</span> book books0_ <span style="color: #a020f0;">where</span> books0_.authorid = 4;
-<span style="color: #a020f0;">select</span> * <span style="color: #a020f0;">from</span> book books0_ <span style="color: #a020f0;">where</span> books0_.authorid = 1;
-<span style="color: #b22222;">-- &#21487;&#33021;&#36824;&#26377;&#24456;&#22810;&#24456;&#22810;&#26465;</span>
-
-<span style="color: #b22222;">-- &#22914;&#26524;&#35774;&#32622;&#20026; subselect&#65292;&#32452;&#32455;&#25104;&#19968;&#26465;&#35821;&#21477;&#21435;&#26597;&#35810;&#12290;&#20250;&#26356;&#21152;&#33410;&#30465;&#36164;&#28304;&#12290;</span>
-<span style="color: #a020f0;">select</span> *
-  <span style="color: #a020f0;">from</span> book books0_
- <span style="color: #a020f0;">where</span> books0_.authorid <span style="color: #a020f0;">in</span> <span style="color: #707183;">(</span><span style="color: #a020f0;">select</span> author0_.aid <span style="color: #a020f0;">from</span> author author0_<span style="color: #707183;">)</span>;
-</pre>
-</div>
+<li>如果设置了 subselect，那么多个查询会尽量合并成子查询形式
 </li>
 </ul>
-</div>
-</div>
 
 
-
-
-<div id="outline-container-sec-5-2-2" class="outline-4">
-<h4 id="sec-5-2-2"><span class="section-number-4">5.2.2</span> 注解的形式</h4>
-<div class="outline-text-4" id="text-5-2-2">
-<div class="org-src-container">
-
-<pre class="src src-java"><span style="color: #008b8b;">@OneToMany</span><span style="color: #707183;">(</span>cascade=<span style="color: #008b8b;">CascadeType</span>.ALL, fetch=<span style="color: #008b8b;">FetchType</span>.LAZY<span style="color: #707183;">)</span>
-<span style="color: #008b8b;">@Fetch</span><span style="color: #707183;">(</span><span style="color: #008b8b;">FetchMode</span>.<span style="color: #228b22;">JOIN</span><span style="color: #707183;">)</span>
-<span style="color: #008b8b;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #8b2252;">"authorid"</span><span style="color: #707183;">)</span>
-<span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #a0522d;">books</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;()</span>;
-</pre>
-</div>
 
 <p>
-必须要注明 @JoinColumn，否则，会生成中间表来存储关联关系。 @JoinColumn 是用来订制生成的外键字段的。
+<b>Anno 方式：</b>
+</p>
+
+<p>
+实现一对多的单向关联，只需在代表一的实体中使用 @OneToMany 映射标注，代表多的实体不需要使用任何映射标注。
+</p>
+
+<p>
+如果只注明 @OneToMany，会通过建立第三方表来保存关系。如果额外添加 @JoinColumn 标注，则会在多的一方增加一个外键列来保存关系。
 </p>
 
 <p>
 通过 cascade 可以设置级联属性；通过 fetch 可以设置是否采用懒加载；通过 @Fetch 注解可以指定查询语句的形式。
 </p>
 
-<p>
-注解的形式在某种意义上跟 xml 形式是对应的。
-</p>
-</div>
-</div>
-</div>
-
-
-<div id="outline-container-sec-5-3" class="outline-3">
-<h3 id="sec-5-3"><span class="section-number-3">5.3</span> OneToMany.BothWay</h3>
-<div class="outline-text-3" id="text-5-3">
-</div><div id="outline-container-sec-5-3-1" class="outline-4">
-<h4 id="sec-5-3-1"><span class="section-number-4">5.3.1</span> 在 xml 中配置</h4>
-<div class="outline-text-4" id="text-5-3-1">
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #0000ff;">set</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">books</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">inverse</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span>&gt;
-    &lt;<span style="color: #0000ff;">key</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">authorid</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">key</span>&gt;
-    &lt;<span style="color: #0000ff;">one-to-many</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Book</span><span style="color: #8b2252;">"</span> /&gt;
-&lt;/<span style="color: #0000ff;">set</span>&gt;
-
-&lt;<span style="color: #0000ff;">many-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">author</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">authorid</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Author</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">many-to-one</span>&gt;
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#21333;&#21521;&#20851;&#31995;&#65292;&#21482;&#38656;&#35201;&#22312;&#19968;&#26041;&#21152;&#27880;&#35299;&#21363;&#21487;</span>
+<span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Father</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@OneToMany</span><span style="color: #7388d6;">(</span>cascade=<span style="color: #008b8b;">CascadeType</span>.ALL, fetch=<span style="color: #008b8b;">FetchType</span>.LAZY<span style="color: #7388d6;">)</span>
+    <span style="color: #008b8b;">@JoinColumn</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"father_id"</span><span style="color: #7388d6;">)</span>   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#19968;&#21477;&#23548;&#33268;&#19981;&#20250;&#20986;&#29616;&#20013;&#38388;&#34920;&#65292;&#24182;&#22312; son &#34920;&#20013;&#28155;&#21152;&#21517;&#20026; father_id &#30340;&#22806;&#38190;&#21015;&#12290;</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Son</span><span style="color: #7388d6;">&gt;</span> <span style="color: #a0522d;">sons</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Son</span><span style="color: #7388d6;">&gt;()</span>;
+<span style="color: #707183;">}</span>
 </pre>
 </div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-5" class="outline-3">
+<h3 id="sec-5-5"><span class="section-number-3">5.5</span> 一对多（双向）</h3>
+<div class="outline-text-3" id="text-5-5">
+<p>
+在JPA规范中，一对多的双向关系只能由多端(Son)来维护。
+</p>
+
+<p>
+在代表多的一端(son)，注解 @ManyToOne，并由 @JoinColumn 设置 son 中的关联字段（外键）。<br >
+在代表一的一端(father)，注解 @OneToMany，并由参数的 mappedBy="father" 属性标注为关系被维护端。
+</p>
+
+
+<p>
+<b>XML 方式：</b>
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">set</span> <span style="color: #a0522d;">name</span>=sons" <span style="color: #a0522d;">inverse</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">key</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">father_id</span><span style="color: #8b2252;">"</span>&gt;&lt;/<span style="color: #0000ff;">key</span>&gt;
+  &lt;<span style="color: #0000ff;">one-to-many</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Son</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #0000ff;">set</span>&gt;
+
+&lt;<span style="color: #0000ff;">many-to-one</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">father</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">column</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">father_id</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">Father</span><span style="color: #8b2252;">"</span> /&gt;
+</pre>
+</div>
+
+
+
+<p>
+<b>Anno 方式：</b>
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#20027;&#31471;&#65292;&#22810;</span>
+<span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Son</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@ManyToOne</span><span style="color: #7388d6;">(</span>optional=<span style="color: #008b8b;">false</span><span style="color: #7388d6;">)</span>       <span style="color: #b22222;">// </span><span style="color: #b22222;">optional&#30340;&#24847;&#24605;&#26159;&#65292;father &#19981;&#33021;&#20026;&#31354;</span>
+    <span style="color: #008b8b;">@JoinColumn</span><span style="color: #7388d6;">(</span>name=<span style="color: #8b2252;">"father_id"</span><span style="color: #7388d6;">)</span>    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35774;&#32622;&#22312;son&#34920;&#20013;&#30340;&#20851;&#32852;&#23383;&#27573;(&#22806;&#38190;)</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Father</span> <span style="color: #a0522d;">father</span>;
+<span style="color: #707183;">}</span>
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#20174;&#31471;&#65292;&#19968;</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Father</span> <span style="color: #707183;">{</span>
+    <span style="color: #008b8b;">@OneToMany</span><span style="color: #7388d6;">(</span>mappedBy=<span style="color: #8b2252;">"father"</span>, fetch=<span style="color: #008b8b;">FetchType</span>.LAZY<span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Son</span><span style="color: #7388d6;">&gt;</span> <span style="color: #a0522d;">sons</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Son</span><span style="color: #7388d6;">&gt;()</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+可以看到，生成的只有两张表， SON/FATHER，SON 持有关联到 FATHER 的外键。
+</p>
 
 <p>
 首先，必须要保证 上面的 column 跟下面的 column 要一致，否则，会在创建表的时候，生成重复的字段，产生不必要的问题。
@@ -591,168 +675,140 @@ fetch 有以下几个选项：
 </p>
 
 <p>
-ps：如果设置了 inverse=true，那么会将另一边设为主端，负责关系的维护。
-也就是说，当执行 session.save(author) 的时候，不去维护 authorid 的信息；而当执行 session.save(book) 的时候，才去维护 authorid 的信息。
-这样，多的一方维护关系，从而减轻了维护成本，提高了效率。（想想习大大跟我们的例子）。
-</p>
-
-<p>
 还要注意，在保存的时候，要先保存 1 的一方，否则，会产生很多不必要的 update 语句，从而影响效率。
 </p>
 </div>
 </div>
 
-
-<div id="outline-container-sec-5-3-2" class="outline-4">
-<h4 id="sec-5-3-2"><span class="section-number-4">5.3.2</span> 通过注解的方式进行配置</h4>
-<div class="outline-text-4" id="text-5-3-2">
-<p>
-在双边分别这样配置：
-</p>
-<div class="org-src-container">
-
-<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">@JoinColumn(name="authorid") &#36825;&#20010;&#19981;&#38656;&#35201;&#21435;&#20889;&#65292;&#22240;&#20026; mappedBy &#20250;&#40664;&#35748;&#35302;&#21457;&#22806;&#38190;&#25805;&#20316;</span>
-<span style="color: #008b8b;">@OneToMany</span><span style="color: #707183;">(</span>mappedBy=<span style="color: #8b2252;">"author"</span><span style="color: #707183;">)</span>   <span style="color: #b22222;">// </span><span style="color: #b22222;">author &#23545;&#24212;&#30340;&#26159; book &#37324;&#38754;&#30340; author &#23646;&#24615;</span>
-<span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;</span> <span style="color: #a0522d;">books</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #707183;">&lt;</span><span style="color: #228b22;">Book</span><span style="color: #707183;">&gt;()</span>;
-
-
-<span style="color: #008b8b;">@ManyToOne</span>
-<span style="color: #008b8b;">@JoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #8b2252;">"authorid"</span><span style="color: #707183;">)</span>
-<span style="color: #a020f0;">private</span> <span style="color: #228b22;">Author</span> <span style="color: #a0522d;">author</span>;
-</pre>
-</div>
-
-<p>
-首先，上边跟下边的 JoinColumn 值的名字，需要一致
-</p>
-
-<p>
-其次，要在 @OneToMany 里面设置 mappedBy 属性，将双方关系的控制权交给另外一边。
-</p>
-
-<p>
-最后，保存的时候，注意顺序，要先保存 1 的一边。
-</p>
-</div>
-</div>
-</div>
-
-
-
-<div id="outline-container-sec-5-4" class="outline-3">
-<h3 id="sec-5-4"><span class="section-number-3">5.4</span> ManyToMany</h3>
-</div>
-<div id="outline-container-sec-5-5" class="outline-3">
-<h3 id="sec-5-5"><span class="section-number-3">5.5</span> OneToOne</h3>
-<div class="outline-text-3" id="text-5-5">
-</div><div id="outline-container-sec-5-5-1" class="outline-4">
-<h4 id="sec-5-5-1"><span class="section-number-4">5.5.1</span> PK assoc</h4>
-<div class="outline-text-4" id="text-5-5-1">
-<p>
-在其中一端，配置 One-To-One 节点：
-</p>
-<pre class="example">
-&lt;one-to-one name="school" class="hibernate.assoc.one2one.School"&gt;&lt;/one-to-one&gt;
-</pre>
-<p>
-在另一端，配置 One-To-One 节点，注意，要加上Constrained="true"，而且要配置主键的生成方式为 foreign.
-</p>
-<pre class="example">
-&lt;one-to-one name="master" class="hibernate.assoc.one2one.Master" constrained="true"&gt;&lt;/one-to-one&gt;
-&lt;id name="sid" type="int"&gt;
-    &lt;column name="SID" /&gt;
-    &lt;generator class="foreign"&gt;
-        &lt;param name="property"&gt;master&lt;/param&gt;
-    &lt;/generator&gt;
-&lt;/id&gt;
-</pre>
-
-<p>
-相应的注解形式为：
-roll(9);
-在School一端配置
-:@Id
-:@GeneratedValue
-:priavte int sid;
-:private String name;
-:private String addr;
-:@OneToOne
-:@JoinColumn
-:private Master master;
-在Master一端配置
-:@Id
-@GeneratedValue
-:private int mid;
-:private String name;
-:private Date birth;
-:@OneToOne
-:@JoinColumn
-:private School school;
-</p>
-</div>
-</div>
-<div id="outline-container-sec-5-5-2" class="outline-4">
-<h4 id="sec-5-5-2"><span class="section-number-4">5.5.2</span> FK assoc</h4>
-<div class="outline-text-4" id="text-5-5-2">
-<p>
-在其中一端，配置如下，通过 manytoone 和 unique 配合，产生一对一的结果。而且会生成相应外键：
-</p>
-<pre class="example">
-&lt;many-to-one name="school" class="School" unique="true"&gt;&lt;/many-to-one&gt;
-</pre>
-<p>
-在另一端：
-</p>
-<pre class="example">
-&lt;one-to-one name="master" class="Master" property-ref="school"&gt;&lt;/one-to-one&gt;
-</pre>
-<ul class="org-ul">
-<li></li>
-</ul>
-<p>
-相应的注解形式为：
-roll(2);
-在School一端配置如下：
-</p>
-<pre class="example">
-@id 
-@GeneratedValue 
-private int sid;
-private String name;
-private String addr;
-@OneToOne(mappedBy="school")
-private Master master;
-</pre>
-<p>
-在另一端：
-</p>
-<pre class="example">
-@Id
-@GeneratedValue
-private int mid;
-private String name;
-private Date birth;
-@ManToOne
-@JoinColumn(name="masterId")
-private School school;
-</pre>
-</div>
-</div>
-</div>
-
 <div id="outline-container-sec-5-6" class="outline-3">
-<h3 id="sec-5-6"><span class="section-number-3">5.6</span> Embedded(Component)</h3>
+<h3 id="sec-5-6"><span class="section-number-3">5.6</span> 多对多（双向）</h3>
 <div class="outline-text-3" id="text-5-6">
 <p>
-嵌入
+JPA中使用 @ManyToMany 来注解多对多的关系，由一个关联表来维护。可以指定某一方为关系维护者。
 </p>
+
+<p>
+多对多关系中一般不设置级联操作。
+</p>
+
+<p>
+如果已经绑定了多对多的关系，不能直接删除从断，需要主端解除绑定再删除。但可以直接删除主端。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Player</span> <span style="color: #707183;">{</span>
+  <span style="color: #008b8b;">@ManyToMany</span>
+  <span style="color: #008b8b;">@JoinTable</span><span style="color: #7388d6;">(</span>name=<span style="color: #8b2252;">"player_game"</span>, joinColumns=<span style="color: #008b8b;">@JoinColumn</span><span style="color: #909183;">(</span>name=<span style="color: #8b2252;">"player_id"</span><span style="color: #909183;">)</span>, inverseJoinColumns=<span style="color: #008b8b;">@JoinColumn</span><span style="color: #909183;">(</span>name=<span style="color: #8b2252;">"game_id"</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20851;&#31995;&#32500;&#25252;&#31471;&#65292;&#36127;&#36131;&#22810;&#23545;&#22810;&#20851;&#31995;&#30340;&#32465;&#23450;&#21644;&#35299;&#38500;</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21487;&#20197;&#19981;&#25351;&#23450; @JoinTable&#65292;&#37027;&#20040;&#20013;&#38388;&#34920;&#12289;&#22806;&#38190;&#21517;&#31561;&#23601;&#20250;&#37319;&#29992;&#40664;&#35748;&#20540;</span>
+  <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Game</span><span style="color: #7388d6;">&gt;</span> <span style="color: #a0522d;">games</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #7388d6;">&lt;&gt;()</span>;
+<span style="color: #707183;">}</span>
+
+
+<span style="color: #008b8b;">@Entity</span>
+<span style="color: #a020f0;">class</span> <span style="color: #228b22;">Game</span> <span style="color: #707183;">{</span>
+  <span style="color: #008b8b;">@ManyToMany</span><span style="color: #7388d6;">(</span>mappedBy=<span style="color: #8b2252;">"games"</span><span style="color: #7388d6;">)</span>
+  <span style="color: #a020f0;">private</span> <span style="color: #228b22;">Set</span><span style="color: #7388d6;">&lt;</span><span style="color: #228b22;">Player</span><span style="color: #7388d6;">&gt;</span> <span style="color: #a0522d;">players</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">HashSet</span><span style="color: #7388d6;">&lt;&gt;()</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
 </div>
 </div>
 </section>
 
 <section id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> 级联（Cascade）</h2>
+<h2 id="sec-6"><span class="section-number-2">6</span> 继承(Inheritance)</h2>
 <div class="outline-text-2" id="text-6">
+<p>
+开发的时候用的不是特别多。
+</p>
+</div>
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> subclass</h3>
+<div class="outline-text-3" id="text-6-1">
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Inheritance</span><span style="color: #707183;">(</span>strategy=<span style="color: #008b8b;">InheritanceType</span>.SINGLE_TABLE<span style="color: #707183;">)</span>
+<span style="color: #008b8b;">@DiscriminatorColumn</span><span style="color: #707183;">(</span>name=<span style="color: #8b2252;">"xxx"</span><span style="color: #707183;">)</span>
+<span style="color: #008b8b;">@DiscriminatorValue</span><span style="color: #707183;">(</span>value=<span style="color: #8b2252;">"e"</span><span style="color: #707183;">)</span>
+<span style="color: #a020f0;">class</span> Dog <span style="color: #228b22;">extents</span> <span style="color: #228b22;">Animal</span> <span style="color: #707183;">{</span> ... <span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+特点：
+</p>
+<ul class="org-ul">
+<li>只有一张表，查询快速
+</li>
+<li>使用了区别列
+</li>
+<li>子类独有列不能添非空约束
+</li>
+<li>继承层次深则冗余字段很多
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> joined-class</h3>
+<div class="outline-text-3" id="text-6-2">
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Inheritance</span><span style="color: #707183;">(</span>strategy=<span style="color: #008b8b;">InheritanceType</span>.JOINED<span style="color: #707183;">)</span>
+<span style="color: #008b8b;">@Entity</span>
+<span style="color: #008b8b;">@PrimaryKeyJoinColumn</span><span style="color: #707183;">(</span>name=<span style="color: #8b2252;">"xxx"</span><span style="color: #707183;">)</span>
+<span style="color: #a020f0;">class</span> Dog <span style="color: #228b22;">extents</span> <span style="color: #228b22;">Animal</span> <span style="color: #707183;">{</span> ... <span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+特点：
+</p>
+<ul class="org-ul">
+<li>查询父类记录，做一个左连接查询
+</li>
+<li>查询子记录，做一个内联接查询
+</li>
+<li>查询效率略低
+</li>
+<li>没有冗余的字段
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> union-subclass</h3>
+<div class="outline-text-3" id="text-6-3">
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Inheritance</span><span style="color: #707183;">(</span>strategy=<span style="color: #008b8b;">InheritanceType</span>.TABLE_PER_CLASS<span style="color: #707183;">)</span>
+</pre>
+</div>
+
+<p>
+特点：
+</p>
+<ul class="org-ul">
+<li>每个实现类都有一个独立的表
+</li>
+<li>查子类不错，查父类需要union
+</li>
+<li>但存在冗余字段
+</li>
+<li>若更新父表的字段，效率较低
+</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> 级联（Cascade）</h2>
+<div class="outline-text-2" id="text-7">
 <p>
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
 </p>
@@ -799,9 +855,9 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </div>
 </section>
 
-<section id="outline-container-sec-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> 懒加载</h2>
-<div class="outline-text-2" id="text-7">
+<section id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> 懒加载</h2>
+<div class="outline-text-2" id="text-8">
 <p>
 可以通过 fetch 属性 配置懒加载，FetchType.EAGER 指定非懒加载，FetchType.Lazy 指定使用懒加载。
 </p>
@@ -812,9 +868,9 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </div>
 </section>
 
-<section id="outline-container-sec-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> 检索策略</h2>
-<div class="outline-text-2" id="text-8">
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 检索策略</h2>
+<div class="outline-text-2" id="text-9">
 <p>
 把握的原则是：
 </p>
@@ -882,12 +938,12 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </div>
 </section>
 
-<section id="outline-container-sec-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> 检索方式</h2>
-<div class="outline-text-2" id="text-9">
-</div><div id="outline-container-sec-9-1" class="outline-3">
-<h3 id="sec-9-1"><span class="section-number-3">9.1</span> HQL</h3>
-<div class="outline-text-3" id="text-9-1">
+<section id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> 检索方式</h2>
+<div class="outline-text-2" id="text-10">
+</div><div id="outline-container-sec-10-1" class="outline-3">
+<h3 id="sec-10-1"><span class="section-number-3">10.1</span> HQL</h3>
+<div class="outline-text-3" id="text-10-1">
 <ul class="org-ul">
 <li>基本用法
 </li>
@@ -902,12 +958,12 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-9-2" class="outline-3">
-<h3 id="sec-9-2"><span class="section-number-3">9.2</span> QBC</h3>
+<div id="outline-container-sec-10-2" class="outline-3">
+<h3 id="sec-10-2"><span class="section-number-3">10.2</span> QBC</h3>
 </div>
-<div id="outline-container-sec-9-3" class="outline-3">
-<h3 id="sec-9-3"><span class="section-number-3">9.3</span> SQLQuery</h3>
-<div class="outline-text-3" id="text-9-3">
+<div id="outline-container-sec-10-3" class="outline-3">
+<h3 id="sec-10-3"><span class="section-number-3">10.3</span> SQLQuery</h3>
+<div class="outline-text-3" id="text-10-3">
 <ul class="org-ul">
 <li>基本语法
 </li>
@@ -919,80 +975,6 @@ all：所有情况下均进行级联操作，即包含 save-update 和 delete �
 </div>
 </div>
 </section>
-<section id="outline-container-sec-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> 继承</h2>
-<div class="outline-text-2" id="text-10">
-<p>
-开发的时候用的不是特别多。所以心态：了解。
-</p>
-</div>
-
-<div id="outline-container-sec-10-1" class="outline-3">
-<h3 id="sec-10-1"><span class="section-number-3">10.1</span> subclass</h3>
-<div class="outline-text-3" id="text-10-1">
-<ul class="org-ul">
-<li>只有一张表，查询快速
-</li>
-<li>使用了区别列
-</li>
-<li>子类独有列不能添非空约束
-</li>
-<li>继承层次深则冗余字段很多
-</li>
-<li>@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-<pre class="example">
-DiscriminatorColumn(name="xxx")
-DiscriminatorValue(value="e")
-</pre>
-</li>
-</ul>
-</div>
-</div>
-
-
-<div id="outline-container-sec-10-2" class="outline-3">
-<h3 id="sec-10-2"><span class="section-number-3">10.2</span> joined-class</h3>
-<div class="outline-text-3" id="text-10-2">
-<ul class="org-ul">
-<li>查询父类记录，做一个左连接查询
-</li>
-<li>查询子记录，做一个内联接查询
-</li>
-<li>查询效率略低
-</li>
-<li>没有冗余的字段
-</li>
-<li>@Inheritance(strategy=InheritanceType.JOINED)
-<pre class="example">
-@Entity
-@PrimaryKeyJoinColumn(name="xxx")
-class Dog extents Animal { ... }
-</pre>
-</li>
-</ul>
-</div>
-</div>
-
-
-<div id="outline-container-sec-10-3" class="outline-3">
-<h3 id="sec-10-3"><span class="section-number-3">10.3</span> union-subclass</h3>
-<div class="outline-text-3" id="text-10-3">
-<ul class="org-ul">
-<li>每个实现类都有一个独立的表
-</li>
-<li>查子类不错，查父类需要union
-</li>
-<li>但存在冗余字段
-</li>
-<li>若更新父表的字段，效率较低
-</li>
-<li>@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-</li>
-</ul>
-</div>
-</div>
-</section>
-
 <section id="outline-container-sec-11" class="outline-2">
 <h2 id="sec-11"><span class="section-number-2">11</span> 二级缓存</h2>
 <div class="outline-text-2" id="text-11">
@@ -1176,27 +1158,10 @@ System.currentTimeMillis();
 </div>
 </div>
 </section>
-
-<section id="outline-container-sec-14" class="outline-2">
-<h2 id="sec-14"><span class="section-number-2">14</span> 改写 hello，增加 hibernate 支持</h2>
-</section>
-<section id="outline-container-sec-15" class="outline-2">
-<h2 id="sec-15"><span class="section-number-2">15</span> Roll</h2>
-<div class="outline-text-2" id="text-15">
-<ol class="org-ol">
-<li>query 对象, hql
-</li>
-<li>Many to one 关系。包括配置，使用
-</li>
-<li>One to Many 关系。包括配置，使用
-</li>
-</ol>
-</div>
-</section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-06 周一 09:36</p>
+<p class="date">Created: 2017-02-16 周四 11:05</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
