@@ -169,59 +169,111 @@ get 跟 load 的区别如下：
 清空整个的 session 缓存内容。
 
 
-* 关联映射
+* 关联映射(Assoc)
 
-因为，在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
+在数据库中，存在多张表，表根表之间通过外键的形式进行的关联。
 
-但是，在我们的java中，存在的是多个类，类之间是通过互相引用的形式进行沟通。（即一个类中，包含另一个类的引用）。
+在 Java 中，存在的是多个类，类之间是通过互相引用的形式进行沟通。
 
-ORM 的主要是，用面向对象的思维去操作数据库。所以，我们在操作java中的对象，或者修改java中对象之间的关系的时候，ORM 框架能够把我们对对象的修改转换为数据库中表的修改。
+ORM 的主要是用面向对象的思维去操作数据库。
 
-所以，我们需要在 java 中设置类之间的相互关系，那么，ORM 框架（hibernate）才能够正确的进行这种转换。
+所以，在操作 Java 中的对象，或者修改对象之间的关系的时候，ORM 框架能够帮我们完成相应的数据库的修改。
 
-即，hibernate 会根据我们设置的 ManyToOne 等设置，生成正确的表跟表之间的关联。还能够在我们增删改查的时候，根据我们的设置，生成正确的 sql 语句。
+我们需要在 Java 中设置类之间的相互关系，ORM 框架（hibernate）才能够正确的进行这种转换。
 
-所以，不管通过xml还是annotation的形式，你要告诉 hibernate 类之间的关系，他才能在你调用类似 session.save(对象) 的方法时，生成正确的语句并插入数据库。
+我们可以通过 xml 或者 annotation 的形式，声明类之间的关系，hibernate 才能正确将这种关系映射到数据库操作上。
 
 目前为止，先模仿，后理解。练习越多，越明白。只看不练，空把式。
 
+** 一对一（主键关联）
 
-** ManyToOne
-如果一个实体类拥有一个属性，这个属性是另外一个实体类的引用，
-那么就不能简单用 @Basic 注解或者 <property /> 标签去定义这个属性跟数据库中表的字段之间的映射关系。
-#+BEGIN_SRC java
-// 例如，一本书，肯定有一个作者，而 author 属性不是一个简单类型，而是一个对象的引用。
-// 书跟作者是一个一对一的关系，也就是一本书，只有一个作者
-class Book {
-  private Author author;
-}
-#+END_SRC
-在这种情况之下，我们需要用 @ManyToOne 注解 或者用 <many-to-one /> 标签去定义这个属性跟表字段之间的映射。
+[例] IdCard 和 Person 是一对一的关联关系
 
-
-many-to-one，这个标签的作用是为所在的列，添加一个外键约束。如果不显式指定 column 名字的话，那么默认生成的名字是 属性名_索引的主键名
-
-many-to-one 标签内可以设置 lazy=(false|proxy|no-proxy), fetch=(select|join)。
-
-lazy 通过设置为 false 或其他，定义是否要进行懒加载。如果设置为 false，不会启用懒加载，否则，则会启用懒加载。
-懒加载是通过创建代理对象的形式去实现的，所以需要用到字节码编译的技术。
-lazy=proxy，那么当设置为懒加载的属性被调用的时候，才会触发查询操作。
-lazy=no-proxy，那么当被调用的时候，未必会去查询，只有当调用的语句中使用到数据库里存的数据的时候，才会真正的去数据库查询。
-所以，它是加强版的懒加载。lazy=no-proxy需要额外的字节码增强的设置，否则会跟 proxy 一致。
-
-fetch 设置立即加载组织成的查询语句的策略，如果设置为 join，那么会组织成一条 left-join 语句，
-如果是 select，那么会组织成若干条独立的查询语句，会查询多次。
-
-
-
-
-** OneToMany
-*** xml 中的配置
+*XML 的配置方式：*
 #+BEGIN_SRC xml
-<set name="books" cascade="save-update" lazy="extra" fetch="select">
-	<key column="authorid"></key>
-	<one-to-many class="Book" />
-</set>
+  <!-- 在其中一端，配置 One-To-One 节点 -->
+  <one-to-one name="person" class="hibernate.Person" />
+
+
+  <!-- 在另一端，配置 One-To-One 节点，注意，要加上Constrained="true" -->
+  <!-- 而且要配置主键的生成方式为 foreign. -->
+  <id name="id" type="int">
+    <column name="ID" />
+    <generator class="foreign">
+      <param name="property">person</param>
+    </generator>
+  </id>
+  <one-to-one name="IdCard" class="hibernate.IdCard" constrained="true" />
+
+#+END_SRC
+
+*Anno 的配置方式：*
+#+BEGIN_SRC java
+  class Person {
+      @OneToOne
+      @JoinColumn
+      private IdCard idcard;
+  }
+
+  class IdCard {
+      @OneToOne
+      @JoinColumn
+      private Person person;
+  }
+#+END_SRC
+
+** 一对一（外键关联）
+
+*XML 的形式：*
+#+BEGIN_SRC xml
+  <!-- 在其中一端 ManyToOne 和 unique 配合，产生一对一的结果，生成相应外键 -->
+  <many-to-one name="school" class="School" unique="true" />
+
+  <!-- 在另一端 -->
+  <one-to-one name="master" class="Master" property-ref="school" />
+#+END_SRC
+
+
+*Anno 的形式：*
+#+BEGIN_SRC java
+  class Person {
+      @OneToOne
+      @JoinColumn(mappedBy="person")
+      private Card card;
+  }
+
+  class Card {
+      @ManyToOne
+      @JoinColumn(name="cardid")
+      private Person person;
+  }
+#+END_SRC
+
+** 多对一（单向）
+#+BEGIN_SRC java
+  // 例如，一本书，肯定有一个作者，而 author 属性不是一个简单类型，而是一个对象的引用。
+  // 书跟作者是一个多对一的关系，也就是一个作者有多本书
+  // 在这种情况之下，我们需要用 @ManyToOne 注解 或者用 <many-to-one /> 标签去定义这个属性跟表字段之间的映射。
+  // many-to-one，这个标签的作用是为所在的列，添加一个外键约束。如果不显式指定 column 名字的话，那么默认生成的名字是 属性名_索引的主键名
+  @Entity
+  class Book {
+    @ManyToOne
+    private Author author;
+  }
+#+END_SRC
+
+many-to-one 可以设置 lazy=(false|proxy|no-proxy), fetch=(select|join)。
+
+** 一对多（单向）
+
+比如，Father 和 Son 是一对多关联
+
+*XML 方式：*
+#+BEGIN_SRC xml
+  <set name="sons" cascade="save-update" lazy="extra" fetch="select">
+    <key column="father_id"></key>
+    <one-to-many class="Son" />
+  </set>
 #+END_SRC
 
 lazy 有下面几个选项： false/true/extra。默认是 true。
@@ -229,149 +281,142 @@ lazy 有下面几个选项： false/true/extra。默认是 true。
 - 如果设置为 true，会启用懒加载。只有在调用 books 的任何方法时，才会去初始化列表，从而触发从数据库中查询图书列表的请求。
 - 如果设置为 extra，也会启用懒加载，但是是更加智能化的懒加载。这时候，如果去调用 books.size() 或 books.contains() 等方法时，并不会真正的初始化图书列表。这样能尽可能节省资源。
 
-
 fetch 有以下几个选项：
 - 如果设置了 select，那么，查询的是多条 select 语句。这是默认值。
 - 如果设置了 join，那么 lazy 的设置会无效，会变成立即加载。加载的语句为 left join 方式
-- 如果设置了 subselect ....
-  #+BEGIN_SRC sql
-  -- 如果查询到多条数据，每条数据中都含有一个一对多的关联数据，那么初始化这些关联数据时：
-  
-  -- 如果设置为 select，那么分别发送一条语句去查询。
-  select * from book books0_ where books0_.authorid = 4;
-  select * from book books0_ where books0_.authorid = 1;
-  -- 可能还有很多很多条
-  
-  -- 如果设置为 subselect，组织成一条语句去查询。会更加节省资源。
-  select *
-    from book books0_
-   where books0_.authorid in (select author0_.aid from author author0_);
-  #+END_SRC
+- 如果设置了 subselect，那么多个查询会尽量合并成子查询形式
 
 
 
+*Anno 方式：*
 
-*** 注解的形式
-#+BEGIN_SRC java
-@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-@Fetch(FetchMode.JOIN)
-@JoinColumn(name="authorid")
-private Set<Book> books = new HashSet<Book>();
-#+END_SRC
+实现一对多的单向关联，只需在代表一的实体中使用 @OneToMany 映射标注，代表多的实体不需要使用任何映射标注。
 
-必须要注明 @JoinColumn，否则，会生成中间表来存储关联关系。 @JoinColumn 是用来订制生成的外键字段的。
+如果只注明 @OneToMany，会通过建立第三方表来保存关系。如果额外添加 @JoinColumn 标注，则会在多的一方增加一个外键列来保存关系。
 
 通过 cascade 可以设置级联属性；通过 fetch 可以设置是否采用懒加载；通过 @Fetch 注解可以指定查询语句的形式。
 
-注解的形式在某种意义上跟 xml 形式是对应的。
-
-
-** OneToMany.BothWay
-*** 在 xml 中配置
-#+BEGIN_SRC xml
-<set name="books" inverse="true">
-	<key column="authorid"></key>
-	<one-to-many class="Book" />
-</set>
-
-<many-to-one name="author" column="authorid" class="Author"></many-to-one>
+#+BEGIN_SRC java
+  // 单向关系，只需要在一方加注解即可
+  @Entity
+  class Father {
+      @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+      @JoinColumn("father_id")   // 这一句导致不会出现中间表，并在 son 表中添加名为 father_id 的外键列。
+      private Set<Son> sons = new HashSet<Son>();
+  }
 #+END_SRC
+
+** 一对多（双向）
+
+在JPA规范中，一对多的双向关系只能由多端(Son)来维护。
+
+在代表多的一端(son)，注解 @ManyToOne，并由 @JoinColumn 设置 son 中的关联字段（外键）。\\
+在代表一的一端(father)，注解 @OneToMany，并由参数的 mappedBy="father" 属性标注为关系被维护端。
+
+
+*XML 方式：*
+#+BEGIN_SRC xml
+  <set name=sons" inverse="true">
+    <key column="father_id"></key>
+    <one-to-many class="Son" />
+  </set>
+
+  <many-to-one name="father" column="father_id" class="Father" />
+#+END_SRC
+
+
+
+*Anno 方式：*
+#+BEGIN_SRC java
+  // 主端，多
+  @Entity
+  class Son {
+      @ManyToOne(optional=false)       // optional的意思是，father 不能为空
+      @JoinColumn(name="father_id")    // 设置在son表中的关联字段(外键)
+      private Father father;
+  }
+
+  // 从端，一
+  class Father {
+      @OneToMany(mappedBy="father", fetch=FetchType.LAZY)
+      private Set<Son> sons = new HashSet<Son>();
+  }
+#+END_SRC
+
+可以看到，生成的只有两张表， SON/FATHER，SON 持有关联到 FATHER 的外键。
 
 首先，必须要保证 上面的 column 跟下面的 column 要一致，否则，会在创建表的时候，生成重复的字段，产生不必要的问题。
 
 其次，要在 set 上面配置 inverse="true"，否则，会在生成语句的时候，产生很多很多的冗余。在一对多双向关系中，一般情况下，要在多的一边设置 inverse。
 
-ps：如果设置了 inverse=true，那么会将另一边设为主端，负责关系的维护。
-也就是说，当执行 session.save(author) 的时候，不去维护 authorid 的信息；而当执行 session.save(book) 的时候，才去维护 authorid 的信息。
-这样，多的一方维护关系，从而减轻了维护成本，提高了效率。（想想习大大跟我们的例子）。
-
 还要注意，在保存的时候，要先保存 1 的一方，否则，会产生很多不必要的 update 语句，从而影响效率。
 
+** 多对多（双向）
+JPA中使用 @ManyToMany 来注解多对多的关系，由一个关联表来维护。可以指定某一方为关系维护者。
 
-*** 通过注解的方式进行配置
-在双边分别这样配置：
+多对多关系中一般不设置级联操作。
+
+如果已经绑定了多对多的关系，不能直接删除从断，需要主端解除绑定再删除。但可以直接删除主端。
+
 #+BEGIN_SRC java
-// @JoinColumn(name="authorid") 这个不需要去写，因为 mappedBy 会默认触发外键操作
-@OneToMany(mappedBy="author")   // author 对应的是 book 里面的 author 属性
-private Set<Book> books = new HashSet<Book>();
+  @Entity
+  class Player {
+    @ManyToMany
+    @JoinTable(name="player_game", joinColumns=@JoinColumn(name="player_id"), inverseJoinColumns=@JoinColumn(name="game_id"))
+    // 关系维护端，负责多对多关系的绑定和解除
+    // 可以不指定 @JoinTable，那么中间表、外键名等就会采用默认值
+    private Set<Game> games = new HashSet<>();
+  }
 
 
-@ManyToOne
-@JoinColumn(name="authorid")
-private Author author;
+  @Entity
+  class Game {
+    @ManyToMany(mappedBy="games")
+    private Set<Player> players = new HashSet<>();
+  }
+
 #+END_SRC
 
-首先，上边跟下边的 JoinColumn 值的名字，需要一致
+* 继承(Inheritance)
+开发的时候用的不是特别多。
+** subclass
+#+BEGIN_SRC java
+  @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+  @DiscriminatorColumn(name="xxx")
+  @DiscriminatorValue(value="e")
+  class Dog extents Animal { ... }
+#+END_SRC
 
-其次，要在 @OneToMany 里面设置 mappedBy 属性，将双方关系的控制权交给另外一边。
+特点：
+- 只有一张表，查询快速
+- 使用了区别列
+- 子类独有列不能添非空约束
+- 继承层次深则冗余字段很多
 
-最后，保存的时候，注意顺序，要先保存 1 的一边。
+** joined-class
+#+BEGIN_SRC java
+  @Inheritance(strategy=InheritanceType.JOINED)
+  @Entity
+  @PrimaryKeyJoinColumn(name="xxx")
+  class Dog extents Animal { ... }
+#+END_SRC
 
+特点：
+- 查询父类记录，做一个左连接查询
+- 查询子记录，做一个内联接查询
+- 查询效率略低
+- 没有冗余的字段
 
+** union-subclass
+#+BEGIN_SRC java
+  @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+#+END_SRC
 
-** ManyToMany
-** OneToOne
-*** PK assoc
-在其中一端，配置 One-To-One 节点：
-: <one-to-one name="school" class="hibernate.assoc.one2one.School"></one-to-one>
-在另一端，配置 One-To-One 节点，注意，要加上Constrained="true"，而且要配置主键的生成方式为 foreign.
-: <one-to-one name="master" class="hibernate.assoc.one2one.Master" constrained="true"></one-to-one>
-: <id name="sid" type="int">
-:     <column name="SID" />
-:     <generator class="foreign">
-:     	<param name="property">master</param>
-:     </generator>
-: </id>
-
-相应的注解形式为：
-roll(9);
-在School一端配置
-:@Id
-:@GeneratedValue
-:priavte int sid;
-:private String name;
-:private String addr;
-:@OneToOne
-:@JoinColumn
-:private Master master;
-在Master一端配置
-:@Id
-@GeneratedValue
-:private int mid;
-:private String name;
-:private Date birth;
-:@OneToOne
-:@JoinColumn
-:private School school;
-*** FK assoc
-在其中一端，配置如下，通过 manytoone 和 unique 配合，产生一对一的结果。而且会生成相应外键：
-: <many-to-one name="school" class="School" unique="true"></many-to-one>
-在另一端：
-: <one-to-one name="master" class="Master" property-ref="school"></one-to-one>
-+
-相应的注解形式为：
-roll(2);
-在School一端配置如下：
-: @id 
-: @GeneratedValue 
-: private int sid;
-: private String name;
-: private String addr;
-: @OneToOne(mappedBy="school")
-: private Master master;
-在另一端：
-: @Id
-: @GeneratedValue
-: private int mid;
-: private String name;
-: private Date birth;
-: @ManToOne
-: @JoinColumn(name="masterId")
-: private School school;
-
-** Embedded(Component)
-嵌入
-
+特点：
+- 每个实现类都有一个独立的表
+- 查子类不错，查父类需要union
+- 但存在冗余字段
+- 若更新父表的字段，效率较低
 * 级联（Cascade）
 
 在利用 hibernate 对实体类对象进行持久化(如 session.save)的时候，需要保证里面引用的对象已经处于持久化状态。
@@ -443,37 +488,6 @@ roll(2);
 - 基本语法
 - 增加条件（addScalar）
 - 返回结果（addEntity）
-* 继承
-开发的时候用的不是特别多。所以心态：了解。
-
-** subclass
-- 只有一张表，查询快速
-- 使用了区别列
-- 子类独有列不能添非空约束
-- 继承层次深则冗余字段很多
-- @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-  : DiscriminatorColumn(name="xxx")
-  : DiscriminatorValue(value="e")
-
-
-** joined-class
-- 查询父类记录，做一个左连接查询
-- 查询子记录，做一个内联接查询
-- 查询效率略低
-- 没有冗余的字段
-- @Inheritance(strategy=InheritanceType.JOINED)
-  : @Entity
-  : @PrimaryKeyJoinColumn(name="xxx")
-  : class Dog extents Animal { ... }
-
-
-** union-subclass
-- 每个实现类都有一个独立的表
-- 查子类不错，查父类需要union
-- 但存在冗余字段
-- 若更新父表的字段，效率较低
-- @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-
 * 二级缓存
 1. 加入 hibernate-ehcache.jar 及关联包
 2. 创建/复制 ehcachexml 到类路径
@@ -491,8 +505,6 @@ roll(2);
 
 * 乐观锁、悲观锁
 * Java 提高
-
-
 ** 日期与时间
 *** Date 类
 这是 java 最开始就有的类，用来处理时间。
@@ -600,15 +612,4 @@ class BirthUtil {
 }
 
 #+END_SRC
-
-* 改写 hello，增加 hibernate 支持
-* Roll
-6. query 对象, hql
-3. Many to one 关系。包括配置，使用
-9. One to Many 关系。包括配置，使用
-
-
-
-
-
 
