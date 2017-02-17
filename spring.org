@@ -7,7 +7,7 @@
 
 [例] 一个女孩要表白
 
-先定义这个女孩的类跟接口
+先定义这个女孩的接口跟类
 #+BEGIN_SRC java
   // 接口，包含一个表白(sayLove)的方法
   public interface Person {
@@ -15,7 +15,7 @@
   }
 
 
-  // 具体类，一个求爱的女孩儿
+  // 具体类，一个要去表白的女孩儿
   public class Girl implements Person {
       @Override
       public void sayLove() {
@@ -33,13 +33,19 @@
   }
 #+END_SRC
 
-但是在某些情况下，直接表白是不合适的，所以需要有人出面玉成此时。这个时候，需要的就是代理。
+但是在某些情况下，直接表白是不合适的，所以需要有人出面玉成此事。
+这个时候，需要代理。代理出面，代替女孩儿求爱。
+
+
+分为静态代理和动态代理。
 
 *** 静态代理
-实现方式有两种：继承+聚合
 
-首先，继承：
+实现方式有两种：继承、聚合
+
+首先，继承的方式：
 #+BEGIN_SRC java
+  // 这就是要帮忙出面的代理，它需要有 sayLove() 方法
   public class LoveProxy extends Girl {
       @Override
       public void sayLove() {
@@ -52,13 +58,15 @@
   // 执行
   main() {
       LoveProxy m = new LoveProxy();
+      // 让代理帮助表白
       m.sayLove();
   }
 #+END_SRC
 
 
-其次，聚合的方式
+其次，聚合的方式。很重要的方式。
 #+BEGIN_SRC java
+  // 需要实现 Girl 相同的接口，我们的代理必须要有 sayLove() 方法
   public class LoveProxy implements Person {
       Girl z = null;
       public LoveProxy(Girl g) {

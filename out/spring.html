@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-17 周五 11:16 -->
+<!-- 2017-02-17 周五 13:46 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -60,7 +60,7 @@
 </p>
 
 <p>
-先定义这个女孩的类跟接口
+先定义这个女孩的接口跟类
 </p>
 <div class="org-src-container">
 
@@ -70,7 +70,7 @@
 <span style="color: #707183;">}</span>
 
 
-<span style="color: #b22222;">// </span><span style="color: #b22222;">&#20855;&#20307;&#31867;&#65292;&#19968;&#20010;&#27714;&#29233;&#30340;&#22899;&#23401;&#20799;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#20855;&#20307;&#31867;&#65292;&#19968;&#20010;&#35201;&#21435;&#34920;&#30333;&#30340;&#22899;&#23401;&#20799;</span>
 <span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">Girl</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
     <span style="color: #008b8b;">@Override</span>
     <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sayLove</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
@@ -93,7 +93,13 @@
 </div>
 
 <p>
-但是在某些情况下，直接表白是不合适的，所以需要有人出面玉成此时。这个时候，需要的就是代理。
+但是在某些情况下，直接表白是不合适的，所以需要有人出面玉成此事。
+这个时候，需要代理。代理出面，代替女孩儿求爱。
+</p>
+
+
+<p>
+分为静态代理和动态代理。
 </p>
 </div>
 
@@ -101,15 +107,16 @@
 <h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> 静态代理</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
-实现方式有两种：继承+聚合
+实现方式有两种：继承、聚合
 </p>
 
 <p>
-首先，继承：
+首先，继承的方式：
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">LoveProxy</span> <span style="color: #a020f0;">extends</span> <span style="color: #228b22;">Girl</span> <span style="color: #707183;">{</span>
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#23601;&#26159;&#35201;&#24110;&#24537;&#20986;&#38754;&#30340;&#20195;&#29702;&#65292;&#23427;&#38656;&#35201;&#26377; sayLove() &#26041;&#27861;</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">LoveProxy</span> <span style="color: #a020f0;">extends</span> <span style="color: #228b22;">Girl</span> <span style="color: #707183;">{</span>
     <span style="color: #008b8b;">@Override</span>
     <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sayLove</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
         <span style="color: #a020f0;">super</span>.sayLove<span style="color: #909183;">()</span>;
@@ -121,6 +128,7 @@
 <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25191;&#34892;</span>
 <span style="color: #0000ff;">main</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
     <span style="color: #228b22;">LoveProxy</span> <span style="color: #a0522d;">m</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">LoveProxy</span><span style="color: #7388d6;">()</span>;
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35753;&#20195;&#29702;&#24110;&#21161;&#34920;&#30333;</span>
     m.sayLove<span style="color: #7388d6;">()</span>;
 <span style="color: #707183;">}</span>
 </pre>
@@ -128,11 +136,12 @@
 
 
 <p>
-其次，聚合的方式
+其次，聚合的方式。很重要的方式。
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">LoveProxy</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#38656;&#35201;&#23454;&#29616; Girl &#30456;&#21516;&#30340;&#25509;&#21475;&#65292;&#25105;&#20204;&#30340;&#20195;&#29702;&#24517;&#39035;&#35201;&#26377; sayLove() &#26041;&#27861;</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">LoveProxy</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
     <span style="color: #228b22;">Girl</span> <span style="color: #a0522d;">z</span> = <span style="color: #008b8b;">null</span>;
     <span style="color: #a020f0;">public</span> <span style="color: #0000ff;">LoveProxy</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">Girl</span> <span style="color: #a0522d;">g</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
         <span style="color: #a020f0;">this</span>.z = g;
@@ -1488,7 +1497,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-17 周五 11:16</p>
+<p class="date">Created: 2017-02-17 周五 13:46</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
