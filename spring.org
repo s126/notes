@@ -2,7 +2,137 @@
 
 * Spring
 ** IOC
+
+** Proxy
+
+[例] 一个女孩要表白
+
+先定义这个女孩的类跟接口
+#+BEGIN_SRC java
+  // 接口，包含一个表白(sayLove)的方法
+  public interface Person {
+      void sayLove();
+  }
+
+
+  // 具体类，一个求爱的女孩儿
+  public class Girl implements Person {
+      @Override
+      public void sayLove() {
+          System.out.println("我爱你.");
+      }
+  }
+
+#+END_SRC
+
+如果不通过代理的方式，那么表白的代码如下：
+#+BEGIN_SRC java
+  main () {
+      Girl z = new Girl();
+      z.sayLove();
+  }
+#+END_SRC
+
+但是在某些情况下，直接表白是不合适的，所以需要有人出面玉成此时。这个时候，需要的就是代理。
+
+*** 静态代理
+实现方式有两种：继承+聚合
+
+首先，继承：
+#+BEGIN_SRC java
+  public class LoveProxy extends Girl {
+      @Override
+      public void sayLove() {
+          super.sayLove();
+          System.out.println("祝你们能白头偕老.");
+      }
+  }
+
+
+  // 执行
+  main() {
+      LoveProxy m = new LoveProxy();
+      m.sayLove();
+  }
+#+END_SRC
+
+
+其次，聚合的方式
+#+BEGIN_SRC java
+  public class LoveProxy implements Person {
+      Girl z = null;
+      public LoveProxy(Girl g) {
+          this.z = g;
+      }
+
+      @Override
+      public void sayLove() {
+          z.sayLove();
+          System.out.println("我们在一起吧。");
+      }
+  }
+
+
+  main() {
+      LoveProxy m = new LoveProxy(new Girl());
+      m.sayLove();
+  }
+#+END_SRC
+
+*** JDK 动态代理
+首先，要创建一个代理的生成器，用来在运行时动态生成一个代理
+#+BEGIN_SRC java
+  public class JDKLoveProxy implements InvocationHandler {
+
+      Object z = null;
+
+      public JDKLoveProxy(Object g) {
+          this.z = g;
+      }
+
+      @Override
+      public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+          // 用反射的方式，调用 z 里的原方法
+          Object result = method.invoke(z, args);
+          System.out.println("你们真的能够在一起。");
+          return result;
+      }
+  }
+#+END_SRC
+
+
+利用上边的代理器，生成一个帮助我们做事的代理。
+#+BEGIN_SRC java
+  main() {
+
+      Girl z = new Girl();
+      // 通过代理器，生成一个代理
+      Person loveProxy = (Person) Proxy
+          .newProxyInstance(z.getClass().getClassLoader(),
+                            z.getClass().getInterfaces(),
+                            new JDKLoveProxy(z));
+      // 让代理帮助自己做某些事
+      loveProxy.sayLove();
+
+
+      System.out.println("--------------------");
+
+
+      // 一个动态代理，可以代理多个类，多个接口
+      Dog xiaobai = new Dog();
+      Animal animalLoveProxy = (Animal) Proxy
+          .newProxyInstance(xiaobai.getClass().getClassLoader(),
+                            xiaobai.getClass().getInterfaces(),
+                            new JDKLoveProxy(xiaobai));
+      animalLoveProxy.sayLove();
+  }
+#+END_SRC
+
+
+*** CGLib 动态代理
+
 ** AOP
+
 ** 声明式事务
 
 * Spring MVC
