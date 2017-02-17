@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-17 周五 13:46 -->
+<!-- 2017-02-17 周五 15:00 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -168,15 +168,15 @@
 <h4 id="sec-1-2-2"><span class="section-number-4">1.2.2</span> JDK 动态代理</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
-首先，要创建一个代理的生成器，用来在运行时动态生成一个代理
+首先，要创建一个代理的 <b>生成器</b> ，用来为某个类生成代理。
 </p>
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">JDKLoveProxy</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">InvocationHandler</span> <span style="color: #707183;">{</span>
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">JDKLoveProxyGenerator</span> <span style="color: #a020f0;">implements</span> <span style="color: #228b22;">InvocationHandler</span> <span style="color: #707183;">{</span>
 
     <span style="color: #228b22;">Object</span> <span style="color: #a0522d;">z</span> = <span style="color: #008b8b;">null</span>;
 
-    <span style="color: #a020f0;">public</span> <span style="color: #0000ff;">JDKLoveProxy</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">Object</span> <span style="color: #a0522d;">g</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #0000ff;">JDKLoveProxyGenerator</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">Object</span> <span style="color: #a0522d;">g</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
         <span style="color: #a020f0;">this</span>.z = g;
     <span style="color: #7388d6;">}</span>
 
@@ -193,26 +193,27 @@
 
 
 <p>
-利用上边的代理器，生成一个帮助我们做事的代理。
+利用上边的代理生成器，生成一个帮助我们做事的代理。
 </p>
 <div class="org-src-container">
 
 <pre class="src src-java"><span style="color: #0000ff;">main</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
 
     <span style="color: #228b22;">Girl</span> <span style="color: #a0522d;">z</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Girl</span><span style="color: #7388d6;">()</span>;
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#20195;&#29702;&#22120;&#65292;&#29983;&#25104;&#19968;&#20010;&#20195;&#29702;</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#20195;&#29702;&#29983;&#25104;&#22120;&#65292;&#20026; Girl &#21019;&#24314;&#19968;&#20010;&#20195;&#29702;</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#29983;&#25104;&#30340;&#31867;&#26159; Person &#25509;&#21475;&#30340;&#19968;&#20010;&#23454;&#29616;</span>
     <span style="color: #228b22;">Person</span> <span style="color: #a0522d;">loveProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Person</span><span style="color: #7388d6;">)</span> Proxy
         .newProxyInstance<span style="color: #7388d6;">(</span>z.getClass<span style="color: #909183;">()</span>.getClassLoader<span style="color: #909183;">()</span>,
                           z.getClass<span style="color: #909183;">()</span>.getInterfaces<span style="color: #909183;">()</span>,
-                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxy</span><span style="color: #909183;">(</span>z<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35753;&#20195;&#29702;&#24110;&#21161;&#33258;&#24049;&#20570;&#26576;&#20123;&#20107;</span>
+                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxyGenerator</span><span style="color: #909183;">(</span>z<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35753;&#20195;&#29702;&#24110;&#21161;&#20570;&#26576;&#20123;&#20107;</span>
     loveProxy.sayLove<span style="color: #7388d6;">()</span>;
 
 
     System.out.println<span style="color: #7388d6;">(</span><span style="color: #8b2252;">"--------------------"</span><span style="color: #7388d6;">)</span>;
 
 
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#19968;&#20010;&#21160;&#24577;&#20195;&#29702;&#65292;&#21487;&#20197;&#20195;&#29702;&#22810;&#20010;&#31867;&#65292;&#22810;&#20010;&#25509;&#21475;</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#19968;&#20010;&#21160;&#24577;&#20195;&#29702;&#29983;&#25104;&#22120;&#65292;&#21487;&#20197;&#20026;&#22810;&#20010;&#19981;&#21516;&#30340;&#25509;&#21475;&#29983;&#25104;&#20195;&#29702;</span>
     <span style="color: #228b22;">Dog</span> <span style="color: #a0522d;">xiaobai</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Dog</span><span style="color: #7388d6;">()</span>;
     <span style="color: #228b22;">Animal</span> <span style="color: #a0522d;">animalLoveProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Animal</span><span style="color: #7388d6;">)</span> Proxy
         .newProxyInstance<span style="color: #7388d6;">(</span>xiaobai.getClass<span style="color: #909183;">()</span>.getClassLoader<span style="color: #909183;">()</span>,
@@ -1497,7 +1498,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-17 周五 13:46</p>
+<p class="date">Created: 2017-02-17 周五 15:00</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

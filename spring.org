@@ -88,13 +88,13 @@
 #+END_SRC
 
 *** JDK 动态代理
-首先，要创建一个代理的生成器，用来在运行时动态生成一个代理
+首先，要创建一个代理的 *生成器* ，用来为某个类生成代理。
 #+BEGIN_SRC java
-  public class JDKLoveProxy implements InvocationHandler {
+  public class JDKLoveProxyGenerator implements InvocationHandler {
 
       Object z = null;
 
-      public JDKLoveProxy(Object g) {
+      public JDKLoveProxyGenerator(Object g) {
           this.z = g;
       }
 
@@ -109,24 +109,25 @@
 #+END_SRC
 
 
-利用上边的代理器，生成一个帮助我们做事的代理。
+利用上边的代理生成器，生成一个帮助我们做事的代理。
 #+BEGIN_SRC java
   main() {
 
       Girl z = new Girl();
-      // 通过代理器，生成一个代理
+      // 通过代理生成器，为 Girl 创建一个代理
+      // 注意，生成的类是 Person 接口的一个实现
       Person loveProxy = (Person) Proxy
           .newProxyInstance(z.getClass().getClassLoader(),
                             z.getClass().getInterfaces(),
-                            new JDKLoveProxy(z));
-      // 让代理帮助自己做某些事
+                            new JDKLoveProxyGenerator(z));
+      // 让代理帮助做某些事
       loveProxy.sayLove();
 
 
       System.out.println("--------------------");
 
 
-      // 一个动态代理，可以代理多个类，多个接口
+      // 一个动态代理生成器，可以为多个不同的接口生成代理
       Dog xiaobai = new Dog();
       Animal animalLoveProxy = (Animal) Proxy
           .newProxyInstance(xiaobai.getClass().getClassLoader(),
