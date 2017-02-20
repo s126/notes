@@ -115,13 +115,12 @@ JDK 的动态代理，必须依赖接口实现
 #+BEGIN_SRC java
   main() {
 
-      Girl z = new Girl();
       // 通过代理生成器，为 Girl 创建一个代理
-      // 注意，生成的类是 Person 接口的一个实现
+      // 注意，生成的代理类是 Person 接口的一个实现
       Person loveProxy = (Person) Proxy
-          .newProxyInstance(z.getClass().getClassLoader(),
-                            z.getClass().getInterfaces(),
-                            new JDKLoveProxyGenerator(z));
+          .newProxyInstance(Girl.class.getClassLoader(),
+                            Girl.class.getInterfaces(),
+                            new JDKLoveProxyGenerator(new Girl()));
       // 让代理帮助做某些事
       loveProxy.sayLove();
 
@@ -130,11 +129,11 @@ JDK 的动态代理，必须依赖接口实现
 
 
       // 一个动态代理生成器，可以为多个不同的接口生成代理
-      Dog xiaobai = new Dog();
+      // 下面为 Dog 生成一个代理
       Animal animalLoveProxy = (Animal) Proxy
-          .newProxyInstance(xiaobai.getClass().getClassLoader(),
-                            xiaobai.getClass().getInterfaces(),
-                            new JDKLoveProxy(xiaobai));
+          .newProxyInstance(Dog.class.getClassLoader(),
+                            Dog.class.getInterfaces(),
+                            new JDKLoveProxy(new Dog()));
       animalLoveProxy.sayLove();
   }
 #+END_SRC
@@ -142,7 +141,6 @@ JDK 的动态代理，必须依赖接口实现
 
 *** CGLib 动态代理
 CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它并不需要接口。
-
 
 如果使用 CGLib 的动态代理，首先，要在工程中加入 cglib 的 jar 包支持：
 : compile "cglib:cglib:3.2.4"
@@ -169,22 +167,19 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
 #+BEGIN_SRC java
   main() {
 
-
       /**
-       ,* 这是一个使用 JDK 动态代理的例子：
-       ,*/
-      Girl z = new Girl();
-
-      // 通过代理器，生成一个代理
+       * 这是一个使用 JDK 动态代理的例子。
+       */
       Person loveProxy = (Person) Proxy
-          .newProxyInstance(z.getClass().getClassLoader(),  // classLoader
-                            z.getClass().getInterfaces(),   // 接口
-                            new JDKLoveProxyGenerator(z));  // 代理生成器
+          .newProxyInstance(Girl.class.getClassLoader(),             // classLoader
+                            Girl.class.getInterfaces(),              // 接口
+                            new JDKLoveProxyGenerator(new Girl())    // 代理生成器
+                            );                    // 注意，生成的代理的类型是 Person
 
       loveProxy.sayLove();
 
 
-      
+        
       /**
        * 这是一个使用 CGLib 动态代理的例子。
        * 跟上面用 JDK 代理方式比较，发现它们其实是一致的。
@@ -194,7 +189,11 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
       enhancer.setSuperclass(Dog.class);                   // 父类
       enhancer.setCallback(new CGLibLoveProxyGenerator()); // 代理生成器
 
-      Dog dogProxy = (Dog) enhancer.create();
+      Dog dogProxy = (Dog) enhancer.create();    // 注意，生成的代理的类型是 Dog
+
+      // 其实，上面创建 dogProxy 的代码可以简写为:
+      // Dog dogProxy = (Dog) Enhancer.create(Dog.class, null, new CGLibLoveProxyGenerator());
+
       dogProxy.sayLove();
   }
 

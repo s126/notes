@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-20 周一 09:32 -->
+<!-- 2017-02-20 周一 10:11 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -203,13 +203,12 @@ JDK 的动态代理，必须依赖接口实现
 
 <pre class="src src-java"><span style="color: #0000ff;">main</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
 
-    <span style="color: #228b22;">Girl</span> <span style="color: #a0522d;">z</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Girl</span><span style="color: #7388d6;">()</span>;
     <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#20195;&#29702;&#29983;&#25104;&#22120;&#65292;&#20026; Girl &#21019;&#24314;&#19968;&#20010;&#20195;&#29702;</span>
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#29983;&#25104;&#30340;&#31867;&#26159; Person &#25509;&#21475;&#30340;&#19968;&#20010;&#23454;&#29616;</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#29983;&#25104;&#30340;&#20195;&#29702;&#31867;&#26159; Person &#25509;&#21475;&#30340;&#19968;&#20010;&#23454;&#29616;</span>
     <span style="color: #228b22;">Person</span> <span style="color: #a0522d;">loveProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Person</span><span style="color: #7388d6;">)</span> Proxy
-        .newProxyInstance<span style="color: #7388d6;">(</span>z.getClass<span style="color: #909183;">()</span>.getClassLoader<span style="color: #909183;">()</span>,
-                          z.getClass<span style="color: #909183;">()</span>.getInterfaces<span style="color: #909183;">()</span>,
-                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxyGenerator</span><span style="color: #909183;">(</span>z<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+        .newProxyInstance<span style="color: #7388d6;">(</span>Girl.<span style="color: #a020f0;">class</span>.getClassLoader<span style="color: #909183;">()</span>,
+                          Girl.<span style="color: #a020f0;">class</span>.getInterfaces<span style="color: #909183;">()</span>,
+                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxyGenerator</span><span style="color: #909183;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">Girl</span><span style="color: #709870;">()</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
     <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35753;&#20195;&#29702;&#24110;&#21161;&#20570;&#26576;&#20123;&#20107;</span>
     loveProxy.sayLove<span style="color: #7388d6;">()</span>;
 
@@ -218,11 +217,11 @@ JDK 的动态代理，必须依赖接口实现
 
 
     <span style="color: #b22222;">// </span><span style="color: #b22222;">&#19968;&#20010;&#21160;&#24577;&#20195;&#29702;&#29983;&#25104;&#22120;&#65292;&#21487;&#20197;&#20026;&#22810;&#20010;&#19981;&#21516;&#30340;&#25509;&#21475;&#29983;&#25104;&#20195;&#29702;</span>
-    <span style="color: #228b22;">Dog</span> <span style="color: #a0522d;">xiaobai</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Dog</span><span style="color: #7388d6;">()</span>;
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#19979;&#38754;&#20026; Dog &#29983;&#25104;&#19968;&#20010;&#20195;&#29702;</span>
     <span style="color: #228b22;">Animal</span> <span style="color: #a0522d;">animalLoveProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Animal</span><span style="color: #7388d6;">)</span> Proxy
-        .newProxyInstance<span style="color: #7388d6;">(</span>xiaobai.getClass<span style="color: #909183;">()</span>.getClassLoader<span style="color: #909183;">()</span>,
-                          xiaobai.getClass<span style="color: #909183;">()</span>.getInterfaces<span style="color: #909183;">()</span>,
-                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxy</span><span style="color: #909183;">(</span>xiaobai<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
+        .newProxyInstance<span style="color: #7388d6;">(</span>Dog.<span style="color: #a020f0;">class</span>.getClassLoader<span style="color: #909183;">()</span>,
+                          Dog.<span style="color: #a020f0;">class</span>.getInterfaces<span style="color: #909183;">()</span>,
+                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxy</span><span style="color: #909183;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">Dog</span><span style="color: #709870;">()</span><span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;
     animalLoveProxy.sayLove<span style="color: #7388d6;">()</span>;
 <span style="color: #707183;">}</span>
 </pre>
@@ -237,7 +236,6 @@ JDK 的动态代理，必须依赖接口实现
 <p>
 CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它并不需要接口。
 </p>
-
 
 <p>
 如果使用 CGLib 的动态代理，首先，要在工程中加入 cglib 的 jar 包支持：
@@ -275,17 +273,14 @@ compile "cglib:cglib:3.2.4"
 
 <pre class="src src-java"><span style="color: #0000ff;">main</span><span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
 
-
     <span style="color: #8b2252;">/**</span>
-<span style="color: #8b2252;">     * &#36825;&#26159;&#19968;&#20010;&#20351;&#29992; JDK &#21160;&#24577;&#20195;&#29702;&#30340;&#20363;&#23376;&#65306;</span>
+<span style="color: #8b2252;">     * &#36825;&#26159;&#19968;&#20010;&#20351;&#29992; JDK &#21160;&#24577;&#20195;&#29702;&#30340;&#20363;&#23376;&#12290;</span>
 <span style="color: #8b2252;">     */</span>
-    <span style="color: #228b22;">Girl</span> <span style="color: #a0522d;">z</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Girl</span><span style="color: #7388d6;">()</span>;
-
-    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36890;&#36807;&#20195;&#29702;&#22120;&#65292;&#29983;&#25104;&#19968;&#20010;&#20195;&#29702;</span>
     <span style="color: #228b22;">Person</span> <span style="color: #a0522d;">loveProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Person</span><span style="color: #7388d6;">)</span> Proxy
-        .newProxyInstance<span style="color: #7388d6;">(</span>z.getClass<span style="color: #909183;">()</span>.getClassLoader<span style="color: #909183;">()</span>,  <span style="color: #b22222;">// </span><span style="color: #b22222;">classLoader</span>
-                          z.getClass<span style="color: #909183;">()</span>.getInterfaces<span style="color: #909183;">()</span>,   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25509;&#21475;</span>
-                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxyGenerator</span><span style="color: #909183;">(</span>z<span style="color: #909183;">)</span><span style="color: #7388d6;">)</span>;  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20195;&#29702;&#29983;&#25104;&#22120;</span>
+        .newProxyInstance<span style="color: #7388d6;">(</span>Girl.<span style="color: #a020f0;">class</span>.getClassLoader<span style="color: #909183;">()</span>,             <span style="color: #b22222;">// </span><span style="color: #b22222;">classLoader</span>
+                          Girl.<span style="color: #a020f0;">class</span>.getInterfaces<span style="color: #909183;">()</span>,              <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25509;&#21475;</span>
+                          <span style="color: #a020f0;">new</span> <span style="color: #228b22;">JDKLoveProxyGenerator</span><span style="color: #909183;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">Girl</span><span style="color: #709870;">()</span><span style="color: #909183;">)</span>    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20195;&#29702;&#29983;&#25104;&#22120;</span>
+                          <span style="color: #7388d6;">)</span>;                    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#29983;&#25104;&#30340;&#20195;&#29702;&#30340;&#31867;&#22411;&#26159; Person</span>
 
     loveProxy.sayLove<span style="color: #7388d6;">()</span>;
 
@@ -300,7 +295,11 @@ compile "cglib:cglib:3.2.4"
     enhancer.setSuperclass<span style="color: #7388d6;">(</span>Dog.<span style="color: #a020f0;">class</span><span style="color: #7388d6;">)</span>;                   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#29238;&#31867;</span>
     enhancer.setCallback<span style="color: #7388d6;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">CGLibLoveProxyGenerator</span><span style="color: #909183;">()</span><span style="color: #7388d6;">)</span>; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20195;&#29702;&#29983;&#25104;&#22120;</span>
 
-    <span style="color: #228b22;">Dog</span> <span style="color: #a0522d;">dogProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Dog</span><span style="color: #7388d6;">)</span> enhancer.create<span style="color: #7388d6;">()</span>;
+    <span style="color: #228b22;">Dog</span> <span style="color: #a0522d;">dogProxy</span> = <span style="color: #7388d6;">(</span><span style="color: #228b22;">Dog</span><span style="color: #7388d6;">)</span> enhancer.create<span style="color: #7388d6;">()</span>;    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#27880;&#24847;&#65292;&#29983;&#25104;&#30340;&#20195;&#29702;&#30340;&#31867;&#22411;&#26159; Dog</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20854;&#23454;&#65292;&#19978;&#38754;&#21019;&#24314; dogProxy &#30340;&#20195;&#30721;&#21487;&#20197;&#31616;&#20889;&#20026;:</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">Dog dogProxy = (Dog) Enhancer.create(Dog.class, null, new CGLibLoveProxyGenerator());</span>
+
     dogProxy.sayLove<span style="color: #7388d6;">()</span>;
 <span style="color: #707183;">}</span>
 </pre>
@@ -1575,7 +1574,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-20 周一 09:32</p>
+<p class="date">Created: 2017-02-20 周一 10:11</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
