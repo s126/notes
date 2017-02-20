@@ -64,7 +64,7 @@
 #+END_SRC
 
 
-其次，聚合的方式。很重要的方式。
+其次，聚合的方式。很重要的方式。这种方式必须要有接口。
 #+BEGIN_SRC java
   // 需要实现 Girl 相同的接口，我们的代理必须要有 sayLove() 方法
   public class LoveProxy implements Person {
@@ -88,6 +88,8 @@
 #+END_SRC
 
 *** JDK 动态代理
+JDK 的动态代理，必须依赖接口实现
+
 首先，要创建一个代理的 *生成器* ，用来为某个类生成代理。
 #+BEGIN_SRC java
   public class JDKLoveProxyGenerator implements InvocationHandler {
@@ -139,6 +141,64 @@
 
 
 *** CGLib 动态代理
+CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它并不需要接口。
+
+
+如果使用 CGLib 的动态代理，首先，要在工程中加入 cglib 的 jar 包支持：
+: compile "cglib:cglib:3.2.4"
+
+其次，使用 CGLib 实现我们的 *代理生成器* ，只要实现 MethodInterceptor 接口即可：
+#+BEGIN_SRC java
+  public class CGLibLoveProxyGenerator implements MethodInterceptor {
+      @Override
+      public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+
+          System.out.println("你好啊，我是一个代理，帮你传个小姑娘的纸条：");
+          // 调用原方法
+          Object result = proxy.invokeSuper(obj, args);
+
+          System.out.println("你们其实挺适合的。在一起就加油哦.");
+
+          return result;
+
+      }
+  }
+#+END_SRC
+
+然后，就可以用上面的 CGLibLoveProxyGenerator 为某个类生成代理了：
+#+BEGIN_SRC java
+  main() {
+
+
+      /**
+       ,* 这是一个使用 JDK 动态代理的例子：
+       ,*/
+      Girl z = new Girl();
+
+      // 通过代理器，生成一个代理
+      Person loveProxy = (Person) Proxy
+          .newProxyInstance(z.getClass().getClassLoader(),  // classLoader
+                            z.getClass().getInterfaces(),   // 接口
+                            new JDKLoveProxyGenerator(z));  // 代理生成器
+
+      loveProxy.sayLove();
+
+
+      
+      /**
+       * 这是一个使用 CGLib 动态代理的例子。
+       * 跟上面用 JDK 代理方式比较，发现它们其实是一致的。
+       */
+      Enhancer enhancer = new Enhancer();
+      enhancer.setClassLoader(Dog.class.getClassLoader()); // classLoader
+      enhancer.setSuperclass(Dog.class);                   // 父类
+      enhancer.setCallback(new CGLibLoveProxyGenerator()); // 代理生成器
+
+      Dog dogProxy = (Dog) enhancer.create();
+      dogProxy.sayLove();
+  }
+
+#+END_SRC
 
 ** AOP
 
