@@ -1002,6 +1002,51 @@ Spring 3 之后增加了一个 @ControllerAdvice 注解，作用在控制器上�
 
 就这样。。。简单。
 
+** 集成 javaMail 发送邮件
+
+来一个在 SpringMVC 中通过 163 发送邮件的示例
+
+首先，增加 jar 包
+: compile "org.springframework:spring-context-support:$springVersion"
+: compile "javax.mail:mail:1.4.7"
+
+其次，在 spring.xml 中增加 mailSender 的配置：
+#+BEGIN_SRC xml
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.163.com" />
+    <property name="username" value="name" />
+    <property name="password" value="pass" />
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.transport.protocol">smtp</prop>
+        <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+        <prop key="mail.debug">true</prop>
+      </props>
+    </property>
+  </bean>
+#+END_SRC
+
+
+最后，在代码中使用:
+#+BEGIN_SRC java
+  @Service
+  public class UserService {
+      
+      @Resource private MailSender mailSender;
+
+      public void sendMailDemo() {
+          SimpleMailMessage mailMsg = new SimpleMailMessage();
+          mailMsg.setFrom("xxx@163.com");   // 发件人
+          mailMsg.setTo("12345@qq.com");    // 收件人
+          mailMsg.setSubject("test");       // 邮件标题
+          mailMsg.setText("测试邮件");       // 发送内容
+
+          mailSender.send(mailMsg);         // 发送
+      }
+  }
+#+END_SRC
+
 * RESTful Style
 
 RESTful (Representational State Transfer) 一种 web 架构风格。
