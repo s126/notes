@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-20 周一 10:11 -->
+<!-- 2017-02-21 周二 14:16 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -310,6 +310,78 @@ compile "cglib:cglib:3.2.4"
 
 <div id="outline-container-sec-1-3" class="outline-3">
 <h3 id="sec-1-3"><span class="section-number-3">1.3</span> AOP</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+第一步，加入jar包：
+</p>
+<pre class="example">
+compile "org.aspectj:aspectjweaver:1.8.9
+</pre>
+
+<p>
+第二步，在 spring.xml 中，增加 aspectj 的支持。
+</p>
+<pre class="example">
+&lt;aop:aspectj-autoproxy proxy-target-class="true" /&gt;
+</pre>
+
+<p>
+第三步，创建切面，放入容器。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#20808;&#23450;&#20041;&#19968;&#20010;&#26085;&#24535;&#30456;&#20851;&#30340;&#20999;&#38754;</span>
+<span style="color: #008b8b;">@Component</span>
+<span style="color: #008b8b;">@Aspect</span>
+<span style="color: #008b8b;">@Order</span><span style="color: #707183;">(</span>2<span style="color: #707183;">)</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">LogAspect</span> <span style="color: #707183;">{</span>
+
+    <span style="color: #008b8b;">@Before</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"execution(* edu.nf.emptyproject.service.UserService.*(..))"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sayHello</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#12304;AOP&#12305; hello..."</span><span style="color: #909183;">)</span>;
+    <span style="color: #7388d6;">}</span>
+
+    <span style="color: #008b8b;">@After</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"execution(* edu.nf.emptyproject.service.UserService.find*(..))"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sayBye</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#12304;AOP&#12305; Goodbye..."</span><span style="color: #909183;">)</span>;
+    <span style="color: #7388d6;">}</span>
+<span style="color: #707183;">}</span>
+
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#23450;&#20041;&#19968;&#20010;&#35745;&#31639;&#36816;&#34892;&#26102;&#38388;&#30340;&#20999;&#38754;</span>
+<span style="color: #008b8b;">@Component</span>
+<span style="color: #008b8b;">@Aspect</span>
+<span style="color: #008b8b;">@Order</span><span style="color: #707183;">(</span>1<span style="color: #707183;">)</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">BenchmarkAspect</span> <span style="color: #707183;">{</span>
+
+    <span style="color: #008b8b;">@Around</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"execution(* edu.nf.emptyproject.service.UserService.*(..)))"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">Object</span> <span style="color: #0000ff;">doSomePrivsCheck</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">ProceedingJoinPoint</span> <span style="color: #a0522d;">joinPoint</span><span style="color: #7388d6;">)</span> <span style="color: #a020f0;">throws</span> <span style="color: #228b22;">Throwable</span> <span style="color: #7388d6;">{</span>
+        <span style="color: #228b22;">long</span> <span style="color: #a0522d;">start</span> = System.currentTimeMillis<span style="color: #909183;">()</span>;
+        <span style="color: #228b22;">Object</span> <span style="color: #a0522d;">ret</span> = joinPoint.proceed<span style="color: #909183;">()</span>;
+        System.out.printf<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#12304;AOP&#12305; &#25191;&#34892;&#26041;&#27861; %s &#19968;&#20849;&#29992;&#20102; %d ms\n"</span>, joinPoint.getSignature<span style="color: #709870;">()</span>.getName<span style="color: #709870;">()</span>, System.currentTimeMillis<span style="color: #709870;">()</span> - start<span style="color: #909183;">)</span>;
+        <span style="color: #a020f0;">return</span> ret;
+    <span style="color: #7388d6;">}</span>
+
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+上面是用注解的形式实现的切面。当然可以用 xml 的方式同样做到：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">logAspect</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">edu.xxx.LogAspect</span><span style="color: #8b2252;">"</span> /&gt;
+
+&lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">config</span>&gt;
+  &lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">aspect</span> <span style="color: #a0522d;">ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">logAspect</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">pointcut</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">a</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">expression</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">execution(* edu..*.*(..))</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">before</span> <span style="color: #a0522d;">method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sayHello</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">pointcut-ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">a</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;/<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">aspect</span>&gt;
+&lt;/<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">config</span>&gt;
+</pre>
+</div>
+</div>
 </div>
 
 <div id="outline-container-sec-1-4" class="outline-3">
@@ -1574,7 +1646,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-20 周一 10:11</p>
+<p class="date">Created: 2017-02-21 周二 14:16</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

@@ -201,6 +201,61 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
 
 ** AOP
 
+第一步，加入jar包：
+: compile "org.aspectj:aspectjweaver:1.8.9
+
+第二步，在 spring.xml 中，增加 aspectj 的支持。
+: <aop:aspectj-autoproxy proxy-target-class="true" />
+
+第三步，创建切面，放入容器。
+#+BEGIN_SRC java
+  // 先定义一个日志相关的切面
+  @Component
+  @Aspect
+  @Order(2)
+  public class LogAspect {
+
+      @Before("execution(* edu.nf.emptyproject.service.UserService.*(..))")
+      public void sayHello() {
+          System.out.println("【AOP】 hello...");
+      }
+
+      @After("execution(* edu.nf.emptyproject.service.UserService.find*(..))")
+      public void sayBye() {
+          System.out.println("【AOP】 Goodbye...");
+      }
+  }
+
+
+  // 定义一个计算运行时间的切面
+  @Component
+  @Aspect
+  @Order(1)
+  public class BenchmarkAspect {
+
+      @Around("execution(* edu.nf.emptyproject.service.UserService.*(..)))")
+      public Object doSomePrivsCheck(ProceedingJoinPoint joinPoint) throws Throwable {
+          long start = System.currentTimeMillis();
+          Object ret = joinPoint.proceed();
+          System.out.printf("【AOP】 执行方法 %s 一共用了 %d ms\n", joinPoint.getSignature().getName(), System.currentTimeMillis() - start);
+          return ret;
+      }
+
+  }
+#+END_SRC
+
+上面是用注解的形式实现的切面。当然可以用 xml 的方式同样做到：
+#+BEGIN_SRC xml
+  <bean id="logAspect" class="edu.xxx.LogAspect" />
+
+  <aop:config>
+    <aop:aspect ref="logAspect">
+      <aop:pointcut id="a" expression="execution(* edu..*.*(..))" />
+      <aop:before method="sayHello" pointcut-ref="a" />
+    </aop:aspect>
+  </aop:config>
+#+END_SRC
+
 ** 声明式事务
 
 * Spring MVC
