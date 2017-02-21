@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-21 周二 14:16 -->
+<!-- 2017-02-21 周二 14:32 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -253,14 +253,21 @@ compile "cglib:cglib:3.2.4"
     <span style="color: #008b8b;">@Override</span>
     <span style="color: #a020f0;">public</span> <span style="color: #228b22;">Object</span> <span style="color: #0000ff;">intercept</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">Object</span> <span style="color: #a0522d;">obj</span>, <span style="color: #228b22;">Method</span> <span style="color: #a0522d;">method</span>, <span style="color: #228b22;">Object</span><span style="color: #909183;">[]</span> <span style="color: #a0522d;">args</span>, <span style="color: #228b22;">MethodProxy</span> <span style="color: #a0522d;">proxy</span><span style="color: #7388d6;">)</span> <span style="color: #a020f0;">throws</span> <span style="color: #228b22;">Throwable</span> <span style="color: #7388d6;">{</span>
 
-        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#20320;&#22909;&#21834;&#65292;&#25105;&#26159;&#19968;&#20010;&#20195;&#29702;&#65292;&#24110;&#20320;&#20256;&#20010;&#23567;&#22993;&#23064;&#30340;&#32440;&#26465;&#65306;"</span><span style="color: #909183;">)</span>;
-        <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35843;&#29992;&#21407;&#26041;&#27861;</span>
-        <span style="color: #228b22;">Object</span> <span style="color: #a0522d;">result</span> = proxy.invokeSuper<span style="color: #909183;">(</span>obj, args<span style="color: #909183;">)</span>;
+        <span style="color: #228b22;">Object</span> <span style="color: #a0522d;">result</span> = <span style="color: #008b8b;">null</span>;
 
-        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#20320;&#20204;&#20854;&#23454;&#25402;&#36866;&#21512;&#30340;&#12290;&#22312;&#19968;&#36215;&#23601;&#21152;&#27833;&#21734;."</span><span style="color: #909183;">)</span>;
+        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @Before &#36890;&#30693;"</span><span style="color: #909183;">)</span>;
 
-        <span style="color: #a020f0;">return</span> result;
-
+        <span style="color: #a020f0;">try</span> <span style="color: #909183;">{</span>
+            <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35843;&#29992;&#21407;&#26041;&#27861;</span>
+            result = proxy.invokeSuper<span style="color: #709870;">(</span>obj, args<span style="color: #709870;">)</span>;
+            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @AfterReturning &#36890;&#30693;"</span><span style="color: #709870;">)</span>;
+            <span style="color: #a020f0;">return</span> result;
+        <span style="color: #909183;">}</span>
+        <span style="color: #a020f0;">catch</span> <span style="color: #909183;">(</span><span style="color: #228b22;">Throwable</span> <span style="color: #a0522d;">e</span><span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
+            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @AtferThrowing &#36890;&#30693;"</span><span style="color: #709870;">)</span>;
+        <span style="color: #909183;">}</span> <span style="color: #a020f0;">finally</span> <span style="color: #909183;">{</span>
+            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @After &#36890;&#30693;"</span><span style="color: #709870;">)</span>;
+        <span style="color: #909183;">}</span>
     <span style="color: #7388d6;">}</span>
 <span style="color: #707183;">}</span>
 </pre>
@@ -1646,7 +1653,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-21 周二 14:16</p>
+<p class="date">Created: 2017-02-21 周二 14:32</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

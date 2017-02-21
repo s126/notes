@@ -151,14 +151,21 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
       @Override
       public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 
-          System.out.println("你好啊，我是一个代理，帮你传个小姑娘的纸条：");
-          // 调用原方法
-          Object result = proxy.invokeSuper(obj, args);
+          Object result = null;
 
-          System.out.println("你们其实挺适合的。在一起就加油哦.");
+          System.out.println("我是一个 @Before 通知");
 
-          return result;
-
+          try {
+              // 调用原方法
+              result = proxy.invokeSuper(obj, args);
+              System.out.println("我是一个 @AfterReturning 通知");
+              return result;
+          }
+          catch (Throwable e) {
+              System.out.println("我是一个 @AtferThrowing 通知");
+          } finally {
+              System.out.println("我是一个 @After 通知");
+          }
       }
   }
 #+END_SRC
