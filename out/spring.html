@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-21 周二 14:32 -->
+<!-- 2017-02-22 周三 10:42 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -38,6 +38,8 @@
 <li><a href="#sec-2-6">2.6. Exception(异常处理)</a></li>
 <li><a href="#sec-2-7">2.7. Interceptor(拦截器)</a></li>
 <li><a href="#sec-2-8">2.8. MessageSource(国际化，资源文件)</a></li>
+<li><a href="#sec-2-9">2.9. MultipartFile(文件的上传)</a></li>
+<li><a href="#sec-2-10">2.10. 集成 javaMail 发送邮件</a></li>
 </ul>
 </li>
 <li><a href="#sec-3">3. RESTful Style</a></li>
@@ -1481,6 +1483,171 @@ errors.rejectValue("name", "NAME.ERROR")
 </p>
 </div>
 </div>
+
+<div id="outline-container-sec-2-9" class="outline-3">
+<h3 id="sec-2-9"><span class="section-number-3">2.9</span> MultipartFile(文件的上传)</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+SpringMVC 中，文件的上传，是通过 MultipartResolver 实现的。
+所以，如果要实现文件的上传，只要在 spring-mvc.xml 中注册相应的 MultipartResolver 即可。
+</p>
+
+<p>
+MultipartResolver 的实现类有两个：
+</p>
+<ol class="org-ol">
+<li>CommonsMultipartResolver
+</li>
+<li>StandardServletMultipartResolver
+</li>
+</ol>
+
+<p>
+两个的区别：
+</p>
+<ol class="org-ol">
+<li>第一个需要使用 Apache 的 commons-fileupload 等 jar 包支持，但它能在比较旧的 servlet 版本中使用。
+</li>
+<li>第二个不需要第三方 jar 包支持，它使用 servlet 内置的上传功能，但是只能在 Servlet 3 以上的版本使用。
+</li>
+</ol>
+
+<p>
+<b>以第二个为例，使用步骤：</b>
+</p>
+
+<p>
+首先，在 web.xml 中为 DispatcherServlet 配置 Multipart：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">servlet</span>&gt;
+  &lt;<span style="color: #0000ff;">servlet-name</span>&gt;mvc&lt;/<span style="color: #0000ff;">servlet-name</span>&gt;
+  &lt;<span style="color: #0000ff;">servlet-class</span>&gt;org.springframework.web.servlet.DispatcherServlet&lt;/<span style="color: #0000ff;">servlet-class</span>&gt;
+  &lt;<span style="color: #0000ff;">init-param</span>&gt;
+    &lt;<span style="color: #0000ff;">param-name</span>&gt;contextConfigLocation&lt;/<span style="color: #0000ff;">param-name</span>&gt;
+    &lt;<span style="color: #0000ff;">param-value</span>&gt;classpath:spring-mvc.xml&lt;/<span style="color: #0000ff;">param-value</span>&gt;
+  &lt;/<span style="color: #0000ff;">init-param</span>&gt;
+  &lt;<span style="color: #0000ff;">load-on-startup</span>&gt;1&lt;/<span style="color: #0000ff;">load-on-startup</span>&gt;
+
+  &lt;<span style="color: #0000ff;">multipart-config</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19978;&#20256;&#25991;&#20214;&#30340;&#22823;&#23567;&#38480;&#21046;&#65292;&#27604;&#22914;&#19979;&#38754;&#34920;&#31034; 5 M </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">max-file-size</span>&gt;5242880&lt;/<span style="color: #0000ff;">max-file-size</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19968;&#27425;&#34920;&#21333;&#25552;&#20132;&#20013;&#25991;&#20214;&#30340;&#22823;&#23567;&#38480;&#21046;&#65292;&#24517;&#39035;&#19979;&#38754;&#20195;&#34920; 10 M </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">max-request-size</span>&gt;10485760&lt;/<span style="color: #0000ff;">max-request-size</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22810;&#22823;&#30340;&#25991;&#20214;&#20250;&#34987;&#33258;&#21160;&#20445;&#23384;&#21040;&#30828;&#30424;&#19978;&#12290;0 &#20195;&#34920;&#25152;&#26377; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">file-size-threshold</span>&gt;0&lt;/<span style="color: #0000ff;">file-size-threshold</span>&gt;
+  &lt;/<span style="color: #0000ff;">multipart-config</span>&gt;
+
+&lt;/<span style="color: #0000ff;">servlet</span>&gt;
+</pre>
+</div>
+
+
+<p>
+其次，在 spring-mvc.xml 中注册 MultipartResolver:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">multipartResolver</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.web.multipart.support.StandardServletMultipartResolver</span><span style="color: #8b2252;">"</span> /&gt;
+</pre>
+</div>
+
+
+<p>
+然后，就可以使用了，比如，表单：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-html">&lt;<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">form</span> <span style="color: #a0522d;">action</span>=<span style="color: #8b2252;">"/file/upload"</span> <span style="color: #a0522d;">enctype</span>=<span style="color: #8b2252;">"multipart/form-data"</span>&gt;
+  &lt;<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"file"</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"mfile"</span> /&gt;
+  &lt;<span style="color: #0000ff;">input</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"submit"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"&#19978;&#20256;&#22270;&#29255;"</span> /&gt;
+&lt;/<span style="color: #483d8b;">form</span>:<span style="color: #0000ff;">form</span>&gt;
+</pre>
+</div>
+
+
+<p>
+于是，就可以在 Controller 里这样处理了：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@PostMapping</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"/upload"</span><span style="color: #707183;">)</span>
+<span style="color: #a020f0;">public</span> <span style="color: #228b22;">String</span> <span style="color: #0000ff;">upload</span><span style="color: #707183;">(</span><span style="color: #228b22;">MultipartFile</span> <span style="color: #a0522d;">mfile</span><span style="color: #707183;">)</span> <span style="color: #a020f0;">throws</span> <span style="color: #228b22;">Exception</span> <span style="color: #707183;">{</span>
+    <span style="color: #228b22;">String</span> <span style="color: #a0522d;">savePath</span> = ...;
+    <span style="color: #a020f0;">if</span><span style="color: #7388d6;">(</span>!mfile.isEmpty<span style="color: #909183;">()</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
+        mfile.transferTo<span style="color: #909183;">(</span><span style="color: #a020f0;">new</span> <span style="color: #228b22;">File</span><span style="color: #709870;">(</span>savePath + mfile.getOriginalFilename<span style="color: #907373;">()</span><span style="color: #709870;">)</span><span style="color: #909183;">)</span>;
+    <span style="color: #7388d6;">}</span>
+    <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"file/index"</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-10" class="outline-3">
+<h3 id="sec-2-10"><span class="section-number-3">2.10</span> 集成 javaMail 发送邮件</h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+来一个在 SpringMVC 中通过 163 发送邮件的示例
+</p>
+
+<p>
+首先，增加 jar 包
+</p>
+<pre class="example">
+compile "org.springframework:spring-context-support:$springVersion"
+compile "javax.mail:mail:1.4.7"
+</pre>
+
+<p>
+其次，在 spring.xml 中增加 mailSender 的配置：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">mailSender</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.mail.javamail.JavaMailSenderImpl</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">host</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">smtp.163.com</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">username</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">name</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">pass</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">javaMailProperties</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">props</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">mail.transport.protocol</span><span style="color: #8b2252;">"</span>&gt;smtp&lt;/<span style="color: #0000ff;">prop</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">mail.smtp.auth</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">prop</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">mail.smtp.starttls.enable</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">prop</span>&gt;
+      &lt;<span style="color: #0000ff;">prop</span> <span style="color: #a0522d;">key</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">mail.debug</span><span style="color: #8b2252;">"</span>&gt;true&lt;/<span style="color: #0000ff;">prop</span>&gt;
+    &lt;/<span style="color: #0000ff;">props</span>&gt;
+  &lt;/<span style="color: #0000ff;">property</span>&gt;
+&lt;/<span style="color: #0000ff;">bean</span>&gt;
+</pre>
+</div>
+
+
+<p>
+最后，在代码中使用:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Service</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">UserService</span> <span style="color: #707183;">{</span>
+
+    <span style="color: #008b8b;">@Resource</span> <span style="color: #a020f0;">private</span> <span style="color: #228b22;">MailSender</span> <span style="color: #a0522d;">mailSender</span>;
+
+    <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sendMailDemo</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
+        <span style="color: #228b22;">SimpleMailMessage</span> <span style="color: #a0522d;">mailMsg</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">SimpleMailMessage</span><span style="color: #909183;">()</span>;
+        mailMsg.setFrom<span style="color: #909183;">(</span><span style="color: #8b2252;">"xxx@163.com"</span><span style="color: #909183;">)</span>;   <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21457;&#20214;&#20154;</span>
+        mailMsg.setTo<span style="color: #909183;">(</span><span style="color: #8b2252;">"12345@qq.com"</span><span style="color: #909183;">)</span>;    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25910;&#20214;&#20154;</span>
+        mailMsg.setSubject<span style="color: #909183;">(</span><span style="color: #8b2252;">"test"</span><span style="color: #909183;">)</span>;       <span style="color: #b22222;">// </span><span style="color: #b22222;">&#37038;&#20214;&#26631;&#39064;</span>
+        mailMsg.setText<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#27979;&#35797;&#37038;&#20214;"</span><span style="color: #909183;">)</span>;       <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21457;&#36865;&#20869;&#23481;</span>
+
+        mailSender.send<span style="color: #909183;">(</span>mailMsg<span style="color: #909183;">)</span>;         <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21457;&#36865;</span>
+    <span style="color: #7388d6;">}</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</div>
 </section>
 
 <section id="outline-container-sec-3" class="outline-2">
@@ -1653,7 +1820,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-21 周二 14:32</p>
+<p class="date">Created: 2017-02-22 周三 10:42</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
