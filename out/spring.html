@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Spring</title>
-<!-- 2017-02-22 周三 10:42 -->
+<!-- 2017-02-23 周四 15:15 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -257,16 +257,16 @@ compile "cglib:cglib:3.2.4"
 
         <span style="color: #228b22;">Object</span> <span style="color: #a0522d;">result</span> = <span style="color: #008b8b;">null</span>;
 
-        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @Before &#36890;&#30693;"</span><span style="color: #909183;">)</span>;
+        System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#36825;&#20010;&#20301;&#32622;&#26159; @Before &#36890;&#30693;"</span><span style="color: #909183;">)</span>;
 
         <span style="color: #a020f0;">try</span> <span style="color: #909183;">{</span>
             <span style="color: #b22222;">// </span><span style="color: #b22222;">&#35843;&#29992;&#21407;&#26041;&#27861;</span>
             result = proxy.invokeSuper<span style="color: #709870;">(</span>obj, args<span style="color: #709870;">)</span>;
-            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @AfterReturning &#36890;&#30693;"</span><span style="color: #709870;">)</span>;
+            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#36825;&#20010;&#20301;&#32622;&#26159; @AfterReturning &#36890;&#30693;&#65292;&#36825;&#37324;&#21487;&#20197;&#24341;&#29992;&#21040;&#21407;&#20989;&#25968;&#30340;&#36820;&#22238;&#20540;"</span><span style="color: #709870;">)</span>;
             <span style="color: #a020f0;">return</span> result;
         <span style="color: #909183;">}</span>
         <span style="color: #a020f0;">catch</span> <span style="color: #909183;">(</span><span style="color: #228b22;">Throwable</span> <span style="color: #a0522d;">e</span><span style="color: #909183;">)</span> <span style="color: #909183;">{</span>
-            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @AtferThrowing &#36890;&#30693;"</span><span style="color: #709870;">)</span>;
+            System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#36825;&#20010;&#20301;&#32622;&#26159; @AtferThrowing &#36890;&#30693;&#65292;&#36825;&#37324;&#21487;&#20197;&#24341;&#29992;&#21040;&#24322;&#24120;&#21464;&#37327;"</span><span style="color: #709870;">)</span>;
         <span style="color: #909183;">}</span> <span style="color: #a020f0;">finally</span> <span style="color: #909183;">{</span>
             System.out.println<span style="color: #709870;">(</span><span style="color: #8b2252;">"&#25105;&#26159;&#19968;&#20010; @After &#36890;&#30693;"</span><span style="color: #709870;">)</span>;
         <span style="color: #909183;">}</span>
@@ -321,6 +321,38 @@ compile "cglib:cglib:3.2.4"
 <h3 id="sec-1-3"><span class="section-number-3">1.3</span> AOP</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
+AspectJ 是一个支持面向切面编程的包。除了 AspectJ，还有 Jboss AOP 和 Spring AOP。
+</p>
+
+<p>
+Spring AOP 的实现不够好，所以在 spring 中一般开启 AspectJ 的支持。
+</p>
+
+<p>
+Spring AOP 采用动态织入，AspectJ 采用静态织入。
+</p>
+
+
+<p>
+<b>几个相关概念：</b>
+</p>
+<ol class="org-ol">
+<li>Advice: 要向目标位置加入什么
+</li>
+<li>Pointcut: 要加到哪些位置
+</li>
+<li>Aspect: 一系列 Advice + Pointcut 的集合。
+</li>
+<li>Joinpoint: Pointcut 中的具体某个位置
+</li>
+</ol>
+
+
+<p>
+<b>在 Spring 中使用 AspectJ:</b>
+</p>
+
+<p>
 第一步，加入jar包：
 </p>
 <pre class="example">
@@ -342,14 +374,20 @@ compile "org.aspectj:aspectjweaver:1.8.9
 <pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#20808;&#23450;&#20041;&#19968;&#20010;&#26085;&#24535;&#30456;&#20851;&#30340;&#20999;&#38754;</span>
 <span style="color: #008b8b;">@Component</span>
 <span style="color: #008b8b;">@Aspect</span>
-<span style="color: #008b8b;">@Order</span><span style="color: #707183;">(</span>2<span style="color: #707183;">)</span>
+<span style="color: #008b8b;">@Order</span><span style="color: #707183;">(</span>2<span style="color: #707183;">)</span>  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#23450;&#20041;&#20102;&#22810;&#20010;&#20999;&#38754;&#65292;&#30001; order &#26469;&#20915;&#23450;&#20808;&#21518;&#25191;&#34892;&#39034;&#24207;&#65292;&#36234;&#23567;&#36234;&#38752;&#21069;</span>
 <span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">LogAspect</span> <span style="color: #707183;">{</span>
 
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#23450;&#20041; Pointcut&#65292;&#26041;&#20415;&#22797;&#29992;</span>
+    <span style="color: #008b8b;">@Pointcut</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"execution(* edu.nf.emptyproject.service.UserService(..))"</span><span style="color: #7388d6;">)</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">log1</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{}</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#23450;&#20041;&#21069;&#32622;&#36890;&#30693;</span>
     <span style="color: #008b8b;">@Before</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"execution(* edu.nf.emptyproject.service.UserService.*(..))"</span><span style="color: #7388d6;">)</span>
     <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sayHello</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
         System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#12304;AOP&#12305; hello..."</span><span style="color: #909183;">)</span>;
     <span style="color: #7388d6;">}</span>
 
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#23450;&#20041;&#21518;&#32622;&#36890;&#30693;</span>
     <span style="color: #008b8b;">@After</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"execution(* edu.nf.emptyproject.service.UserService.find*(..))"</span><span style="color: #7388d6;">)</span>
     <span style="color: #a020f0;">public</span> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">sayBye</span><span style="color: #7388d6;">()</span> <span style="color: #7388d6;">{</span>
         System.out.println<span style="color: #909183;">(</span><span style="color: #8b2252;">"&#12304;AOP&#12305; Goodbye..."</span><span style="color: #909183;">)</span>;
@@ -375,6 +413,21 @@ compile "org.aspectj:aspectjweaver:1.8.9
 </pre>
 </div>
 
+
+<p>
+最后，来一发例子：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #0000ff;">main</span> <span style="color: #707183;">()</span> <span style="color: #707183;">{</span>
+    <span style="color: #228b22;">ApplicationContext</span> <span style="color: #a0522d;">context</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">ClassPathXmlApplicationContext</span><span style="color: #7388d6;">(</span><span style="color: #8b2252;">"spring.xml"</span><span style="color: #7388d6;">)</span>;
+    <span style="color: #228b22;">UserService</span> <span style="color: #a0522d;">userService</span> = context.getBean<span style="color: #7388d6;">(</span>UserService.<span style="color: #a020f0;">class</span><span style="color: #7388d6;">)</span>;
+    userService.sayHello<span style="color: #7388d6;">()</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+
 <p>
 上面是用注解的形式实现的切面。当然可以用 xml 的方式同样做到：
 </p>
@@ -390,13 +443,149 @@ compile "org.aspectj:aspectjweaver:1.8.9
 &lt;/<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">config</span>&gt;
 </pre>
 </div>
+
+<p>
+Ok.
+</p>
+
+
+<p>
+<b>注：AspectJ 表达式函数:</b><br >
+</p>
+<table>
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="left">函数</td>
+<td class="left">说明</td>
+</tr>
+
+<tr>
+<td class="left">excution()</td>
+<td class="left">excution(* com.*.*(..)), 表示匹配 com 包下所有方法</td>
+</tr>
+
+<tr>
+<td class="left">args()</td>
+<td class="left">arg(int, int), 表示匹配所有参数为int, int的方法</td>
+</tr>
+
+<tr>
+<td class="left">within()</td>
+<td class="left">within(sss.*), 匹配sss包下所有的类下的所有方法</td>
+</tr>
+
+<tr>
+<td class="left">target()</td>
+<td class="left">target(sss.Test), 匹配所有的类及其子类</td>
+</tr>
+
+<tr>
+<td class="left">this()</td>
+<td class="left">this(sss.Test), 当前 AOP 对象实现了Test接口的所有方法</td>
+</tr>
+
+<tr>
+<td class="left">@annotation()</td>
+<td class="left">@annotation(com.Test), 表示匹配所有标注了@Test的方法</td>
+</tr>
+
+<tr>
+<td class="left">@args()</td>
+<td class="left">@arg(Test), 匹配参数注解为Test的方法</td>
+</tr>
+
+<tr>
+<td class="left">@within()</td>
+<td class="left">@within(sss.Test), 匹配所有使用Test注解的类的所有方法</td>
+</tr>
+
+<tr>
+<td class="left">@target</td>
+<td class="left">@target(sss.Test), 所有当前目标对象使用Test注解的类的所有方法</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
+
 <div id="outline-container-sec-1-4" class="outline-3">
 <h3 id="sec-1-4"><span class="section-number-3">1.4</span> 声明式事务</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+事务配置分为三个部分： DataSource + TransactionManager + Proxy。
+</p>
+
+<p>
+首先，在 spring.xml 中配置事务管理器(TransactionManager)：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">transactionManager</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.orm.hibernate5.HibernateTransactionManager</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sessionFactory</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sessionFactory</span><span style="color: #8b2252;">"</span>/&gt;
+&lt;/<span style="color: #0000ff;">bean</span>&gt;
+</pre>
+</div>
+
+
+<p>
+然后，通过 xml 或 annotation 的方式配置事务：
+</p>
+</div>
+
+<div id="outline-container-sec-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> 在 xml 中，用 aop 的方式配置:</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<div class="org-src-container">
+
+<pre class="src src-xml"><span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#20351;&#29992;&#20107;&#21153;&#31649;&#29702;&#22120;&#65292;&#29983;&#25104;&#20107;&#21153;&#30340; advisor </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">advice</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">txAdvice</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">transaction-manager</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">transactionManager</span><span style="color: #8b2252;">"</span>&gt;
+  &lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">attributes</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#21487;&#20197;&#37197;&#32622;&#20107;&#21153;&#30340;&#23646;&#24615; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">method</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">get*</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">read-only</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span> /&gt;
+    &lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">method</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">list*</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">read-only</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;/<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">attributes</span>&gt;
+&lt;/<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">advice</span>&gt;
+
+<span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#20026;&#25351;&#23450;&#31867;&#30340;&#25351;&#23450;&#26041;&#27861;&#65292;&#32455;&#20837;&#20107;&#21153;&#20195;&#30721; </span><span style="color: #b22222;">--&gt;</span>
+&lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">config</span>&gt;
+  &lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">pointcut</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">services</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">expression</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">execution(* fish.miniblog.service.*.*(..))</span><span style="color: #8b2252;">"</span> /&gt;
+  &lt;<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">advisor</span> <span style="color: #a0522d;">pointcut-ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">services</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">advice-ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">txAdvice</span><span style="color: #8b2252;">"</span> /&gt;
+&lt;/<span style="color: #483d8b;">aop</span>:<span style="color: #0000ff;">config</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> 使用 @Transactional 注解的方法:</h4>
+<div class="outline-text-4" id="text-1-4-2">
+<p>
+首先，在 spring.xml 中启用事务注解:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">annotation-driven</span> <span style="color: #a0522d;">transaction-manager</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">transactionManager</span><span style="color: #8b2252;">"</span> /&gt;
+</pre>
+</div>
+
+<p>
+然后，就可以肆无忌惮使用 @Transactional 注解了。
+</p>
+</div>
+</div>
 </div>
 </section>
+
 
 <section id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2"><span class="section-number-2">2</span> Spring MVC</h2>
@@ -1820,7 +2009,7 @@ localhost/posts/223
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-22 周三 10:42</p>
+<p class="date">Created: 2017-02-23 周四 15:15</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

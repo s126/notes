@@ -153,16 +153,16 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
 
           Object result = null;
 
-          System.out.println("我是一个 @Before 通知");
+          System.out.println("这个位置是 @Before 通知");
 
           try {
               // 调用原方法
               result = proxy.invokeSuper(obj, args);
-              System.out.println("我是一个 @AfterReturning 通知");
+              System.out.println("这个位置是 @AfterReturning 通知，这里可以引用到原函数的返回值");
               return result;
           }
           catch (Throwable e) {
-              System.out.println("我是一个 @AtferThrowing 通知");
+              System.out.println("这个位置是 @AtferThrowing 通知，这里可以引用到异常变量");
           } finally {
               System.out.println("我是一个 @After 通知");
           }
@@ -208,6 +208,22 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
 
 ** AOP
 
+AspectJ 是一个支持面向切面编程的包。除了 AspectJ，还有 Jboss AOP 和 Spring AOP。
+
+Spring AOP 的实现不够好，所以在 spring 中一般开启 AspectJ 的支持。
+
+Spring AOP 采用动态织入，AspectJ 采用静态织入。
+
+
+*几个相关概念：*
+1. Advice: 要向目标位置加入什么
+2. Pointcut: 要加到哪些位置
+3. Aspect: 一系列 Advice + Pointcut 的集合。
+4. Joinpoint: Pointcut 中的具体某个位置
+
+
+*在 Spring 中使用 AspectJ:*
+
 第一步，加入jar包：
 : compile "org.aspectj:aspectjweaver:1.8.9
 
@@ -219,14 +235,20 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
   // 先定义一个日志相关的切面
   @Component
   @Aspect
-  @Order(2)
+  @Order(2)  // 如果定义了多个切面，由 order 来决定先后执行顺序，越小越靠前
   public class LogAspect {
 
+      // 定义 Pointcut，方便复用
+      @Pointcut("execution(* edu.nf.emptyproject.service.UserService(..))")
+      private void log1() {}
+
+      // 定义前置通知
       @Before("execution(* edu.nf.emptyproject.service.UserService.*(..))")
       public void sayHello() {
           System.out.println("【AOP】 hello...");
       }
 
+      // 定义后置通知
       @After("execution(* edu.nf.emptyproject.service.UserService.find*(..))")
       public void sayBye() {
           System.out.println("【AOP】 Goodbye...");
@@ -251,6 +273,17 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
   }
 #+END_SRC
 
+
+最后，来一发例子：
+#+BEGIN_SRC java
+  main () {
+      ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+      UserService userService = context.getBean(UserService.class);
+      userService.sayHello();
+  }
+#+END_SRC
+
+
 上面是用注解的形式实现的切面。当然可以用 xml 的方式同样做到：
 #+BEGIN_SRC xml
   <bean id="logAspect" class="edu.xxx.LogAspect" />
@@ -263,7 +296,65 @@ CGLib 动态代理使用的是直接修改 Class 字节码的方式实现，它�
   </aop:config>
 #+END_SRC
 
+Ok.
+
+
+*注：AspectJ 表达式函数:*\\
+| 函数          | 说明                                                          |
+| excution()    | excution(* com.*.*(..)), 表示匹配 com 包下所有方法            |
+| args()        | arg(int, int), 表示匹配所有参数为int, int的方法               |
+| within()      | within(sss.*), 匹配sss包下所有的类下的所有方法                |
+| target()      | target(sss.Test), 匹配所有的类及其子类                        |
+| this()        | this(sss.Test), 当前 AOP 对象实现了Test接口的所有方法         |
+| @annotation() | @annotation(com.Test), 表示匹配所有标注了@Test的方法          |
+| @args()       | @arg(Test), 匹配参数注解为Test的方法                          |
+| @within()     | @within(sss.Test), 匹配所有使用Test注解的类的所有方法         |
+| @target       | @target(sss.Test), 所有当前目标对象使用Test注解的类的所有方法 |
+
+
 ** 声明式事务
+
+事务配置分为三个部分： DataSource + TransactionManager + Proxy。
+
+首先，在 spring.xml 中配置事务管理器(TransactionManager)：
+
+#+BEGIN_SRC xml
+  <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+#+END_SRC
+
+
+然后，通过 xml 或 annotation 的方式配置事务：
+
+*** 在 xml 中，用 aop 的方式配置:
+#+BEGIN_SRC xml
+  <!-- 使用事务管理器，生成事务的 advisor -->
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <!-- 可以配置事务的属性 -->
+      <tx:method name="get*" read-only="true" />
+      <tx:method name="list*" read-only="true" />
+    </tx:attributes>
+  </tx:advice>
+
+  <!-- 为指定类的指定方法，织入事务代码 -->
+  <aop:config>
+    <aop:pointcut id="services" expression="execution(* fish.miniblog.service.*.*(..))" />
+    <aop:advisor pointcut-ref="services" advice-ref="txAdvice" />
+  </aop:config>
+#+END_SRC
+
+
+*** 使用 @Transactional 注解的方法:
+
+首先，在 spring.xml 中启用事务注解:
+#+BEGIN_SRC xml
+  <tx:annotation-driven transaction-manager="transactionManager" />
+#+END_SRC
+
+然后，就可以肆无忌惮使用 @Transactional 注解了。
+
 
 * Spring MVC
 ** 创建 MVC 项目基本步骤
