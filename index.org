@@ -2,7 +2,7 @@
 
    + [[file:hibernate.org][Hibernate]]
    + [[file:java.org][Java 基础]]
-   + [[file:oracle.org][Oracle11g]]
+   + [[file:oracle.org][Oracle Database]]
    + [[file:spring.org][Spring]]
    + [[file:struts.org][struts]]
    + [[file:kaoshi.org][备考]]

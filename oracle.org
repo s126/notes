@@ -1,10 +1,9 @@
-#+TITLE: Oracle11g
+#+TITLE: Oracle Database
 
 * Oracle 的体系结构
 数据库是一个以某种有组织的方式存储的数据集合。
 它本质上是用计算机存储记录的系统，是位于用户和系统之间的一层管理软件。
 Oracle 数据库是目前最流行、最强大的面向对象的关系型数据库(ORDBMS)。
-
 
 Oracle 是基于请求响应的方式，分为服务端和客户端。
 
@@ -175,7 +174,6 @@ Toad / PLSQL Developer 等
 * 用户与权限
 ** 用户
 用户是用于资源控制和权限管理的一个概念
-
 
 开始新的项目时，保持良好的习惯： 
 为项目创建新的用户，指定新的表空间。
@@ -362,20 +360,7 @@ revoke alter on scott from vip;
 *** 特殊的 PUBLIC 角色
 公用角色，默认是授予每个用户的。
 
-
-* TODO 阶段性实践
-计算大家完成以下工作所消耗的时间：
-1. 连接上指定服务器的指定数据库。
-2. 为新的用户创建所需要的默认表空间。
-3. 为新的用户创建所需要的资源文件。
-4. 创建用户，指定表空间、资源文件，设置配额。
-5. 为所创建的用户授予特定的系统权限，如创建会话、创建表、更新数据等。
-6. 为 scott 用户授予相应的对象权限，让 scott 用户能够操纵我们所创建用户下的一些对象。
-7. 进行一系列的简单操作。
-
-
-
-* SQL 语句
+* SQL语句
 Structured Query Language，结构性查询语言。
 
 ** SQL 的历史及概念
@@ -541,7 +526,7 @@ rename sss to sss_new;
 2. 删除外键引用表上存在的外键约束
 3. 在删除的过程中加上关键字 cascade constraints.
 
-*** DML（Data Definition Language）
+*** DML（Data Manipulation Language）
 概念，增删改查，又叫 CRUD(Create/Read/Update/Delete)
 
 **** 查询(select)
@@ -811,7 +796,6 @@ nvarchar2中，长度表示的是字符个数。
 **** long 类型
 用来存储大容量数据的，最大是 2GB。已弃用，建议使用 LOB 字段代替。
 
-
 *** 数字类型
 **** NUMBER 类型
 定义语法为：
@@ -833,7 +817,7 @@ nvarchar2中，长度表示的是字符个数。
 : insert into demo values (7.101);  -- 实际上插入的是 7.10
 两个参数，第一个代表精度，第二个代表小数位数。
 
-还有两个子类型 int/float
+**** INT/FLOAT 子类型
 : create table s9 (c int);
 : insert into s9 values (22.22);
 
@@ -865,7 +849,6 @@ insert into s1 values (to_char(sysdate, 'yyyy-mm-dd'));        -- to_char 是把
 #+END_SRC
 
 **** TIMESTAMP 数据类型
-
 #+BEGIN_SRC sql
 
 -- 返回的是 timestamp with timezone 类型，包含年月日时分秒微妙毫秒，上午下午，时区
@@ -874,7 +857,6 @@ insert into s1 values (to_char(sysdate, 'yyyy-mm-dd'));        -- to_char 是把
 select systimestamp from dual;;
 
 #+END_SRC
-
 
 *** RAW 类型
 主要用来处理二进制的。
@@ -1026,7 +1008,7 @@ select * from dept;
 
 
 
-** 函数
+** 内置函数
 *** 数值函数
 - abs 求绝对值
   : select abs(-22) from dual;
@@ -1138,62 +1120,42 @@ select * from dept;
 
 
 
-** 自定义函数
-语法:
+* 锁 (LOCK)
+锁是为了保证数据的并行性，一致性，完整性
+
+** 行级锁，事务锁
+可以通过 update/insert/delete/select for update 对指定数据加上行级锁。
+
+大致的原理如下：
+#+BEGIN_QUOTE
+Oracle 的每行数据上，都存在一个标志位表示每行数据是否被锁定。每个表也有标志位表示表的锁定情况。
+: update emp set sal = sal + 1000 where empno = 7788;
+Oracle 对语句进行解析后，找到7788记录的数据块，并找到一个可用的undo块，将sal列的原数据放入undo块，
+然后在数据头部设置相应SCN (System Change Number) 号、事务槽信息、锁定标志等，表明行被锁定。
+若有其他人也要修改这一行，其过程是一样的，但在设置锁定标志的时候，如果发现锁定已经存在，就会等待，直到之前的锁消失。
+#+END_QUOTE
+
+下面句子中，nowait表示，如果发现数据锁定了，不等待，而是立刻返回错误。
+: select for update nowait;
+
+** 乐观锁、悲观锁
+自己找一下相关资料
+
+
+** 被锁定的对象，解锁的方法
+只能杀掉锁定对象的 session，查看锁定对象的语句：
 #+BEGIN_SRC sql
-CREATE [or REPLACE] FUNCTION function_name [(参数 参数类型 := 默认值 [, 其他参数])] RETURN 参数类型
-AS|IS
-  定义的变量
-BEGIN
-  逻辑
-  return xxx;
-END;
+SELECT c.sid, c.serial#, a.object_id, a.session_id, b.object_name, c.*
+  FROM v$locked_object a, dba_objects b, v$session c
+ WHERE a.object_id = b.object_id
+   AND a.SESSION_ID = c.sid(+);
+#+END_SRC
+杀掉 Session 的语句:
+#+BEGIN_SRC sql
+alter system kill session 'sid, serial#';
+alter system kill session '2,33';
 #+END_SRC
 
-示例:
-#+BEGIN_SRC sql
--- 随机抽取 1-n 之间的一个整数
-create or replace function hehe (n number := 10) return number
-is
-  s number;
-begin
-  s = round(dbms_random.value(0.5, n + 0.5));
-  return s;
-end hehe;
-/
-
-
--- 你要还要多久毕业？示例。
-create or replace function howsoon (d date := to_date('20170101', 'yyyymmdd')) return number
-is
-begin
-  return to_number(d - sysdate);
-end;
-/
-
-
--- 函数的参数可以带三种类型， in/out/in out
--- 如果参数没有注明in或out等，那么默认就是 in 类型
--- in 类型的参数，是传入值，所以，必须在传入的时候，赋予一个具体的值。
--- out 类型的参数，是传出值，所以，在传入的时候，不必赋值，但是，在函数体内，必须要给与一个值。
-create or replace function mtimes (a number, res out number) return number
-as
-begin
-  res := a*a*a;  -- 必须要有这样的赋值操作，才能使 res 得到一个值，这样才有意义。
-  return a;  
-end;
-
--- 上述函数的调用方式
-declare
-  abc number;
-begin
-  dbms_output.put_line('我们传入的参数是:' || mtimes(82, abc));
-  dbms_output.put_line('它的的三次方是:' || abc);
-end;
-
-
-
-#+END_SRC
 
 * 同义词 (Synonymous)
 #+BEGIN_SRC sql
@@ -1704,6 +1666,64 @@ drop materialized view mv_emp;
    select * from plan_table;         -- plan_table 保存的是上述解释计划的结果
    select * from table(dbms_xplan.display);  -- 是对上面表里面数据的更直观显示
    #+END_SRC
+
+
+* 函数 (Function)
+语法:
+#+BEGIN_SRC sql
+CREATE [or REPLACE] FUNCTION function_name [(参数 参数类型 := 默认值 [, 其他参数])] RETURN 参数类型
+AS|IS
+  定义的变量
+BEGIN
+  逻辑
+  return xxx;
+END;
+#+END_SRC
+
+示例:
+#+BEGIN_SRC sql
+-- 随机抽取 1-n 之间的一个整数
+create or replace function hehe (n number := 10) return number
+is
+  s number;
+begin
+  s = round(dbms_random.value(0.5, n + 0.5));
+  return s;
+end hehe;
+/
+
+
+-- 你要还要多久毕业？示例。
+create or replace function howsoon (d date := to_date('20170101', 'yyyymmdd')) return number
+is
+begin
+  return to_number(d - sysdate);
+end;
+/
+
+
+-- 函数的参数可以带三种类型， in/out/in out
+-- 如果参数没有注明in或out等，那么默认就是 in 类型
+-- in 类型的参数，是传入值，所以，必须在传入的时候，赋予一个具体的值。
+-- out 类型的参数，是传出值，所以，在传入的时候，不必赋值，但是，在函数体内，必须要给与一个值。
+create or replace function mtimes (a number, res out number) return number
+as
+begin
+  res := a*a*a;  -- 必须要有这样的赋值操作，才能使 res 得到一个值，这样才有意义。
+  return a;  
+end;
+
+-- 上述函数的调用方式
+declare
+  abc number;
+begin
+  dbms_output.put_line('我们传入的参数是:' || mtimes(82, abc));
+  dbms_output.put_line('它的的三次方是:' || abc);
+end;
+
+
+
+#+END_SRC
 
 
 * PL/SQL
@@ -2500,42 +2520,6 @@ end;
 
 #+END_SRC
 
-* LOCK
-锁是为了保证数据的并行性，一致性，完整性
-
-** 行级锁，事务锁
-可以通过 update/insert/delete/select for update 对指定数据加上行级锁。
-
-大致的原理如下：
-#+BEGIN_QUOTE
-Oracle 的每行数据上，都存在一个标志位表示每行数据是否被锁定。每个表也有标志位表示表的锁定情况。
-: update emp set sal = sal + 1000 where empno = 7788;
-Oracle 对语句进行解析后，找到7788记录的数据块，并找到一个可用的undo块，将sal列的原数据放入undo块，
-然后在数据头部设置相应SCN (System Change Number) 号、事务槽信息、锁定标志等，表明行被锁定。
-若有其他人也要修改这一行，其过程是一样的，但在设置锁定标志的时候，如果发现锁定已经存在，就会等待，直到之前的锁消失。
-#+END_QUOTE
-
-下面句子中，nowait表示，如果发现数据锁定了，不等待，而是立刻返回错误。
-: select for update nowait;
-
-** 乐观锁、悲观锁
-自己找一下相关资料
-
-
-** 被锁定的对象，解锁的方法
-只能杀掉锁定对象的 session，查看锁定对象的语句：
-#+BEGIN_SRC sql
-SELECT c.sid, c.serial#, a.object_id, a.session_id, b.object_name, c.*
-  FROM v$locked_object a, dba_objects b, v$session c
- WHERE a.object_id = b.object_id
-   AND a.SESSION_ID = c.sid(+);
-#+END_SRC
-杀掉 Session 的语句:
-#+BEGIN_SRC sql
-alter system kill session 'sid, serial#';
-alter system kill session '2,33';
-#+END_SRC
-
 * 导入导出
 这里只是简单栗子，更多选项请查阅资料
 #+BEGIN_SRC sh
@@ -2573,66 +2557,7 @@ begin
 end;
 select row_number over (order by )
 
-
-
-
-
-
 #+END_SRC
 
-
-* 作业相关
-#+BEGIN_SRC sql
--- 简单的过程语句。用来在 t1 表中插入 100000 条数据。
-create table t1 (id number, name varchar2(20));
-
-begin
-  for i in 1..100000 loop
-    insert into t1 values (i, 'zhouqiang');
-    commit;
-  end loop;
-
-end;
-/
-#+END_SRC
-
-列出当月所有的星期五.
-1. 需要列出当月所有的日期。
-
-   需要用到的知识点：
-   1) 本月第一天： trunc
-   2) 本月最后一天： last_day
-   3) 计算本月的天数： 天数 = 月末 - 月初 + 1
-   3) 如何获取连续的时间
-
-      a. connect by
-         : select level from dual connect by level <= 本月的天数;
-      b. rownum
-         : select rownum from dba_objects where rownum <= 本月的天数;
-
-
-* 小测验
-** 下载考试题目的方法
-1. 打开 git bash
-2. 输入以下命令，进行下载：
-   : git clone https://github.com/s126/exam.git
-
-** 组长提交答案的方法
-1. 在下载的项目文件夹 exam/20160930 下面，创建自己组号为名称的文件夹。
-   如，第九组，创建文件夹 '9'
-2. 把所有组员的答案(名字.sql文件)，放在上步创建的文件夹下。
-3. 在 git bash 中，首先切换到 exam 文件夹
-   : cd /e/exam/
-4. 用以下命令保存结果到本地版本库：
-   : git add .
-   : git commit -m "这是第九组的答案"
-   如果上面两步没问题，那么用下面命令提交到 github
-   : git push
-
-** 备忘
-- 不要在 system/sys 用户之下创建数据，进行业务。要细心，在进行ddl等语句之前，先要检查当前用户，不要搞错。
-- 一定要认真，仔细，用心。不要犯低级错误，因为越低级的错误，越坑人，杀伤力往往越大。
-- 表名、视图名字、索引名字等，要尽量符合一定规范。好读、好记、有意义。
-- 在项目开始前，根据需求，尽量把数据库的表建立完善。加上该加的主键，外键，非空约束，字段长度等。即，设计要合理，防止后面出现数据混乱或者频繁修改。
 * pages
 http://wenku.baidu.com/view/e3fcb582ec3a87c24028c4fc.html
