@@ -117,3 +117,32 @@ SimpleDateFormat:
 
 #+END_SRC
 
+* 加密算法简介
+** MD5
+
+示例:
+
+#+BEGIN_SRC java
+  public class DigestUtil {
+
+      /**
+       * MD5 算法。特点，简单易用但相对安全系数低
+       * 产生的是 16 位字节长度的 digest.
+       **/
+      public static String getDigestMD5 (String input) throws Exception {
+          MessageDigest md = MessageDigest.getInstance("MD5");
+          md.update(input.getBytes(StandardCharsets.UTF_8));
+          return String.format("%x", new BigInteger(1, md.digest()));
+      }
+      
+  }
+#+END_SRC
+
+** SHA-1
+20 bytes.
+
+** SHA-256
+32 bytes.
+
+** MessageDigest
+** Salt

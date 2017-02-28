@@ -1,0 +1,9 @@
+#+TITLE: 备考
+
+
+
+* Java 之 Thread
+
+1. Java 中实现一个线程的两种方法(Runnable/Thread)
+2. synchronized/sleep/wait/notify/notifyAll/yield/start/join/interrput 的概念
+
