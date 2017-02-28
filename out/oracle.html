@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Oracle Database</title>
-<!-- 2017-02-28 周二 15:07 -->
+<!-- 2017-02-28 周二 15:18 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -2665,7 +2665,7 @@ build immediate/deferred                               -- 在创建无话视图�
 </li>
 <li>如果基表里的数据发生变化，以一种什么样的策略保持同步
 <pre class="example">
-refresh complete/fast/force/never                      -- 四中方式依次对应： 全量刷新，即删除后重新生成 / 增量刷新 / oracle 自动判断，如果能增量则增量否则全量 / 不同步数据
+refresh complete/fast/force/never                      -- 四种方式依次对应： 全量刷新，即删除后重新生成 / 增量刷新 / oracle 自动判断，如果能增量则增量否则全量 / 不同步数据
 </pre>
 </li>
 <li>如果基表里的数据发生变化，刷新的时机
@@ -3826,11 +3826,11 @@ DBMS_SQL 的方式，请看课本 p260.
 <h3 id="sec-12-9"><span class="section-number-3">12.9</span> 存储过程</h3>
 <div class="outline-text-3" id="text-12-9">
 <p>
-对 PL/SQL 块起个名字，达到复用的结果。
+存储过程就是赋予名字的 PL/SQL 块。它可以实现复用的目的。
 </p>
 
 <p>
-跟函数比，过程没有 return 语句。所以更专注于过程，而非返回结果。
+跟函数类似，但存储过程没有 return 语句，它更专注于执行过程，而非返回结果。
 </p>
 
 <div class="org-src-container">
@@ -3918,7 +3918,7 @@ imp system/orcl <span style="color: #a0522d;">file</span>=D:\aaa.dmp <span style
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-02-28 周二 15:07</p>
+<p class="date">Created: 2017-02-28 周二 15:18</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
