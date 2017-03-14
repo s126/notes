@@ -1,0 +1,62 @@
+#+TITLE: Linux 基础教程
+
+
+* 虚拟机
+** VirtualBox
+** VMWare Station
+安装步骤
+
+* 常用的命令
+** 文档
+--help
+
+man(manual)
+
+info(information)
+
+** ls(list)
+用来列出文件夹的内容
+
+** passwd
+更改用户密码
+
+** su
+切换到超级用户
+
+** sudo
+临时切换到超级用户并做一些操作。操作完成之后返回原先用户的环境。
+
+** gedit
+linux 之下存在的一个简单编辑器，类似于 windows 下面的 notepad
+
+: sudo gedit /etc/apt/sources.list
+
+: su
+: vim /etc/apt/sources.list
+
+** cp(copy)
+: cp /etc/apt/sources.list ~/sources.list
+
+** rm(remove)
+: rm -rf / ttt  # 要不得
+
+
+
+* 程序安装
+** apt-get update
+读取 sources.list 里面的地址，把所有可用软件的目录更新到本地
+
+** apt-cache search
+从本地目录中，查询相关的软件。支持正则表达式。
+
+** apt-get install
+讲软件下载到本地
+
+比如，下载 git
+#+BEGIN_SRC sh
+  apt-get update           # 在每次进行软件下载前，养成随手 update 的习惯
+  apt-cache search "^git"  # 查询 git 软件
+  apt-get install git      # 对 git 进行安装
+
+  git clone https://github.com/s126/notes  # 克隆我们的笔记
+#+END_SRC
