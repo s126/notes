@@ -2,8 +2,8 @@
 
    + [[file:hibernate.org][Hibernate]]
    + [[file:java.org][Java 基础]]
+   + [[file:linux.org][Linux 基础教程]]
    + [[file:oracle.org][Oracle Database]]
    + [[file:spring.org][Spring]]
    + [[file:struts.org][struts]]
-   + [[file:kaoshi.org][备考]]
    + [[file:tools.org][常用工具]]

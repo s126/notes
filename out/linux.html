@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Linux 基础教程</title>
+<!-- 2017-03-15 周三 16:38 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="imfine">
+<link rel="stylesheet" href="nnn.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Linux 基础教程</h1>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 虚拟机</a>
+<ul>
+<li><a href="#sec-1-1">1.1. VirtualBox</a></li>
+<li><a href="#sec-1-2">1.2. VMWare Station</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. 常用的命令</a>
+<ul>
+<li><a href="#sec-2-1">2.1. 文档</a></li>
+<li><a href="#sec-2-2">2.2. ls(list)</a></li>
+<li><a href="#sec-2-3">2.3. passwd</a></li>
+<li><a href="#sec-2-4">2.4. su</a></li>
+<li><a href="#sec-2-5">2.5. sudo</a></li>
+<li><a href="#sec-2-6">2.6. gedit</a></li>
+<li><a href="#sec-2-7">2.7. cp(copy)</a></li>
+<li><a href="#sec-2-8">2.8. rm(remove)</a></li>
+<li><a href="#sec-2-9">2.9. mkdir/rmdir</a></li>
+<li><a href="#sec-2-10">2.10. cat/head/tail/more/less</a></li>
+<li><a href="#sec-2-11">2.11. grep</a></li>
+<li><a href="#sec-2-12">2.12. find</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. 程序安装</a>
+<ul>
+<li><a href="#sec-3-1">3.1. apt-get update</a></li>
+<li><a href="#sec-3-2">3.2. apt-cache search</a></li>
+<li><a href="#sec-3-3">3.3. apt-get install</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. 用户与权限</a>
+<ul>
+<li><a href="#sec-4-1">4.1. chown</a></li>
+<li><a href="#sec-4-2">4.2. chgrp</a></li>
+<li><a href="#sec-4-3">4.3. groups</a></li>
+<li><a href="#sec-4-4">4.4. chmod</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+
+<section id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 虚拟机</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> VirtualBox</h3>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> VMWare Station</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+安装步骤
+</p>
+</div>
+</div>
+</section>
+
+<section id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 常用的命令</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> 文档</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+&#x2013;help
+</p>
+
+<p>
+man(manual)
+</p>
+
+<p>
+info(information)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> ls(list)</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+用来列出文件夹的内容
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> passwd</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+更改用户密码
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> su</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+切换到超级用户
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> sudo</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+临时切换到超级用户并做一些操作。操作完成之后返回原先用户的环境。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> gedit</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+linux 之下存在的一个简单编辑器，类似于 windows 下面的 notepad
+</p>
+
+<pre class="example">
+sudo gedit /etc/apt/sources.list
+</pre>
+
+<pre class="example">
+su
+vim /etc/apt/sources.list
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3">2.7</span> cp(copy)</h3>
+<div class="outline-text-3" id="text-2-7">
+<pre class="example">
+cp /etc/apt/sources.list ~/sources.list
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> rm(remove)</h3>
+<div class="outline-text-3" id="text-2-8">
+<pre class="example">
+rm -rf / ttt  # 要不得
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-9" class="outline-3">
+<h3 id="sec-2-9"><span class="section-number-3">2.9</span> mkdir/rmdir</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+mkdir 是用来创建文件
+</p>
+
+<p>
+rmdir 默认只能删除空的文件夹，如果想要删除文件夹连带下面内容的话，那么用 rm -r dir 来表示。这是为了安全！
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-10" class="outline-3">
+<h3 id="sec-2-10"><span class="section-number-3">2.10</span> cat/head/tail/more/less</h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+查看文件内容
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-11" class="outline-3">
+<h3 id="sec-2-11"><span class="section-number-3">2.11</span> grep</h3>
+<div class="outline-text-3" id="text-2-11">
+<p>
+用来过滤内容，可以使用正则表达式。经常跟 "|" 通道结合使用。例如：
+</p>
+<pre class="example">
+ls /etc | grep "java"
+</pre>
+<p>
+表示的是，显示 /etc 文件夹下名字中包含 "java" 字符串的文件夹
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-12" class="outline-3">
+<h3 id="sec-2-12"><span class="section-number-3">2.12</span> find</h3>
+<div class="outline-text-3" id="text-2-12">
+<p>
+用来查找某个文件夹下面的内容。即搜索。
+</p>
+
+<p>
+比如，我们想查找 /etc 下面所有的 xml 文件，语法为:
+</p>
+<pre class="example">
+find /etc -type f -name "*.xml"
+</pre>
+
+<p>
+其他内容，请自行 man
+</p>
+</div>
+</div>
+</section>
+
+<section id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 程序安装</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> apt-get update</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+读取 sources.list 里面的地址，把所有可用软件的目录更新到本地
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> apt-cache search</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+从本地目录中，查询相关的软件。支持正则表达式。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> apt-get install</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+讲软件下载到本地
+</p>
+
+<p>
+比如，下载 git
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">apt-get update           <span style="color: #b22222;"># </span><span style="color: #b22222;">&#22312;&#27599;&#27425;&#36827;&#34892;&#36719;&#20214;&#19979;&#36733;&#21069;&#65292;&#20859;&#25104;&#38543;&#25163; update &#30340;&#20064;&#24815;</span>
+apt-cache search <span style="color: #8b2252;">"^git"</span>  <span style="color: #b22222;"># </span><span style="color: #b22222;">&#26597;&#35810; git &#36719;&#20214;</span>
+apt-get install git      <span style="color: #b22222;"># </span><span style="color: #b22222;">&#23545; git &#36827;&#34892;&#23433;&#35013;</span>
+
+git clone https://github.com/s126/notes  <span style="color: #b22222;"># </span><span style="color: #b22222;">&#20811;&#38534;&#25105;&#20204;&#30340;&#31508;&#35760;</span>
+</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 用户与权限</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+文件的基本权限有:
+</p>
+<ol class="org-ol">
+<li>Read (读)
+</li>
+<li>Write (写)
+</li>
+<li>eXecute (执行)
+</li>
+</ol>
+
+<p>
+设置权限的层次：
+</p>
+<ol class="org-ol">
+<li>Owner (拥有者)
+</li>
+<li>Group (组)
+</li>
+<li>Others (其他人)
+</li>
+</ol>
+</div>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> chown</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+更改文件的 Owner（所有者）或 Group（组）
+</p>
+
+<pre class="example">
+chown fish ~/abc.txt
+chown :fish_pool ~/abc.txt
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> chgrp</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+更改用户的组
+</p>
+
+<pre class="example">
+chgrp fish_pool ~/abc.txt
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> groups</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+创建一个组：
+</p>
+<pre class="example">
+groupadd fish_pool
+</pre>
+
+<p>
+将用户 fish 和 vip 添加到组里面：
+</p>
+<pre class="example">
+gpasswd -a fish fish_pool
+gpasswd -a vip fish_pool
+</pre>
+
+<p>
+将 vip 移除出去:
+</p>
+<pre class="example">
+gpasswd -d vip fish_pool
+</pre>
+
+<p>
+显示当前用户所属的组（结果是一到多个）：
+</p>
+<pre class="example">
+groups
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> chmod</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+详细更改用户的权限
+</p>
+
+
+<p>
+第一种方式，通过 +/-/= 来添加权限
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="color: #b22222;"># </span><span style="color: #b22222;">&#21019;&#24314;&#19968;&#20010;&#25991;&#20214;</span>
+<span style="color: #483d8b;">echo</span> <span style="color: #8b2252;">"hello, world"</span> &gt;&gt; ~/hello.txt
+
+<span style="color: #b22222;"># </span><span style="color: #b22222;">&#22914;&#26524;&#35753;&#36825;&#20010;&#25991;&#20214;&#25317;&#26377;&#35835;&#30340;&#26435;&#38480;</span>
+chmod +r ~/hello.txt
+chmod -r ~/hello.txt
+
+chmod u+r ~/hello.txt  <span style="color: #b22222;"># </span><span style="color: #b22222;">&#25317;&#26377;&#32773;</span>
+chmod g+r ~/hello.txt  <span style="color: #b22222;"># </span><span style="color: #b22222;">&#32452;</span>
+chmod o+r ~/hello.txt  <span style="color: #b22222;"># </span><span style="color: #b22222;">&#20854;&#20182;</span>
+chmod a+r ~/hello.txt  <span style="color: #b22222;"># </span><span style="color: #b22222;">&#25152;&#26377;</span>
+</pre>
+</div>
+
+<p>
+第二种方式，八进制。用数字去组合各种权限，r/w/x 分别用 4/2/1 来表示。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">chmod 777 ~/hello.txt
+chmod 644 ~/hello.txt
+</pre>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: imfine</p>
+<p class="date">Created: 2017-03-15 周三 16:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation">Go ahead, never stop.</p>
+</div>
+</body>
+</html>
