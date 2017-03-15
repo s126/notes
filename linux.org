@@ -37,10 +37,30 @@ linux 之下存在的一个简单编辑器，类似于 windows 下面的 notepad
 ** cp(copy)
 : cp /etc/apt/sources.list ~/sources.list
 
+
 ** rm(remove)
 : rm -rf / ttt  # 要不得
 
+** mkdir/rmdir
+mkdir 是用来创建文件
 
+rmdir 默认只能删除空的文件夹，如果想要删除文件夹连带下面内容的话，那么用 rm -r dir 来表示。这是为了安全！
+
+** cat/head/tail/more/less
+查看文件内容
+
+** grep
+用来过滤内容，可以使用正则表达式。经常跟 "|" 通道结合使用。例如：
+: ls /etc | grep "java"
+表示的是，显示 /etc 文件夹下名字中包含 "java" 字符串的文件夹
+
+** find
+用来查找某个文件夹下面的内容。即搜索。
+
+比如，我们想查找 /etc 下面所有的 xml 文件，语法为:
+: find /etc -type f -name "*.xml"
+
+其他内容，请自行 man
 
 * 程序安装
 ** apt-get update
@@ -59,4 +79,72 @@ linux 之下存在的一个简单编辑器，类似于 windows 下面的 notepad
   apt-get install git      # 对 git 进行安装
 
   git clone https://github.com/s126/notes  # 克隆我们的笔记
+#+END_SRC
+* 用户与权限
+
+文件的基本权限有:
+1. Read (读)
+2. Write (写)
+3. eXecute (执行)
+
+设置权限的层次：
+1. Owner (拥有者)
+2. Group (组)
+3. Others (其他人)
+
+** chown
+
+更改文件的 Owner（所有者）或 Group（组）
+
+: chown fish ~/abc.txt
+: chown :fish_pool ~/abc.txt
+
+** chgrp
+
+更改用户的组
+
+: chgrp fish_pool ~/abc.txt
+
+** groups
+
+创建一个组：
+: groupadd fish_pool
+
+将用户 fish 和 vip 添加到组里面：
+: gpasswd -a fish fish_pool
+: gpasswd -a vip fish_pool
+
+将 vip 移除出去:
+: gpasswd -d vip fish_pool
+
+显示当前用户所属的组（结果是一到多个）：
+: groups
+
+
+
+** chmod
+详细更改用户的权限
+
+
+第一种方式，通过 +/-/= 来添加权限
+#+BEGIN_SRC sh
+
+  # 创建一个文件
+  echo "hello, world" >> ~/hello.txt
+
+  # 如果让这个文件拥有读的权限
+  chmod +r ~/hello.txt
+  chmod -r ~/hello.txt
+
+  chmod u+r ~/hello.txt  # 拥有者
+  chmod g+r ~/hello.txt  # 组
+  chmod o+r ~/hello.txt  # 其他
+  chmod a+r ~/hello.txt  # 所有
+
+#+END_SRC
+
+第二种方式，八进制。用数字去组合各种权限，r/w/x 分别用 4/2/1 来表示。
+#+BEGIN_SRC sh
+  chmod 777 ~/hello.txt
+  chmod 644 ~/hello.txt
 #+END_SRC
