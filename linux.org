@@ -62,6 +62,30 @@ rmdir 默认只能删除空的文件夹，如果想要删除文件夹连带下�
 
 其他内容，请自行 man
 
+** tar/zip
+
+要想把一堆文件归档成一个单独的文件（方便管理），需要用到 tar 命令:
+: tar -c -f xxx.tar a.txt b.txt c.txt
+: tar -cf xxx.tar *.txt
+: tar cf xxx.tar *.txt
+
+tar 命令，只是把分散的文件，拼接成一个完整的文件，但没有做任何的压缩处理。
+
+
+如果想压缩的话，就需要用到相关的压缩命令。拿 gzip 来示例：
+: gzip xxx.tar
+
+
+如果，想一步到位，压缩加归档的话：
+: tar --create --verbose --zip --file xxx.tar.gz a.txt b.txt c.txt
+: tar czvf xxx.tar.gz *.txt
+
+如果想要解压的话：
+: tar xzvf xxx.tar.gz
+
+
+
+
 * 程序安装
 ** apt-get update
 读取 sources.list 里面的地址，把所有可用软件的目录更新到本地
@@ -148,3 +172,43 @@ rmdir 默认只能删除空的文件夹，如果想要删除文件夹连带下�
   chmod 777 ~/hello.txt
   chmod 644 ~/hello.txt
 #+END_SRC
+* JDK 的安装
+
+首先，选择。
+- OpenJDK
+- Oracle JDK
+
+
+** 安装 OpenJDK
+
+建议直接在 apt 里面安装
+
+首先，查询：
+: apt-get update
+: apt-cache search openjdk
+
+其次，安装
+: apt-get install openjdk-7-jdk
+
+也可以下载其他相关的，比如，文档、示例
+: apt-get install openjdk-7-doc
+: apt-get install openjdk-7-demo
+
+当然，如果要卸载，需要:
+: apt-get remove openjdk-7-jdk
+: apt-get purge openjdk-7-jdk
+
+卸载可以跟一些选择，比如 --purge，表示清理。自己 help 详情。
+
+查看是否安装成功：
+: java -version
+: javac -version
+: whereis java
+: which java
+** 安装 OracleJDK
+
+
+
+
+
+
