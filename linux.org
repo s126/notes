@@ -178,7 +178,6 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 - OpenJDK
 - Oracle JDK
 
-
 ** 安装 OpenJDK
 
 建议直接在 apt 里面安装
@@ -207,8 +206,46 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 : which java
 ** 安装 OracleJDK
 
+总共分 2 步：
+*** 第 0 步，下载
+注意，要下载跟自己的操作系统(Opertation System)相匹配的版本。
+
+查看操作系统信息，可以用 uname -a 命令。
+
+其中 x86 代表 32 位操作系统；x64 代表 64 位操作系统。
+
+*** 第 1 步，解压到相应目录(/opt/)
+按照标准，建议，把所有第三方的，所有文件都在同一个文件夹内的软件，安装到 /opt/ 目录。
+: sudo tar xzf jdk-xxx.tar.gz -C /opt/jdk1.8
+
+*** 第 2 步，设置环境变量
+在命令行下，首先，定义变量
+#+BEGIN_SRC sh
+
+  ## 首先，设置 JAVA_HOME
+  JAVA_HOME=/opt/jdk1.8
+  export JAVA_HOME
+
+  # 上面两句可以简写为
+  export JAVA_HOME=/opt/jdk1.8
 
 
+  ## 如果，相要把 java 可执行文件的路径添加到 PATH
+  export PATH=$JAVA_HOME/bin:$PATH
+
+#+END_SRC
+
+上面再命令行下运行的命令，只能在当前 terminal 里有效。如果想永久设置，将这些设置放到 ~/.bashrc 或 ~/.profile 里面。
 
 
+但是，如果在系统中存在其他版本的 java，
+你不想删除它，而且你想切换当前使用的版本为你刚安装的版本的话：
+
+第一种方式：更改 PATH 变量中，路径的先后顺序。
+
+第二种方式：利用 update-alternates 命令，设置执行程序的优先级。
+: update-alternates --install /usr/bin/java java /opt/jdk1.8/bin/java 1
+: update-alternates --install /usr/bin/javac javac /opt/jdk1.8/bin/javac 1
+: update-alternates --config java
+这样，就可以通过修改优先级，来切换不同的版本了。
 
