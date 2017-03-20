@@ -275,5 +275,24 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
   JAVA_HOME=/opt/jdk1.8.0_121
   PATH=$JAVA_HOME/bin:$PATH
   CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+#+END_SRC
+
+* Tomcat 的安装
+** 手动安装
+#+BEGIN_SRC sh
+  # 第 0 步：下载
+  wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-7/v7.0.76/bin/apache-tomcat-7.0.76.tar.gz
+
+  # 第 1 步：解压
+  sudo tar xf apache-tomcat-7.0.76 -C /opt/
+
+  # 第 2 步：配置环境变量
+  echo "CATALINA_HOME=/opt/apache-tomcat-7.0.76" >> ~/.bashrc
+  source ~/.bashrc
+
+  # 第 3 步：启动
+  sudo $CATALINA_HOME/bin/startup.sh
 
 #+END_SRC
+
+** apt 方式安装
