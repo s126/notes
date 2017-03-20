@@ -296,3 +296,13 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 #+END_SRC
 
 ** apt 方式安装
+第一步，安装：
+: sudo apt-get install tomcat7
+
+第二部，启动：
+: service tomcat7 start    # 或者 systemctl start tomcat7
+
+第三步，安装其他：
+: sudo apt-get install tomcat7-docs
+: sudo apt-get install tomcat7-examples
+: sudo apt-get isntall tomcat7-admin
