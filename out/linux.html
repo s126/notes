@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Linux 基础教程</title>
-<!-- 2017-03-20 周一 09:52 -->
+<!-- 2017-03-20 周一 10:12 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -630,9 +630,9 @@ sudo tar xzf jdk-xxx.tar.gz -C /opt/jdk1.8
 第二种方式：利用 update-alternates 命令，设置执行程序的优先级。
 </p>
 <pre class="example">
-update-alternates --install /usr/bin/java java /opt/jdk1.8/bin/java 1
-update-alternates --install /usr/bin/javac javac /opt/jdk1.8/bin/javac 1
-update-alternates --config java
+update-alternatives --install /usr/bin/java java /opt/jdk1.8/bin/java 1
+update-alternatives --install /usr/bin/javac javac /opt/jdk1.8/bin/javac 1
+update-alternatives --config java
 </pre>
 <p>
 这样，就可以通过修改优先级，来切换不同的版本了。
@@ -655,13 +655,13 @@ sudo tar xzf jdk1.8.tar.gz -C /opt/
 <span style="color: #483d8b;">echo</span> <span style="color: #8b2252;">"JAVA_HOME=/opt/jdk1.8.0_121"</span> &gt;&gt; .bashrc
 
 <span style="color: #b22222;"># </span><span style="color: #b22222;">&#35774;&#32622; path</span>
-sudo update-alternates --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
-sudo update-alternates --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
-sudo update-alternates --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
+sudo update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
+sudo update-alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
+sudo update-alternatives --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
 
 <span style="color: #b22222;"># </span><span style="color: #b22222;">&#28982;&#21518;&#65292;&#21487;&#20197;&#36890;&#36807;&#19979;&#38754;&#21629;&#20196;&#20999;&#25442;&#29256;&#26412;</span>
-sudo update-alternates --config java
-sudo update-alternates --config javac
+sudo update-alternatives --config java
+sudo update-alternatives --config javac
 </pre>
 </div>
 </div>
@@ -671,7 +671,7 @@ sudo update-alternates --config javac
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-20 周一 09:52</p>
+<p class="date">Created: 2017-03-20 周一 10:12</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

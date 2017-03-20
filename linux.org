@@ -258,9 +258,9 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 第一种方式：更改 PATH 变量中，路径的先后顺序。
 
 第二种方式：利用 update-alternates 命令，设置执行程序的优先级。
-: update-alternates --install /usr/bin/java java /opt/jdk1.8/bin/java 1
-: update-alternates --install /usr/bin/javac javac /opt/jdk1.8/bin/javac 1
-: update-alternates --config java
+: update-alternatives --install /usr/bin/java java /opt/jdk1.8/bin/java 1
+: update-alternatives --install /usr/bin/javac javac /opt/jdk1.8/bin/javac 1
+: update-alternatives --config java
 这样，就可以通过修改优先级，来切换不同的版本了。
 
 *** All In All
@@ -275,11 +275,11 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
   echo "JAVA_HOME=/opt/jdk1.8.0_121" >> .bashrc
 
   # 设置 path
-  sudo update-alternates --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
-  sudo update-alternates --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
-  sudo update-alternates --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
+  sudo update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
+  sudo update-alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
+  sudo update-alternatives --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
   
   # 然后，可以通过下面命令切换版本
-  sudo update-alternates --config java
-  sudo update-alternates --config javac
+  sudo update-alternatives --config java
+  sudo update-alternatives --config javac
 #+END_SRC
