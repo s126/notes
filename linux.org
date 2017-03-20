@@ -86,6 +86,20 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 
 
 
+** 任务相关
+
+将当前任务挂起，即放到后台
+: Ctrl-Z
+
+命令行下，查看所有被挂起的后台任务
+: jobs
+
+将挂起的某个任务，放置到前台
+: fg [任务编号]
+
+将程序以后台的方式打开，只需要在命令最后添加
+: &
+
 * 程序安装
 ** apt-get update
 读取 sources.list 里面的地址，把所有可用软件的目录更新到本地
@@ -249,3 +263,23 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 : update-alternates --config java
 这样，就可以通过修改优先级，来切换不同的版本了。
 
+*** All In All
+#+BEGIN_SRC sh
+  # 下载
+  wget [jdk 地址]
+
+  # 解压
+  sudo tar xzf jdk1.8.tar.gz -C /opt/
+
+  # 设置 JAVA_HOME
+  echo "JAVA_HOME=/opt/jdk1.8.0_121" >> .bashrc
+
+  # 设置 path
+  sudo update-alternates --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
+  sudo update-alternates --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
+  sudo update-alternates --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
+  
+  # 然后，可以通过下面命令切换版本
+  sudo update-alternates --config java
+  sudo update-alternates --config javac
+#+END_SRC
