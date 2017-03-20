@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Linux 基础教程</title>
-<!-- 2017-03-20 周一 10:12 -->
+<!-- 2017-03-20 周一 11:07 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -651,17 +651,10 @@ wget <span style="color: #707183;">[</span>jdk &#22320;&#22336;<span style="colo
 <span style="color: #b22222;"># </span><span style="color: #b22222;">&#35299;&#21387;</span>
 sudo tar xzf jdk1.8.tar.gz -C /opt/
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">&#35774;&#32622; JAVA_HOME</span>
-<span style="color: #483d8b;">echo</span> <span style="color: #8b2252;">"JAVA_HOME=/opt/jdk1.8.0_121"</span> &gt;&gt; .bashrc
-
-<span style="color: #b22222;"># </span><span style="color: #b22222;">&#35774;&#32622; path</span>
-sudo update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
-sudo update-alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
-sudo update-alternatives --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
-
-<span style="color: #b22222;"># </span><span style="color: #b22222;">&#28982;&#21518;&#65292;&#21487;&#20197;&#36890;&#36807;&#19979;&#38754;&#21629;&#20196;&#20999;&#25442;&#29256;&#26412;</span>
-sudo update-alternatives --config java
-sudo update-alternatives --config javac
+<span style="color: #b22222;"># </span><span style="color: #b22222;">&#35774;&#32622; JAVA_HOME, "vi .bashrc"</span>
+<span style="color: #a0522d;">JAVA_HOME</span>=/opt/jdk1.8.0_121
+<span style="color: #a0522d;">PATH</span>=$<span style="color: #a0522d;">JAVA_HOME</span>/bin:$<span style="color: #a0522d;">PATH</span>
+<span style="color: #a0522d;">CLASSPATH</span>=$<span style="color: #a0522d;">JAVA_HOME</span>/lib/dt.jar:$<span style="color: #a0522d;">JAVA_HOME</span>/lib/tools.jar
 </pre>
 </div>
 </div>
@@ -671,7 +664,7 @@ sudo update-alternatives --config javac
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-20 周一 10:12</p>
+<p class="date">Created: 2017-03-20 周一 11:07</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

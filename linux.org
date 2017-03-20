@@ -271,15 +271,9 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
   # 解压
   sudo tar xzf jdk1.8.tar.gz -C /opt/
 
-  # 设置 JAVA_HOME
-  echo "JAVA_HOME=/opt/jdk1.8.0_121" >> .bashrc
+  # 设置 JAVA_HOME, "vi .bashrc"
+  JAVA_HOME=/opt/jdk1.8.0_121
+  PATH=$JAVA_HOME/bin:$PATH
+  CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
-  # 设置 path
-  sudo update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2222
-  sudo update-alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2222
-  sudo update-alternatives --install /usr/bin/javap javap /opt/jdk1.8.0_121/bin/javap 2222
-  
-  # 然后，可以通过下面命令切换版本
-  sudo update-alternatives --config java
-  sudo update-alternatives --config javac
 #+END_SRC
