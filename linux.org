@@ -311,6 +311,27 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 : sudo apt-get install tomcat7-docs
 : sudo apt-get install tomcat7-examples
 : sudo apt-get isntall tomcat7-admin
+* Tomcat 的基本概念
+Tomcat 服务器由四大部分组成：
+1. Coyote   : 用来监听网络，接收请求，交给相应的 Catalina 处理，并将结果返回到客户端
+2. Catalina : 实现了 J2EE 标准的 Servlet 容器，用来执行调用 Servlet。它是 tomcat 最核心的部分。
+3. Jasper   : 用来将 jsp 翻译成相应的 Servlet
+4. Cluster  : 当配置集群的时候才会有用。进行集群管理。
+
+*注意：*
+- tomcat 是一个服务器，它包含基本的网络处理，还有通过内置的 Servlet 容器完成对 servlet 的处理
+- tomcat 在 4.* 版本后，对容器做了重新设定，新设定的容器名字命名为 catalina，一直沿用到现在。
+- 在设置环境变量的时候，只有 CATALINA_HOME，并没有 TOMCAT_HOME。因为我们设定的是 Servlet 容器的目录。
+
+
+在 server.xml 中，分下面几个层次
+- Server
+  - Service (一个服务是若干 Connector 和 Engine 的集合。 Connector 用来处理网络， Engine 用来执行功能)
+    - Connector (用于监听网络，并将相应的请求发送给相应 Engine)
+    - Engine (一个引擎里里面包含若干 Host<本机可以多 IP，所以根据不同的 IP 地址访问不同项目>，每个 Host 包含部署的若干项目即 Context)
+  
+
+
 * Tomcat 下的文件部署
 
 在部署之前，先弄懂几个概念：

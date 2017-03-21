@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Oracle Database</title>
-<!-- 2017-03-15 周三 16:38 -->
+<!-- 2017-03-21 周二 10:55 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -22,8 +22,20 @@
 <ul>
 <li><a href="#sec-1">1. Oracle 的体系结构</a>
 <ul>
-<li><a href="#sec-1-1">1.1. 服务端</a></li>
-<li><a href="#sec-1-2">1.2. 客户端</a></li>
+<li><a href="#sec-1-1">1.1. 服务端</a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. 实例 (INSTANCE)</a></li>
+<li><a href="#sec-1-1-2">1.1.2. 数据库 (DATABASE)</a></li>
+<li><a href="#sec-1-1-3">1.1.3. 启动过程</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">1.2. 客户端</a>
+<ul>
+<li><a href="#sec-1-2-1">1.2.1. sqlplus</a></li>
+<li><a href="#sec-1-2-2">1.2.2. jdbc</a></li>
+<li><a href="#sec-1-2-3">1.2.3. 其他的图形化工具</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-2">2. Oracle 网络配置</a>
@@ -35,18 +47,68 @@
 </li>
 <li><a href="#sec-3">3. 用户与权限</a>
 <ul>
-<li><a href="#sec-3-1">3.1. 用户</a></li>
-<li><a href="#sec-3-2">3.2. 权限</a></li>
-<li><a href="#sec-3-3">3.3. 角色</a></li>
+<li><a href="#sec-3-1">3.1. 用户</a>
+<ul>
+<li><a href="#sec-3-1-1">3.1.1. 系统缺省用户</a></li>
+<li><a href="#sec-3-1-2">3.1.2. 用户的默认表空间</a></li>
+<li><a href="#sec-3-1-3">3.1.3. 资源文件 (Profile)</a></li>
+<li><a href="#sec-3-1-4">3.1.4. 创建/修改/删除用户</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-2">3.2. 权限</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1. 系统权限 (执行特定命令)</a></li>
+<li><a href="#sec-3-2-2">3.2.2. 对象权限 (访问数据库对象)</a></li>
+<li><a href="#sec-3-2-3">3.2.3. 示例</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3">3.3. 角色</a>
+<ul>
+<li><a href="#sec-3-3-1">3.3.1. 创建角色</a></li>
+<li><a href="#sec-3-3-2">3.3.2. 配置角色</a></li>
+<li><a href="#sec-3-3-3">3.3.3. 使用角色</a></li>
+<li><a href="#sec-3-3-4">3.3.4. 删除角色</a></li>
+<li><a href="#sec-3-3-5">3.3.5. 相关的字典表</a></li>
+<li><a href="#sec-3-3-6">3.3.6. 特殊的 PUBLIC 角色</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-4">4. SQL语句</a>
 <ul>
 <li><a href="#sec-4-1">4.1. SQL 的历史及概念</a></li>
-<li><a href="#sec-4-2">4.2. SQL 的分类</a></li>
-<li><a href="#sec-4-3">4.3. 数据类型</a></li>
+<li><a href="#sec-4-2">4.2. SQL 的分类</a>
+<ul>
+<li><a href="#sec-4-2-1">4.2.1. DDL（Data Definition Language）</a></li>
+<li><a href="#sec-4-2-2">4.2.2. DML（Data Manipulation Language）</a></li>
+<li><a href="#sec-4-2-3">4.2.3. TCL（Transaction Control Language)</a></li>
+<li><a href="#sec-4-2-4">4.2.4. DCL（Data Control Language)</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-3">4.3. 数据类型</a>
+<ul>
+<li><a href="#sec-4-3-1">4.3.1. 字符类型</a></li>
+<li><a href="#sec-4-3-2">4.3.2. 数字类型</a></li>
+<li><a href="#sec-4-3-3">4.3.3. 时间类型</a></li>
+<li><a href="#sec-4-3-4">4.3.4. RAW 类型</a></li>
+<li><a href="#sec-4-3-5">4.3.5. LOB类型(large Object)</a></li>
+<li><a href="#sec-4-3-6">4.3.6. ROWID/ROWNUM</a></li>
+<li><a href="#sec-4-3-7">4.3.7. NULL</a></li>
+</ul>
+</li>
 <li><a href="#sec-4-4">4.4. 运算符</a></li>
-<li><a href="#sec-4-5">4.5. 内置函数</a></li>
+<li><a href="#sec-4-5">4.5. 内置函数</a>
+<ul>
+<li><a href="#sec-4-5-1">4.5.1. 数值函数</a></li>
+<li><a href="#sec-4-5-2">4.5.2. 字符函数</a></li>
+<li><a href="#sec-4-5-3">4.5.3. 时间函数</a></li>
+<li><a href="#sec-4-5-4">4.5.4. 比较函数</a></li>
+<li><a href="#sec-4-5-5">4.5.5. 转换函数</a></li>
+<li><a href="#sec-4-5-6">4.5.6. 其他函数</a></li>
+<li><a href="#sec-4-5-7">4.5.7. 分组函数</a></li>
+<li><a href="#sec-4-5-8">4.5.8. 分析函数</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-5">5. 锁 (LOCK)</a>
@@ -82,10 +144,26 @@
 <ul>
 <li><a href="#sec-12-1">12.1. 基本语法</a></li>
 <li><a href="#sec-12-2">12.2. 变量赋值</a></li>
-<li><a href="#sec-12-3">12.3. 变量类型</a></li>
+<li><a href="#sec-12-3">12.3. 变量类型</a>
+<ul>
+<li><a href="#sec-12-3-1">12.3.1. 标量类型(Scalar)</a></li>
+<li><a href="#sec-12-3-2">12.3.2. TYPE/ROWTYPE</a></li>
+<li><a href="#sec-12-3-3">12.3.3. 自定义记录/数组类型</a></li>
+</ul>
+</li>
 <li><a href="#sec-12-4">12.4. 操作符</a></li>
-<li><a href="#sec-12-5">12.5. 流程控制</a></li>
-<li><a href="#sec-12-6">12.6. 异常处理</a></li>
+<li><a href="#sec-12-5">12.5. 流程控制</a>
+<ul>
+<li><a href="#sec-12-5-1">12.5.1. 分支判断</a></li>
+<li><a href="#sec-12-5-2">12.5.2. 循环迭代</a></li>
+</ul>
+</li>
+<li><a href="#sec-12-6">12.6. 异常处理</a>
+<ul>
+<li><a href="#sec-12-6-1">12.6.1. 系统自定义的异常(Predefined)</a></li>
+<li><a href="#sec-12-6-2">12.6.2. 用户自定义的异常(UserDefined)</a></li>
+</ul>
+</li>
 <li><a href="#sec-12-7">12.7. 动态 SQL</a></li>
 <li><a href="#sec-12-8">12.8. 游标 (Cursor)</a></li>
 <li><a href="#sec-12-9">12.9. 存储过程</a></li>
@@ -3918,7 +3996,7 @@ imp system/orcl <span style="color: #a0522d;">file</span>=D:\aaa.dmp <span style
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-15 周三 16:38</p>
+<p class="date">Created: 2017-03-21 周二 10:55</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
