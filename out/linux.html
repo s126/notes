@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Linux 基础教程</title>
-<!-- 2017-03-20 周一 15:24 -->
+<!-- 2017-03-21 周二 10:32 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -62,13 +62,27 @@
 <li><a href="#sec-5">5. JDK 的安装</a>
 <ul>
 <li><a href="#sec-5-1">5.1. 安装 OpenJDK</a></li>
-<li><a href="#sec-5-2">5.2. 安装 OracleJDK</a></li>
+<li><a href="#sec-5-2">5.2. 安装 OracleJDK</a>
+<ul>
+<li><a href="#sec-5-2-1">5.2.1. 第 0 步，下载</a></li>
+<li><a href="#sec-5-2-2">5.2.2. 第 1 步，解压到相应目录(<i>opt</i>)</a></li>
+<li><a href="#sec-5-2-3">5.2.3. 第 2 步，设置环境变量</a></li>
+<li><a href="#sec-5-2-4">5.2.4. All In All</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-6">6. Tomcat 的安装</a>
 <ul>
 <li><a href="#sec-6-1">6.1. 手动安装</a></li>
 <li><a href="#sec-6-2">6.2. apt 方式安装</a></li>
+</ul>
+</li>
+<li><a href="#sec-7">7. Tomcat 下的文件部署</a>
+<ul>
+<li><a href="#sec-7-1">7.1. 将符合 war 标准的文件夹或 .war 文件直接放置到 webapps 下面</a></li>
+<li><a href="#sec-7-2">7.2. 修改配置文件，设置 Context</a></li>
+<li><a href="#sec-7-3">7.3. 使用 Tomcat 提供的 Admin 管理</a></li>
 </ul>
 </li>
 </ul>
@@ -707,7 +721,12 @@ sudo apt-get install tomcat7
 第二部，启动：
 </p>
 <pre class="example">
-service tomcat7 start    # 或者 systemctl start tomcat7
+service tomcat7 start
+service tomcat7 stop/restart/status
+
+# 作为一些新的系统，底层控制已换成 systemd，那么可以使用下面命令。跟上面等效:
+systemctl start/restart/stop/status tomcat7
+systemctl enable/disable tomcat7    # 设置是否开机启动
 </pre>
 
 <p>
@@ -721,10 +740,119 @@ sudo apt-get isntall tomcat7-admin
 </div>
 </div>
 </section>
+<section id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Tomcat 下的文件部署</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+在部署之前，先弄懂几个概念：
+</p>
+<ul class="org-ul">
+<li>CATALINA
+</li>
+<li>CATALINA_HOME 环境变量（什么意思，占位）
+</li>
+<li>CATALINA_BASE 环境变量（什么意思，占位）
+</li>
+</ul>
+
+<p>
+如果是手动安装的：
+</p>
+<pre class="example">
+CATALINA_HOME=/opt/apache-tomcat-7
+CATALINA_BASE=/opt/apache-tomcat-7
+</pre>
+
+<p>
+如果是 APT 安装的：
+</p>
+<pre class="example">
+CATALINA_HOME=/usr/share/tomcat7
+CATALINA_BASE=/var/lib/tomcat7
+</pre>
+
+
+<p>
+拿手动安装的示例，说明 CATALINA_BASE 下各文件夹的作用：
+</p>
+<ul class="org-ul">
+<li>bin 文件夹，放置的是启动关闭等的可执行脚本文件
+</li>
+<li>lib 文件夹，运行所需要的 jar 包
+</li>
+<li>logs 日志文件夹，保存了运行中的各种日志。如果系统运行中出现问题，我们首先要想到来这个文件夹查看相应出错信息。
+</li>
+<li>conf 文件夹，所有的配置文件
+</li>
+<li>webapps 默认的项目存放文件夹。如果把 war 项目放到下面，会自动被服务器加载。
+</li>
+<li>work 程序运行中编译的中间文件存放于此。比如，jsp 编译成的 servlet.
+</li>
+</ul>
+
+
+<p>
+如果想部署项目，下面几种方法:
+</p>
+</div>
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> 将符合 war 标准的文件夹或 .war 文件直接放置到 webapps 下面</h3>
+</div>
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> 修改配置文件，设置 Context</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+下面几种方法，分别对应不同的级别:
+</p>
+<ol class="org-ol">
+<li>修改 conf/server.xml，增加或修改 Context 节点
+</li>
+<li>修改 conf/context.xml，增加相应内容
+</li>
+<li>修改或增加 conf/Catalina/主机名/context.xml，增加相应内容
+</li>
+<li>修改或增加 conf/Catalina/主机名/名字.xml，增加相应内容
+</li>
+</ol>
+
+<p>
+如果你们装了 tomcat7-examples 等，你们可以看一下 conf/Catalina/localhost 文件夹下面是不是已经存在了相应的 xml 文件？
+这就是为什么我们能在 tomcat 启动后访问到他们的原因。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3"><span class="section-number-3">7.3</span> 使用 Tomcat 提供的 Admin 管理</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+首先，确保已经安装了 tomcat-admin。
+tomcat-admin 也是一个标准的 web 工程，安装完后，它存在于 /usr/share/tomcat7-admin 文件夹。
+</p>
+<pre class="example">
+apt install tomcat7-admin
+</pre>
+
+<p>
+其次，如果使用 admin 进行管理，需要登陆验证。所以我们需要添加一个用户。在 conf/tomcat-users.xml 中添加：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">role</span> <span style="color: #a0522d;">rolename</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">manager-gui</span><span style="color: #8b2252;">"</span>/&gt;
+&lt;<span style="color: #0000ff;">user</span> <span style="color: #a0522d;">username</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#29992;&#25143;&#21517;</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">password</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#23494;&#30721;</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">roles</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">manager-gui</span><span style="color: #8b2252;">"</span>/&gt;
+</pre>
+</div>
+
+<p>
+然后，访问 localhost:8080/manager/html 就可以进入控制台，在上面进行查看并部署了。
+</p>
+</div>
+</div>
+</section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-20 周一 15:24</p>
+<p class="date">Created: 2017-03-21 周二 10:32</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

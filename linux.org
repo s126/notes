@@ -300,9 +300,67 @@ tar 命令，只是把分散的文件，拼接成一个完整的文件，但没�
 : sudo apt-get install tomcat7
 
 第二部，启动：
-: service tomcat7 start    # 或者 systemctl start tomcat7
+: service tomcat7 start
+: service tomcat7 stop/restart/status
+: 
+: # 作为一些新的系统，底层控制已换成 systemd，那么可以使用下面命令。跟上面等效:
+: systemctl start/restart/stop/status tomcat7
+: systemctl enable/disable tomcat7    # 设置是否开机启动
 
 第三步，安装其他：
 : sudo apt-get install tomcat7-docs
 : sudo apt-get install tomcat7-examples
 : sudo apt-get isntall tomcat7-admin
+* Tomcat 下的文件部署
+
+在部署之前，先弄懂几个概念：
+- CATALINA
+- CATALINA_HOME 环境变量（什么意思，占位）
+- CATALINA_BASE 环境变量（什么意思，占位）
+
+如果是手动安装的：
+: CATALINA_HOME=/opt/apache-tomcat-7
+: CATALINA_BASE=/opt/apache-tomcat-7
+
+如果是 APT 安装的：
+: CATALINA_HOME=/usr/share/tomcat7
+: CATALINA_BASE=/var/lib/tomcat7
+
+
+拿手动安装的示例，说明 CATALINA_BASE 下各文件夹的作用：
+- bin 文件夹，放置的是启动关闭等的可执行脚本文件
+- lib 文件夹，运行所需要的 jar 包
+- logs 日志文件夹，保存了运行中的各种日志。如果系统运行中出现问题，我们首先要想到来这个文件夹查看相应出错信息。
+- conf 文件夹，所有的配置文件
+- webapps 默认的项目存放文件夹。如果把 war 项目放到下面，会自动被服务器加载。
+- work 程序运行中编译的中间文件存放于此。比如，jsp 编译成的 servlet.
+
+
+如果想部署项目，下面几种方法:
+** 将符合 war 标准的文件夹或 .war 文件直接放置到 webapps 下面
+** 修改配置文件，设置 Context
+下面几种方法，分别对应不同的级别:
+1. 修改 conf/server.xml，增加或修改 Context 节点
+2. 修改 conf/context.xml，增加相应内容
+3. 修改或增加 conf/Catalina/主机名/context.xml，增加相应内容
+4. 修改或增加 conf/Catalina/主机名/名字.xml，增加相应内容
+
+如果你们装了 tomcat7-examples 等，你们可以看一下 conf/Catalina/localhost 文件夹下面是不是已经存在了相应的 xml 文件？
+这就是为什么我们能在 tomcat 启动后访问到他们的原因。
+
+** 使用 Tomcat 提供的 Admin 管理
+首先，确保已经安装了 tomcat-admin。
+tomcat-admin 也是一个标准的 web 工程，安装完后，它存在于 /usr/share/tomcat7-admin 文件夹。
+: apt install tomcat7-admin
+
+其次，如果使用 admin 进行管理，需要登陆验证。所以我们需要添加一个用户。在 conf/tomcat-users.xml 中添加：
+#+BEGIN_SRC xml
+  <role rolename="manager-gui"/>
+  <user username="用户名" password="密码" roles="manager-gui"/>
+#+END_SRC
+
+然后，访问 localhost:8080/manager/html 就可以进入控制台，在上面进行查看并部署了。
+
+
+
+
