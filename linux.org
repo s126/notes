@@ -370,6 +370,11 @@ Tomcat 服务器由四大部分组成：
 如果你们装了 tomcat7-examples 等，你们可以看一下 conf/Catalina/localhost 文件夹下面是不是已经存在了相应的 xml 文件？
 这就是为什么我们能在 tomcat 启动后访问到他们的原因。
 
+比如，在 conf/Catalina/localhost/examples.xml 中，是这样的：
+#+BEGIN_SRC xml
+  <Context path="/examples" docBase="/usr/share/tomcat7-examples/examples" />
+#+END_SRC
+
 ** 使用 Tomcat 提供的 Admin 管理
 首先，确保已经安装了 tomcat-admin。
 tomcat-admin 也是一个标准的 web 工程，安装完后，它存在于 /usr/share/tomcat7-admin 文件夹。
