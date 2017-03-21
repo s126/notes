@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Linux 基础教程</title>
-<!-- 2017-03-21 周二 10:58 -->
+<!-- 2017-03-21 周二 11:09 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -758,6 +758,26 @@ Tomcat 服务器由四大部分组成：
 </li>
 </ol>
 
+
+<p>
+相应的，在 server.xml 中，分下面几个层次
+</p>
+<ul class="org-ul">
+<li>Server
+<ul class="org-ul">
+<li>Service (一个服务是若干 Connector 和 Engine 的集合。 Connector 用来处理网络， Engine 用来执行功能)
+<ul class="org-ul">
+<li>Connector (用于监听网络，并将相应的请求发送给 Engine 相应 Host 的相应 Context)
+</li>
+<li>Engine (一个引擎里里面包含若干 Host&lt;本机可以多 IP，所以根据不同的 IP 地址访问不同项目&gt;，每个 Host 包含部署的若干项目即 Context)
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
 <p>
 <b>注意：</b>
 </p>
@@ -768,30 +788,13 @@ Tomcat 服务器由四大部分组成：
 </li>
 <li>在设置环境变量的时候，只有 CATALINA_HOME，并没有 TOMCAT_HOME。因为我们设定的是 Servlet 容器的目录。
 </li>
-</ul>
-
-
-<p>
-在 server.xml 中，分下面几个层次
-</p>
-<ul class="org-ul">
-<li>Server
-<ul class="org-ul">
-<li>Service (一个服务是若干 Connector 和 Engine 的集合。 Connector 用来处理网络， Engine 用来执行功能)
-<ul class="org-ul">
-<li>Connector (用于监听网络，并将相应的请求发送给相应 Engine)
+<li>一个项目的最基本单元是 Context，在最开始的时候，只能在 server.xml 的 Host 节点里配置。
 </li>
-<li>Engine (一个引擎里里面包含若干 Host&lt;本机可以多 IP，所以根据不同的 IP 地址访问不同项目&gt;，每个 Host 包含部署的若干项目即 Context)
-</li>
-</ul>
-</li>
-</ul>
+<li>但这不够科学，不够灵活。所以在后来的版本中，出现了 context.xml 配置文件，并且可以配置到多个位置，增加了配置的灵活性。
 </li>
 </ul>
 </div>
 </section>
-
-
 
 <section id="outline-container-sec-8" class="outline-2">
 <h2 id="sec-8"><span class="section-number-2">8</span> Tomcat 下的文件部署</h2>
@@ -905,7 +908,7 @@ apt install tomcat7-admin
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-21 周二 10:58</p>
+<p class="date">Created: 2017-03-21 周二 11:09</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>

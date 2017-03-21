@@ -318,19 +318,20 @@ Tomcat 服务器由四大部分组成：
 3. Jasper   : 用来将 jsp 翻译成相应的 Servlet
 4. Cluster  : 当配置集群的时候才会有用。进行集群管理。
 
+
+相应的，在 server.xml 中，分下面几个层次
+- Server
+  - Service (一个服务是若干 Connector 和 Engine 的集合。 Connector 用来处理网络， Engine 用来执行功能)
+    - Connector (用于监听网络，并将相应的请求发送给 Engine 相应 Host 的相应 Context)
+    - Engine (一个引擎里里面包含若干 Host<本机可以多 IP，所以根据不同的 IP 地址访问不同项目>，每个 Host 包含部署的若干项目即 Context)
+
+
 *注意：*
 - tomcat 是一个服务器，它包含基本的网络处理，还有通过内置的 Servlet 容器完成对 servlet 的处理
 - tomcat 在 4.* 版本后，对容器做了重新设定，新设定的容器名字命名为 catalina，一直沿用到现在。
 - 在设置环境变量的时候，只有 CATALINA_HOME，并没有 TOMCAT_HOME。因为我们设定的是 Servlet 容器的目录。
-
-
-在 server.xml 中，分下面几个层次
-- Server
-  - Service (一个服务是若干 Connector 和 Engine 的集合。 Connector 用来处理网络， Engine 用来执行功能)
-    - Connector (用于监听网络，并将相应的请求发送给相应 Engine)
-    - Engine (一个引擎里里面包含若干 Host<本机可以多 IP，所以根据不同的 IP 地址访问不同项目>，每个 Host 包含部署的若干项目即 Context)
-  
-
+- 一个项目的最基本单元是 Context，在最开始的时候，只能在 server.xml 的 Host 节点里配置。
+- 但这不够科学，不够灵活。所以在后来的版本中，出现了 context.xml 配置文件，并且可以配置到多个位置，增加了配置的灵活性。
 
 * Tomcat 下的文件部署
 
