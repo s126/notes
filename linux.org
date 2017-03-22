@@ -391,8 +391,8 @@ tomcat-admin 也是一个标准的 web 工程，安装完后，它存在于 /usr
 
 
 
-* SSH
-一般情况下，操作 Linux/Uninx 系统，需要通过远程连接的方式。ssh 是最常用的命令。
+* SSH (Secure Shell)
+一般情况下，操作 Linux/Uninx 系统，需要通过远程连接的方式。ssh 是最常用的方式。
 
 ** 服务端
 需要安装 openssh-server，这是 ssh 的服务端
@@ -404,15 +404,20 @@ tomcat-admin 也是一个标准的 web 工程，安装完后，它存在于 /usr
 
 ** 客户端
 基本语法为：
-: ssh [用户名@] 主机IP地址
+: ssh [选项] [用户名@] 主机IP地址
 
 比如，连接 12.34.56.78 上的 fish 用户：
 : ssh fish@12.34.56.78
 
+SSH 的默认端口号为 22，如果服务器上改过端口号，则需要在连接的时候指定：
+: ssh -p 3232 fish@12.34.56.78
+
 连接上后，就可以像本地一样进行操作了。
 
-如果想往服务器上，传送文件，或从服务器上下载文件，需要用到
-: scp 源文件 目的地      # 基于 ssh 的拷贝
+--------------
+
+如果想在服务器上，传送或下载文件，需要用到 scp 命令。它是基于 ssh 的 cp 命令。
+: scp 源文件 目的地
 
 比如，要把 miniblog.war 文件，传送到服务器：
 : scp /e/workspace/build/minilog.war test@12.34.56.78:/opt/apache-tomcat8/webapps/

@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Linux 基础教程</title>
-<!-- 2017-03-22 周三 10:02 -->
+<!-- 2017-03-22 周三 10:47 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -86,7 +86,7 @@
 <li><a href="#sec-8-3">8.3. 使用 Tomcat 提供的 Admin 管理</a></li>
 </ul>
 </li>
-<li><a href="#sec-9">9. SSH</a>
+<li><a href="#sec-9">9. SSH (Secure Shell)</a>
 <ul>
 <li><a href="#sec-9-1">9.1. 服务端</a></li>
 <li><a href="#sec-9-2">9.2. 客户端</a></li>
@@ -925,10 +925,10 @@ apt install tomcat7-admin
 
 
 <section id="outline-container-sec-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> SSH</h2>
+<h2 id="sec-9"><span class="section-number-2">9</span> SSH (Secure Shell)</h2>
 <div class="outline-text-2" id="text-9">
 <p>
-一般情况下，操作 Linux/Uninx 系统，需要通过远程连接的方式。ssh 是最常用的命令。
+一般情况下，操作 Linux/Uninx 系统，需要通过远程连接的方式。ssh 是最常用的方式。
 </p>
 </div>
 
@@ -959,7 +959,7 @@ sudo service ssh status
 基本语法为：
 </p>
 <pre class="example">
-ssh [用户名@] 主机IP地址
+ssh [选项] [用户名@] 主机IP地址
 </pre>
 
 <p>
@@ -970,14 +970,23 @@ ssh fish@12.34.56.78
 </pre>
 
 <p>
+SSH 的默认端口号为 22，如果服务器上改过端口号，则需要在连接的时候指定：
+</p>
+<pre class="example">
+ssh -p 3232 fish@12.34.56.78
+</pre>
+
+<p>
 连接上后，就可以像本地一样进行操作了。
 </p>
 
+<hr >
+
 <p>
-如果想往服务器上，传送文件，或从服务器上下载文件，需要用到
+如果想在服务器上，传送或下载文件，需要用到 scp 命令。它是基于 ssh 的 cp 命令。
 </p>
 <pre class="example">
-scp 源文件 目的地      # 基于 ssh 的拷贝
+scp 源文件 目的地
 </pre>
 
 <p>
@@ -996,7 +1005,7 @@ scp /e/workspace/build/minilog.war test@12.34.56.78:/opt/apache-tomcat8/webapps/
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-22 周三 10:02</p>
+<p class="date">Created: 2017-03-22 周三 10:47</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
