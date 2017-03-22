@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Linux 基础教程</title>
-<!-- 2017-03-21 周二 13:42 -->
+<!-- 2017-03-22 周三 10:02 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -84,6 +84,12 @@
 <li><a href="#sec-8-1">8.1. 将符合 war 标准的文件夹或 .war 文件直接放置到 webapps 下面</a></li>
 <li><a href="#sec-8-2">8.2. 修改配置文件，设置 Context</a></li>
 <li><a href="#sec-8-3">8.3. 使用 Tomcat 提供的 Admin 管理</a></li>
+</ul>
+</li>
+<li><a href="#sec-9">9. SSH</a>
+<ul>
+<li><a href="#sec-9-1">9.1. 服务端</a></li>
+<li><a href="#sec-9-2">9.2. 客户端</a></li>
 </ul>
 </li>
 </ul>
@@ -914,10 +920,83 @@ apt install tomcat7-admin
 </div>
 </div>
 </section>
+
+
+
+
+<section id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> SSH</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+一般情况下，操作 Linux/Uninx 系统，需要通过远程连接的方式。ssh 是最常用的命令。
+</p>
+</div>
+
+<div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> 服务端</h3>
+<div class="outline-text-3" id="text-9-1">
+<p>
+需要安装 openssh-server，这是 ssh 的服务端
+</p>
+<pre class="example">
+sudo apt install openssh-server
+</pre>
+
+<p>
+开启 ssh 服务
+</p>
+<pre class="example">
+sudo service ssh start
+sudo service ssh status
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> 客户端</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+基本语法为：
+</p>
+<pre class="example">
+ssh [用户名@] 主机IP地址
+</pre>
+
+<p>
+比如，连接 12.34.56.78 上的 fish 用户：
+</p>
+<pre class="example">
+ssh fish@12.34.56.78
+</pre>
+
+<p>
+连接上后，就可以像本地一样进行操作了。
+</p>
+
+<p>
+如果想往服务器上，传送文件，或从服务器上下载文件，需要用到
+</p>
+<pre class="example">
+scp 源文件 目的地      # 基于 ssh 的拷贝
+</pre>
+
+<p>
+比如，要把 miniblog.war 文件，传送到服务器：
+</p>
+<pre class="example">
+scp /e/workspace/build/minilog.war test@12.34.56.78:/opt/apache-tomcat8/webapps/
+</pre>
+
+<p>
+如果，想从服务器上下载文件，只需要将上面的两个命令互换位置即可。
+</p>
+</div>
+</div>
+</section>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-21 周二 13:42</p>
+<p class="date">Created: 2017-03-22 周三 10:02</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
