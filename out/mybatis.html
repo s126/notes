@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MyBatis 教程</title>
+<!-- 2017-03-28 周二 14:32 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="imfine">
+<link rel="stylesheet" href="nnn.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">MyBatis 教程</h1>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 我也不知道怎么记笔记。想到哪，写到哪吧。</a></li>
+<li><a href="#sec-2">2. MyBatis + Spring</a>
+<ul>
+<li><a href="#sec-2-1">2.1. 第一步，创建 Gradle 项目，引入相应 jar 包</a></li>
+<li><a href="#sec-2-2">2.2. 配置文件</a></li>
+<li><a href="#sec-2-3">2.3. 使用，比如，在 PersonService 类里面</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+
+
+<section id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 我也不知道怎么记笔记。想到哪，写到哪吧。</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+假设数据库中存在一张表 person，它有两个字段，分别是主键和名字(id, name):
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #b22222;">-- &#21019;&#24314;&#34920; person</span>
+<span style="color: #a020f0;">create</span> <span style="color: #a020f0;">table</span> <span style="color: #0000ff;">person</span> <span style="color: #707183;">(</span>id <span style="color: #a020f0;">number</span> <span style="color: #a020f0;">primary</span> <span style="color: #a020f0;">key</span>, <span style="color: #a020f0;">name</span> varchar2<span style="color: #7388d6;">(</span>20<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">-- &#25554;&#20837;&#20960;&#26465;&#31034;&#20363;&#25968;&#25454;</span>
+<span style="color: #a020f0;">insert</span> <span style="color: #a020f0;">into</span> person <span style="color: #a020f0;">values</span> <span style="color: #707183;">(</span>1, <span style="color: #8b2252;">'&#21608;&#26143;&#39536;'</span><span style="color: #707183;">)</span>;
+<span style="color: #a020f0;">insert</span> <span style="color: #a020f0;">into</span> person <span style="color: #a020f0;">values</span> <span style="color: #707183;">(</span>2, <span style="color: #8b2252;">'&#24352;&#23398;&#21451;'</span><span style="color: #707183;">)</span>;
+<span style="color: #a020f0;">insert</span> <span style="color: #a020f0;">into</span> person <span style="color: #a020f0;">values</span> <span style="color: #707183;">(</span>3, <span style="color: #8b2252;">'&#29579;&#23478;&#21355;'</span><span style="color: #707183;">)</span>;
+<span style="color: #a020f0;">commit</span>;
+</pre>
+</div>
+
+<p>
+站在 ORM 的角度考虑，我们应该为这个表创建一个类，Person，它跟 person 表是对应关系。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">Person</span> <span style="color: #707183;">{</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">int</span> <span style="color: #a0522d;">id</span>;
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">String</span> <span style="color: #a0522d;">name</span>;
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">...</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+如果按照 JDBC 的原生写法，我们从 person 表中
+</p>
+<ol class="org-ol">
+<li>读取 id 为 1 的数据
+</li>
+<li>删除 id 为 2 的数据
+</li>
+</ol>
+<p>
+大致要这么写：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#26597;&#35810;&#22823;&#32422;&#20998;&#19979;&#38754;&#20960;&#27493;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">1 ... jdbc &#30340;&#26041;&#24335;&#33719;&#21462;&#25968;&#25454;&#24211;&#36830;&#25509; Connection</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">2 ... &#23558;&#32467;&#26524;&#23553;&#35013;&#21040; Person &#31867;&#20013;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">3 ... &#28165;&#29702;&#25968;&#25454;&#24211;&#36830;&#25509;&#65292;&#20570;&#22909;&#24322;&#24120;&#30340;&#22788;&#29702;</span>
+<span style="color: #228b22;">ResultSet</span> <span style="color: #a0522d;">rs</span> = conn.executeQuery<span style="color: #707183;">(</span><span style="color: #8b2252;">"select * from person where id = 1"</span><span style="color: #707183;">)</span>;
+<span style="color: #228b22;">Person</span> <span style="color: #a0522d;">person</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Person</span><span style="color: #707183;">(</span>rs.getLong<span style="color: #7388d6;">(</span>1<span style="color: #7388d6;">)</span>, rs.getString<span style="color: #7388d6;">(</span>2<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#21024;&#38500;&#31867;&#20284;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">1 ... jdbc &#30340;&#26041;&#24335;&#33719;&#21462;&#25968;&#25454;&#24211;&#36830;&#25509; Connection</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">2 ... &#25191;&#34892;&#21024;&#38500;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">3 ... &#22788;&#29702;&#20107;&#21153;&#65292;&#20851;&#38381;&#36164;&#28304;&#65292;&#22788;&#29702;&#24322;&#24120;</span>
+conn.execute<span style="color: #707183;">(</span><span style="color: #8b2252;">"delete from Person where id = 2"</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+<p>
+每次这么写很麻烦，容易出错。所以出现了一些 ORM 框架，帮助我们进行数据库连接。<br >
+</p>
+
+<p>
+比如 hibernate。<br >
+它的思路是，在实体对象中设置好映射和关联后，我们只需要对对象进行各种操作（增删改查等）。
+框架会帮助我们把这些操作翻译成对数据库的操作。 <br >
+上面的功能，用 hibernate 实现，大致的代码为:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">1. &#35835;&#21462;&#37197;&#32622;&#25991;&#20214;&#65292;&#24314;&#31435; SessionFactory</span>
+<span style="color: #228b22;">SessionFactory</span> <span style="color: #a0522d;">sessionFactory</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">Configuration</span><span style="color: #707183;">(</span><span style="color: #8b2252;">"hibernate.xml"</span><span style="color: #707183;">)</span>.config<span style="color: #707183;">()</span>.buildSessionFactory<span style="color: #707183;">()</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">2. &#33719;&#21462;&#19968;&#20010;&#36830;&#25509;(session)</span>
+<span style="color: #228b22;">Session</span> <span style="color: #a0522d;">session</span> = sessionFactory.getSession<span style="color: #707183;">()</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">3. &#25191;&#34892;&#25805;&#20316;&#65292;&#26597;&#35810;&#12289;&#21024;&#38500;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#26159;&#38754;&#21521;&#23545;&#35937;&#30340;&#35821;&#27861;&#12290;hibernate &#36127;&#36131;&#23558;&#25105;&#20204;&#30340;&#25805;&#20316;&#32763;&#35793;&#25104;&#30456;&#23545;&#24212;&#30340; jdbc &#25805;&#20316;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#36825;&#22823;&#22823;&#31616;&#21270;&#20102;&#25105;&#20204;&#30340;&#25968;&#25454;&#25805;&#20316;&#12290;</span>
+<span style="color: #228b22;">Person</span> <span style="color: #a0522d;">tom</span> = session.get<span style="color: #707183;">(</span>Person.<span style="color: #a020f0;">class</span>, 1<span style="color: #707183;">)</span>;
+<span style="color: #228b22;">Person</span> <span style="color: #a0522d;">cat</span> = session.get<span style="color: #707183;">(</span>Person.<span style="color: #a020f0;">class</span>, 2<span style="color: #707183;">)</span>;
+session.delete<span style="color: #707183;">(</span>cat<span style="color: #707183;">)</span>;
+session.save<span style="color: #707183;">(</span>cat<span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+
+<p>
+hibernate 非常强大，在它的基础上，形成了 JavaEE 的 ORM 标准 JPA。
+但是 hibernate 也存在一些缺点，比如：
+</p>
+<ol class="org-ol">
+<li>相对比较重型，学习门槛高！！！
+</li>
+<li>过于面向对象，过度封装。
+</li>
+<li>虽然提升了开发效率，但是对执行效率有一定的牺牲（因为翻译成的 jdbc 操作未必是最优的）。所以，很难调优。
+</li>
+<li>不够灵活。
+</li>
+</ol>
+
+
+<p>
+所以，怎么兼顾 jdbc 和 hibernate 方式的优点，是很多人考虑的问题。于是 mybatis 出现了。
+</p>
+
+<p>
+它的思路很简单，例如，我们要对 person 表进行操作（查询和删除），在 jdbc 中对应两条语句：
+</p>
+<pre class="example">
+select id, name from person where id = 1;
+delete from person where id = 2;
+</pre>
+
+<p>
+那是不是可以弄一个配置文件，为这两条语句分别取个名字呢？
+下面示例 xml 里，为两条 sql 语句分别起了名字，叫 selectFromPerson 和 deleteFromPerson
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #0000ff;">mapper</span>&gt;
+  &lt;<span style="color: #0000ff;">sql</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">selectFromPerson</span><span style="color: #8b2252;">"</span>&gt;select id, name from person where id = 1&lt;/<span style="color: #0000ff;">sql</span>&gt;
+  &lt;<span style="color: #0000ff;">sql</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">deleteFromPerson</span><span style="color: #8b2252;">"</span>&gt;delete from person where id = 2&lt;/<span style="color: #0000ff;">sql</span>&gt;
+&lt;/<span style="color: #0000ff;">mapper</span>&gt;
+</pre>
+</div>
+
+<p>
+然后，我们可以这样调用：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#22987;&#21270; mybatis&#65292;&#21152;&#36733;&#37197;&#32622;&#25991;&#20214;&#21644;&#25968;&#25454;&#24211;&#20449;&#24687;&#65292;&#23553;&#35013;&#21040;&#19968;&#20010;&#23545;&#35937;&#37324;&#65292;&#36825;&#37324;&#21483; SqlSessionFactory</span>
+<span style="color: #228b22;">SqlSessionfactory</span> <span style="color: #a0522d;">sqlsessionfactory</span> = &#21021;&#22987;&#21270;&#20195;&#30721;;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#35201;&#26597;&#35810;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#39318;&#20808;&#65292;mybatis &#38656;&#35201;&#21435;&#23547;&#25214;&#21517;&#23383;&#21483; "selectFromPerson" &#30340; sql &#35821;&#21477;&#12290;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#28982;&#21518;&#65292;&#36890;&#36807;&#25105;&#20204;&#32473;&#30340;&#25968;&#25454;&#24211;&#37197;&#32622;&#65292;&#23427;&#20250;&#24110;&#25105;&#20204;&#36830;&#25509;&#25968;&#25454;&#24211;&#65292;&#25191;&#34892;&#19978;&#38754;&#26597;&#21040;&#30340;&#35821;&#21477;&#65292;&#23553;&#35013;&#32467;&#26524;&#21040; Person &#23545;&#35937;&#37324;&#12290;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25152;&#20197;&#65292;&#24046;&#19981;&#22810;&#26159;&#36825;&#26679;&#30340;&#20195;&#30721;:</span>
+<span style="color: #228b22;">Person</span> <span style="color: #a0522d;">de</span> = <span style="color: #707183;">(</span><span style="color: #228b22;">Person</span><span style="color: #707183;">)</span> sqlsessionfactory.getSession<span style="color: #707183;">()</span>.exec<span style="color: #707183;">(</span><span style="color: #8b2252;">"selectFromPerson"</span><span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22914;&#26524;&#35201;&#21024;&#38500;&#65292;&#20063;&#26159;&#31867;&#20284;&#30340;&#36923;&#36753;</span>
+sqlsessionfactory.getSession<span style="color: #707183;">()</span>.exec<span style="color: #707183;">(</span><span style="color: #8b2252;">"deleteFromPerson"</span><span style="color: #707183;">)</span>;
+</pre>
+</div>
+
+<p>
+我们看到，通过这种方式，我们只需要将要用到的 sql 语句，整理并放到配置文件中就行了。
+而执行的过程和封装的过程，交给 mybatis 帮助我们完成。这样，就有下面优点：
+</p>
+<ol class="org-ol">
+<li>轻量级
+</li>
+<li>灵活
+</li>
+<li>方便
+</li>
+</ol>
+
+
+<p>
+当然，在实际的过程中，会有很多 sql 语句，也会有其他复杂配置。
+为了不至于配置文件过大而导致维护麻烦，mybatis 将配置文件分为了两类:
+</p>
+<ol class="org-ol">
+<li>一个核心配置文件，里面配置数据库信息，还有指定其他的 mapper 文件。
+</li>
+<li>多个 mapper 文件。虽然所有的 sql 放在一个 xml 中也没问题。但基于单一原则（还有其他原因），我们应该将操作不同表的语句分开来放在不同文件里。这样便于维护使用。
+</li>
+</ol>
+
+
+<p>
+上面只是示例伪代码，下面才是 mybatis 中真正语法。首先，来个核心文件的配置内容：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span> ?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> configuration <span style="color: #a020f0;">PUBLIC</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//mybatis.org//DTD Config 3.0//EN</span><span style="color: #8b2252;">"</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://mybatis.org/dtd/mybatis-3-config.dtd</span><span style="color: #8b2252;">"</span>&gt;
+&lt;<span style="color: #0000ff;">configuration</span>&gt;
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25105;&#20204;&#21487;&#20197;&#37197;&#32622;&#22810;&#20010;&#25968;&#25454;&#24211;&#65292;&#36825;&#26679;&#26041;&#20415;&#25105;&#20204;&#22312;&#19981;&#21516;&#29615;&#22659;&#19979;&#30340;&#24320;&#21457; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#22909;&#20102;&#65292;&#21518;&#38754;&#23601;&#19981;&#38656;&#35201;&#25913;&#26469;&#25913;&#21435;&#20102;&#12290;&#20999;&#25442;&#25968;&#25454;&#24211;&#30340;&#26102;&#20505;&#65292;&#21482;&#38656;&#35201;&#23558; default &#25351;&#21521;&#25105;&#20204;&#30456;&#24212;&#30340;&#37197;&#32622;&#23601;&#21487;&#20197;&#20102; </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">environments</span> <span style="color: #a0522d;">default</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#24320;&#21457;&#29615;&#22659;</span><span style="color: #8b2252;">"</span>&gt;
+
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#25105;&#20204;&#22312;&#29983;&#20135;&#29615;&#22659;&#20013;&#20351;&#29992;&#30340;&#25968;&#25454;&#24211; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">environment</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#29983;&#20135;&#29615;&#22659;</span><span style="color: #8b2252;">"</span>&gt;
+      <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#20351;&#29992; jdbc &#20869;&#24314;&#30340;&#20107;&#21153;&#22788;&#29702; </span><span style="color: #b22222;">--&gt;</span>
+      &lt;<span style="color: #0000ff;">transactionManager</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">JDBC</span><span style="color: #8b2252;">"</span>/&gt;
+      <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#35774;&#32622;&#25968;&#25454;&#28304; </span><span style="color: #b22222;">--&gt;</span>
+      &lt;<span style="color: #0000ff;">dataSource</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">POOLED</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">driver</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${driver}</span><span style="color: #8b2252;">"</span>/&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">url</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${url}</span><span style="color: #8b2252;">"</span>/&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">username</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${username}</span><span style="color: #8b2252;">"</span>/&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${password}</span><span style="color: #8b2252;">"</span>/&gt;
+      &lt;/<span style="color: #0000ff;">dataSource</span>&gt;
+    &lt;/<span style="color: #0000ff;">environment</span>&gt;
+
+    &lt;<span style="color: #0000ff;">environment</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">&#24320;&#21457;&#29615;&#22659;</span><span style="color: #8b2252;">"</span>&gt;
+      &lt;<span style="color: #0000ff;">transactionManager</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">JDBC</span><span style="color: #8b2252;">"</span>/&gt;
+      &lt;<span style="color: #0000ff;">dataSource</span> <span style="color: #a0522d;">type</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">POOLED</span><span style="color: #8b2252;">"</span>&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">driver</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${driver}</span><span style="color: #8b2252;">"</span>/&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">url</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${url}</span><span style="color: #8b2252;">"</span>/&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">username</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${username}</span><span style="color: #8b2252;">"</span>/&gt;
+        &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${password}</span><span style="color: #8b2252;">"</span>/&gt;
+      &lt;/<span style="color: #0000ff;">dataSource</span>&gt;
+    &lt;/<span style="color: #0000ff;">environment</span>&gt;
+
+  &lt;/<span style="color: #0000ff;">environments</span>&gt;
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25351;&#23450;&#21508;&#20010; mapper &#25991;&#20214; </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">mappers</span>&gt;
+    &lt;<span style="color: #0000ff;">mapper</span> <span style="color: #a0522d;">resource</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">t/mapper/PersonMapper.xml</span><span style="color: #8b2252;">"</span>/&gt;
+  &lt;/<span style="color: #0000ff;">mappers</span>&gt;
+
+&lt;/<span style="color: #0000ff;">configuration</span>&gt;
+</pre>
+</div>
+
+<p>
+然后是 PersonMapper.xml 文件：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span>?&gt;
+&lt;!<span style="color: #a020f0;">DOCTYPE</span> mapper <span style="color: #a020f0;">PUBLIC</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">-//mybatis.org//DTD Mapper 3.0//EN</span><span style="color: #8b2252;">"</span> <span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://mybatis.org/dtd/mybatis-3-mapper.dtd</span><span style="color: #8b2252;">"</span>&gt;
+
+&lt;<span style="color: #0000ff;">mapper</span> <span style="color: #a0522d;">namespace</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">t.dao.PersonDao</span><span style="color: #8b2252;">"</span>&gt;
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36825;&#37324;&#65292;&#27604;&#25105;&#20204;&#19978;&#38754;&#30340;&#31034;&#20363;&#22797;&#26434;&#20102;&#19968;&#28857;&#28857;&#12290;&#22240;&#20026;&#24819;&#35201; mybatis &#24110;&#21161;&#25105;&#20204;&#26356;&#22909;&#20570;&#20107;&#65292;&#23601;&#35201;&#21578;&#35785;&#22905;&#26356;&#22810;&#20449;&#24687;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#39318;&#20808;&#65292;&#26681;&#25454;&#25805;&#20316;&#30340;&#19981;&#21516;&#65292;&#21010;&#20998;&#20102;&#19981;&#21516;&#30340;&#33410;&#28857;&#65292;&#27604;&#22914; select &#34920;&#31034;&#26597;&#35810;&#35821;&#21477;&#65292;delete &#34920;&#31034;&#21024;&#38500;&#35821;&#21477; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#20877;&#27425;&#65292;&#20851;&#20110; sql &#21517;&#23383;&#65292;&#22240;&#20026;&#19978;&#38754;&#25351;&#23450;&#20102; namespace&#65292;&#25152;&#20197;&#65292;&#25105;&#20204;&#19979;&#38754;&#36825;&#26465; sql &#30340;&#20840;&#21517;&#23601;&#26159; t.dao.UserDao.selectFromPerson </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> resultType: &#21578;&#35785; mybatis&#65292;&#23558;&#26597;&#35810;&#20986;&#26469;&#30340;&#25968;&#25454;&#23553;&#35013;&#25104; Person &#31867;&#22411; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> parameterType: &#32473;&#25105;&#20204;&#30340; sql &#35821;&#21477;&#20256;&#19968;&#20010;&#21442;&#25968;&#36827;&#26469; </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">select</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">selectFromPerson</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">parameterType</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">java.lang.Integer</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">resultType</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">t.model.Person</span><span style="color: #8b2252;">"</span>&gt;
+    SELECT id, name FROM person WHERE id=#{id}
+  &lt;/<span style="color: #0000ff;">select</span>&gt;
+
+  &lt;<span style="color: #0000ff;">delete</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">deleteFromPerson</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">parameterType</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">java.lang.Integer</span><span style="color: #8b2252;">"</span>&gt;
+    delete from person where id=#{id}
+  &lt;/<span style="color: #0000ff;">delete</span>&gt;
+&lt;/<span style="color: #0000ff;">mapper</span>&gt;
+</pre>
+</div>
+
+
+<p>
+配置文件有了，下面就是调用的方式：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">1 ... &#35835;&#21462;&#26680;&#24515;&#37197;&#32622;&#25991;&#20214;&#65292;&#21019;&#24314; sessionfactory</span>
+<span style="color: #228b22;">InputStream</span> <span style="color: #a0522d;">inputStream</span> = Resources.getResourceAsStream<span style="color: #707183;">(</span><span style="color: #8b2252;">"mybatis.xml"</span><span style="color: #707183;">)</span>;
+<span style="color: #228b22;">SqlSessionFactory</span> <span style="color: #a0522d;">sqlSessionFactory</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">SqlSessionFactoryBuilder</span><span style="color: #707183;">()</span>.build<span style="color: #707183;">(</span>inputStream<span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">2 ... &#33719;&#21462; session</span>
+<span style="color: #228b22;">SqlSession</span> <span style="color: #a0522d;">session</span> = sqlSessionFactory.openSession<span style="color: #707183;">()</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">3 ... &#36827;&#34892;&#26597;&#35810;&#65292;&#37197;&#32622;&#25991;&#20214;&#37324;&#65292;&#26597;&#35810;&#30340; sql &#35821;&#21477;&#25105;&#20204;&#32473;&#30340;&#21517;&#23383;&#26159; t.dao.PersonDao.selectFromPerson&#65292;&#25152;&#20197;&#65292;&#26597;&#35810;&#22914;&#19979;</span>
+<span style="color: #228b22;">Person</span> <span style="color: #a0522d;">person</span> = <span style="color: #707183;">(</span><span style="color: #228b22;">Person</span><span style="color: #707183;">)</span> session.selectOne<span style="color: #707183;">(</span><span style="color: #8b2252;">"t.dao.PersonDao.selectFromPerson"</span>, 1<span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">4 ... &#36827;&#34892;&#21024;&#38500;&#65292;&#30456;&#24212; sql &#35821;&#21477;&#20026; t.dao.PersonDao.deleteFromPerson</span>
+session.delete<span style="color: #707183;">(</span><span style="color: #8b2252;">"t.dao.PersonDao.deleteFromPerson"</span>, 2<span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">5 ... &#37322;&#25918;&#36164;&#28304;</span>
+session.close<span style="color: #707183;">()</span>;
+</pre>
+</div>
+
+
+
+<p>
+这样就 OK 了，这基本是 Mybatis 的全部了（虽然还有很多细节没说）。<br >
+当然，你有没有觉得，下面这样的语句写多了也会抓狂。
+</p>
+<pre class="example">
+Person person = (Person) session.selectOne("t.dao.PersonDao.selectFromPerson", 1);
+</pre>
+<p>
+因为，sql 的名字写短了容易起冲突，写长了不好记，容易写错，并且因为是字符串 IDE 也不好给出相应提醒。另外，需要自己动手转型，也麻烦。
+</p>
+
+<p>
+怎么办？再封装一丢丢就好了。
+</p>
+
+<p>
+既然我们给这条 sql 起的名字是 t.dao.PersonDao.selectFromPerson，那么，我们就按照这个写法，创建相应的接口呗。<br >
+<b>也就是：复辟我们的 dao 层！</b>
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #a020f0;">package</span> t.<span style="color: #008b8b;">dao</span>;
+
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">interface</span> <span style="color: #228b22;">PersonDao</span> <span style="color: #707183;">{</span>
+    <span style="color: #228b22;">Person</span> <span style="color: #0000ff;">selectFromPerson</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">int</span> <span style="color: #a0522d;">id</span><span style="color: #7388d6;">)</span>;
+    <span style="color: #228b22;">void</span> <span style="color: #0000ff;">deleteFromPerson</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">int</span> <span style="color: #a0522d;">id</span><span style="color: #7388d6;">)</span>;
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+
+<p>
+这样，整个调用的代码就变成了：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #b22222;">// </span><span style="color: #b22222;">1 ... &#35835;&#21462;&#26680;&#24515;&#37197;&#32622;&#25991;&#20214;&#65292;&#21019;&#24314; sessionfactory</span>
+<span style="color: #228b22;">InputStream</span> <span style="color: #a0522d;">inputStream</span> = Resources.getResourceAsStream<span style="color: #707183;">(</span><span style="color: #8b2252;">"mybatis.xml"</span><span style="color: #707183;">)</span>;
+<span style="color: #228b22;">SqlSessionFactory</span> <span style="color: #a0522d;">sqlSessionFactory</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">SqlSessionFactoryBuilder</span><span style="color: #707183;">()</span>.build<span style="color: #707183;">(</span>inputStream<span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">2 ... &#33719;&#21462; session</span>
+<span style="color: #228b22;">SqlSession</span> <span style="color: #a0522d;">session</span> = sqlSessionFactory.openSession<span style="color: #707183;">()</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">3 ... mybatis &#26681;&#25454; PersonDao &#25509;&#21475;&#29983;&#25104;&#30456;&#24212;&#30340;&#20195;&#29702;&#23545;&#35937;&#65288;&#20195;&#29702;&#27169;&#24335;&#65292;&#36824;&#35760;&#24471;&#21527;&#65289;&#12290;</span>
+<span style="color: #228b22;">PersonDao</span> <span style="color: #a0522d;">personDao</span> = session.getMapper<span style="color: #707183;">(</span>PersonDao.<span style="color: #a020f0;">class</span><span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">4 ... &#25105;&#20204;&#35843;&#29992;&#36825;&#20010;&#20195;&#29702;&#23545;&#35937;&#30340;&#30456;&#24212;&#26041;&#27861;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">mybatis &#20250;&#36890;&#36807;&#21453;&#23556;&#30340;&#26041;&#24335;&#65292;&#26597;&#35810;&#21040;&#36825;&#20010; PersonDao &#30340;&#20840;&#31867;&#21517;&#20026; t.dao.PersonDao&#65292;&#25105;&#20204;&#35843;&#29992;&#30340;&#26041;&#27861;&#21517;&#20026; selectFromPerson&#65292;&#25152;&#20197;&#22905;&#20063;&#23601;&#26126;&#30333;&#20102;&#65306;</span>
+<span style="color: #b22222;">//  </span><span style="color: #b22222;">-- &#25105;&#20204;&#26159;&#24819;&#35201;&#25191;&#34892; t.dao.PersonDao.selectFromPerson &#36825;&#26465; sql &#35821;&#21477;</span>
+<span style="color: #b22222;">//  </span><span style="color: #b22222;">-- &#36820;&#22238;&#30340;&#25968;&#25454;&#24212;&#35813;&#23553;&#35013;&#25104; Person</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#25152;&#20197; mybatis &#23601;&#20250;&#21435;&#25214;&#21517;&#23383;&#20026; t.dao.PersonDao.selectFromPerson &#30340; sql &#35821;&#21477;&#65292;&#26597;&#35810;&#21040;&#65292;&#23553;&#35013;&#32467;&#26524;&#21040; Person &#37324;&#12290;</span>
+<span style="color: #228b22;">Person</span> <span style="color: #a0522d;">person</span> = personDao.selectFromPerson<span style="color: #707183;">(</span>1<span style="color: #707183;">)</span>;
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">5 ... &#37322;&#25918;&#36164;&#28304;</span>
+session.close<span style="color: #707183;">()</span>;
+</pre>
+</div>
+
+<p>
+有没有发现，这样封装了一下，好像事情变得更面向对象了，操作起来更爽手了。
+</p>
+
+<p>
+也就这么简单。
+</p>
+
+<p>
+我们的 MyBatis 教程。就这样结束了。
+</p>
+</div>
+</section>
+
+
+<section id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> MyBatis + Spring</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> 第一步，创建 Gradle 项目，引入相应 jar 包</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+
+<pre class="src src-java">compile <span style="color: #707183;">(</span>
+         <span style="color: #b22222;">// </span><span style="color: #b22222;">Databases</span>
+         <span style="color: #8b2252;">"cn.easyproject:ojdbc7:12.1.0.2.0"</span>,
+         <span style="color: #8b2252;">"c3p0:c3p0:0.9.1.2"</span>,
+
+         <span style="color: #b22222;">// </span><span style="color: #b22222;">Spring</span>
+         <span style="color: #8b2252;">"org.springframework:spring-web:$springVersion"</span>,
+         <span style="color: #8b2252;">"org.springframework:spring-aop:$springVersion"</span>,
+         <span style="color: #8b2252;">"org.springframework:spring-orm:$springVersion"</span>,
+
+         <span style="color: #b22222;">// </span><span style="color: #b22222;">MyBatis And Plugin</span>
+         <span style="color: #8b2252;">"org.mybatis:mybatis:3.4.2"</span>,
+         <span style="color: #8b2252;">"org.mybatis:mybatis-spring:1.3.1"</span>
+         <span style="color: #707183;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> 配置文件</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+我们可以将 mybatis 的核心配置文件合并到 spring 中:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #a020f0;">xml</span> <span style="color: #a0522d;">version</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">1.0</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">encoding</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">UTF-8</span><span style="color: #8b2252;">"</span>?&gt;
+&lt;<span style="color: #0000ff;">beans</span> <span style="color: #483d8b;">xmlns</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.springframework.org/schema/beans</span><span style="color: #8b2252;">"</span>
+       <span style="color: #483d8b;">xmlns</span>:<span style="color: #a0522d;">xsi</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.w3.org/2001/XMLSchema-instance</span><span style="color: #8b2252;">"</span>
+       <span style="color: #483d8b;">xmlns</span>:<span style="color: #a0522d;">context</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.springframework.org/schema/context</span><span style="color: #8b2252;">"</span>
+       <span style="color: #483d8b;">xmlns</span>:<span style="color: #a0522d;">tx</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.springframework.org/schema/tx</span><span style="color: #8b2252;">"</span>
+       <span style="color: #483d8b;">xsi</span>:<span style="color: #a0522d;">schemaLocation</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd</span><span style="color: #8b2252;">"</span>&gt;
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#22806;&#37096;&#36164;&#28304;&#25991;&#20214; </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #483d8b;">context</span>:<span style="color: #0000ff;">property-placeholder</span> <span style="color: #a0522d;">location</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">classpath:db.properties</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">ignore-unresolvable</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span>/&gt;
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#37197;&#32622;&#25968;&#25454;&#28304; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#36825;&#37324;&#20351;&#29992;&#30340;&#26159; c3p0&#65292;&#27604;&#36739;&#32463;&#20856;&#30340;&#21830;&#19994;&#19978;&#27604;&#36739;&#25104;&#29087;&#30340;&#25968;&#25454;&#28304;&#31649;&#29702;&#21253; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> Spring &#20063;&#20869;&#32622;&#20102;&#19968;&#20010;&#25968;&#25454;&#28304;&#31649;&#29702;&#31867;&#65292;&#25105;&#20204;&#24320;&#21457;&#29615;&#22659;&#21487;&#20197;&#29992;&#65292;&#20294;&#29983;&#20135;&#29615;&#22659;&#23601;&#19981;&#35201;&#29992;&#20102;&#12290;&#22240;&#20026;&#23427;&#22826;&#31616;&#38475;&#20102;&#12290; </span><span style="color: #b22222;">--&gt;</span>
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#29616;&#22312;&#20351;&#29992;&#27604;&#36739;&#22810;&#30340;&#65292;&#36824;&#26377;&#38463;&#37324;&#20113;&#30340;&#25968;&#25454;&#28304;&#31649;&#29702; jar &#21253;&#65292;&#20320;&#20204;&#21487;&#20197;&#33258;&#34892;&#26597;&#35810; </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">dataSource</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">com.mchange.v2.c3p0.ComboPooledDataSource</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">destroy-method</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">close</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">user</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${user}</span><span style="color: #8b2252;">"</span>/&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">password</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${password}</span><span style="color: #8b2252;">"</span>/&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">jdbcUrl</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${url}</span><span style="color: #8b2252;">"</span>/&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">driverClass</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">${driver}</span><span style="color: #8b2252;">"</span>/&gt;
+  &lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#23558; Sqlsessionfactory &#30340;&#29983;&#25104;&#24037;&#20316;&#20132;&#32473; spring </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sqlSessionFactory</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.mybatis.spring.SqlSessionFactoryBean</span><span style="color: #8b2252;">"</span>&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25351;&#26126;&#20351;&#29992;&#30340;&#25968;&#25454;&#28304; </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">dataSource</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">dataSource</span><span style="color: #8b2252;">"</span>/&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25351;&#26126;&#25152;&#26377;&#30340; mapper &#25991;&#20214;&#12290;&#34429;&#28982;&#65292;&#20063;&#21487;&#20197;&#36890;&#36807;&#27880;&#35299;&#37197;&#32622; mybatis&#65292;&#20294;&#22312;&#23454;&#38469;&#36807;&#31243;&#20013;&#65292;&#23613;&#37327;&#29992; xml &#23569;&#29992;&#27880;&#35299;&#65292;&#22240;&#20026;&#36825;&#26679;&#20415;&#20110;&#32500;&#25252;&#12290;&#20999;&#35760;&#12290;</span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">mapperLocations</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">classpath:mybatis/*.xml</span><span style="color: #8b2252;">"</span>/&gt;
+    <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#25351;&#26126;&#40664;&#35748;&#30340;&#23454;&#20307;&#31867;&#30340;&#21253;&#21517;&#65292;&#22914;&#26524;&#25351;&#23450;&#20102;&#65292;&#25105;&#20204;&#22312; mapper &#37324;&#30340; resultType="t.model.User" &#21487;&#20197;&#31616;&#20889;&#20026; resultType="User" </span><span style="color: #b22222;">--&gt;</span>
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">typeAliasesPackage</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">classpath:t.model</span><span style="color: #8b2252;">"</span>/&gt;
+  &lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+
+  <span style="color: #b22222;">&lt;!--</span>
+<span style="color: #b22222;">      &#22914;&#26524;&#20165;&#37197;&#32622;&#20102; sqlSessionFactory&#65292;&#22312;&#20195;&#30721;&#20013;&#65292;&#35843;&#29992; selectFromPerson&#65292;&#25105;&#20204;&#38656;&#35201;&#36825;&#26679;&#20889;&#65306;</span>
+
+<span style="color: #b22222;">      // &#20808;&#36890;&#36807;&#23481;&#22120;&#33719;&#21462; sessionfactory</span>
+<span style="color: #b22222;">      @Resource SqlSessionFactory sqlSessionFacotory;</span>
+<span style="color: #b22222;">      // &#24471;&#21040; mapper</span>
+<span style="color: #b22222;">      PersonDao personDao = sqlSessionFacotory.getMapper(PersonDao.class);</span>
+<span style="color: #b22222;">      // &#25191;&#34892;&#26041;&#27861;</span>
+<span style="color: #b22222;">      personDao.selectFromPerson(1);</span>
+
+
+<span style="color: #b22222;">      &#20294;&#26159;&#65292;&#22914;&#26524;&#33021;&#23558;&#20195;&#30721;&#31616;&#21270;&#25104;&#36825;&#31181;&#24418;&#24335;&#65292;&#23682;&#19981;&#26159;&#26356;&#32654;&#65311;</span>
+
+<span style="color: #b22222;">      // &#30452;&#25509;&#20174;&#23481;&#22120;&#37324;&#21462;&#20986;&#21021;&#22987;&#21270;&#22909;&#30340; personDao</span>
+<span style="color: #b22222;">      @Resource PersonDao personDao;</span>
+<span style="color: #b22222;">      // &#25351;&#23450;&#26041;&#27861;</span>
+<span style="color: #b22222;">      personDao.selectFromPerson(1);</span>
+
+
+<span style="color: #b22222;">      &#24819;&#36825;&#26679;&#21527;&#65311;&#21487;&#20197;&#65292;&#21482;&#38656;&#35201;&#22312; Spring &#20013;&#37197;&#32622;&#19968;&#20010;&#21518;&#32622;&#22788;&#29702;&#22120;&#23601;&#22909;&#20102;&#12290;</span>
+<span style="color: #b22222;">      &#31616;&#32780;&#35328;&#20043;&#65292;&#35753; spring &#22312;&#21021;&#22987;&#21270;&#22909;&#21518;&#65292;&#23558; basePackage &#37324;&#30340;&#25152;&#26377;&#25509;&#21475;&#37117;&#36890;&#36807; mybatis &#20135;&#29983;&#30456;&#24212;&#30340;&#20195;&#29702;&#31867;&#65292;&#28982;&#21518;&#25918;&#21040;&#23481;&#22120;&#37324;&#12290;</span>
+<span style="color: #b22222;">      &#36825;&#26679;&#65292;&#25105;&#20204;&#20197;&#21518;&#29992;&#30340;&#26102;&#20505;&#65292;&#21482;&#38656;&#35201;&#21040;&#23481;&#22120;&#37324;&#21435;&#25343;&#23601;&#21487;&#20197;&#20102;&#12290;</span>
+<span style="color: #b22222;">  </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.mybatis.spring.mapper.MapperScannerConfigurer</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">basePackage</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">it.dao</span><span style="color: #8b2252;">"</span>/&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sqlSessionFactoryBeanName</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">value</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">sqlSessionFactory</span><span style="color: #8b2252;">"</span>/&gt;
+  &lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+
+  <span style="color: #b22222;">&lt;!--</span><span style="color: #b22222;"> &#19979;&#38754;&#26159;&#22768;&#26126;&#24335;&#20107;&#21153;&#65292;&#36319;&#20043;&#21069;&#24046;&#19981;&#22810;&#30340; </span><span style="color: #b22222;">--&gt;</span>
+  &lt;<span style="color: #0000ff;">bean</span> <span style="color: #a0522d;">id</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">transactionManager</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">org.springframework.jdbc.datasource.DataSourceTransactionManager</span><span style="color: #8b2252;">"</span>&gt;
+    &lt;<span style="color: #0000ff;">property</span> <span style="color: #a0522d;">name</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">dataSource</span><span style="color: #8b2252;">"</span> <span style="color: #a0522d;">ref</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">dataSource</span><span style="color: #8b2252;">"</span>/&gt;
+  &lt;/<span style="color: #0000ff;">bean</span>&gt;
+
+  &lt;<span style="color: #483d8b;">tx</span>:<span style="color: #0000ff;">annotation-driven</span> <span style="color: #a0522d;">proxy-target-class</span>=<span style="color: #8b2252;">"</span><span style="color: #8b2252;">true</span><span style="color: #8b2252;">"</span>/&gt;
+
+&lt;/<span style="color: #0000ff;">beans</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> 使用，比如，在 PersonService 类里面</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #008b8b;">@Service</span>
+<span style="color: #008b8b;">@Transactional</span>
+<span style="color: #a020f0;">public</span> <span style="color: #a020f0;">class</span> <span style="color: #228b22;">PersonService</span> <span style="color: #707183;">{</span>
+
+    <span style="color: #008b8b;">@Resource</span>
+    <span style="color: #a020f0;">private</span> <span style="color: #228b22;">PersonDao</span> <span style="color: #a0522d;">personDao</span>;
+
+    <span style="color: #a020f0;">public</span> <span style="color: #0000ff;">getPersonById</span><span style="color: #7388d6;">(</span><span style="color: #228b22;">int</span> <span style="color: #a0522d;">id</span><span style="color: #7388d6;">)</span> <span style="color: #7388d6;">{</span>
+        <span style="color: #a020f0;">return</span> personDao.selectFromPerson<span style="color: #909183;">(</span>id<span style="color: #909183;">)</span>;
+    <span style="color: #7388d6;">}</span>
+<span style="color: #707183;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: imfine</p>
+<p class="date">Created: 2017-03-28 周二 14:32</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation">Go ahead, never stop.</p>
+</div>
+</body>
+</html>

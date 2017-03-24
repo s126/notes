@@ -127,6 +127,53 @@ git push origin master                             # 本地的 master 分支有�
 #+END_SRC
 
 
+* 版本控制工具之 Subversion
+首先，下载可爱的小乌龟:
+: wget https://nchc.dl.sourceforge.net/project/tortoisesvn/1.9.5/Application/TortoiseSVN-1.9.5.27581-x64-svn-1.9.5.msi
+
+其次，如果想使用 svn 从服务器上下载东西:
+: svn checkout http://svn.apache.org/repos/asf/struts/struts2
+: svn co http://svn.apache.org/repos/asf/struts/struts2
+
+如果想同步代码:
+: svn update
+
+查看当前代码的修改情况：
+: svn status
+: svn st
+
+如果想提交代码:
+: svn commit -m 我的注释
+: svn ci -m "My Message"
+
+查看日志
+: svn log
+
+寻求帮助
+: svn --help
+: svn update --help
+
+
+** 搭建服务器
+
+首先，创建一个 svn 库:
+: svnadmin create /var/svn/aaa
+
+修改下面的 conf/svnserver.conf 文件，将下面几条注释去掉
+: anon-access = read       # 匿名用户只能读，不能改
+: anon-access = write      # 已登录用户，可以修改
+: password-db = passwd     # 指明验证文件的名字
+
+其次，开启服务：
+: svnserve --daemon --root /tmp/bbb
+
+然后，就可以访问了
+: svn co svn://ip
+
+导入文件夹到项目，可以用 import 命令：
+: svn import ~/hello svn://ip/hello
+
+
 * 依赖管理工具之 Maven
 以下是在 eclipse 中创建一个 maven 项目的步骤。
 

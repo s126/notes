@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>常用工具</title>
-<!-- 2017-03-21 周二 10:55 -->
+<!-- 2017-03-24 周五 15:26 -->
 <meta  charset="utf-8">
 <meta  name="generator" content="Org-mode">
 <meta  name="author" content="imfine">
@@ -22,9 +22,14 @@
 <ul>
 <li><a href="#sec-1">1. Emacs 常用命令</a></li>
 <li><a href="#sec-2">2. 版本控制工具之 GIT</a></li>
-<li><a href="#sec-3">3. 依赖管理工具之 Maven</a></li>
-<li><a href="#sec-4">4. Eclipse 常用快捷键</a></li>
-<li><a href="#sec-5">5. JUnit</a></li>
+<li><a href="#sec-3">3. 版本控制工具之 Subversion</a>
+<ul>
+<li><a href="#sec-3-1">3.1. 搭建服务器</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. 依赖管理工具之 Maven</a></li>
+<li><a href="#sec-5">5. Eclipse 常用快捷键</a></li>
+<li><a href="#sec-6">6. JUnit</a></li>
 </ul>
 </div>
 </nav>
@@ -182,8 +187,110 @@ git push origin master                             <span style="color: #b22222;"
 
 
 <section id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> 依赖管理工具之 Maven</h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> 版本控制工具之 Subversion</h2>
 <div class="outline-text-2" id="text-3">
+<p>
+首先，下载可爱的小乌龟:
+</p>
+<pre class="example">
+wget https://nchc.dl.sourceforge.net/project/tortoisesvn/1.9.5/Application/TortoiseSVN-1.9.5.27581-x64-svn-1.9.5.msi
+</pre>
+
+<p>
+其次，如果想使用 svn 从服务器上下载东西:
+</p>
+<pre class="example">
+svn checkout http://svn.apache.org/repos/asf/struts/struts2
+svn co http://svn.apache.org/repos/asf/struts/struts2
+</pre>
+
+<p>
+如果想同步代码:
+</p>
+<pre class="example">
+svn update
+</pre>
+
+<p>
+查看当前代码的修改情况：
+</p>
+<pre class="example">
+svn status
+svn st
+</pre>
+
+<p>
+如果想提交代码:
+</p>
+<pre class="example">
+svn commit -m 我的注释
+svn ci -m "My Message"
+</pre>
+
+<p>
+查看日志
+</p>
+<pre class="example">
+svn log
+</pre>
+
+<p>
+寻求帮助
+</p>
+<pre class="example">
+svn --help
+svn update --help
+</pre>
+</div>
+
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> 搭建服务器</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+首先，创建一个 svn 库:
+</p>
+<pre class="example">
+svnadmin create /var/svn/aaa
+</pre>
+
+<p>
+修改下面的 conf/svnserver.conf 文件，将下面几条注释去掉
+</p>
+<pre class="example">
+anon-access = read       # 匿名用户只能读，不能改
+anon-access = write      # 已登录用户，可以修改
+password-db = passwd     # 指明验证文件的名字
+</pre>
+
+<p>
+其次，开启服务：
+</p>
+<pre class="example">
+svnserve --daemon --root /tmp/bbb
+</pre>
+
+<p>
+然后，就可以访问了
+</p>
+<pre class="example">
+svn co svn://ip
+</pre>
+
+<p>
+导入文件夹到项目，可以用 import 命令：
+</p>
+<pre class="example">
+svn import ~/hello svn://ip/hello
+</pre>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 依赖管理工具之 Maven</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 以下是在 eclipse 中创建一个 maven 项目的步骤。
 </p>
@@ -225,9 +332,9 @@ git push origin master                             <span style="color: #b22222;"
 </ol>
 </div>
 </section>
-<section id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Eclipse 常用快捷键</h2>
-<div class="outline-text-2" id="text-4">
+<section id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Eclipse 常用快捷键</h2>
+<div class="outline-text-2" id="text-5">
 <p>
 首先要学会的第一个快捷键：Ctrl-Shift-L. 按下试试。
 </p>
@@ -389,9 +496,9 @@ Debug 环境中的快捷键。务必记住啊。
 </div>
 </section>
 
-<section id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> JUnit</h2>
-<div class="outline-text-2" id="text-5">
+<section id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> JUnit</h2>
+<div class="outline-text-2" id="text-6">
 <p>
 它是 Java 平台非常流行，非常强大，也非常简单实用的一种测试框架。
 </p>
@@ -408,7 +515,7 @@ Debug 环境中的快捷键。务必记住啊。
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: imfine</p>
-<p class="date">Created: 2017-03-21 周二 10:55</p>
+<p class="date">Created: 2017-03-24 周五 15:26</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation">Go ahead, never stop.</p>
 </div>
