@@ -44,86 +44,88 @@ git pull
 下面总结了一下常用的基本命令：
 #+BEGIN_SRC sh
 
-## 修改 .gitconfig 文件，这是 git 的配置文件
-vi ~/.gitconfig 
+  ## 修改 .gitconfig 文件，这是 git 的配置文件
+  vi ~/.gitconfig 
 
-## 初始化 版本库
-git init
-git init-db
+  ## 初始化 版本库
+  git init
+  git init-db
 
-## 添加忽略文件。这个文件控制，哪些文件不要被提交
-echo "*.svn" > .gitignore
+  ## 添加忽略文件。这个文件控制，哪些文件不要被提交
+  echo "*.svn" > .gitignore
 
-## 将改变增加至索引
-git add .
+  ## 将改变增加至索引
+  git add .
 
-## 从索引写入到库
-git commit -m "提交到版本库"
-git commit -a -m "提交，连同所有未 add 的修改文件"
-git commit --amend -a -m "替换最后一次的提交信息"
+  ## 从索引写入到库
+  git commit -m "提交到版本库"
+  git commit -a -m "提交，连同所有未 add 的修改文件"
+  git commit --amend -a -m "替换最后一次的提交信息"
 
-## 查看修改了什么东西
-git diff
-git diff --cached
-git status
+  ## 查看修改了什么东西
+  git diff
+  git diff --cached
+  git status
 
-## 回撤版本，重新提交。后悔药。
-git reset HEAD^           # 回撤到上一版本，默认是 --mix 形式，另有 --soft 和 --hard 形式
-git status                # 可以看到，上一版本提交的文件没有增加到 index 的状态
-git add/commit...         # 做完处理后，重新提交
-
-
-## 查看日志，历史记录
-git show
-git log
-git log --pretty=oneline  # 定制 log 的显示样式
-git log -2 -p             # 显示最近两次提交的详细信息
-git log --stat --summary  # 简要显示每次更新的统计信息（提交过那些文件，有多少行修改）
-
-## 增加/查看/切换/删除 分支
-git branch                # 查看分支
-git branch s126           # 创建分支 s126
-git checkout s126         # 切换到分支 s126
-git checkout -b tmp       # 创建并切换到分支 tmp
-git branch -D tmp         # 删除分支 tmp
-
-## 合并工作到主分支(s126 -> master)
-git checkout master       # 切换到主分支
-git merge HEAD s126       # 将 s126 的最新版本合并到当前分支
-git pull . s126           # 相当于 git fetch && git merge
-
-## 生成并应用补丁，这是另外一个合并工作的方法。暂时不需要搞太清楚。
-git format-patch master > A.patch
-git checkout master       # 先生成补丁文件，再切换到分支目录
-git apply A.patch         # 应用补丁文件到当前分支
-git add/commit...         # 然后提交修改
+  ## 回撤版本，重新提交。后悔药。
+  git reset HEAD^           # 回撤到上一版本，默认是 --mix 形式，另有 --soft 和 --hard 形式
+  git status                # 可以看到，上一版本提交的文件没有增加到 index 的状态
+  git add/commit...         # 做完处理后，重新提交
 
 
-## 下载/上传/更新 信息到指定版本库
-git clone git://192.168.1.1/repo.git
-git push git://192.168.1.1/repo.git s126:master
-git pull git://192.168.1.1/repo.git master:s126
-git fetch public
+  ## 查看日志，历史记录
+  git show
+  git log
+  git log --pretty=oneline  # 定制 log 的显示样式
+  git log -2 -p             # 显示最近两次提交的详细信息
+  git log --stat --summary  # 简要显示每次更新的统计信息（提交过那些文件，有多少行修改）
+  git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-## 其他命令：
-git tag                   # 将某个版本做个标记，即赋予一个好记的名字
-git gc                    # 垃圾收集，能大大减小版本库大小
-git repack                # 同上，也能大大减小版本库大小
-git ls-tree HEAD          # 查看版本库中的文件结构，下面语句是跟 awk 合作，打印整个目录结构
-git ls-tree -r HEAD | awk '{print $4}' > d:/home/index/repTree
-git whatchanged           # 显示某个版本改变了哪些文件
-git show-branch           # 显示分支变动情况
-git reflog                # 显示所有变更历史(跟 git log 不同)
-git clone                 # 相当于 git init && git fetch
-git pull                  # 相当于 git fetch && git merge
-git rebase                # git merge 外，合并仓库的另一种形式
+  ## 增加/查看/切换/删除 分支
+  git branch                # 查看分支
+  git branch s126           # 创建分支 s126
+  git branch s126 343223    # 以 343223 为起点创建 s126 分支
+  git checkout s126         # 切换到分支 s126
+  git checkout -b tmp       # 创建并切换到分支 tmp
+  git branch -D tmp         # 删除分支 tmp
+
+  ## 合并工作到主分支(s126 -> master)
+  git checkout master       # 切换到主分支
+  git merge HEAD s126       # 将 s126 的最新版本合并到当前分支
+  git pull . s126           # 相当于 git fetch && git merge
+
+  ## 生成并应用补丁，这是另外一个合并工作的方法。暂时不需要搞太清楚。
+  git format-patch master > A.patch
+  git checkout master       # 先生成补丁文件，再切换到分支目录
+  git apply A.patch         # 应用补丁文件到当前分支
+  git add/commit...         # 然后提交修改
 
 
-## 下面的例子是建立一个纯仓库，并作为开发的中心仓库（即 GIT 服务端）
-git clone --bare /workspace/hnpmi /repo/s126.git   # 创建一个新的纯仓库，用于备份、共享
-cd /workspace/s126                                 # 这是我们的工作目录
-git remote add origin /repo/s126.git               # 将刚才新建的仓库添加为h我们的远程分支
-git push origin master                             # 本地的 master 分支有更新，同步到远程分支
+  ## 下载/上传/更新 信息到指定版本库
+  git clone git://192.168.1.1/repo.git
+  git push git://192.168.1.1/repo.git s126:master
+  git pull git://192.168.1.1/repo.git master:s126
+  git fetch public
+
+  ## 其他命令：
+  git tag                   # 将某个版本做个标记，即赋予一个好记的名字
+  git gc                    # 垃圾收集，能大大减小版本库大小
+  git repack                # 同上，也能大大减小版本库大小
+  git ls-tree HEAD          # 查看版本库中的文件结构，下面语句是跟 awk 合作，打印整个目录结构
+  git ls-tree -r HEAD | awk '{print $4}' > d:/home/index/repTree
+  git whatchanged           # 显示某个版本改变了哪些文件
+  git show-branch           # 显示分支变动情况
+  git reflog                # 显示所有变更历史(跟 git log 不同)
+  git clone                 # 相当于 git init && git fetch
+  git pull                  # 相当于 git fetch && git merge
+  git rebase                # git merge 外，合并仓库的另一种形式
+
+
+  ## 下面的例子是建立一个纯仓库，并作为开发的中心仓库（即 GIT 服务端）
+  git clone --bare /workspace/hnpmi /repo/s126.git   # 创建一个新的纯仓库，用于备份、共享
+  cd /workspace/s126                                 # 这是我们的工作目录
+  git remote add origin /repo/s126.git               # 将刚才新建的仓库添加为h我们的远程分支
+  git push origin master                             # 本地的 master 分支有更新，同步到远程分支
 #+END_SRC
 
 
